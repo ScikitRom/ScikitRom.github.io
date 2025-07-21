@@ -10,6 +10,6 @@ format:
     toc: false
 ---
 
-![](docs/twisting.pdf){width="85%" height="1000px"}
+![](twisting.pdf){width="85%" height="1000px"}
 
 

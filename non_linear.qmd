@@ -10,6 +10,6 @@ format:
     toc: false
 ---
 
-![](docs/non_linear heat conduction.pdf){width="85%" height="1000px"}
+![](non_linear heat conduction.pdf){width="85%" height="1000px"}
 
 
