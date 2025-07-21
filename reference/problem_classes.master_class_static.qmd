@@ -1,4 +1,15 @@
-# problem_classes.master_class_static { #skrom.problem_classes.master_class_static }
+---
+title: "problem_classes.master_class_static"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
+
 
 `problem_classes.master_class_static`
 
