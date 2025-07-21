@@ -75,6 +75,7 @@ website:
           - reference/utils.visualization.generate_vtu.qmd
           - reference/utils.visualization.vtuwriter.qmd
           - reference/utils.visualization.color_palette.qmd
+          section: Visualization
       - section: "**Examples**"
         contents:
           - href: problem_structure.qmd

@@ -1,4 +1,14 @@
-# utils.visualization.generate_vtk { #skrom.utils.visualization.generate_vtk }
+---
+title: "utils.visualization.generate_vtk"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `utils.visualization.generate_vtk`
 

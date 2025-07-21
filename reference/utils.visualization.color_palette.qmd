@@ -1,4 +1,14 @@
-# utils.visualization.color_palette { #skrom.utils.visualization.color_palette }
+---
+title: "utils.visualization.color_palette"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `utils.visualization.color_palette`
 
