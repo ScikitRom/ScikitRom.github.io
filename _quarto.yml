@@ -64,8 +64,6 @@ website:
         - contents:
           - reference/utils.qmd
           - reference/utils.imports.qmd
-          - reference/utils.old.qmd
-          - reference/utils.old.rom_utils_old.qmd
           - reference/utils.reduced_basis.qmd
           - reference/utils.reduced_basis.svd.qmd
           section: Utilities
