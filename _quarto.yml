@@ -148,8 +148,6 @@ quartodoc:
       contents:
         - utils
         - utils.imports
-        - utils.old
-        - utils.old.rom_utils_old
         - utils.reduced_basis
         - utils.reduced_basis.svd
 
