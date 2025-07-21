@@ -1,0 +1,224 @@
+---
+title: "Tutorial: Building a Reduced-Order Model with scikit-rom"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
+
+
+![Linear Elasticity](beam_vid.mp4)
+
+This comprehensive tutorial demonstrates the complete process of developing a reduced-order model (ROM) for a three-dimensional linear elastic structure using scikit-rom. You'll learn how each component operates, understand the interconnections between files, and discover how to build an affine ROM that enables real-time or near-real-time simulations.
+
+## Problem Description
+
+We analyze a 3D block governed by linear elasticity principles. The structure features two distinct material regions with different stiffness properties, enabling demonstration of spatially varying material handling through affine decomposition. Core characteristics include:
+
+**Linear Affine Elasticity**: The stiffness matrix is constructed as a linear combination of blocks that are affine in the Lamé parameters $(\lambda, \mu)$.
+
+**Domain Partitioning**: The block is divided into two regions with distinct elastic properties.
+
+**Parameter Space**: Young's modulus $E$ and Poisson's ratio $\nu$ are sampled for both offline and online ROM phases.
+
+**Boundary Conditions**: Dirichlet constraints (fixed displacement) on one face; Neumann conditions (applied traction) on the opposing face.
+
+![](problem.pdf){width="100%" height="1000px"}
+
+## Project Architecture
+
+The simulation workflow is organized through the following directory structure and files:
+
+```
+problem_1/
+├─ domain.py           # Mesh generation, basis setup, boundary and region partitioning
+├─ bilinear_forms.py   # Affine weak form (stiffness) assembly
+├─ linear_forms.py     # Load (traction) right-hand side term
+├─ properties.py       # Lamé parameter computation per region
+├─ params.py           # Sampling (E, ν) for training and testing
+└─ problem_def.py      # Main orchestration: assembles all components for scikit-rom
+```
+
+
+## 1. Geometry \& Finite Element Framework — domain.py
+
+**Mesh Construction**: The domain represents a 3D block discretized with hexahedral elements, parameterized by dimensions $(l_x, l_y, l_z)$ and mesh refinement factor for resolution control.
+
+**Basis Functions**: Employs vector-valued trilinear hexahedral elements to represent 3D displacement fields.
+
+**Boundary Identification**:
+
+- `'left'`: Dirichlet (fixed displacement)
+- `'right'`: Neumann (applied load)
+
+**Region Partitioning**: The mesh is divided along the $x$-axis at the midpoint into:
+
+- `region_1`: $x \leq 0.5 \cdot l_x$ (stiffer region)
+- `region_2`: $x > 0.5 \cdot l_x$ (softer region)
+
+The module returns a comprehensive dictionary containing the mesh, bases, boundary DOFs, and a per-region basis dictionary for subsequent operator assembly.
+
+## 2. Material Properties \& Affine Coefficient Functions — properties.py
+
+**Lamé Parameters**: Transforms Young's modulus $E$ and Poisson's ratio $\nu$ into Lamé parameters $(\lambda, \mu)$ using skfem utilities.
+
+**Region Handling**:
+
+- For `region_1`, both $\lambda$ and $\mu$ are scaled by 50× (stiffer inclusion)
+- For `region_2`, properties remain unchanged (baseline material)
+
+This design facilitates straightforward definition of piecewise-constant or heterogeneous material properties, essential for multi-region simulations.
+
+## 3. Affine Stiffness Matrix Assembly — bilinear_forms.py
+
+**Affine Bilinear Forms**:
+
+- `stiffness_lam`: Weak form for the $\lambda$ (volumetric) component
+- `stiffness_mu`: Weak form for the $\mu$ (shear) component
+
+**Mathematics**:
+Each block is computed per-region (using basis restriction).
+The global stiffness matrix is expressed as:
+
+$K(E,\nu) = \sum_{\text{regions}} \lambda \cdot K_{\lambda,\text{region}} + \mu \cdot K_{\mu,\text{region}}$
+
+**Parameter-Dependent Evaluation**: Lamé parameters are computed as needed for each region via the region-aware property function.
+
+This approach ensures the assembly aligns with the affine decomposition essential for efficient ROM evaluation.
+
+## 4. Right-Hand Side (Loads) — linear_forms.py
+
+**Neumann Traction**: Implements a constant traction (-1e-2) in the global $y$-direction applied to the 'right' face.
+
+**Affine in Parameters**: The load vector is parameter-independent and only needs to be assembled once for the entire ROM process.
+
+## 5. Parameter Sampling — params.py
+
+**Parameter Ranges**:
+
+- $E$: [0.5, 2.0]
+- $\nu$: [0.2, 0.4]
+
+**Sampling Strategy**: Uses Sobol sequences to create quasi-random sets of $(E,\nu)$ pairs for:
+
+- Training snapshots (for ROM basis construction)
+- Testing snapshots (for validation)
+
+**Masks Provided**: Returns boolean arrays to cleanly separate training vs testing data.
+
+## 6. Problem Orchestration — problem_def.py
+
+**Master Problem Class**: Inherits from the scikit-rom base and registers essential routines:
+
+- `domain()`: Loads mesh and DOFs from domain.py
+- `bilinear_forms()`: Returns affine weak forms for $\lambda$ and $\mu$
+- `linear_forms()`: Returns the Neumann loading routine
+- `properties()`: Returns the regionwise Lamé parameter mapper
+- `parameters(n_samples)`: Returns parameter sets and train/test split
+
+**Affine Operator Assembly**: On the first solve, stiffness and load "blocks" are assembled separately for each region/material.
+
+**Full-Order Solve**: Assembles and solves the condensed system with Dirichlet BCs for each parameter instance.
+
+**ROM Projection**: Projects global blocks onto the reduced basis, incorporating an offline mean-shift to keep the ROM centered.
+
+This design ensures a clear separation between model definition (problem file) and algorithmic ROM machinery (provided by scikit-rom).
+
+## 7. Offline Workflow: Building the ROM
+
+**Step-by-step process**:
+
+1. **Parameter Sampling**: Generate $n$ training samples $(E_i, \nu_i)$ using the routine from params.py.
+2. **Full-Order Simulations**: For each parameter, solve the full high-fidelity FEM system and store the solution as a snapshot.
+3. **Data Processing**:
+    - **Mean Subtraction**: Subtract the mean from all snapshots to center the dataset
+    - **SVD/POD**: Perform singular value decomposition on the mean-subtracted snapshots to find the dominant modes (energy-ranked spatial patterns)
+    - **Mode Truncation**: Retain only the leading $r$ modes (user- or error-determined) for reduced basis
+4. **Reduced Operator Assembly**: Project per-region blocks $(K_{\lambda,\text{region}}, K_{\mu,\text{region}})$ into the reduced space, yielding ultra-compact operators.
+
+The reduced model is now ready for very rapid online predictions.
+
+## 8. Online Workflow: Fast Evaluation
+
+For a new parameter set $(E, \nu)$:
+
+1. **Compute Per-Region Lamé Parameters**: Map input parameters to $(\lambda, \mu)$ values for each region.
+2. **Assemble Reduced Stiffness**: Combine precomputed regionwise blocks using affine expressions.
+3. **Solve Reduced System**: The resulting linear system has size equal to the number of modes $(r \ll N)$, making it extremely fast.
+4. **Mean Recovery**: Add back the mean field to produce the full-field displacement solution, ready for visualization or further analysis.
+
+## 9. Validation \& Error Assessment
+
+**Test Set**: Evaluate the ROM on held-out (never-seen) parameter pairs.
+
+**Error Metrics**:
+
+- Relative error (L2 or energy norm) between ROM and high-fidelity FOM solutions
+- Statistical fit metrics (e.g., R² score)
+
+**Speed-up Factor**: The ROM typically achieves significant speed-up (often orders of magnitude) versus direct FEM.
+
+## 10. Summary Table of Key Methods
+
+| Method | Purpose | Typical Location in Pipeline |
+| :-- | :-- | :-- |
+| `domain()` | Setup mesh, BCs, DOFs, and per-region bases | First, before assembly |
+| `bilinear_forms()` | Return affine form handles for λ, μ | Operator initialization |
+| `linear_forms()` | Specify right-hand-side (load) | Operator assembly |
+| `properties()` | Map (E, ν, region) → (λ, μ) | Parameter unpacking |
+| `parameters()` | Produce sampled (E, ν) + train/test masks | Offline/online split |
+| `fom_solver()` | Run and store full-order solutions | Snapshot generation (offline) |
+| `rom_solver()` | Assemble and solve projected ROM system | Rapid online prediction |
+
+## 11. Code Snippets for Each Stage
+
+**Parameter Sampling Example**:
+
+```python
+params, param_ranges, train_mask, test_mask = parameters(32)
+```
+
+**Domain Setup Example**:
+
+```python
+dom = domain_()
+mesh = dom['mesh']
+basis = dom['basis']
+regions = dom['basis_regions']
+```
+
+**Affine Block Assembly**:
+
+```python
+stiffness_lam, stiffness_mu = bilinear_forms()
+K_lambda = asm(stiffness_lam, region_basis, ...)
+K_mu = asm(stiffness_mu, region_basis, ...)
+```
+
+**Full-Order Solve**:
+
+```python
+u = solve(*condense(K, rhs, x=fixed_values, D=dirichlet_dofs))
+```
+
+**ROM Solve Online**:
+
+```python
+ms_full_sol, mean_shift = rom_solver(param)
+full_field = ms_full_sol + mean_shift
+```
+
+
+## 12. Best Practices
+
+- Always center your snapshot data before SVD to ensure best POD convergence
+- Use enough training samples (and parameter space coverage) to avoid overfitting or "holes" in ROM accuracy
+- Check ROM error on multiple, unseen test samples
+- Visualize spatial error fields—not just scalar error metrics—for insight into local ROM limitations
+- Leverage the modular file structure for extending to other domains, BCs, and PDEs
+
+This workflow and modular codebase provide a flexible, scalable foundation for reduced-order modeling of parametrized PDEs in computational mechanics, accelerating simulation, optimization, and interactive design.
