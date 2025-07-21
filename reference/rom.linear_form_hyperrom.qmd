@@ -1,4 +1,14 @@
-# rom.linear_form_hyperrom { #skrom.rom.linear_form_hyperrom }
+---
+title: "rom.linear_form_hyperrom"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `rom.linear_form_hyperrom`
 

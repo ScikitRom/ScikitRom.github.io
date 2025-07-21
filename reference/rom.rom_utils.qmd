@@ -1,4 +1,14 @@
-# rom.rom_utils { #skrom.rom.rom_utils }
+---
+title: "rom.rom_utils"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `rom.rom_utils`
 

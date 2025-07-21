@@ -1,4 +1,14 @@
-# rom { #skrom.rom }
+---
+title: "rom"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `rom`
 
