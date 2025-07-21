@@ -1,0 +1,15 @@
+---
+title: "Nonlinear heat conduction in a two-material 1-D rod"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](docs/non_linear heat conduction.pdf){width="85%" height="1000px"}
+
+

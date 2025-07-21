@@ -1,0 +1,15 @@
+---
+title: "Twisting of a Neo-Hookean Block"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](docs/twisting.pdf){width="85%" height="1000px"}
+
+

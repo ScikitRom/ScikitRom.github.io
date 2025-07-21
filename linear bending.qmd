@@ -1,0 +1,13 @@
+---
+title: "Heterogeneous linear elasticity in a two-material 3D block"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](docs/linear bending.pdf){width="85%" height="1000px"}

@@ -1,0 +1,13 @@
+---
+title: "Linear heat conduction with non-affine parametric source on a star-shaped plate"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](docs/linear star shaped.pdf){width="85%" height="1000px"}

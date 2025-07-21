@@ -7,7 +7,7 @@ format:
       dark: darkly
     page-layout: full
     css: styles.css
-    toc: true
+    toc: false
 ---
 
 {{< include resources/intro/rom_intro_ex.md >}}

@@ -1,0 +1,13 @@
+---
+title: "Nonlinear power-law (strain-hardening) bar under gravity and line load"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](docs/1-d stretching.pdf){width="85%" height="1000px"}
