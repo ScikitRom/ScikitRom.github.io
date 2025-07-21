@@ -1,4 +1,14 @@
-# rom.ecsw.hyperreduce { #skrom.rom.ecsw.hyperreduce }
+---
+title: "rom.ecsw.hyperreduce"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `rom.ecsw.hyperreduce`
 

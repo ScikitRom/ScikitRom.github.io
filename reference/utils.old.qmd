@@ -1,4 +1,14 @@
-# utils.old { #skrom.utils.old }
+---
+title: "utils.old"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `utils.old`
 

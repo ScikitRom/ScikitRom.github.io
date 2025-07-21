@@ -1,4 +1,16 @@
-# utils.reduced_basis { #skrom.utils.reduced_basis }
+---
+title: "utils.reduced_basis"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `utils.reduced_basis`
+
+{Coming Soon . . .}
 

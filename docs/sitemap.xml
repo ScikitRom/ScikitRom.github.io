@@ -73,7 +73,51 @@
     <lastmod>2025-07-15T05:37:51.933Z</lastmod>
   </url>
   <url>
-    <loc> https://scikitrom.github.io/reference/rom.html</loc>
+    <loc>https://scikitrom.github.io/reference/rom.html</loc>
     <lastmod>2025-07-21T17:09:10.158Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/index.html</loc>
+    <lastmod>2025-07-18T04:58:58.174Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/utils.reduced_basis.svd.html</loc>
+    <lastmod>2025-07-21T17:33:45.715Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/utils.html</loc>
+    <lastmod>2025-07-21T17:28:06.901Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/utils.old.html</loc>
+    <lastmod>2025-07-21T17:30:08.579Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecsw.html</loc>
+    <lastmod>2025-07-21T17:22:02.599Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecsw.custom_nnls.html</loc>
+    <lastmod>2025-07-21T17:22:38.534Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecsw.hyperreduce.html</loc>
+    <lastmod>2025-07-21T17:23:23.061Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/utils.imports.html</loc>
+    <lastmod>2025-07-21T17:29:11.855Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/utils.old.rom_utils_old.html</loc>
+    <lastmod>2025-07-21T17:32:03.713Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/utils.reduced_basis.html</loc>
+    <lastmod>2025-07-21T17:33:02.402Z</lastmod>
+  </url>
+  <url>
+    <loc> https://scikitrom.github.io/index.html</loc>
+    <lastmod>2025-07-18T04:58:58.174Z</lastmod>
   </url>
 </urlset>

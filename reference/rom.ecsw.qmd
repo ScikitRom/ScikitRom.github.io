@@ -1,4 +1,14 @@
-# rom.ecsw { #skrom.rom.ecsw }
+---
+title: "rom.ecsw"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: article
+    css: styles.css
+    toc: true
+---
 
 `rom.ecsw`
 
