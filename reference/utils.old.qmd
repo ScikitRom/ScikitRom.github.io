@@ -12,9 +12,6 @@ format:
 
 `utils.old`
 
-## utils.old {.doc-section .doc-section-utilsold}
-
-
 Legacy utility functions and experimental prototypes retained for reference and backward compatibility.
 
 This subpackage contains all "old" or deprecated utility routines that have since been superseded by newer, more robust implementations in the main `utils` package. It allows you to review earlier approaches and compare behavior against current methods.
@@ -28,7 +25,7 @@ Available modules (non-exhaustive):
 - `dehydration_monitor_old.py` : Prototype hydration-tracking functions for Alzheimer’s monitoring device.
 - `wavelet_basics.py`          : Initial implementations of wavelet transform utilities.
 
-## Examples {.doc-section .doc-section-examples}
+## Examples
 
 ```python
 >>> from utils.old import svd_mode_selectors_old

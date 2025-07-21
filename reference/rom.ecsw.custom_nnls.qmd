@@ -10,8 +10,6 @@ format:
     toc: true
 ---
 
-# rom.ecsw.custom_nnls { #skrom.rom.ecsw.custom_nnls }
-
 `rom.ecsw.custom_nnls`
 
 Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW).

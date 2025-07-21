@@ -533,8 +533,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#utils.old" id="toc-utils.old" class="nav-link active" data-scroll-target="#utils.old">utils.old</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link active" data-scroll-target="#examples">Examples</a></li>
   </ul>
 </nav>
     </div>
@@ -562,8 +561,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><code>utils.old</code></p>
-<section id="utils.old" class="level2 doc-section doc-section-utilsold">
-<h2 class="doc-section doc-section-utilsold anchored" data-anchor-id="utils.old">utils.old</h2>
 <p>Legacy utility functions and experimental prototypes retained for reference and backward compatibility.</p>
 <p>This subpackage contains all “old” or deprecated utility routines that have since been superseded by newer, more robust implementations in the main <code>utils</code> package. It allows you to review earlier approaches and compare behavior against current methods.</p>
 <p>Available modules (non-exhaustive):</p>
@@ -575,9 +572,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>dehydration_monitor_old.py</code> : Prototype hydration-tracking functions for Alzheimer’s monitoring device.</li>
 <li><code>wavelet_basics.py</code> : Initial implementations of wavelet transform utilities.</li>
 </ul>
-</section>
-<section id="examples" class="level2 doc-section doc-section-examples">
-<h2 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h2>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> utils.old <span class="im">import</span> svd_mode_selectors_old</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> modes, U <span class="op">=</span> svd_mode_selectors_old.svd_mode_selector(data_matrix, tolerance<span class="op">=</span><span class="fl">1e-2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
