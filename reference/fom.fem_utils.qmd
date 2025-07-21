@@ -1,4 +1,14 @@
-# fom.fem_utils { #skrom.fom.fem_utils }
+---
+title: "fom.fem_utils"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
 
 `fom.fem_utils`
 

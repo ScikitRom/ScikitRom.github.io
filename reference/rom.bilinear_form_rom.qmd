@@ -1,4 +1,14 @@
-# rom.bilinear_form_rom { #skrom.rom.bilinear_form_rom }
+---
+title: "rom.bilinear_form_rom"
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
 
 `rom.bilinear_form_rom`
 
