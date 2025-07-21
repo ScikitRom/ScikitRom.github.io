@@ -1,1 +1,1 @@
-Sitemap: https://suparnobhattacharyya.github.io/SCIKIT-ROM-SITE/sitemap.xml
+Sitemap:  https://scikitrom.github.io/sitemap.xml
