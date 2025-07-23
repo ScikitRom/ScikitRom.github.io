@@ -1,5 +1,5 @@
 ---
-title: "ls"
+title: "Linear heat conduction with non-affine parametric source on a star-shaped plate"
 format:
   html:
     theme:

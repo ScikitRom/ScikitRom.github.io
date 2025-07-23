@@ -1,5 +1,5 @@
 ---
-title: "nl"
+title: "Nonlinear heat conduction in a two-material 1-D rod"
 format:
   html:
     theme:

@@ -1,5 +1,5 @@
 ---
-title: "lb"
+title: "Heterogeneous linear elasticity in a two-material 3D block"
 format:
   html:
     theme:
