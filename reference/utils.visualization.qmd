@@ -5,9 +5,9 @@ format:
     theme:
       light: flatly
       dark: darkly
-    page-layout: article
+    page-layout: full
     css: styles.css
-    toc: true
+    toc: false
 ---
 
 `utils.visualization`

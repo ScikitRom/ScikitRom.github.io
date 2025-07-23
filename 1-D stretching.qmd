@@ -1,5 +1,5 @@
 ---
-title: "Nonlinear power-law (strain-hardening) bar under gravity and line load"
+title: "1-D"
 format:
   html:
     theme:

@@ -2,10 +2,10 @@
 title: "rom"
 format:
   html:
-   theme:
+    theme:
       light: flatly
       dark: darkly
-    page-layout: article
+    page-layout: full
     css: styles.css
     toc: false
 ---

@@ -7,7 +7,7 @@ format:
       dark: darkly
     page-layout: full
     css: styles.css
-    toc: true
+    toc: false
 ---
 
 `utils.imports`
