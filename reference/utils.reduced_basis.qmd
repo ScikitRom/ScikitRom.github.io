@@ -11,6 +11,3 @@ format:
 ---
 
 `utils.reduced_basis`
-
-{Coming Soon . . .}
-
