@@ -1,1 +1,1 @@
-Sitemap:  https://scikitrom.github.io/sitemap.xml
+Sitemap: https://scikitrom.github.io/sitemap.xml

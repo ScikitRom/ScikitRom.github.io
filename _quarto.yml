@@ -7,7 +7,7 @@ project:
   
 website:
   title: "SCIKIT-ROM"
-  site-url: " https://scikitrom.github.io/"
+  site-url: "https://scikitrom.github.io/"
   
   page-footer:
     left: "© 2025. All rights reserved."
@@ -25,7 +25,7 @@ website:
         href: ""
         aria-label: LinkedIn
       - icon: github
-        href: "https://github.com/suparnob100/scikit-rom"
+        href: "https://suparnobhattacharyya.github.io/"
         aria-label: GitHub
       - icon: envelope
         href: ""
