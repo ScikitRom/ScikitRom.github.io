@@ -82,8 +82,6 @@ website:
           - href: linear bending.qmd
           - href: non_linear.qmd
           - href: twisting.qmd
-          - href: twisting_1.qmd
-          
           
 extensions:
   - quarto-ext/quartodoc

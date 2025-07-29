@@ -1139,5 +1139,27 @@
       "**Examples**",
       "Linear heat conduction with non-affine parametric source on a star-shaped plate"
     ]
+  },
+  {
+    "objectID": "twisting.html",
+    "href": "twisting.html",
+    "title": "P.5 Twisting of a Neo-Hookean Block",
+    "section": "",
+    "text": "Problem Setup\nGithub link",
+    "crumbs": [
+      "**Examples**",
+      "P.5 Twisting of a Neo-Hookean Block"
+    ]
+  },
+  {
+    "objectID": "twisting.html#section",
+    "href": "twisting.html#section",
+    "title": "Twisting of a Neo-Hookean Block",
+    "section": "",
+    "text": "Github link",
+    "crumbs": [
+      "**Examples**",
+      "Twisting of a Neo-Hookean Block"
+    ]
   }
 ]

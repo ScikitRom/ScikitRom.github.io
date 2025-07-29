@@ -1,5 +1,5 @@
 ---
-title: "Twisting of a Neo-Hookean Block"
+title: "P.5 Twisting of a Neo-Hookean Block"
 format:
   html:
     theme:
@@ -11,6 +11,9 @@ format:
 ---
 
 ![](twisting.png){fig-align="center"}
+
+#### **Problem Setup**
+[Github link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_1_h)
 
 
 ![](twisting.pdf){width="85%" height="1000px"}
