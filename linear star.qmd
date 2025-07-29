@@ -10,7 +10,7 @@ format:
     toc: false
 ---
 
-![](star.png)
+![](star.png){fig-align="center"}
 
 
 ![](linear star shaped.pdf){width="85%" height="1000px"}

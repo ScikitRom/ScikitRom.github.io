@@ -10,7 +10,7 @@ format:
     toc: false
 ---
 
-![](HC.png)
+![](HC.png){fig-align="center"}
 
 
 ![](non_linear heat conduction.pdf){width="85%" height="1000px"}

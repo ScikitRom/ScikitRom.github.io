@@ -10,7 +10,7 @@ format:
     toc: false
 ---
 
-![](twisting.png)
+![](twisting.png){fig-align="center"}
 
 
 ![](twisting.pdf){width="85%" height="1000px"}

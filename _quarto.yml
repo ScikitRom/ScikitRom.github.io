@@ -82,6 +82,7 @@ website:
           - href: linear bending.qmd
           - href: non_linear.qmd
           - href: twisting.qmd
+          - href: twisting_1.qmd
           
           
 extensions:
@@ -92,7 +93,6 @@ format:
   html:
     theme: 
       light: flatly
-      dark: darkly
     page-layout: article
     css: styles.css
     mathjax: default
