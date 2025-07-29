@@ -1,16 +1,23 @@
 ---
-title: "Nonlinear power-law (strain-hardening) bar under gravity and line load"
+title: "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load"
 format:
   html:
     theme:
       light: flatly
-      dark: darkly
     page-layout: full
     css: styles.css
     toc: false
 ---
 
-![](NL_power_law.png)
+![](NL_power_law.png){fig-align="center"}
 
+## **Problem Setup**
+<img
+  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  alt="GitHub logo"
+  width="32"
+  height="32"
+  style="vertical-align:middle; margin-right:8px;"
+/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_2_h)
 
 ![](nonlinear_power_law.pdf){width="85%" height="1000px"}

@@ -1,10 +1,9 @@
 ---
-title: "Nonlinear heat conduction in a two-material 1-D rod"
+title: "P.4 Nonlinear heat conduction in a two-material 1-D rod"
 format:
   html:
     theme:
       light: flatly
-      dark: darkly
     page-layout: full
     css: styles.css
     toc: false
@@ -12,6 +11,14 @@ format:
 
 ![](HC.png){fig-align="center"}
 
+## **Problem Setup**
+<img
+  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  alt="GitHub logo"
+  width="32"
+  height="32"
+  style="vertical-align:middle; margin-right:8px;"
+/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/heat_transfer/static/non_linear/problem_1_h)
 
 ![](non_linear heat conduction.pdf){width="85%" height="1000px"}
 

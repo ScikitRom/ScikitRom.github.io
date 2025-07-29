@@ -1055,12 +1055,12 @@
   {
     "objectID": "non_linear.html",
     "href": "non_linear.html",
-    "title": "Nonlinear heat conduction in a two-material 1-D rod",
+    "title": "P.4 Nonlinear heat conduction in a two-material 1-D rod",
     "section": "",
-    "text": "{fig-align=“center”}",
+    "text": "## Problem Setup Link",
     "crumbs": [
       "**Examples**",
-      "Nonlinear heat conduction in a two-material 1-D rod"
+      "P.4 Nonlinear heat conduction in a two-material 1-D rod"
     ]
   },
   {
@@ -1132,12 +1132,12 @@
   {
     "objectID": "linear star.html",
     "href": "linear star.html",
-    "title": "Linear heat conduction with non-affine parametric source on a star-shaped plate",
+    "title": "P.2 Linear heat conduction with non-affine parametric source on a star-shaped plate",
     "section": "",
-    "text": "{fig-align=“center”}",
+    "text": "## Problem Setup Link",
     "crumbs": [
       "**Examples**",
-      "Linear heat conduction with non-affine parametric source on a star-shaped plate"
+      "P.2 Linear heat conduction with non-affine parametric source on a star-shaped plate"
     ]
   },
   {
@@ -1171,6 +1171,61 @@
     "crumbs": [
       "**Examples**",
       "P.5 Twisting of a Neo-Hookean Block"
+    ]
+  },
+  {
+    "objectID": "nonlinear_power_law.html",
+    "href": "nonlinear_power_law.html",
+    "title": "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load",
+    "section": "",
+    "text": "## Problem Setup Link",
+    "crumbs": [
+      "**Examples**",
+      "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load"
+    ]
+  },
+  {
+    "objectID": "linear bending.html#problem-setup",
+    "href": "linear bending.html#problem-setup",
+    "title": "P.3 Heterogeneous linear elasticity in a two-material 3D block",
+    "section": "Problem Setup",
+    "text": "Problem Setup\nLink",
+    "crumbs": [
+      "**Examples**",
+      "P.3 Heterogeneous linear elasticity in a two-material 3D block"
+    ]
+  },
+  {
+    "objectID": "non_linear.html#problem-setup",
+    "href": "non_linear.html#problem-setup",
+    "title": "P.4 Nonlinear heat conduction in a two-material 1-D rod",
+    "section": "Problem Setup",
+    "text": "Problem Setup\nLink",
+    "crumbs": [
+      "**Examples**",
+      "P.4 Nonlinear heat conduction in a two-material 1-D rod"
+    ]
+  },
+  {
+    "objectID": "linear star.html#problem-setup",
+    "href": "linear star.html#problem-setup",
+    "title": "P.2 Linear heat conduction with non-affine parametric source on a star-shaped plate",
+    "section": "Problem Setup",
+    "text": "Problem Setup\nLink",
+    "crumbs": [
+      "**Examples**",
+      "P.2 Linear heat conduction with non-affine parametric source on a star-shaped plate"
+    ]
+  },
+  {
+    "objectID": "nonlinear_power_law.html#problem-setup",
+    "href": "nonlinear_power_law.html#problem-setup",
+    "title": "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load",
+    "section": "Problem Setup",
+    "text": "Problem Setup\nLink",
+    "crumbs": [
+      "**Examples**",
+      "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load"
     ]
   }
 ]
