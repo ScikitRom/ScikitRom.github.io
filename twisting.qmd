@@ -1,5 +1,5 @@
 ---
-title: "P.5 Twisting of a Neo-Hookean Block"
+title: "P.2 Twisting of a Neo-Hookean Block"
 format:
   html:
     theme:

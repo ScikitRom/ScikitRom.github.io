@@ -1165,12 +1165,13 @@
   {
     "objectID": "twisting.html#problem-setup",
     "href": "twisting.html#problem-setup",
-    "title": "P.5 Twisting of a Neo-Hookean Block",
+    "title": "P.2 Twisting of a Neo-Hookean Block",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
-      "P.5 Twisting of a Neo-Hookean Block"
+      "Computatinal meachanics",
+      "P.2 Twisting of a Neo-Hookean Block"
     ]
   },
   {
@@ -1187,34 +1188,37 @@
   {
     "objectID": "linear bending.html#problem-setup",
     "href": "linear bending.html#problem-setup",
-    "title": "P.3 Heterogeneous linear elasticity in a two-material 3D block",
+    "title": "P.2 Heterogeneous linear elasticity in a two-material 3D block",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
-      "P.3 Heterogeneous linear elasticity in a two-material 3D block"
+      "Heat transfer",
+      "P.2 Heterogeneous linear elasticity in a two-material 3D block"
     ]
   },
   {
     "objectID": "non_linear.html#problem-setup",
     "href": "non_linear.html#problem-setup",
-    "title": "P.4 Nonlinear heat conduction in a two-material 1-D rod",
+    "title": "P.3 Nonlinear heat conduction in a two-material 1-D rod",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
-      "P.4 Nonlinear heat conduction in a two-material 1-D rod"
+      "Heat transfer",
+      "P.3 Nonlinear heat conduction in a two-material 1-D rod"
     ]
   },
   {
     "objectID": "linear star.html#problem-setup",
     "href": "linear star.html#problem-setup",
-    "title": "P.2 Linear heat conduction with non-affine parametric source on a star-shaped plate",
+    "title": "P.1 Linear heat conduction with non-affine parametric source on a star-shaped plate",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
-      "P.2 Linear heat conduction with non-affine parametric source on a star-shaped plate"
+      "Heat transfer",
+      "P.1 Linear heat conduction with non-affine parametric source on a star-shaped plate"
     ]
   },
   {

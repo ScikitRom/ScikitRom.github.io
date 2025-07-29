@@ -76,12 +76,17 @@ website:
           section: Visualization
       - section: "**Examples**"
         contents:
-          - href: problem_structure.qmd
-          - href: nonlinear_power_law.qmd
-          - href: linear star.qmd
-          - href: linear bending.qmd
-          - href: non_linear.qmd
-          - href: twisting.qmd
+        - problem_structure.qmd  
+        - contents:
+          - nonlinear_power_law.qmd
+          - twisting.qmd
+          section: Computatinal meachanics
+        - contents:
+          - linear star.qmd
+          - linear bending.qmd
+          - non_linear.qmd
+          section: Heat transfer
+          
           
 extensions:
   - quarto-ext/quartodoc

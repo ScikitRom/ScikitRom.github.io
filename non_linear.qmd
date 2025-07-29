@@ -1,5 +1,5 @@
 ---
-title: "P.4 Nonlinear heat conduction in a two-material 1-D rod"
+title: "P.3 Nonlinear heat conduction in a two-material 1-D rod"
 format:
   html:
     theme:
