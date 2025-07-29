@@ -10,6 +10,9 @@ format:
     toc: false
 ---
 
+![](twisting.png)
+
+
 ![](twisting.pdf){width="85%" height="1000px"}
 
 

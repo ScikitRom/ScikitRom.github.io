@@ -10,4 +10,7 @@ format:
     toc: false
 ---
 
+![](NL_power_law.png)
+
+
 ![](nonlinear_power_law.pdf){width="85%" height="1000px"}

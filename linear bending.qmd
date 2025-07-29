@@ -10,4 +10,7 @@ format:
     toc: false
 ---
 
+![](3d_bending.png)
+
+
 ![](linear bending.pdf){width="85%" height="1000px"}
