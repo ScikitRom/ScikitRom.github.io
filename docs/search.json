@@ -1188,37 +1188,37 @@
   {
     "objectID": "linear bending.html#problem-setup",
     "href": "linear bending.html#problem-setup",
-    "title": "P.2 Heterogeneous linear elasticity in a two-material 3D block",
+    "title": "P.4 Heterogeneous linear elasticity in a two-material 3D block",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
       "Heat transfer",
-      "P.2 Heterogeneous linear elasticity in a two-material 3D block"
+      "P.4 Heterogeneous linear elasticity in a two-material 3D block"
     ]
   },
   {
     "objectID": "non_linear.html#problem-setup",
     "href": "non_linear.html#problem-setup",
-    "title": "P.3 Nonlinear heat conduction in a two-material 1-D rod",
+    "title": "P.5 Nonlinear heat conduction in a two-material 1-D rod",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
       "Heat transfer",
-      "P.3 Nonlinear heat conduction in a two-material 1-D rod"
+      "P.5 Nonlinear heat conduction in a two-material 1-D rod"
     ]
   },
   {
     "objectID": "linear star.html#problem-setup",
     "href": "linear star.html#problem-setup",
-    "title": "P.1 Linear heat conduction with non-affine parametric source on a star-shaped plate",
+    "title": "P.3 Linear heat conduction with non-affine parametric source on a star-shaped plate",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
       "Heat transfer",
-      "P.1 Linear heat conduction with non-affine parametric source on a star-shaped plate"
+      "P.3 Linear heat conduction with non-affine parametric source on a star-shaped plate"
     ]
   },
   {

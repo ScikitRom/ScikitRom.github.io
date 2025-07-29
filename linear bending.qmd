@@ -1,5 +1,5 @@
 ---
-title: "P.2 Heterogeneous linear elasticity in a two-material 3D block"
+title: "P.4 Heterogeneous linear elasticity in a two-material 3D block"
 format:
   html:
     theme:
