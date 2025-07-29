@@ -10,4 +10,4 @@ format:
     toc: false
 ---
 
-![](1-d stretching.pdf){width="85%" height="1000px"}
+![](nonlinear_power_law.pdf){width="85%" height="1000px"}

@@ -398,7 +398,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/linear star.html</loc>
-    <lastmod>2025-07-21T20:12:29.852Z</lastmod>
+    <lastmod>2025-07-23T16:16:09.715Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/index.html</loc>
@@ -458,11 +458,11 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/twisting.html</loc>
-    <lastmod>2025-07-21T20:25:01.125Z</lastmod>
+    <lastmod>2025-07-23T16:18:13.660Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/linear bending.html</loc>
-    <lastmod>2025-07-21T20:20:25.231Z</lastmod>
+    <lastmod>2025-07-23T16:17:13.470Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/1-D stretching.html</loc>
@@ -470,7 +470,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/non_linear.html</loc>
-    <lastmod>2025-07-21T20:23:40.228Z</lastmod>
+    <lastmod>2025-07-23T16:17:44.789Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/index.html</loc>
@@ -883,5 +883,9 @@
   <url>
     <loc>https://scikitrom.github.io/problem_structure.html</loc>
     <lastmod>2025-07-23T18:11:26.485Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/nonlinear_power_law.html</loc>
+    <lastmod>2025-07-29T16:28:38.297Z</lastmod>
   </url>
 </urlset>

@@ -77,7 +77,7 @@ website:
       - section: "**Examples**"
         contents:
           - href: problem_structure.qmd
-          - href: 1-D stretching.qmd
+          - href: nonlinear_power_law.qmd
           - href: linear star.qmd
           - href: linear bending.qmd
           - href: non_linear.qmd
