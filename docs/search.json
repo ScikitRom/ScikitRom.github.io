@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Welcome to skrom",
     "section": "",
-    "text": "Reduced-order modeling (ROM) is a computational technique that creates fast approximations of high-fidelity numerical models. Instead of solving large systems of equations with millions of degrees of freedom, ROM constructs a low-dimensional representation that captures the essential physics while being orders of magnitude faster to evaluate.\nThe key insight is that many physical systems exhibit low-dimensional behavior even when discretized on fine meshes. By identifying the dominant modes of the system’s response through techniques like Proper Orthogonal Decomposition (POD), we can build efficient surrogate models that maintain high accuracy."
+    "text": "scikit-rom is a lightweight, Python-based platform designed for projection-based model reduction of finite element models with moderate to large problem sizes (up to approximately 600,000 degrees of freedom). Built on top of scikit-fem, an easy-to-use finite element assembly library, this repository demonstrates reduced-order modeling (ROM) techniques for a range of linear and nonlinear problems, including time-dependent ones. Current examples primarily focus on thermal and mechanical systems, with extensions to fluid dynamics planned for future releases.\nBeyond its application to real-world finite element problems, the library also serves as a valuable testing ground for new model reduction algorithms and as a tutorial resource for those new to the field."
   },
   {
     "objectID": "index.html#one-dimensional-steady-state-heat-conduction-finite-element-and-reduced-order-modeling",
@@ -1227,5 +1227,12 @@
       "**Examples**",
       "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load"
     ]
+  },
+  {
+    "objectID": "Resources/intro/rom_intro.html",
+    "href": "Resources/intro/rom_intro.html",
+    "title": "SCIKIT-ROM",
+    "section": "",
+    "text": "scikit-rom\nscikit-rom is a lightweight, Python-based platform designed for projection-based model reduction of finite element models with moderate to large problem sizes (up to approximately 600,000 degrees of freedom). Built on top of scikit-fem, an easy-to-use finite element assembly library, this repository demonstrates reduced-order modeling (ROM) techniques for a range of linear and nonlinear problems, including time-dependent ones. Current examples primarily focus on thermal and mechanical systems, with extensions to fluid dynamics planned for future releases.\nBeyond its application to real-world finite element problems, the library also serves as a valuable testing ground for new model reduction algorithms and as a tutorial resource for those new to the field.\n\n\n\nWhat is Reduced-Order Modeling?\nReduced-order modeling (ROM) is a computational strategy for approximating high-fidelity numerical models with significantly reduced computational cost. Instead of solving large-scale systems—often with millions of unknowns—ROM techniques construct low-dimensional surrogates that retain the dominant physics of the system, enabling efficient and repeated evaluations.\nThe underlying principle is that many physical systems exhibit behavior that can be captured by a small number of dominant modes, despite their discretization on fine spatial meshes. Techniques such as Proper Orthogonal Decomposition (POD) extract these modes from full-order simulations, enabling the construction of reduced models that are both accurate and computationally efficient.\n\n\n\nOffline–Online Decomposition\nscikit-rom implements the classical offline–online decomposition paradigm:\n\nOffline Phase (computationally intensive, performed once):\n\nSampling of the parameter space\nGeneration of full-order solution snapshots\nComputation of the reduced basis via singular value decomposition (SVD)\nAssembly of parameter-independent reduced operators\n\nOnline Phase (efficient, performed repeatedly):\n\nEvaluation of the system response for new parameter values using preassembled reduced operators\nSpeedups on the order of 10–500× relative to full-order models are typical"
   }
 ]

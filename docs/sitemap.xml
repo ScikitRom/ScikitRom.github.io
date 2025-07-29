@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://scikitrom.github.io/index.html</loc>
-    <lastmod>2025-07-23T15:54:47.986Z</lastmod>
+    <lastmod>2025-07-29T20:30:20.239Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/twisting.html</loc>
@@ -191,5 +191,9 @@
   <url>
     <loc>https://scikitrom.github.io/twisting_1.html</loc>
     <lastmod>2025-07-29T19:11:54.953Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/Resources/intro/rom_intro.html</loc>
+    <lastmod>2025-07-29T20:27:59.846Z</lastmod>
   </url>
 </urlset>

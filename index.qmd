@@ -4,13 +4,12 @@ format:
   html:
     theme:
       light: flatly
-      dark: darkly
     page-layout: full
     css: styles.css
     toc: false
 ---
 
-{{< include resources/intro/rom_intro_ex.md >}}
+{{< include resources/intro/rom_intro.md >}}
 
 
 ## Recommended Reading
