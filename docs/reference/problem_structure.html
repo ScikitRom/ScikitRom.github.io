@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>problem_structure</title>
+<title>problem_structure – SCIKIT-ROM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,16 +71,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-991b1886d3c685c7aa2b62b80640c7af.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-4fe08fe6ba88cb6a76d561880b1f1851.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-df9b2c8a9b2add4ee0f707c7b5f69f2c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-4fe08fe6ba88cb6a76d561880b1f1851.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -133,19 +137,523 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../reference/_styles-quartodoc.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">SCIKIT-ROM</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://suparnobhattacharyya.github.io/"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Documentation</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Function reference</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Problem Classes</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/problem_classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/problem_classes.master_class_static.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.master_class_static</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Full-Order Model (FOM)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/fom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">fom.fem_utils</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Reduced-Order Model (ROM)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.bilinear_form_rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.linear_form_rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.rom_error_est</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.rom_utils</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.linear_form_hyperrom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.linear_form_hyperrom</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">ECSW</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw.custom_nnls</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw.hyperreduce</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Utilities</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.imports.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.imports</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.reduced_basis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.reduced_basis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.reduced_basis.svd</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Visualization</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.generate_vtk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.generate_vtu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.vtuwriter</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.color_palette</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Examples</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../problem_structure.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nonlinear power-law (strain-hardening) bar under gravity and line load</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../linear star.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../linear bending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Heterogeneous linear elasticity in a two-material 3D block</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../non_linear.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nonlinear heat conduction in a two-material 1-D rod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../twisting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Twisting of a Neo-Hookean Block</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tutorial-building-a-reduced-order-model-with-scikit-rom" id="toc-tutorial-building-a-reduced-order-model-with-scikit-rom" class="nav-link active" data-scroll-target="#tutorial-building-a-reduced-order-model-with-scikit-rom">Tutorial: Building a Reduced-Order Model with <strong>scikit-rom</strong></a>
+  <ul class="collapse">
+  <li><a href="#what-is-reduced-order-modeling" id="toc-what-is-reduced-order-modeling" class="nav-link" data-scroll-target="#what-is-reduced-order-modeling">What is Reduced-Order Modeling?</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#geometry-finite-element-setup-domain.py" id="toc-geometry-finite-element-setup-domain.py" class="nav-link" data-scroll-target="#geometry-finite-element-setup-domain.py">1. Geometry &amp; Finite-Element Setup — <strong>domain.py</strong></a></li>
+  <li><a href="#constitutive-law-material-properties-properties.py" id="toc-constitutive-law-material-properties-properties.py" class="nav-link" data-scroll-target="#constitutive-law-material-properties-properties.py">2. Constitutive Law &amp; Material Properties — <strong>properties.py</strong></a></li>
+  <li><a href="#affine-stiffness-tensor-bilinear_forms.py" id="toc-affine-stiffness-tensor-bilinear_forms.py" class="nav-link" data-scroll-target="#affine-stiffness-tensor-bilinear_forms.py">3. Affine Stiffness Tensor — <strong>bilinear_forms.py</strong></a></li>
+  <li><a href="#right-hand-side-linear_forms.py" id="toc-right-hand-side-linear_forms.py" class="nav-link" data-scroll-target="#right-hand-side-linear_forms.py">4. Right-Hand Side — <strong>linear_forms.py</strong></a></li>
+  <li><a href="#parameter-sampling-params.py" id="toc-parameter-sampling-params.py" class="nav-link" data-scroll-target="#parameter-sampling-params.py">5. Parameter Sampling — <strong>params.py</strong></a></li>
+  <li><a href="#orchestrating-everything-problem_def.py" id="toc-orchestrating-everything-problem_def.py" class="nav-link" data-scroll-target="#orchestrating-everything-problem_def.py">6. Orchestrating Everything — <strong>problem_def.py</strong></a>
+  <ul class="collapse">
+  <li><a href="#anatomy-of-problemaffine" id="toc-anatomy-of-problemaffine" class="nav-link" data-scroll-target="#anatomy-of-problemaffine">Anatomy of <code>ProblemAffine</code></a></li>
+  </ul></li>
+  <li><a href="#offline-workflow-building-the-rom" id="toc-offline-workflow-building-the-rom" class="nav-link" data-scroll-target="#offline-workflow-building-the-rom">7. Offline Workflow — Building the ROM</a>
+  <ul class="collapse">
+  <li><a href="#step-1-parameter-sampling" id="toc-step-1-parameter-sampling" class="nav-link" data-scroll-target="#step-1-parameter-sampling">Step 1: Parameter Sampling</a></li>
+  <li><a href="#step-2-snapshot-generation" id="toc-step-2-snapshot-generation" class="nav-link" data-scroll-target="#step-2-snapshot-generation">Step 2: Snapshot Generation</a></li>
+  <li><a href="#step-3-proper-orthogonal-decomposition-pod" id="toc-step-3-proper-orthogonal-decomposition-pod" class="nav-link" data-scroll-target="#step-3-proper-orthogonal-decomposition-pod">Step 3: Proper Orthogonal Decomposition (POD)</a></li>
+  <li><a href="#step-4-reduced-operator-assembly" id="toc-step-4-reduced-operator-assembly" class="nav-link" data-scroll-target="#step-4-reduced-operator-assembly">Step 4: Reduced Operator Assembly</a></li>
+  </ul></li>
+  <li><a href="#online-solve-real-time-evaluation" id="toc-online-solve-real-time-evaluation" class="nav-link" data-scroll-target="#online-solve-real-time-evaluation">8. Online Solve — Real-Time Evaluation</a></li>
+  <li><a href="#validation-ensuring-rom-quality" id="toc-validation-ensuring-rom-quality" class="nav-link" data-scroll-target="#validation-ensuring-rom-quality">9. Validation — Ensuring ROM Quality</a></li>
+  <li><a href="#advanced-topics" id="toc-advanced-topics" class="nav-link" data-scroll-target="#advanced-topics">10. Advanced Topics</a>
+  <ul class="collapse">
+  <li><a href="#choosing-the-reduced-dimension" id="toc-choosing-the-reduced-dimension" class="nav-link" data-scroll-target="#choosing-the-reduced-dimension">10.1 Choosing the Reduced Dimension</a></li>
+  <li><a href="#affine-vs.-non-affine-problems" id="toc-affine-vs.-non-affine-problems" class="nav-link" data-scroll-target="#affine-vs.-non-affine-problems">10.2 Affine vs.&nbsp;Non-Affine Problems</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
 
 
 
@@ -531,6 +1039,19 @@ a(u,v; \lambda,\mu) = \int_\Omega
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
@@ -601,7 +1122,7 @@ a(u,v; \lambda,\mu) = \int_\Omega
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/scikitrom\.github\.io\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -615,6 +1136,11 @@ a(u,v; \lambda,\mu) = \int_\Omega
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -929,6 +1455,19 @@ a(u,v; \lambda,\mu) = \int_\Omega
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2025. All rights reserved.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 
