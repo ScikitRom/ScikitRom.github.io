@@ -12,7 +12,7 @@ format:
 
 ![](twisting.png){fig-align="center"}
 
-#### **Problem Setup**
+## **Problem Setup**
 [Github link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_1_h)
 
 
