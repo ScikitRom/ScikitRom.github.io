@@ -1053,6 +1053,6 @@
     "href": "index.html#installation",
     "title": "Welcome to skrom",
     "section": "Installation",
-    "text": "Installation"
+    "text": "Installation\n\n\nThis tutorial explains how to install SKROM (scikit-ROM):\nInstallation Steps:\n1.Clone the repository:\nCopy\nEdit\ngit clone [GitHub URL]\ncd scikit-rom\n2.Install with pip:\n\nFor developers (editable install):\n\nCopy\nEdit\npip install -e .\n\nFor regular users:\n\nCopy\nEdit\npip install .\n(Use pip3 instead of pip on Mac)\nNotes\n\nUse -e for development; it lets you edit the code without reinstalling.\nRegular users should use standard installation.\nReinstallation automatically removes the old version.\nThe installation completes in seconds and shows “successfully built SKROM.”\nAll instructions are available on the GitHub page."
   }
 ]

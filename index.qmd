@@ -13,8 +13,48 @@ format:
 
 ## Installation 
 
-<iframe width="1196" height="673" src="https://www.youtube.com/embed/qlLsf27pG_w" title="installing scikit-rom [v1.0.0]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
----
+<iframe width="1050" height="600" src="https://www.youtube.com/embed/qlLsf27pG_w" title="installing scikit-rom [v1.0.0]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+This tutorial explains how to install SKROM (scikit-ROM):
+
+Installation Steps:
+
+  1.Clone the repository:
+
+  ```bash
+  Copy
+  Edit
+  git clone [GitHub URL]
+  cd scikit-rom
+  ```
+
+  2.Install with pip:
+
+  - For developers (editable install):
+
+  ```bash
+  Copy
+  Edit
+  pip install -e .
+  ```
+
+  - For regular users:
+
+  ```bash
+  Copy
+  Edit
+  pip install .
+  ```
+
+(Use pip3 instead of pip on Mac)
+
+Notes
+
+  - Use `-e` for development; it lets you edit the code without reinstalling.
+  - Regular users should use standard installation.
+  - Reinstallation automatically removes the old version.
+  - The installation completes in seconds and shows “successfully built SKROM.”
+  - All instructions are available on the GitHub page.
 
 ## Recommended Reading
 
