@@ -42,7 +42,7 @@ Installation Steps:
 
 (Use pip3 instead of pip on Mac)
 
-Notes
+Notes:
 
   - Use `-e` for development; it lets you edit the code without reinstalling.
   - Regular users should use standard installation.

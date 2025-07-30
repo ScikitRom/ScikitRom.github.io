@@ -113,7 +113,7 @@
     "href": "reference/utils.imports.html",
     "title": "utils.imports",
     "section": "",
-    "text": "utils.imports\nutils.imports\nThe utils package aggregates frequently used libraries and helper routines for the pyHyperRom framework:\n\nCore imports for OS, filesystem, timing, and randomness\nNumerical & symbolic computing: NumPy, SciPy (dense & sparse), Sympy\nFinite‐element tools: scikit‐fem (from skfem import *), mesh I/O via meshio\nLinear algebra solvers: dense (LU), sparse (splu, spilu, CG), and multigrid (pyamg)\nSampling & design‐of‐experiments: Sobol, Latin Hypercube (SciPy QMC & pyDOE)\nPlotting & visualization: Matplotlib (2D/3D, custom styles), ptitprince, and optional animation modules\n\nUtilities for dynamic imports, path handling, and Cartesian products\n\nThese imports and utilities ensure consistent, ready‐to‐use functionality across the entire reduced‐order modeling pipeline.",
+    "text": "utils.imports\nutils.imports\nThe utils package aggregates frequently used libraries and helper routines for the scikit-rom framework.",
     "crumbs": [
       "**Documentation**",
       "Utilities",
