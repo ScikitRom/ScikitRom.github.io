@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load – SCIKIT-ROM</title>
+<title>problem_classes.master_class_static – SCIKIT-ROM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,65 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1ae26b6b86ecaffacb6d975e4161849a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-1ae26b6b86ecaffacb6d975e4161849a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-c1653071155cc6b08e63f8633cea9c16.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-1ae26b6b86ecaffacb6d975e4161849a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,17 +108,180 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
+<link rel="stylesheet" href="../styles.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">SCIKIT-ROM</span>
     </a>
   </div>
@@ -97,6 +299,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -105,7 +308,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./problem_structure.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">Computational Mechanics</a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">problem_classes.master_class_static</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -128,7 +331,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
@@ -143,7 +346,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">fom.fem_utils</span></a>
   </div>
 </li>
@@ -160,25 +363,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.bilinear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.linear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_error_est</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_utils</span></a>
   </div>
 </li>
@@ -195,19 +398,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.bilinear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.deim</span></a>
   </div>
 </li>
@@ -224,25 +427,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.bilinear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.linear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.custom_nnls</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.hyperreduce</span></a>
   </div>
 </li>
@@ -259,13 +462,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.imports.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.imports.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.imports</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.reduced_basis.svd</span></a>
   </div>
 </li>
@@ -282,13 +485,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.integrators</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.dynamics.newmark_beta.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.dynamics.newmark_beta.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.newmark_beta</span></a>
   </div>
 </li>
@@ -305,31 +508,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtk</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtu</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.vtuwriter</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.color_palette</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.plot_utils</span></a>
   </div>
 </li>
@@ -346,37 +549,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.bilinear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.linear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.params</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.domain</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.problem_def</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.properties</span></a>
   </div>
 </li>
@@ -395,34 +598,34 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./problem_structure.html" class="sidebar-item-text sidebar-link">
+  <a href="../problem_structure.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
  <span class="menu-text">Computational Mechanics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./nonlinear_power_law.html" class="sidebar-item-text sidebar-link active">
+  <a href="../nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./twisting.html" class="sidebar-item-text sidebar-link">
+  <a href="../twisting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.2 Twisting of a Neo-Hookean Block</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear bending.html" class="sidebar-item-text sidebar-link">
+  <a href="../linear bending.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.3 Heterogeneous linear elasticity in a two-material 3D block</span></a>
   </div>
 </li>
@@ -439,13 +642,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear star.html" class="sidebar-item-text sidebar-link">
+  <a href="../linear star.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./non_linear.html" class="sidebar-item-text sidebar-link">
+  <a href="../non_linear.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.5 Nonlinear heat conduction in a two-material 1-D rod</span></a>
   </div>
 </li>
@@ -462,9 +665,10 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./problem_structure.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">Computational Mechanics</a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</a></li></ol></nav>
+
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</h1>
+<h1 class="title">problem_classes.master_class_static</h1>
 </div>
 
 
@@ -481,22 +685,325 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="NL_power_law.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
-<section id="problem-setup" class="level2">
-<h2 class="anchored" data-anchor-id="problem-setup"><strong>Problem Setup</strong></h2>
-<p><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><a href="https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_2_h">Link</a></p>
-<p><embed src="nonlinear_power_law.pdf" style="width:85.0%" height="1000"></p>
+<p><code>problem_classes.master_class_static</code></p>
+<p>Module for static reduced-order modeling (ROM):</p>
+<ul>
+<li>Dynamic import of problem definitions</li>
+<li>Full-order FEM solver (FOM)</li>
+<li>Offline snapshot generator</li>
+<li>Online ROM evaluator</li>
+</ul>
+<section id="classes" class="level2">
+<h2 class="anchored" data-anchor-id="classes">Classes</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.Problem">Problem</a></td>
+<td>Abstract base for conductivity problems under affine decomposition.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.fom_simulation">fom_simulation</a></td>
+<td>Offline snapshot generator using full-order FEM.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.rom_simulation">rom_simulation</a></td>
+<td>Plain Galerkin ROM evaluator with error and speed-up metrics.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.problem_classes.master_class_static.Problem" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem">Problem</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Abstract base for conductivity problems under affine decomposition.</p>
+<section id="methods" class="level4">
+<h4 class="anchored" data-anchor-id="methods">Methods</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.bilinear_forms">bilinear_forms</a></td>
+<td>Return affine bilinear form components.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.domain">domain</a></td>
+<td>Return geometry and FEM bases.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.fom_solver">fom_solver</a></td>
+<td>Solve full-order FEM system for given parameters.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.hyper_rom_solver">hyper_rom_solver</a></td>
+<td>Solve hyper-reduced-order model for given parameters.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.linear_forms">linear_forms</a></td>
+<td>Return affine linear form components.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.parameters">parameters</a></td>
+<td>Generate sampling of parameter space.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.properties">properties</a></td>
+<td>Return function to compute parameter-dependent coefficients.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.Problem.rom_solver">rom_solver</a></td>
+<td>Solve reduced-order model for given parameters.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.problem_classes.master_class_static.Problem.bilinear_forms" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.bilinear_forms">bilinear_forms</h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.bilinear_forms()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Return affine bilinear form components.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.domain" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.domain">domain</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.domain()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Return geometry and FEM bases.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.fom_solver" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.fom_solver">fom_solver</h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.fom_solver()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve full-order FEM system for given parameters.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.hyper_rom_solver" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.hyper_rom_solver">hyper_rom_solver</h5>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.hyper_rom_solver()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve hyper-reduced-order model for given parameters.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.linear_forms" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.linear_forms">linear_forms</h5>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.linear_forms()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Return affine linear form components.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.parameters" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.parameters">parameters</h5>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.parameters()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Generate sampling of parameter space.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.properties" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.properties">properties</h5>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.properties()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Return function to compute parameter-dependent coefficients.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.Problem.rom_solver" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.Problem.rom_solver">rom_solver</h5>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.Problem.rom_solver()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve reduced-order model for given parameters.</p>
+</section>
+</section>
+</section>
+<section id="skrom.problem_classes.master_class_static.fom_simulation" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.fom_simulation">fom_simulation</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.fom_simulation(num_snapshots<span class="op">=</span><span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Offline snapshot generator using full-order FEM.</p>
+<section id="methods-1" class="level4">
+<h4 class="anchored" data-anchor-id="methods-1">Methods</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.fom_simulation.run_simulation">run_simulation</a></td>
+<td>Generate snapshots and record timings.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.problem_classes.master_class_static.fom_simulation.run_simulation" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.fom_simulation.run_simulation">run_simulation</h5>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.fom_simulation.run_simulation()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Generate snapshots and record timings.</p>
+</section>
+</section>
+</section>
+<section id="skrom.problem_classes.master_class_static.rom_simulation" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.rom_simulation">rom_simulation</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.rom_simulation(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    fos_solutions<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    train_mask<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    test_mask<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    V_sel<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    n_sel<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    N_rom_snap<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Plain Galerkin ROM evaluator with error and speed-up metrics.</p>
+<section id="methods-2" class="level4">
+<h4 class="anchored" data-anchor-id="methods-2">Methods</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.rom_simulation.run_hyper_rom_simulation">run_hyper_rom_simulation</a></td>
+<td>Execute hyper-ROM solves, compute error percentages and speed-ups.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.rom_simulation.run_rom_simulation">run_rom_simulation</a></td>
+<td>Execute ROM solves, compute error percentages and speed-ups.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.problem_classes.master_class_static.rom_simulation.run_hyper_rom_simulation" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.rom_simulation.run_hyper_rom_simulation">run_hyper_rom_simulation</h5>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.rom_simulation.run_hyper_rom_simulation(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Execute hyper-ROM solves, compute error percentages and speed-ups.</p>
+<section id="parameters" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 13%">
+<col style="width: 64%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>z</td>
+<td>array_like</td>
+<td>Weight vector for hyper-reduction (stored for reference).</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>hyper_rom_error</td>
+<td>list of float</td>
+<td>Percent error per snapshot.</td>
+</tr>
+<tr class="even">
+<td>hyper_speed_up</td>
+<td>list of float</td>
+<td>Full/FOM time ratio per snapshot.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.problem_classes.master_class_static.rom_simulation.run_rom_simulation" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.rom_simulation.run_rom_simulation">run_rom_simulation</h5>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.rom_simulation.run_rom_simulation()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Execute ROM solves, compute error percentages and speed-ups.</p>
+<section id="returns-1" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rom_error</td>
+<td>list of float</td>
+<td>Percent error per snapshot.</td>
+</tr>
+<tr class="even">
+<td>speed_up</td>
+<td>list of float</td>
+<td>Full/ROM time ratio per snapshot.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+</section>
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.problem_classes.master_class_static.get_problem">get_problem</a></td>
+<td>Instantiate a registered problem by name.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.problem_classes.master_class_static.register_problem">register_problem</a></td>
+<td>Decorator to register a problem class under a given name.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.problem_classes.master_class_static.get_problem" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.get_problem">get_problem</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.get_problem(name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Instantiate a registered problem by name.</p>
+</section>
+<section id="skrom.problem_classes.master_class_static.register_problem" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.master_class_static.register_problem">register_problem</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>problem_classes.master_class_static.register_problem(name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Decorator to register a problem class under a given name.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
     const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {

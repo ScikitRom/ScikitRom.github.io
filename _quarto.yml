@@ -13,7 +13,9 @@ website:
     left: "© 2025. All rights reserved."
     
   navbar:
-    background: light
+    background: "#500000"   # Texas A&M maroon
+    foreground: "white"     # Navbar text color
+    collapse: true
     mainfont: "Adobe Garamond"
     search: true
     title: "SCIKIT-ROM"
@@ -156,8 +158,7 @@ extensions:
   
 format:
   html:
-    theme: 
-      light: flatly
+    theme: default
     page-layout: article
     css: styles.css
     mathjax: default

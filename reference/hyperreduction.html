@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load – SCIKIT-ROM</title>
+<title>hyperreduction – SCIKIT-ROM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,23 +23,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1ae26b6b86ecaffacb6d975e4161849a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-63ea34c0b45e8cab2e1fcb82dbf94eba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,7 +69,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light">
@@ -79,7 +79,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">SCIKIT-ROM</span>
     </a>
   </div>
@@ -97,6 +97,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -105,14 +106,14 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./problem_structure.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">Computational Mechanics</a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -128,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
@@ -143,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">fom.fem_utils</span></a>
   </div>
 </li>
@@ -160,25 +161,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.bilinear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.linear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_error_est</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_utils</span></a>
   </div>
 </li>
@@ -195,19 +196,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.bilinear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.deim</span></a>
   </div>
 </li>
@@ -224,25 +225,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.bilinear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.linear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.custom_nnls</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.hyperreduce</span></a>
   </div>
 </li>
@@ -259,13 +260,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.imports.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.imports.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.imports</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.reduced_basis.svd</span></a>
   </div>
 </li>
@@ -282,13 +283,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.integrators</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.dynamics.newmark_beta.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.dynamics.newmark_beta.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.newmark_beta</span></a>
   </div>
 </li>
@@ -305,31 +306,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtk</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtu</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.vtuwriter</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.color_palette</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.plot_utils</span></a>
   </div>
 </li>
@@ -346,37 +347,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.bilinear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.linear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.params</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.domain</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.problem_def</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.properties</span></a>
   </div>
 </li>
@@ -395,34 +396,34 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./problem_structure.html" class="sidebar-item-text sidebar-link">
+  <a href="../problem_structure.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
  <span class="menu-text">Computational Mechanics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./nonlinear_power_law.html" class="sidebar-item-text sidebar-link active">
+  <a href="../nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./twisting.html" class="sidebar-item-text sidebar-link">
+  <a href="../twisting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.2 Twisting of a Neo-Hookean Block</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear bending.html" class="sidebar-item-text sidebar-link">
+  <a href="../linear bending.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.3 Heterogeneous linear elasticity in a two-material 3D block</span></a>
   </div>
 </li>
@@ -439,13 +440,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear star.html" class="sidebar-item-text sidebar-link">
+  <a href="../linear star.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./non_linear.html" class="sidebar-item-text sidebar-link">
+  <a href="../non_linear.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.5 Nonlinear heat conduction in a two-material 1-D rod</span></a>
   </div>
 </li>
@@ -458,38 +459,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#skrom.hyperreduction" id="toc-skrom.hyperreduction" class="nav-link active" data-scroll-target="#skrom.hyperreduction">hyperreduction</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./problem_structure.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">Computational Mechanics</a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta column-page-right">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="NL_power_law.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
-<section id="problem-setup" class="level2">
-<h2 class="anchored" data-anchor-id="problem-setup"><strong>Problem Setup</strong></h2>
-<p><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><a href="https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_2_h">Link</a></p>
-<p><embed src="nonlinear_power_law.pdf" style="width:85.0%" height="1000"></p>
+<section id="skrom.hyperreduction" class="level1">
+<h1>hyperreduction</h1>
+<p><code>hyperreduction</code></p>
+<p>The <code>hyperreduce</code> package provides tools to perform hyper‐reduction on full‐order models.</p>
+<p>Contents: - <code>bilinear_form_hyperrom.py</code> &amp; <code>linear_form_hyperrom.py</code>: Classes that cluster elements by free‐DOF counts, project local stiffness/load contributions onto reduced bases, and assemble global reduced matrices/vectors. - <code>hyperreduce.py</code>: End‐to‐end pipeline combining randomized SVD preprocessing with bounded NNLS solves for weight selection, plus plotting diagnostics. - <code>custom_nnls.py</code>: Wrapped NNLS solver specialized for hyper‐reduction constraints.</p>
+<p>These modules streamline the construction of sparse, hyper‐reduced operators and right‐hand sides for fast, accurate reduced‐order simulations.</p>
 
 
 </section>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load – SCIKIT-ROM</title>
+<title>hyperreduction.bilinear_form_hyperrom – SCIKIT-ROM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,26 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1ae26b6b86ecaffacb6d975e4161849a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-63ea34c0b45e8cab2e1fcb82dbf94eba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light">
@@ -79,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">SCIKIT-ROM</span>
     </a>
   </div>
@@ -97,6 +132,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -105,14 +141,14 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./problem_structure.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">Computational Mechanics</a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -128,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
@@ -143,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">fom.fem_utils</span></a>
   </div>
 </li>
@@ -160,25 +196,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.bilinear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.linear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_error_est</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_utils</span></a>
   </div>
 </li>
@@ -195,19 +231,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.bilinear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.deim</span></a>
   </div>
 </li>
@@ -224,25 +260,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.bilinear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.linear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.custom_nnls</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.hyperreduce</span></a>
   </div>
 </li>
@@ -259,13 +295,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.imports.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.imports.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.imports</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.reduced_basis.svd</span></a>
   </div>
 </li>
@@ -282,13 +318,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.integrators</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.dynamics.newmark_beta.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.dynamics.newmark_beta.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.newmark_beta</span></a>
   </div>
 </li>
@@ -305,31 +341,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtk</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtu</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.vtuwriter</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.color_palette</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.plot_utils</span></a>
   </div>
 </li>
@@ -346,37 +382,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.bilinear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.linear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.params</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.domain</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.problem_def</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
+  <a href="../reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.properties</span></a>
   </div>
 </li>
@@ -395,34 +431,34 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./problem_structure.html" class="sidebar-item-text sidebar-link">
+  <a href="../problem_structure.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
  <span class="menu-text">Computational Mechanics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./nonlinear_power_law.html" class="sidebar-item-text sidebar-link active">
+  <a href="../nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./twisting.html" class="sidebar-item-text sidebar-link">
+  <a href="../twisting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.2 Twisting of a Neo-Hookean Block</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear bending.html" class="sidebar-item-text sidebar-link">
+  <a href="../linear bending.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.3 Heterogeneous linear elasticity in a two-material 3D block</span></a>
   </div>
 </li>
@@ -439,13 +475,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./linear star.html" class="sidebar-item-text sidebar-link">
+  <a href="../linear star.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./non_linear.html" class="sidebar-item-text sidebar-link">
+  <a href="../non_linear.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.5 Nonlinear heat conduction in a two-material 1-D rod</span></a>
   </div>
 </li>
@@ -458,40 +494,497 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#skrom.hyperreduction.bilinear_form_hyperrom" id="toc-skrom.hyperreduction.bilinear_form_hyperrom" class="nav-link active" data-scroll-target="#skrom.hyperreduction.bilinear_form_hyperrom">hyperreduction.bilinear_form_hyperrom</a>
+  <ul class="collapse">
+  <li><a href="#hyperreducebilinear_form_hyperrom.py" id="toc-hyperreducebilinear_form_hyperrom.py" class="nav-link" data-scroll-target="#hyperreducebilinear_form_hyperrom.py">hyperreduce/bilinear_form_hyperrom.py</a></li>
+  <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
+  <ul class="collapse">
+  <li><a href="#skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM" id="toc-skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM" class="nav-link" data-scroll-target="#skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM">BilinearFormHYPERROM</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./problem_structure.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">Computational Mechanics</a></li><li class="breadcrumb-item"><a href="./nonlinear_power_law.html">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta column-page-right">
 
-    
-  
-    
-  </div>
-  
+<section id="skrom.hyperreduction.bilinear_form_hyperrom" class="level1">
+<h1>hyperreduction.bilinear_form_hyperrom</h1>
+<p><code>hyperreduction.bilinear_form_hyperrom</code></p>
+<section id="hyperreducebilinear_form_hyperrom.py" class="level2 doc-section doc-section-hyperreducebilinearformhyperrompy">
+<h2 class="doc-section doc-section-hyperreducebilinearformhyperrompy anchored" data-anchor-id="hyperreducebilinear_form_hyperrom.py">hyperreduce/bilinear_form_hyperrom.py</h2>
+<p>Implements Hyper-Reduction (HYPERROM) for reduced-order stiffness assembly.</p>
+<p>This module provides:</p>
+<ul>
+<li><code>BilinearFormHYPERROM</code>: a subclass of <code>skfem.assembly.form.bilinear_form.BilinearForm</code> that
+<ul>
+<li>clusters elements by number of free DOFs after Dirichlet condensation</li>
+<li>extracts and projects element stiffness blocks onto test/trial reduced bases</li>
+<li>assembles the global reduced stiffness matrix via vectorized contractions</li>
+</ul></li>
+</ul>
+<p>The <code>hyperreduce</code> folder contains all tools for hyper-reduction, including: - Classes for reduced‐order bilinear and linear forms with element clustering - Routines to extract local element matrices/vectors in the ROM basis - Utilities for efficient handling of Dirichlet conditions in reduced spaces - Support for element‐wise parallelization and weighted assembly</p>
+</section>
+<section id="classes" class="level2">
+<h2 class="anchored" data-anchor-id="classes">Classes</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM">BilinearFormHYPERROM</a></td>
+<td>Reduced-order bilinear form for hyper-reduction of stiffness matrices.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM">BilinearFormHYPERROM</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    form,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    elem_weight,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    lob,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    rob,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    free_dofs<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Reduced-order bilinear form for hyper-reduction of stiffness matrices.</p>
+<p>Projects element-level stiffness matrices onto reduced bases and assembles the global reduced stiffness matrix. Handles Dirichlet boundary conditions via mapping from full degrees of freedom (DOFs) to free (non-Dirichlet) DOFs. All reduced bases and operations are performed only on free DOFs, with Dirichlet and mean field contributions reinserted during solution reconstruction.</p>
+<section id="parameters" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 75%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>form</td>
+<td>callable</td>
+<td>The original bilinear form function taking test and trial basis functions and assembly parameters.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>elem_weight</td>
+<td>scalar or ndarray</td>
+<td>Element-wise weights (e.g., quadrature or sampling weights). Can be a single scalar or an array of length equal to the number of elements.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>ubasis</td>
+<td>Basis</td>
+<td>Trial-space reduced basis object containing full DOF count and element connectivity data.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>lob</td>
+<td>ndarray</td>
+<td>Left (test) reduced basis matrix of shape (N_free, r) if free_dofs is provided, or (N, r) otherwise.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>rob</td>
+<td>ndarray</td>
+<td>Right (trial) reduced basis matrix, with same shape requirements as <code>lob</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>vbasis</td>
+<td>Basis</td>
+<td>Reduced basis for test functions; if None, defaults to <code>ubasis</code>.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="odd">
+<td>free_dofs</td>
+<td>ndarray of int</td>
+<td>Indices of global DOFs that are free (non-Dirichlet). If provided, bases are defined only on these DOFs.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="even">
+<td>mean</td>
+<td>ndarray</td>
+<td>Mean snapshot vector of length N_full DOFs, subtracted during basis computation and reinserted during reconstruction.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="odd">
+<td>nthreads</td>
+<td>int</td>
+<td>Number of threads for element-wise assembly operations. Default 0 (serial execution).</td>
+<td><code>0</code></td>
+</tr>
+<tr class="even">
+<td>dtype</td>
+<td>data - type</td>
+<td>NumPy data type for assembled matrices and intermediate arrays.</td>
+<td><code>np.float64</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes" class="level4 doc-section doc-section-attributes">
+<h4 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 16%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>lob</td>
+<td>ndarray</td>
+<td>Left reduced basis (possibly restricted to free DOFs).</td>
+</tr>
+<tr class="even">
+<td>rob</td>
+<td>ndarray</td>
+<td>Right reduced basis (possibly restricted to free DOFs).</td>
+</tr>
+<tr class="odd">
+<td>free_dofs</td>
+<td>ndarray or None</td>
+<td>Indices of free DOFs if Dirichlet conditions are present.</td>
+</tr>
+<tr class="even">
+<td>mean</td>
+<td>ndarray or None</td>
+<td>Mean snapshot vector for solution centering.</td>
+</tr>
+<tr class="odd">
+<td>r</td>
+<td>int</td>
+<td>Reduced dimension (number of basis vectors).</td>
+</tr>
+<tr class="even">
+<td>mapping</td>
+<td>ndarray of int</td>
+<td>Mapping from full DOF indices to reduced free-DOF indices.</td>
+</tr>
+<tr class="odd">
+<td>cluster_idx</td>
+<td>list of ndarray</td>
+<td>Indices of elements grouped by number of free DOFs per element.</td>
+</tr>
+<tr class="even">
+<td>order_cluster</td>
+<td>list of ndarray</td>
+<td>Local ordering for extracting free DOF positions within each cluster.</td>
+</tr>
+<tr class="odd">
+<td>w_cluster</td>
+<td>list of ndarray</td>
+<td>Element weights corresponding to each cluster.</td>
+</tr>
+<tr class="even">
+<td>R_test_free</td>
+<td>list of ndarray</td>
+<td>Test-basis rows restricted to free DOFs per element cluster.</td>
+</tr>
+<tr class="odd">
+<td>R_trial_free</td>
+<td>list of ndarray</td>
+<td>Trial-basis rows restricted to free DOFs per element cluster.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
+<ul>
+<li>Clustering by element free DOF count enables vectorized extraction of submatrices for each element group, reducing Python looping.</li>
+<li>Uses Einstein summation (<code>np.einsum</code>) to contract element-level contributions into the reduced global stiffness matrix.</li>
+</ul>
+</section>
+<section id="methods" class="level4">
+<h4 class="anchored" data-anchor-id="methods">Methods</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.assemble_weighted">assemble_weighted</a></td>
+<td>Assemble the globally weighted reduced stiffness matrix.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_matrices_rom">extract_element_matrices_rom</a></td>
+<td>Extract local stiffness matrices in the reduced basis for specified elements.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_vector">extract_element_vector</a></td>
+<td>Extract local load vectors for a linear form in the ROM.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.assemble_weighted" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.assemble_weighted">assemble_weighted</h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.assemble_weighted(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Assemble the globally weighted reduced stiffness matrix.</p>
+<p>Each element stiffness block is weighted, projected onto reduced test/trial bases restricted to free DOFs, and summed into a reduced r-by-r matrix.</p>
+<section id="parameters-1" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 77%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>**kwargs</td>
+<td></td>
+<td>Additional options passed to the low-level <code>form</code> assembly routines (e.g., quadrature settings).</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 33%">
+<col style="width: 51%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>K_reduced</td>
+<td>(ndarray, shape(r, r))</td>
+<td>Assembled reduced stiffness matrix.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_matrices_rom" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_matrices_rom">extract_element_matrices_rom</h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_matrices_rom(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Extract local stiffness matrices in the reduced basis for specified elements.</p>
+<p>This routine assembles the original bilinear form on each element and returns an array of shape (n_elems, Nbfun, Nbfun), where Nbfun is the number of local basis functions.</p>
+<section id="parameters-2" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 68%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ubasis</td>
+<td>Basis</td>
+<td>Trial-space finite element basis (with restricted elements if <code>elem_indices</code> is provided).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>vbasis</td>
+<td>Basis</td>
+<td>Test-space finite element basis; defaults to <code>ubasis</code>.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="odd">
+<td>elem_indices</td>
+<td>ndarray of int</td>
+<td>Subset of element indices to restrict the basis via <code>with_elements</code>.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="even">
+<td>**kwargs</td>
+<td></td>
+<td>Extra keyword arguments forwarded to the form assembly.</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-1" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 33%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>element_matrices</td>
+<td>(ndarray, shape(n_elems, Nbfun, Nbfun))</td>
+<td>Local element stiffness matrices for each (restricted) element.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="raises" class="level6 doc-section doc-section-raises">
+<h6 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>ValueError</td>
+<td>If trial/test bases have mismatched quadrature dimensions.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_vector" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_vector">extract_element_vector</h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hyperreduction.bilinear_form_hyperrom.BilinearFormHYPERROM.extract_element_vector(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    basis,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Extract local load vectors for a linear form in the ROM.</p>
+<p>Assembles the linear form on each element, returning an array of shape (n_elems, Nbfun) of local load contributions.</p>
+<section id="parameters-3" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 16%">
+<col style="width: 58%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>basis</td>
+<td>AbstractBasis</td>
+<td>Test-space finite element basis.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>**kwargs</td>
+<td></td>
+<td>Extra parameters forwarded to the form evaluation.</td>
+<td><code>{}</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-2" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 35%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>element_vectors</td>
+<td>(ndarray, shape(n_elems, Nbfun))</td>
+<td>Local element load vectors for each element.</td>
+</tr>
+</tbody>
+</table>
 
 
-</header>
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="NL_power_law.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
-<section id="problem-setup" class="level2">
-<h2 class="anchored" data-anchor-id="problem-setup"><strong>Problem Setup</strong></h2>
-<p><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><a href="https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_2_h">Link</a></p>
-<p><embed src="nonlinear_power_law.pdf" style="width:85.0%" height="1000"></p>
-
-
+</section>
+</section>
+</section>
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
