@@ -26,7 +26,7 @@ website:
       - icon: github
         href: "https://github.com/suparnob100/scikit-rom/tree/main"
         aria-label: GitHub
-      - text: "![](images/image_tamids.png){width=35px}"
+      - text: "![](/images/image_tamids.png){width=35px}"
         href: "https://tamids.tamu.edu"
         aria-label: "TAMIDS"
 

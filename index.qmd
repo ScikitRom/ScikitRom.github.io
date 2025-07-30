@@ -22,7 +22,7 @@ Installation Steps:
   1. **Clone the repository:**
 
   ```bash
-  git clone [GitHub URL]
+  git clone https://github.com/suparnob100/scikit-rom
   cd scikit-rom
   ```
 
@@ -49,6 +49,11 @@ Notes:
   - Reinstallation automatically removes the old version.
   - The installation completes in seconds and shows “successfully built SKROM.”
   - All instructions are available on the GitHub page.
+  
+## Getting Started
+
+<iframe width="1050" height="600" src="https://www.youtube.com/embed/zvUlaBeBRBw" title="Getting started [Coding up your problem]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 ## Recommended Reading
 
