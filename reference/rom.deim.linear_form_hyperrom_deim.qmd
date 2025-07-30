@@ -1,0 +1,121 @@
+# rom.deim.linear_form_hyperrom_deim { #skrom.rom.deim.linear_form_hyperrom_deim }
+
+`rom.deim.linear_form_hyperrom_deim`
+
+
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [LinearFormHYPERROM_deim](#skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim) | Hyperreduction of a linear form via DEIM and mesh sampling. |
+
+### LinearFormHYPERROM_deim { #skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim }
+
+```python
+rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim(
+    form,
+    elem_weight,
+    ubasis,
+    lob,
+    sampled_rows,
+    deim_mat,
+    free_dofs=None,
+    mean=None,
+    nthreads=0,
+    dtype=np.float64,
+)
+```
+
+Hyperreduction of a linear form via DEIM and mesh sampling.
+
+Implements a Discrete Empirical Interpolation Method (DEIM)–based
+hyperreduction for finite‐element linear forms. Builds a reduced‐order
+load vector by assembling only a weighted subset of elements and
+reconstructing the full operator via DEIM interpolation.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [assemble_deim](#skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim) | Assemble the hyper-reduced load vector via DEIM. |
+| [deim_elem_assembly](#skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly) | Assemble the sampled full-order load vector. |
+| [extract_element_vector_rom](#skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom) | Extract element vectors for assembling over sampled mesh. |
+
+##### assemble_deim { #skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim }
+
+```python
+rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim(
+    **kwargs,
+)
+```
+
+Assemble the hyper-reduced load vector via DEIM.
+
+This method first builds the sampled full-order load vector
+on the selected elements, then applies the DEIM interpolation
+matrix to project it onto the reduced basis.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type   | Description                                                            | Default   |
+|----------|--------|------------------------------------------------------------------------|-----------|
+| **kwargs | dict   | Keyword arguments passed to `deim_elem_assembly` / element extraction. | `{}`      |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type    | Description                              |
+|--------|---------|------------------------------------------|
+|        | ndarray | Reduced-order load vector of shape (r,). |
+
+##### deim_elem_assembly { #skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly }
+
+```python
+rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly(
+    **kwargs,
+)
+```
+
+Assemble the sampled full-order load vector.
+
+Extracts element-level load contributions only on the
+sampled elements, then scatters them into the global
+load vector.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type   | Description                                               | Default   |
+|----------|--------|-----------------------------------------------------------|-----------|
+| **kwargs | dict   | Keyword arguments passed to `extract_element_vector_rom`. | `{}`      |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type    | Description                                |
+|--------|---------|--------------------------------------------|
+|        | ndarray | Full-order load vector of length `n_dofs`. |
+
+##### extract_element_vector_rom { #skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom }
+
+```python
+rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom(
+    basis,
+    elem_indices=None,
+    **kwargs,
+)
+```
+
+Extract element vectors for assembling over sampled mesh.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name         | Type              | Description                                                                      | Default    |
+|--------------|-------------------|----------------------------------------------------------------------------------|------------|
+| ubasis       | Basis             | Basis for test functions.                                                        | _required_ |
+| elem_indices | array_like of int | Indices of elements to include in extraction.                                    | `None`     |
+| **kwargs     | dict              | Additional keyword arguments for evaluating the bilinear form over each element. | `{}`       |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type    | Description                                                     |
+|--------|---------|-----------------------------------------------------------------|
+|        | ndarray | Array of shape (n_elems, n_loc) containing the element vectors. |

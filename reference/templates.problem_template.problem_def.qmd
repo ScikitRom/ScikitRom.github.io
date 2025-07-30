@@ -1,0 +1,161 @@
+# templates.problem_template.problem_def { #skrom.templates.problem_template.problem_def }
+
+`templates.problem_template.problem_def`
+
+
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [ProblemTemplate](#skrom.templates.problem_template.problem_def.ProblemTemplate) | Template for an affine or non-linear ROM problem. |
+
+### ProblemTemplate { #skrom.templates.problem_template.problem_def.ProblemTemplate }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate()
+```
+
+Template for an affine or non-linear ROM problem.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [bilinear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms) | Return a list of bilinear form callables (or Jacobian forms for nonlinear problems). |
+| [domain](#skrom.templates.problem_template.problem_def.ProblemTemplate.domain) | Setup mesh, basis, DOFs, and boundary conditions. |
+| [fom_operators](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators) | Assemble (and cache on first call) the full-order operators |
+| [fom_rhs](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs) | Assemble (and cache on first call) the full-order right-hand side vector. |
+| [fom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver) | Solve the full-order model for given parameters. |
+| [hyper_rom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver) | Solve hyper-reduced-order model for given parameters. |
+| [linear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms) | Return a list of linear form callables (or residual forms for nonlinear problems). |
+| [parameters](#skrom.templates.problem_template.problem_def.ProblemTemplate.parameters) | Generate sampling design over parameter space. |
+| [properties](#skrom.templates.problem_template.problem_def.ProblemTemplate.properties) | Return a list of functions mapping physical parameters to coefficients. |
+| [reduced_operators](#skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators) | Project FOM operators onto the reduced basis and compute |
+| [rom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver) | Solve the reduced-order model and reconstruct the full solution. |
+
+##### bilinear_forms { #skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.bilinear_forms()
+```
+
+Return a list of bilinear form callables (or Jacobian forms for nonlinear problems).
+Each form should have signature a(u, v, w).
+
+##### domain { #skrom.templates.problem_template.problem_def.ProblemTemplate.domain }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.domain()
+```
+
+Setup mesh, basis, DOFs, and boundary conditions.
+
+Returns:
+    dict with keys like
+    - 'mesh'
+    - 'basis'
+    - 'free_dofs'
+    - 'dirichlet_dofs'
+    - 'dirichlet_value'
+    # …any other domain-specific items…
+
+##### fom_operators { #skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.fom_operators(cls)
+```
+
+Assemble (and cache on first call) the full-order operators
+needed by the FOM solver (e.g. stiffness matrix).
+
+Returns:
+    tuple of FOM operators
+
+##### fom_rhs { #skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.fom_rhs(cls)
+```
+
+Assemble (and cache on first call) the full-order right-hand side vector.
+
+Returns:
+    full-order RHS vector
+
+##### fom_solver { #skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.fom_solver(cls, param)
+```
+
+Solve the full-order model for given parameters.
+
+Returns:
+    solution array satisfying BCs
+
+##### hyper_rom_solver { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver()
+```
+
+Solve hyper-reduced-order model for given parameters.
+
+##### linear_forms { #skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.linear_forms()
+```
+
+Return a list of linear form callables (or residual forms for nonlinear problems).
+Each form should have signature l(v, w).
+
+##### parameters { #skrom.templates.problem_template.problem_def.ProblemTemplate.parameters }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.parameters(n_samples)
+```
+
+Generate sampling design over parameter space.
+
+Parameters:
+    n_samples (int): number of samples to draw.
+
+Returns:
+    params, param_ranges, train_mask, test_mask
+
+##### properties { #skrom.templates.problem_template.problem_def.ProblemTemplate.properties }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.properties()
+```
+
+Return a list of functions mapping physical parameters to coefficients.
+E.g. [k_func, q_func, …]
+
+##### reduced_operators { #skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.reduced_operators(
+    cls,
+    param,
+)
+```
+
+Project FOM operators onto the reduced basis and compute
+any mean or offset terms needed for the ROM.
+
+Returns:
+    (modal_solution_full_space, mean_correction)
+
+##### rom_solver { #skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.rom_solver(cls, param)
+```
+
+Solve the reduced-order model and reconstruct the full solution.
+
+Returns:
+    (parameter_scaled_modal_solution, mean_correction)

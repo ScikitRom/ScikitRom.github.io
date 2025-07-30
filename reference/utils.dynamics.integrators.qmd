@@ -1,0 +1,53 @@
+# utils.dynamics.integrators { #skrom.utils.dynamics.integrators }
+
+`utils.dynamics.integrators`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [newmark_with_damping](#skrom.utils.dynamics.integrators.newmark_with_damping) | Newmark-β integrator with Rayleigh damping C. |
+| [wbz_alpha](#skrom.utils.dynamics.integrators.wbz_alpha) | Wood-Bossak-Zienkiewicz (WBZ-α) method. |
+
+### newmark_with_damping { #skrom.utils.dynamics.integrators.newmark_with_damping }
+
+```python
+utils.dynamics.integrators.newmark_with_damping(
+    M,
+    C,
+    K,
+    force_free,
+    times,
+    U0=None,
+    V0=None,
+    beta=0.25,
+    gamma=0.5,
+)
+```
+
+Newmark-β integrator with Rayleigh damping C.
+Uses copies of input matrices to avoid side effects.
+force_free(i, times) must return the load vector at times[i].
+
+### wbz_alpha { #skrom.utils.dynamics.integrators.wbz_alpha }
+
+```python
+utils.dynamics.integrators.wbz_alpha(
+    M,
+    C,
+    K,
+    force_free,
+    times,
+    U0=None,
+    V0=None,
+    gamma=0.5,
+    beta=0.25,
+    alpha_m=0.0,
+)
+```
+
+Wood-Bossak-Zienkiewicz (WBZ-α) method.
+Extension of Newmark method with algorithmic damping parameter alpha_m.
+alpha_m: numerical damping parameter (0 ≤ alpha_m ≤ 1)

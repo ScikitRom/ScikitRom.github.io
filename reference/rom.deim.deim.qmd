@@ -1,0 +1,88 @@
+# rom.deim.deim { #skrom.rom.deim.deim }
+
+`rom.deim.deim`
+
+
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [deim](#skrom.rom.deim.deim.deim) | Class to perform the Discrete Empirical Interpolation Method (DEIM) for  |
+
+### deim { #skrom.rom.deim.deim.deim }
+
+```python
+rom.deim.deim.deim(mesh, F_nl, V_sel, tol_f=0.01, extra_modes=0)
+```
+
+Class to perform the Discrete Empirical Interpolation Method (DEIM) for 
+reducing the dimension of nonlinear force terms in a reduced order model 
+(ROM) within a finite element framework.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [deim_dof_to_elem](#skrom.rom.deim.deim.deim.deim_dof_to_elem) | Map the selected degrees-of-freedom (DOFs) to an element indicator vector. |
+| [deim_red](#skrom.rom.deim.deim.deim.deim_red) | Perform the standard Discrete Empirical Interpolation Method (DEIM) to select rows  |
+| [select_elems](#skrom.rom.deim.deim.deim.select_elems) | Select the elements (or rows) for DEIM reduction based on the computed snapshot basis. |
+
+##### deim_dof_to_elem { #skrom.rom.deim.deim.deim.deim_dof_to_elem }
+
+```python
+rom.deim.deim.deim.deim_dof_to_elem(deim_dof)
+```
+
+Map the selected degrees-of-freedom (DOFs) to an element indicator vector.
+Each element (or cell) is flagged if any of its nonzero node equation IDs 
+appear in the DEIM-selected DOFs.
+
+###### Parameters: {.doc-section .doc-section-parameters}
+
+deim_dof : list
+    List of DOF indices selected by the DEIM or S-optimal procedure.
+
+###### Returns: {.doc-section .doc-section-returns}
+
+x : ndarray
+    A binary vector indicating for each element whether it contains any
+    of the selected DOFs (1 if yes, 0 if no).
+
+##### deim_red { #skrom.rom.deim.deim.deim.deim_red }
+
+```python
+rom.deim.deim.deim.deim_red(f_basis, num_f_basis_vectors_used)
+```
+
+Perform the standard Discrete Empirical Interpolation Method (DEIM) to select rows 
+that capture the dominant features of the nonlinear basis.
+
+###### Parameters: {.doc-section .doc-section-parameters}
+
+f_basis : ndarray
+    Basis matrix derived from the nonlinear force snapshots.
+num_f_basis_vectors_used : int
+    Number of basis vectors (modes) to use for the reduction.
+
+###### Returns: {.doc-section .doc-section-returns}
+
+f_basis_sampled : ndarray
+    Matrix of the selected rows from the original basis.
+sampled_rows : list
+    List of row indices that were selected.
+is_sampled : ndarray
+    Boolean array indicating which rows of the original basis are selected.
+
+##### select_elems { #skrom.rom.deim.deim.deim.select_elems }
+
+```python
+rom.deim.deim.deim.select_elems()
+```
+
+Select the elements (or rows) for DEIM reduction based on the computed snapshot basis.
+This method:
+  1. Performs SVD on the nonlinear force snapshots to determine dominant modes.
+  2. Uses an S-optimal sampling strategy (or DEIM, if uncommented) to select rows.
+  3. Maps the selected DOFs back to element indicators.
+  4. Constructs the DEIM projection matrix.

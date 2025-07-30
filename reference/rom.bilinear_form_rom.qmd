@@ -1,14 +1,4 @@
----
-title: "rom.bilinear_form_rom"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# rom.bilinear_form_rom { #skrom.rom.bilinear_form_rom }
 
 `rom.bilinear_form_rom`
 
@@ -82,7 +72,7 @@ conditions via mappings from full to free DOFs.
 | Name | Description |
 | --- | --- |
 | [assemble](#skrom.rom.bilinear_form_rom.BilinearFormROM.assemble) | Assemble the global reduced stiffness matrix. |
-| [extract_element_vector](#skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_vector) | Extract local element load vectors for a linear form. |
+| [extract_element_matrices](#skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices) | Extract local element stiffness matrices for a given bilinear form. |
 
 ##### assemble { #skrom.rom.bilinear_form_rom.BilinearFormROM.assemble }
 
@@ -108,25 +98,29 @@ over free DOFs only.
 |-----------|------------------------|---------------------------|
 | K_reduced | (ndarray, shape(r, r)) | Reduced stiffness matrix. |
 
-##### extract_element_vector { #skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_vector }
+##### extract_element_matrices { #skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices }
 
 ```python
-rom.bilinear_form_rom.BilinearFormROM.extract_element_vector(basis, **kwargs)
+rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices(
+    ubasis,
+    vbasis=None,
+    **kwargs,
+)
 ```
 
-Extract local element load vectors for a linear form.
-
-Computes per-element load contributions for each local basis function.
+Extract local element stiffness matrices for a given bilinear form.
 
 ###### Parameters {.doc-section .doc-section-parameters}
 
-| Name     | Type          | Description                                             | Default    |
-|----------|---------------|---------------------------------------------------------|------------|
-| basis    | AbstractBasis | Finite element basis associated with the test function. | _required_ |
-| **kwargs |               | Additional keyword arguments passed to the form.        | `{}`       |
+| Name   | Type         | Description                                                                                         | Default    |
+|--------|--------------|-----------------------------------------------------------------------------------------------------|------------|
+| form   | BilinearForm | A bilinear form instance (e.g., one decorated with @BilinearForm).                                  | _required_ |
+| ubasis | Basis        | The finite element basis associated with the trial function.                                        | _required_ |
+| vbasis | Basis        | The finite element basis associated with the test function. If None, vbasis is set equal to ubasis. | `None`     |
+| kwargs | dict         | Additional keyword arguments to be passed as extra parameters during the assembly process.          | `{}`       |
 
 ###### Returns {.doc-section .doc-section-returns}
 
-| Name            | Type                                | Description                                                                              |
-|-----------------|-------------------------------------|------------------------------------------------------------------------------------------|
-| element_vectors | (ndarray, shape(n_elements, Nbfun)) | Local load vectors for each element, where Nbfun is the number of local basis functions. |
+| Name             | Type    | Description                                                                                                                                                                 |
+|------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| element_matrices | ndarray | A NumPy array of shape (n_elements, Nbfun, Nbfun) containing the local stiffness matrices for each element, where Nbfun is the number of local basis functions per element. |

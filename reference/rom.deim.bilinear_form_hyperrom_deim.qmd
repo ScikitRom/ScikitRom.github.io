@@ -1,0 +1,125 @@
+# rom.deim.bilinear_form_hyperrom_deim { #skrom.rom.deim.bilinear_form_hyperrom_deim }
+
+`rom.deim.bilinear_form_hyperrom_deim`
+
+
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [BilinearFormHYPERROM_deim](#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim) | Hyperreduction of a bilinear form via DEIM and mesh sampling. |
+
+### BilinearFormHYPERROM_deim { #skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim }
+
+```python
+rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim(
+    form,
+    elem_weight,
+    ubasis,
+    lob,
+    rob,
+    sampled_rows,
+    deim_mat,
+    vbasis=None,
+    free_dofs=None,
+    mean=None,
+    nthreads=0,
+    dtype=np.float64,
+)
+```
+
+Hyperreduction of a bilinear form via DEIM and mesh sampling.
+
+Implements a Discrete Empirical Interpolation Method (DEIM)–based
+hyperreduction for finite‐element bilinear forms. Builds a reduced‐order
+operator by assembling only a subset of elements and
+reconstructing the full operator via DEIM interpolation.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [assemble_deim](#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim) | Assemble the hyper-reduced stiffness matrix via DEIM. |
+| [deim_elem_assembly](#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly) | Assemble the sampled full-order stiffness matrix. |
+| [extract_element_matrices_rom](#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom) | Extract element matrices for assembling over sampled mesh. |
+
+##### assemble_deim { #skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim }
+
+```python
+rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim(
+    **kwargs,
+)
+```
+
+Assemble the hyper-reduced stiffness matrix via DEIM.
+
+This first builds the sampled full-order matrix,
+then projects it onto the reduced basis using the DEIM
+interpolation matrix.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type   | Description                                       | Default   |
+|----------|--------|---------------------------------------------------|-----------|
+| **kwargs | dict   | Keyword arguments passed to `deim_elem_assembly`. | `{}`      |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type    | Description                                     |
+|--------|---------|-------------------------------------------------|
+|        | ndarray | Reduced-order stiffness matrix of shape (r, r). |
+
+##### deim_elem_assembly { #skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly }
+
+```python
+rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly(
+    **kwargs,
+)
+```
+
+Assemble the sampled full-order stiffness matrix.
+
+Extracts element-level contributions only on sampled
+elements, flattens and filters out zeros, and builds
+a sparse CSR matrix.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type   | Description                                                 | Default   |
+|----------|--------|-------------------------------------------------------------|-----------|
+| **kwargs | dict   | Keyword arguments passed to `extract_element_matrices_rom`. | `{}`      |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type       | Description                                                                                    |
+|--------|------------|------------------------------------------------------------------------------------------------|
+|        | csr_matrix | Sparse full-order stiffness matrix of shape (n_dofs, n_dofs), assembled over sampled elements. |
+
+##### extract_element_matrices_rom { #skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom }
+
+```python
+rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom(
+    ubasis,
+    vbasis=None,
+    elem_indices=None,
+    **kwargs,
+)
+```
+
+Extract element matrices for assembling over sampled mesh.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name         | Type              | Description                                                                      | Default    |
+|--------------|-------------------|----------------------------------------------------------------------------------|------------|
+| ubasis       | Basis             | Basis for trial functions.                                                       | _required_ |
+| vbasis       | Basis             | Basis for test functions. If None, `ubasis` is used.                             | `None`     |
+| elem_indices | array_like of int | Indices of elements to include in extraction.                                    | `None`     |
+| **kwargs     | dict              | Additional keyword arguments for evaluating the bilinear form over each element. | `{}`       |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type    | Description                                                                       |
+|--------|---------|-----------------------------------------------------------------------------------|
+|        | ndarray | Array of shape (n_elems, n_loc, n_loc) containing the element stiffness matrices. |

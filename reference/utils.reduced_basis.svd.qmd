@@ -1,14 +1,4 @@
----
-title: "utils.reduced_basis.svd"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# utils.reduced_basis.svd { #skrom.utils.reduced_basis.svd }
 
 `utils.reduced_basis.svd`
 

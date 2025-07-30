@@ -1,0 +1,39 @@
+# templates.problem_template.bilinear_forms { #skrom.templates.problem_template.bilinear_forms }
+
+`templates.problem_template.bilinear_forms`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [a](#skrom.templates.problem_template.bilinear_forms.a) | Template for your problem’s bilinear form (or Jacobian in a nonlinear solver): |
+
+### a { #skrom.templates.problem_template.bilinear_forms.a }
+
+```python
+templates.problem_template.bilinear_forms.a(u, v, w)
+```
+
+Template for your problem’s bilinear form (or Jacobian in a nonlinear solver):
+    ∫_Ω [your integrand here] dx
+
+#### Parameters: {.doc-section .doc-section-parameters}
+
+u : array_like or callable
+    Trial (or current Newton iterate) values at quadrature points.
+v : array_like or callable
+    Test function values at quadrature points.
+w : dict
+    Assembly context carrying any coefficients or parameters.
+
+#### Returns: {.doc-section .doc-section-returns}
+
+array_like or float
+    Elementwise integrand for global matrix assembly.
+
+#### Note: {.doc-section .doc-section-note}
+
+In a nonlinear problem solved by Newton’s method,
+this form assembles the Jacobian matrix.

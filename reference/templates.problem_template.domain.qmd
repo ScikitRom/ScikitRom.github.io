@@ -1,0 +1,31 @@
+# templates.problem_template.domain { #skrom.templates.problem_template.domain }
+
+`templates.problem_template.domain`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [domain_](#skrom.templates.problem_template.domain.domain_) | Template for setting up the computational domain and boundary conditions. |
+
+### domain_ { #skrom.templates.problem_template.domain.domain_ }
+
+```python
+templates.problem_template.domain.domain_(**kwargs)
+```
+
+Template for setting up the computational domain and boundary conditions.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type   | Description                                                                                                  | Default   |
+|--------|--------|--------------------------------------------------------------------------------------------------------------|-----------|
+| kwargs | dict   | Any problem-specific parameters needed for mesh generation, basis construction, and boundary identification. | `{}`      |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description                                                                                                                                                                                                                                                  |
+|--------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|        | dict   | {     'mesh': <mesh object>,     'basis': <finite-element basis object>,     'free_dofs': <array of free DOFs>,     'dirichlet_dofs': <array of Dirichlet DOFs>,     'dirichlet_value': <value imposed on Dirichlet BC>,     # add other entries as needed } |

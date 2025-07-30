@@ -1,14 +1,4 @@
----
-title: "rom.linear_form_rom"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# rom.linear_form_rom { #skrom.rom.linear_form_rom }
 
 `rom.linear_form_rom`
 

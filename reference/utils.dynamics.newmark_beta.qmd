@@ -1,0 +1,31 @@
+# utils.dynamics.newmark_beta { #skrom.utils.dynamics.newmark_beta }
+
+`utils.dynamics.newmark_beta`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [newmark_with_damping](#skrom.utils.dynamics.newmark_beta.newmark_with_damping) | Newmark-β integrator with Rayleigh damping C. |
+
+### newmark_with_damping { #skrom.utils.dynamics.newmark_beta.newmark_with_damping }
+
+```python
+utils.dynamics.newmark_beta.newmark_with_damping(
+    M,
+    C,
+    K,
+    force_free,
+    times,
+    U0=None,
+    V0=None,
+    beta=0.25,
+    gamma=0.5,
+)
+```
+
+Newmark-β integrator with Rayleigh damping C.
+Uses copies of input matrices to avoid side effects.
+force_free(i, times) must return the load vector at times[i].

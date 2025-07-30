@@ -1,14 +1,4 @@
----
-title: "rom.rom_error_est"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# rom.rom_error_est { #skrom.rom.rom_error_est }
 
 `rom.rom_error_est`
 

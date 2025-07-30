@@ -1,14 +1,4 @@
----
-title: "utils.visualization.generate_vtk"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# utils.visualization.generate_vtk { #skrom.utils.visualization.generate_vtk }
 
 `utils.visualization.generate_vtk`
 
@@ -19,6 +9,8 @@ format:
 | Name | Description |
 | --- | --- |
 | [generate_vtk](#skrom.utils.visualization.generate_vtk.generate_vtk) | Batch export of full-order and reduced-order solutions to VTK. |
+| [save_vtk_solution](#skrom.utils.visualization.generate_vtk.save_vtk_solution) | Write a single solution vector to a VTK file. |
+| [save_vtk_time_series](#skrom.utils.visualization.generate_vtk.save_vtk_time_series) | Write one VTK per time-step and a .pvd that collects them. |
 
 ### generate_vtk { #skrom.utils.visualization.generate_vtk.generate_vtk }
 
@@ -74,3 +66,64 @@ each invocation.
 >>> generate_vtk(LS_test, LS_rom, mesh, basis, scale=0.5, num_test=3,
 ...              out_dir="vtk_outputs", split_dim=True)
 ```
+
+### save_vtk_solution { #skrom.utils.visualization.generate_vtk.save_vtk_solution }
+
+```python
+utils.visualization.generate_vtk.save_vtk_solution(
+    u,
+    mesh,
+    basis,
+    scale,
+    run_dir,
+    prefix,
+    split_dim=False,
+)
+```
+
+Write a single solution vector to a VTK file.
+
+Applies a translation to the mesh based on displacement values and saves
+the resulting geometry along with point data fields.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name      | Type         | Description                                                                                                                                                  | Default    |
+|-----------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| u         | array_like   | Displacement vector of length matching the mesh degrees of freedom.                                                                                          | _required_ |
+| mesh      | object       | Mesh object supporting `translated(displacements)` to return a new mesh and `save(path, point_data=...)` to write VTK files.                                 | _required_ |
+| basis     | object       | Basis object containing attribute `nodal_dofs`, an integer array indexing into the global solution vector for nodal degrees of freedom.                      | _required_ |
+| scale     | float        | Scalar multiplier applied to the displacement values before translation.                                                                                     | _required_ |
+| run_dir   | pathlib.Path | Directory in which the `.vtk` file will be created.                                                                                                          | _required_ |
+| prefix    | str          | Filename prefix (e.g., "test_sol_fos").                                                                                                                      | _required_ |
+| split_dim | bool         | If True, splits the displacement into separate scalar fields (`u_x`, `u_y`, and `u_z` for 3D) in the VTK output; otherwise writes a single vector field `u`. | `False`    |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description   |
+|--------|--------|---------------|
+|        | None   |               |
+
+### save_vtk_time_series { #skrom.utils.visualization.generate_vtk.save_vtk_time_series }
+
+```python
+utils.visualization.generate_vtk.save_vtk_time_series(
+    U,
+    times,
+    mesh,
+    basis,
+    scale,
+    run_dir,
+    prefix,
+)
+```
+
+Write one VTK per time-step and a .pvd that collects them.
+
+U      : full displacement history
+times  : time vector
+mesh   : skfem mesh
+basis  : skfem basis
+scale  : displacement scale
+run_dir: output directory
+prefix : file prefix, e.g. "beam"

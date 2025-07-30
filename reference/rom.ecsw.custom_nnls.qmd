@@ -1,14 +1,4 @@
----
-title: "rom.ecsw.custom_nnls"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# rom.ecsw.custom_nnls { #skrom.rom.ecsw.custom_nnls }
 
 `rom.ecsw.custom_nnls`
 

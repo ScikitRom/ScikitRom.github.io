@@ -1,14 +1,4 @@
----
-title: "utils.visualization.vtuwriter"
-format:
-  html:
-    theme:
-      light: flatly
-      dark: darkly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# utils.visualization.vtuwriter { #skrom.utils.visualization.vtuwriter }
 
 `utils.visualization.vtuwriter`
 
