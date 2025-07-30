@@ -15,6 +15,7 @@ This module provides:
       * assembles the global reduced stiffness matrix via vectorized contractions
 
 The `hyperreduce` folder contains all tools for hyper-reduction, including:
+
   - Classes for reduced‐order bilinear and linear forms with element clustering
   - Routines to extract local element matrices/vectors in the ROM basis
   - Utilities for efficient handling of Dirichlet conditions in reduced spaces

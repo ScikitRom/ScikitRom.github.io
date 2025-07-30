@@ -5,12 +5,14 @@
 Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW).
 
 This module provides:
+
   - `NNLS_termination`: enumeration of L2 and L∞ convergence criteria for NNLS.
   - `_verify`: internal helper to assert solver invariants.
   - `NNLSSolver`: a sequential active-set NNLS solver with per-entry bounds, selectable norms,
     stall-detection, and verbosity controls.
 
 The `ecsw` folder contains utilities for Empirical Cubature Subset Weighting, including:
+
   - Algorithms to compute cubature weights using bounded NNLS.
   - Selection and pruning of integration points via active-set methods.
   - Support functions for convergence criteria and solver configuration.
