@@ -1,5 +1,5 @@
 ---
-title: "P.3 Linear heat conduction with non-affine parametric source on a star-shaped plate"
+title: "P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate"
 format:
   html:
     theme:

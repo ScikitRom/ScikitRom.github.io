@@ -724,13 +724,13 @@
   {
     "objectID": "linear bending.html#problem-setup",
     "href": "linear bending.html#problem-setup",
-    "title": "P.4 Heterogeneous linear elasticity in a two-material 3D block",
+    "title": "P.3 Heterogeneous linear elasticity in a two-material 3D block",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
-      "Heat Transfer",
-      "P.4 Heterogeneous linear elasticity in a two-material 3D block"
+      "Computational Mechanics",
+      "P.3 Heterogeneous linear elasticity in a two-material 3D block"
     ]
   },
   {
@@ -750,13 +750,13 @@
   {
     "objectID": "linear star.html#problem-setup",
     "href": "linear star.html#problem-setup",
-    "title": "P.3 Linear heat conduction with non-affine parametric source on a star-shaped plate",
+    "title": "P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate",
     "section": "Problem Setup",
     "text": "Problem Setup\nLink",
     "crumbs": [
       "**Examples**",
       "Heat Transfer",
-      "P.3 Linear heat conduction with non-affine parametric source on a star-shaped plate"
+      "P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate"
     ]
   },
   {

@@ -142,10 +142,10 @@ website:
           - contents:
               - nonlinear_power_law.qmd
               - twisting.qmd
+              - linear bending.qmd
             section: Computational Mechanics
           - contents:
               - linear star.qmd
-              - linear bending.qmd
               - non_linear.qmd
             section: Heat Transfer
 
