@@ -11,6 +11,10 @@ format:
 
 {{< include resources/intro/rom_intro.md >}}
 
+## Installation 
+
+<iframe width="1196" height="673" src="https://www.youtube.com/embed/qlLsf27pG_w" title="installing scikit-rom [v1.0.0]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+---
 
 ## Recommended Reading
 

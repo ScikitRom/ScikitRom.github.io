@@ -32,6 +32,10 @@ website:
       - icon: envelope
         href: ""
         aria-label: Email
+      - text: "![](image_tamids.png){width=32px}"
+        href: "https://tamids.tamu.edu"
+        aria-label: "TAMIDS"
+
 
    
    # This section creates the LEFT sidebar
