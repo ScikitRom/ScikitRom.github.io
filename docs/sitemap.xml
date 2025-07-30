@@ -2,15 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://scikitrom.github.io/twisting.html</loc>
-    <lastmod>2025-07-30T15:43:46.578Z</lastmod>
+    <lastmod>2025-07-29T21:06:25.616Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/Resources/intro/rom_intro.html</loc>
-    <lastmod>2025-07-30T15:43:46.292Z</lastmod>
+    <lastmod>2025-07-29T21:06:25.594Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.visualization.html</loc>
-    <lastmod>2025-07-30T15:43:46.260Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.798Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.visualization.generate_vtu.html</loc>
@@ -22,15 +22,15 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.rom_error_est.html</loc>
-    <lastmod>2025-07-30T15:43:46.255Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.797Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.reduced_basis.html</loc>
-    <lastmod>2025-07-30T15:43:46.251Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.796Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.newton_solver_rom.html</loc>
-    <lastmod>2025-07-30T15:43:46.244Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.796Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.imports.html</loc>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.errors.html</loc>
-    <lastmod>2025-07-30T15:43:46.229Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.795Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.dynamics.integrators.html</loc>
@@ -46,7 +46,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.basis.pod.html</loc>
-    <lastmod>2025-07-30T15:43:46.213Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.794Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/templates.problem_template.properties.html</loc>
@@ -66,11 +66,11 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.html</loc>
-    <lastmod>2025-07-30T15:43:46.181Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.791Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.linear_form_hyperrom.html</loc>
-    <lastmod>2025-07-30T15:43:46.181Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.790Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.linear_form_hyperrom_ecsw.html</loc>
@@ -90,27 +90,27 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_structure.html</loc>
-    <lastmod>2025-07-30T15:43:46.147Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.788Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_classes.master_class_static.html</loc>
-    <lastmod>2025-07-30T15:43:46.143Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.788Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.html</loc>
-    <lastmod>2025-07-30T15:43:46.124Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.782Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.ecsw.html</loc>
-    <lastmod>2025-07-30T15:43:46.120Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.781Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.ecsw.custom_nnls.html</loc>
-    <lastmod>2025-07-30T15:43:46.115Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.780Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/fom.html</loc>
-    <lastmod>2025-07-30T15:43:46.102Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.778Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/problem_structure.html</loc>
@@ -134,7 +134,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/non_linear.html</loc>
-    <lastmod>2025-07-30T15:43:46.515Z</lastmod>
+    <lastmod>2025-07-29T21:06:25.615Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/fom.fem_utils.html</loc>
@@ -142,15 +142,15 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.bilinear_form_hyperrom.html</loc>
-    <lastmod>2025-07-30T15:43:46.102Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.780Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.ecsw.hyperreduce.html</loc>
-    <lastmod>2025-07-30T15:43:46.117Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.781Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.linear_form_hyperrom.html</loc>
-    <lastmod>2025-07-30T15:43:46.122Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.782Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/index.html</loc>
@@ -158,7 +158,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_classes.html</loc>
-    <lastmod>2025-07-30T15:43:46.145Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.788Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.bilinear_form_rom.html</loc>
@@ -178,7 +178,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.html</loc>
-    <lastmod>2025-07-30T15:43:46.176Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.790Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.linear_form_rom.html</loc>
@@ -202,11 +202,11 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.basic.html</loc>
-    <lastmod>2025-07-30T15:43:46.213Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.794Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.custom_nnls.html</loc>
-    <lastmod>2025-07-30T15:43:46.213Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.794Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.dynamics.newmark_beta.html</loc>
@@ -214,15 +214,15 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.fem_utils.html</loc>
-    <lastmod>2025-07-30T15:43:46.229Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.795Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.newton_solver.html</loc>
-    <lastmod>2025-07-30T15:43:46.241Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.795Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.html</loc>
-    <lastmod>2025-07-30T15:43:46.247Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.796Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.reduced_basis.svd.html</loc>
@@ -230,7 +230,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.rom_utils.html</loc>
-    <lastmod>2025-07-30T15:43:46.257Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.797Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.visualization.generate_vtk.html</loc>
@@ -246,6 +246,6 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/Resources/intro/rom_intro_ex.html</loc>
-    <lastmod>2025-07-30T15:43:46.303Z</lastmod>
+    <lastmod>2025-07-29T20:30:38.587Z</lastmod>
   </url>
 </urlset>
