@@ -24,6 +24,22 @@ text-align: justify;
 text-justify: inter-word; /* spreads words evenly */
 }
 
+/* Hyperlinks and navigation links */
+a {
+  color: #500000;
+  text-decoration: none; /* optional: remove underline */
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: #750000; /* slightly darker maroon for hover effect */
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #500000; /* keep visited links same as normal */
+}
 
 
 /* --- Controls row --- */
