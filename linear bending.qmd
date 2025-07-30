@@ -12,12 +12,7 @@ format:
 ![](3d_bending.png){fig-align="center"}
 
 ## **Problem Setup**
-<img
-  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-  alt="GitHub logo"
-  width="32"
-  height="32"
-  style="vertical-align:middle; margin-right:8px;"
-/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_1)
 
-![](linear bending.pdf){width="85%" height="1000px"}
+<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_1)
+
+![](linear%20bending.pdf){width="85%" height="1000px"}

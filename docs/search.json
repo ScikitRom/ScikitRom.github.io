@@ -560,7 +560,7 @@
     "href": "problem_structure.html#problem-description",
     "title": "Tutorial: Building a Reduced-Order Model with scikit-rom",
     "section": "Problem Description",
-    "text": "Problem Description\nWe analyze a 3D block governed by linear elasticity principles. The structure features two distinct material regions with different stiffness properties, enabling demonstration of spatially varying material handling through affine decomposition. Core characteristics include:\nLinear Affine Elasticity: The stiffness matrix is constructed as a linear combination of blocks that are affine in the Lamé parameters \\((\\lambda, \\mu)\\).\nDomain Partitioning: The block is divided into two regions with distinct elastic properties.\nParameter Space: Young’s modulus \\(E\\) and Poisson’s ratio \\(\\nu\\) are sampled for both offline and online ROM phases.\nBoundary Conditions: Dirichlet constraints (fixed displacement) on one face; Neumann conditions (applied traction) on the opposing face.",
+    "text": "Problem Description\nWe analyze a 3D block governed by linear elasticity principles. The structure features two distinct material regions with different stiffness properties, enabling demonstration of spatially varying material handling through affine decomposition. Core characteristics include:\nLinear Affine Elasticity: The stiffness matrix is constructed as a linear combination of blocks that are affine in the Lamé parameters \\((\\lambda, \\mu)\\).\nDomain Partitioning: The block is divided into two regions with distinct elastic properties.\nParameter Space: Young’s modulus \\(E\\) and Poisson’s ratio \\(\\nu\\) are sampled for both offline and online ROM phases.\nBoundary Conditions: Dirichlet constraints (fixed displacement) on one face; Neumann conditions (applied traction) on the opposing face.\nLink",
     "crumbs": [
       "**Examples**",
       "Tutorial: Building a Reduced-Order Model with scikit-rom"
@@ -571,7 +571,7 @@
     "href": "problem_structure.html#project-architecture",
     "title": "Tutorial: Building a Reduced-Order Model with scikit-rom",
     "section": "Project Architecture",
-    "text": "Project Architecture\nThe simulation workflow is organized through the following directory structure and files:\nproblem_1/\n├─ domain.py           # Mesh generation, basis setup, boundary and region partitioning\n├─ bilinear_forms.py   # Affine weak form (stiffness) assembly\n├─ linear_forms.py     # Load (traction) right-hand side term\n├─ properties.py       # Lamé parameter computation per region\n├─ params.py           # Sampling (E, ν) for training and testing\n└─ problem_def.py      # Main orchestration: assembles all components for scikit-rom",
+    "text": "Project Architecture\nThe simulation workflow is organized through the following directory structure and files:\nproblem_1/\n├─ domain.py           # Mesh generation, basis setup, boundary and region partitioning\n├─ bilinear_forms.py   # Affine weak form (stiffness) assembly\n├─ linear_forms.py     # Load (traction) right-hand side term\n├─ properties.py       # Lamé parameter computation per region\n├─ params.py           # Sampling (E, ν) for training and testing\n└─ problem_def.py      # Main orchestration: assembles all components for scikit-rom\n└─ problem_1.ipynb     # Executes the complete workflow starting from data generation to model reduction",
     "crumbs": [
       "**Examples**",
       "Tutorial: Building a Reduced-Order Model with scikit-rom"
@@ -593,7 +593,7 @@
     "href": "problem_structure.html#material-properties-affine-coefficient-functions-properties.py",
     "title": "Tutorial: Building a Reduced-Order Model with scikit-rom",
     "section": "2. Material Properties & Affine Coefficient Functions — properties.py",
-    "text": "2. Material Properties & Affine Coefficient Functions — properties.py\nLamé Parameters: Transforms Young’s modulus \\(E\\) and Poisson’s ratio \\(\\nu\\) into Lamé parameters \\((\\lambda, \\mu)\\) using skfem utilities.\nRegion Handling:\n\nFor region_1, both \\(\\lambda\\) and \\(\\mu\\) are scaled by 50× (stiffer inclusion)\nFor region_2, properties remain unchanged (baseline material)\n\nThis design facilitates straightforward definition of piecewise-constant or heterogeneous material properties, essential for multi-region simulations.",
+    "text": "2. Material Properties & Affine Coefficient Functions — properties.py\nLamé Parameters: Transforms Young’s modulus \\(E\\) and Poisson’s ratio \\(\\nu\\) into Lamé parameters \\((\\lambda, \\mu)\\) using skfem utilities.\nRegion Handling:\n\nFor region_1, both \\(\\lambda\\) and \\(\\mu\\) are scaled by \\(50\\times\\) (stiffer inclusion)\nFor region_2, properties remain unchanged (baseline material)",
     "crumbs": [
       "**Examples**",
       "Tutorial: Building a Reduced-Order Model with scikit-rom"
@@ -702,8 +702,8 @@
     "objectID": "problem_structure.html#best-practices",
     "href": "problem_structure.html#best-practices",
     "title": "Tutorial: Building a Reduced-Order Model with scikit-rom",
-    "section": "12. Best Practices",
-    "text": "12. Best Practices\n\nAlways center your snapshot data before SVD to ensure best POD convergence\nUse enough training samples (and parameter space coverage) to avoid overfitting or “holes” in ROM accuracy\nCheck ROM error on multiple, unseen test samples\nVisualize spatial error fields—not just scalar error metrics—for insight into local ROM limitations\nLeverage the modular file structure for extending to other domains, BCs, and PDEs\n\nThis workflow and modular codebase provide a flexible, scalable foundation for reduced-order modeling of parametrized PDEs in computational mechanics, accelerating simulation, optimization, and interactive design.",
+    "section": "11. Best Practices",
+    "text": "11. Best Practices\n\nAlways center your snapshot data before SVD to ensure best POD convergence\nUse enough training samples (and parameter space coverage) to avoid overfitting or “holes” in ROM accuracy\nCheck ROM error on multiple, unseen test samples\nVisualize spatial error fields—not just scalar error metrics—for insight into local ROM limitations\nLeverage the modular file structure for extending to other domains, BCs, and PDEs\n\nThis workflow and modular codebase provide a flexible, scalable foundation for reduced-order modeling of parametrized PDEs in computational mechanics, accelerating simulation, optimization, and interactive design.",
     "crumbs": [
       "**Examples**",
       "Tutorial: Building a Reduced-Order Model with scikit-rom"

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -71,7 +36,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-1ae26b6b86ecaffacb6d975e4161849a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -557,7 +522,8 @@ window.Quarto = {
 <p><strong>Domain Partitioning</strong>: The block is divided into two regions with distinct elastic properties.</p>
 <p><strong>Parameter Space</strong>: Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> are sampled for both offline and online ROM phases.</p>
 <p><strong>Boundary Conditions</strong>: Dirichlet constraints (fixed displacement) on one face; Neumann conditions (applied traction) on the opposing face.</p>
-<p><embed src="problem.pdf" style="width:100.0%" height="1000"></p>
+<p><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><a href="https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_1">Link</a></p>
+<p><embed src="linear bending.pdf" style="width:100.0%" height="1000"></p>
 </section>
 <section id="project-architecture" class="level2">
 <h2 class="anchored" data-anchor-id="project-architecture">Project Architecture</h2>
@@ -568,7 +534,8 @@ window.Quarto = {
 ├─ linear_forms.py     # Load (traction) right-hand side term
 ├─ properties.py       # Lamé parameter computation per region
 ├─ params.py           # Sampling (E, ν) for training and testing
-└─ problem_def.py      # Main orchestration: assembles all components for scikit-rom</code></pre>
+└─ problem_def.py      # Main orchestration: assembles all components for scikit-rom
+└─ problem_1.ipynb     # Executes the complete workflow starting from data generation to model reduction</code></pre>
 </section>
 <section id="geometry-finite-element-framework-domain.py" class="level2">
 <h2 class="anchored" data-anchor-id="geometry-finite-element-framework-domain.py">1. Geometry &amp; Finite Element Framework — domain.py</h2>
@@ -591,10 +558,9 @@ window.Quarto = {
 <p><strong>Lamé Parameters</strong>: Transforms Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> into Lamé parameters <span class="math inline">\((\lambda, \mu)\)</span> using skfem utilities.</p>
 <p><strong>Region Handling</strong>:</p>
 <ul>
-<li>For <code>region_1</code>, both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span> are scaled by 50× (stiffer inclusion)</li>
+<li>For <code>region_1</code>, both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span> are scaled by <span class="math inline">\(50\times\)</span> (stiffer inclusion)</li>
 <li>For <code>region_2</code>, properties remain unchanged (baseline material)</li>
 </ul>
-<p>This design facilitates straightforward definition of piecewise-constant or heterogeneous material properties, essential for multi-region simulations.</p>
 </section>
 <section id="affine-stiffness-matrix-assembly-bilinear_forms.py" class="level2">
 <h2 class="anchored" data-anchor-id="affine-stiffness-matrix-assembly-bilinear_forms.py">3. Affine Stiffness Matrix Assembly — bilinear_forms.py</h2>
@@ -732,27 +698,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="code-snippets-for-each-stage" class="level2">
-<h2 class="anchored" data-anchor-id="code-snippets-for-each-stage">11. Code Snippets for Each Stage</h2>
-<p><strong>Parameter Sampling Example</strong>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>params, param_ranges, train_mask, test_mask <span class="op">=</span> parameters(<span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Domain Setup Example</strong>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dom <span class="op">=</span> domain_()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mesh <span class="op">=</span> dom[<span class="st">'mesh'</span>]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>basis <span class="op">=</span> dom[<span class="st">'basis'</span>]</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>regions <span class="op">=</span> dom[<span class="st">'basis_regions'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Affine Block Assembly</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stiffness_lam, stiffness_mu <span class="op">=</span> bilinear_forms()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>K_lambda <span class="op">=</span> asm(stiffness_lam, region_basis, ...)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>K_mu <span class="op">=</span> asm(stiffness_mu, region_basis, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Full-Order Solve</strong>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> solve(<span class="op">*</span>condense(K, rhs, x<span class="op">=</span>fixed_values, D<span class="op">=</span>dirichlet_dofs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>ROM Solve Online</strong>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ms_full_sol, mean_shift <span class="op">=</span> rom_solver(param)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>full_field <span class="op">=</span> ms_full_sol <span class="op">+</span> mean_shift</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
 <section id="best-practices" class="level2">
-<h2 class="anchored" data-anchor-id="best-practices">12. Best Practices</h2>
+<h2 class="anchored" data-anchor-id="best-practices">11. Best Practices</h2>
 <ul>
 <li>Always center your snapshot data before SVD to ensure best POD convergence</li>
 <li>Use enough training samples (and parameter space coverage) to avoid overfitting or “holes” in ROM accuracy</li>
