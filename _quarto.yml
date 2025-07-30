@@ -23,16 +23,10 @@ website:
     
     
     right:
-      - icon: linkedin
-        href: ""
-        aria-label: LinkedIn
       - icon: github
         href: "https://github.com/suparnob100/scikit-rom/tree/main"
         aria-label: GitHub
-      - icon: envelope
-        href: ""
-        aria-label: Email
-      - text: "![](image_tamids.png){width=35px}"
+      - text: "![](images/image_tamids.png){width=35px}"
         href: "https://tamids.tamu.edu"
         aria-label: "TAMIDS"
 
@@ -125,7 +119,6 @@ website:
             section: Utilities
           - contents:
               - reference/utils.dynamics.integrators.qmd
-              - reference/utils.dynamics.newmark_beta.qmd
             section: Dynamics
           - contents:
               - reference/utils.visualization.generate_vtk.qmd

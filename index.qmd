@@ -19,30 +19,24 @@ This tutorial explains how to install SKROM (scikit-ROM):
 
 Installation Steps:
 
-  1.Clone the repository:
+  1. **Clone the repository:**
 
   ```bash
-  Copy
-  Edit
   git clone [GitHub URL]
   cd scikit-rom
   ```
 
-  2.Install with pip:
+  2. **Install with pip:**
 
   - For developers (editable install):
 
   ```bash
-  Copy
-  Edit
   pip install -e .
   ```
 
   - For regular users:
 
   ```bash
-  Copy
-  Edit
   pip install .
   ```
 
@@ -60,4 +54,4 @@ Notes
 
 To dive deeper, check out:
 
-- [Hyper-reduction Techniques for Efficient Simulation](resources/papers/hyperreduction_paper.pdf)
+- [Hyper-reduction Techniques for Efficient Simulation](https://link.springer.com/article/10.1007/s11831-025-10299-4)
