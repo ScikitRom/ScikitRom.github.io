@@ -5,12 +5,14 @@
 Implements reduced-order bilinear form assembly for full-order to reduced-order transformations.
 
 This module provides:
+
   - `BilinearFormROM`: a subclass of `skfem.assembly.form.bilinear_form.BilinearForm`
     that projects full-order element stiffness matrices onto reduced bases,
     groups elements by Dirichlet-free and mixed-Dirichlet sets for memory-efficient handling,
     and assembles the global reduced stiffness matrix with optional chunked computation.
 
 The `rom` folder contains core tools for reduced-order modeling (ROM), including:
+
   - Classes for projecting and assembling reduced-order bilinear and linear forms
   - Utilities for handling Dirichlet boundary conditions in reduced spaces
   - Chunked and clustered assembly routines to manage large-scale stiffness/load data
