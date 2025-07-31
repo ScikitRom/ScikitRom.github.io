@@ -626,7 +626,7 @@
     "href": "problem_structure.html#parameter-sampling-params.py",
     "title": "Tutorial: Building a Reduced-Order Model with scikit-rom",
     "section": "5. Parameter Sampling — params.py",
-    "text": "5. Parameter Sampling — params.py\nParameter Ranges:\n\n\\(E\\): [0.5, 2.0]\n\\(\\nu\\): [0.2, 0.4]\n\nSampling Strategy: Uses Sobol sequences to create quasi-random sets of \\((E,\\nu)\\) pairs for:\n\nTraining snapshots (for ROM basis construction)\nTesting snapshots (for validation)\n\nMasks Provided: Returns boolean arrays to cleanly separate training vs testing data.",
+    "text": "5. Parameter Sampling — params.py\nParameter Ranges:\n\n\\(E\\): [2.0, 10.0]\n\\(\\nu\\): [0.2, 0.4]\n\nSampling Strategy: Uses Sobol sequences to create quasi-random sets of \\((E,\\nu)\\) pairs for:\n\nTraining snapshots (for ROM basis construction)\nTesting snapshots (for validation)\n\nMasks Provided: Returns boolean arrays to cleanly separate training vs testing data.",
     "crumbs": [
       "**Examples**",
       "Tutorial: Building a Reduced-Order Model with scikit-rom"

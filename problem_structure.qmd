@@ -97,7 +97,7 @@ This approach ensures the assembly aligns with the affine decomposition essentia
 
 **Parameter Ranges**:
 
--   $E$: \[0.5, 2.0\]
+-   $E$: \[2.0, 10.0\]
 -   $\nu$: \[0.2, 0.4\]
 
 **Sampling Strategy**: Uses Sobol sequences to create quasi-random sets of $(E,\nu)$ pairs for:
