@@ -16,10 +16,10 @@ website:
     background: "#500000"   # Texas A&M maroon
     foreground: "white"     # Navbar text color
     collapse: true
-    mainfont: "Adobe Garamond"
+    # mainfont: "Adobe Garamond"
     search: true
-    title: "SCIKIT-ROM"
-    subtitle: "SCIKIT-ROM"
+    # title: "SCIKIT-ROM"
+    # subtitle: "SCIKIT-ROM"
     
     
     right:
