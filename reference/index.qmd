@@ -1,19 +1,10 @@
----
-title: "Function reference"
-format:
-  html:
-    theme:
-      light: flatly
-    page-layout: full
-    css: styles.css
-    toc: false
----
+# Function reference {.doc .doc-index}
 
 ## Full-Order Model (FOM)
 
 | | |
 | --- | --- |
-| [fom.fem_utils](fom.fem_utils.qmd#skrom.fom.fem_utils) | This module includes: |
+| [fom.fem_utils](fom.fem_utils.qmd#skrom.fom.fem_utils) | Finite element utilities for preconditioning, mesh operations, and nonlinear solving. |
 
 ## Reduced-Order Model (ROM)
 
@@ -28,15 +19,15 @@ format:
 
 | | |
 | --- | --- |
-| [rom.deim.bilinear_form_hyperrom_deim](rom.deim.bilinear_form_hyperrom_deim.qmd#skrom.rom.deim.bilinear_form_hyperrom_deim) |  |
-| [rom.deim.linear_form_hyperrom_deim](rom.deim.linear_form_hyperrom_deim.qmd#skrom.rom.deim.linear_form_hyperrom_deim) |  |
-| [rom.deim.deim](rom.deim.deim.qmd#skrom.rom.deim.deim) |  |
+| [rom.deim.bilinear_form_hyperrom_deim](rom.deim.bilinear_form_hyperrom_deim.qmd#skrom.rom.deim.bilinear_form_hyperrom_deim) | DEIM-based hyperreduction for finite element bilinear forms. |
+| [rom.deim.linear_form_hyperrom_deim](rom.deim.linear_form_hyperrom_deim.qmd#skrom.rom.deim.linear_form_hyperrom_deim) | DEIM-based hyperreduction for finite element linear forms. |
+| [rom.deim.deim](rom.deim.deim.qmd#skrom.rom.deim.deim) | Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration. |
 
 ## ECSW Hyper-Reduction
 
 | | |
 | --- | --- |
-| [rom.ecsw.bilinear_form_hyperrom_ecsw](rom.ecsw.bilinear_form_hyperrom_ecsw.qmd#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw) |  |
+| [rom.ecsw.bilinear_form_hyperrom_ecsw](rom.ecsw.bilinear_form_hyperrom_ecsw.qmd#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw) | ECSW-based hyperreduction for finite element bilinear forms with element clustering. |
 | [rom.ecsw.linear_form_hyperrom_ecsw](rom.ecsw.linear_form_hyperrom_ecsw.qmd#skrom.rom.ecsw.linear_form_hyperrom_ecsw) |  |
 | [rom.ecsw.custom_nnls](rom.ecsw.custom_nnls.qmd#skrom.rom.ecsw.custom_nnls) | Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW). |
 | [rom.ecsw.hyperreduce](rom.ecsw.hyperreduce.qmd#skrom.rom.ecsw.hyperreduce) | Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS. |
@@ -53,7 +44,6 @@ format:
 | | |
 | --- | --- |
 | [utils.dynamics.integrators](utils.dynamics.integrators.qmd#skrom.utils.dynamics.integrators) |  |
-| [utils.dynamics.newmark_beta](utils.dynamics.newmark_beta.qmd#skrom.utils.dynamics.newmark_beta) |  |
 
 ## Visualization
 

@@ -528,14 +528,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate">ProblemTemplate</a></td>
-<td>Template for an affine or non-linear ROM problem.</td>
+<td>Template for an affine or non-linear reduced-order-model (ROM) problem.</td>
 </tr>
 </tbody>
 </table>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate">ProblemTemplate</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Template for an affine or non-linear ROM problem.</p>
+<p>Template for an affine or non-linear reduced-order-model (ROM) problem.</p>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
 <table class="caption-top table">
@@ -548,117 +548,526 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms">bilinear_forms</a></td>
-<td>Return a list of bilinear form callables (or Jacobian forms for nonlinear problems).</td>
+<td>Import element-level bilinear (or Jacobian) forms from</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.domain">domain</a></td>
-<td>Setup mesh, basis, DOFs, and boundary conditions.</td>
+<td>Import domain information from <strong>domain.py</strong> in the local directory.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators">fom_operators</a></td>
-<td>Assemble (and cache on first call) the full-order operators</td>
+<td>Assemble (and cache) full-order operators (e.g.&nbsp;stiffness, mass)</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs">fom_rhs</a></td>
-<td>Assemble (and cache on first call) the full-order right-hand side vector.</td>
+<td>Assemble (and cache) the full-order RHS vector consumed by</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver">fom_solver</a></td>
-<td>Solve the full-order model for given parameters.</td>
+<td>Solve the high-fidelity model for one parameter point.</td>
 </tr>
 <tr class="even">
-<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver">hyper_rom_solver</a></td>
-<td>Solve hyper-reduced-order model for given parameters.</td>
+<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim">hyper_rom_operators_deim</a></td>
+<td>Compute operators (interpolation indices, projection matrices, …)</td>
 </tr>
 <tr class="odd">
+<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw">hyper_rom_operators_ecsw</a></td>
+<td>Compute operators (sampling matrices, weights, …) for the ECSW method.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim">hyper_rom_solver_deim</a></td>
+<td>Solve the DEIM hyper-reduced model.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw">hyper_rom_solver_ecsw</a></td>
+<td>Solve the ECSW hyper-reduced model.</td>
+</tr>
+<tr class="even">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms">linear_forms</a></td>
-<td>Return a list of linear form callables (or residual forms for nonlinear problems).</td>
+<td>Import element-level linear / residual forms from <strong>linear_forms.py</strong>.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.parameters">parameters</a></td>
-<td>Generate sampling design over parameter space.</td>
-</tr>
-<tr class="odd">
-<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.properties">properties</a></td>
-<td>Return a list of functions mapping physical parameters to coefficients.</td>
+<td>Import a sampling-design generator from <strong>params.py</strong>. The helper</td>
 </tr>
 <tr class="even">
-<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators">reduced_operators</a></td>
-<td>Project FOM operators onto the reduced basis and compute</td>
+<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.properties">properties</a></td>
+<td>Import coefficient-generating functions (e.g.&nbsp;<em>k(μ)</em>, <em>q(β)</em>, …) from</td>
 </tr>
 <tr class="odd">
+<td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators">reduced_operators</a></td>
+<td>Project FOM operators onto the reduced basis so <strong>rom_solver</strong> can work</td>
+</tr>
+<tr class="even">
 <td><a href="#skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver">rom_solver</a></td>
-<td>Solve the reduced-order model and reconstruct the full solution.</td>
+<td>Solve the reduced-order model and reconstruct the high-dimensional</td>
 </tr>
 </tbody>
 </table>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms">bilinear_forms</h5>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.bilinear_forms()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Return a list of bilinear form callables (or Jacobian forms for nonlinear problems). Each form should have signature a(u, v, w).</p>
+<p>Import element-level bilinear (or Jacobian) forms from <strong>bilinear_forms.py</strong>. Nothing is assembled here – we merely hand back the callables.</p>
+<section id="example" class="level6 doc-section doc-section-example">
+<h6 class="doc-section doc-section-example anchored" data-anchor-id="example">Example</h6>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>from bilinear_forms import a1, a2 return [a1, a2]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.domain" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.domain">domain</h5>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.domain()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Setup mesh, basis, DOFs, and boundary conditions.</p>
-<p>Returns: dict with keys like - ‘mesh’ - ‘basis’ - ‘free_dofs’ - ‘dirichlet_dofs’ - ‘dirichlet_value’ # …any other domain-specific items…</p>
+<p>Import domain information from <strong>domain.py</strong> in the local directory. No geometry is built here – we simply delegate to <em>domain_</em>.</p>
+<section id="example-1" class="level6 doc-section doc-section-example">
+<h6 class="doc-section doc-section-example anchored" data-anchor-id="example-1">Example</h6>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>from domain import domain_ return domain_()</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Required keys (but not limited to) in the returned dict: * ‘mesh’, ‘basis’ * ‘free_dofs’, ‘dirichlet_dofs’, ‘dirichlet_value’</p>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators">fom_operators</h5>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.fom_operators(cls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Assemble (and cache on first call) the full-order operators needed by the FOM solver (e.g.&nbsp;stiffness matrix).</p>
-<p>Returns: tuple of FOM operators</p>
+<p>Assemble (and cache) full-order operators (e.g.&nbsp;stiffness, mass) used by <strong>fom_solver</strong>.</p>
+<section id="parameters" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 9%">
+<col style="width: 80%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object</td>
+<td>Runtime-state container injected by the master class. Provides simulation metadata such as <strong>cls.cur_itr</strong> (current sample), solver tolerances, logging utilities, etc.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs">fom_rhs</h5>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.fom_rhs(cls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Assemble (and cache on first call) the full-order right-hand side vector.</p>
-<p>Returns: full-order RHS vector</p>
+<p>Assemble (and cache) the full-order RHS vector consumed by <strong>fom_solver</strong> and hyper-reduction routines.</p>
+<section id="parameters-1" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 22%">
+<col style="width: 56%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object</td>
+<td>Simulation context (see <em>fom_operators</em> docstring).</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver">fom_solver</h5>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.fom_solver(cls, param)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Solve the full-order model for given parameters.</p>
-<p>Returns: solution array satisfying BCs</p>
+<p>Solve the high-fidelity model for one parameter point.</p>
+<p>Called automatically by the master class when a simulation is run.</p>
+<section id="parameters-2" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 23%">
+<col style="width: 54%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object</td>
+<td>Contains run-time info such as <strong>cls.cur_itr</strong>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar</td>
+<td>Parameter vector/value μ at which to solve.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver">hyper_rom_solver</h5>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Solve hyper-reduced-order model for given parameters.</p>
+<section id="returns" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>full_solution</td>
+<td>ndarray</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim">hyper_rom_operators_deim</h5>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    param,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Compute operators (interpolation indices, projection matrices, …) for the DEIM method.</p>
+<section id="parameters-3" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 57%">
+<col style="width: 18%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object – simulation context</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar – parameter vector/value μ</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw">hyper_rom_operators_ecsw</h5>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    param,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Compute operators (sampling matrices, weights, …) for the ECSW method.</p>
+<section id="parameters-4" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 57%">
+<col style="width: 18%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object – simulation context</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar – parameter vector/value μ</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim">hyper_rom_solver_deim</h5>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    param,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve the DEIM hyper-reduced model.</p>
+<p>Called automatically by the master class when a DEIM-based simulation is executed.</p>
+<section id="parameters-5" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 57%">
+<col style="width: 18%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object – simulation context</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar – parameter vector/value μ</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw">hyper_rom_solver_ecsw</h5>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    param,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve the ECSW hyper-reduced model.</p>
+<p>Called automatically by the master class when an ECSW-based simulation is executed.</p>
+<section id="parameters-6" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-6">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 57%">
+<col style="width: 18%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object – simulation context</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar – parameter vector/value μ</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms">linear_forms</h5>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.linear_forms()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Return a list of linear form callables (or residual forms for nonlinear problems). Each form should have signature l(v, w).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.linear_forms()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Import element-level linear / residual forms from <strong>linear_forms.py</strong>. No assembly happens here – we just return the callables.</p>
+<section id="example-2" class="level6 doc-section doc-section-example">
+<h6 class="doc-section doc-section-example anchored" data-anchor-id="example-2">Example</h6>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>from linear_forms import f1, f2 return [f1, f2]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.parameters" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.parameters">parameters</h5>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.parameters(n_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Generate sampling design over parameter space.</p>
-<p>Parameters: n_samples (int): number of samples to draw.</p>
-<p>Returns: params, param_ranges, train_mask, test_mask</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.parameters(n_samples)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Import a sampling-design generator from <strong>params.py</strong>. The helper function constructs training / test parameter sets.</p>
+<section id="example-3" class="level6 doc-section doc-section-example">
+<h6 class="doc-section doc-section-example anchored" data-anchor-id="example-3">Example</h6>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>from params import parameters return parameters(n_samples)</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.properties" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.properties">properties</h5>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.properties()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Return a list of functions mapping physical parameters to coefficients. E.g. [k_func, q_func, …]</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.properties()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Import coefficient-generating functions (e.g.&nbsp;<em>k(μ)</em>, <em>q(β)</em>, …) from <strong>properties.py</strong> located in the same folder.</p>
+<section id="example-4" class="level6 doc-section doc-section-example">
+<h6 class="doc-section doc-section-example anchored" data-anchor-id="example-4">Example</h6>
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<blockquote class="blockquote">
+<p>from properties import k_func, q_func return [k_func, q_func]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators">reduced_operators</h5>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.reduced_operators(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    param,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Project FOM operators onto the reduced basis and compute any mean or offset terms needed for the ROM.</p>
-<p>Returns: (modal_solution_full_space, mean_correction)</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.reduced_operators(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    cls,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    param,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Project FOM operators onto the reduced basis so <strong>rom_solver</strong> can work in a low-dimensional space.</p>
+<section id="parameters-7" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-7">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 57%">
+<col style="width: 18%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object – simulation context</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar – parameter vector/value μ</td>
+<td></td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver">rom_solver</h5>
-<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.rom_solver(cls, param)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Solve the reduced-order model and reconstruct the full solution.</p>
-<p>Returns: (parameter_scaled_modal_solution, mean_correction)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>templates.problem_template.problem_def.ProblemTemplate.rom_solver(cls, param)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve the reduced-order model and reconstruct the high-dimensional field.</p>
+<p>Called automatically by the master class during a simulation.</p>
+<section id="parameters-8" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-8">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 21%">
+<col style="width: 59%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cls</td>
+<td>master_class object</td>
+<td>Gives access to run-time metadata (e.g.&nbsp;<strong>cls.cur_itr</strong>).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>param</td>
+<td>ndarray or scalar</td>
+<td>Parameter vector/value μ.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-1" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>u_red</td>
+<td><em>u_red</em> – parameter-scaled modal coefficients</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 </section>
 </section>

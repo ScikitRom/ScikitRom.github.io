@@ -517,32 +517,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.ecsw.hyperreduce</h1>
 <p><code>rom.ecsw.hyperreduce</code></p>
 <p>Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS.</p>
-<p>This module provides:</p>
-<ul>
-<li><p><code>hyperreduce</code>: function to perform hyper-reduction on a QoI matrix by:</p>
-<ol type="1">
-<li>Optionally applying randomized SVD for dimensionality reduction</li>
-<li>Constructing bounded constraints for NNLS from projected data</li>
-<li>Solving a bounded NNLS problem via <code>NNLSSolver</code></li>
-<li>Optionally visualizing singular value decay and NNLS coefficients</li>
-</ol></li>
-</ul>
-<p>The <code>hyperreduce</code> folder contains utilities to reduce full-order models, including:</p>
-<ul>
-<li>Randomized SVD preprocessing routines</li>
-<li>Bounded NNLS solve integrations (<code>custom_nnls</code>)</li>
-<li>Plotting helpers for diagnostic visualization of reduction errors</li>
-</ul>
-<p>Dependencies:</p>
-<ul>
-<li>NumPy for array operations</li>
-<li>scikit-learn’s <code>randomized_svd</code> for fast SVD</li>
-<li>Matplotlib for plotting diagnostics</li>
-<li>Custom <code>NNLSSolver</code> implementation in <code>custom_nnls</code></li>
-</ul>
+<p>This module provides: - <code>hyperreduce</code>: function to perform hyper-reduction on a QoI matrix by: 1. Optionally applying randomized SVD for dimensionality reduction 2. Constructing bounded constraints for NNLS from projected data 3. Solving a bounded NNLS problem via <code>NNLSSolver</code> 4. Optionally visualizing singular value decay and NNLS coefficients</p>
+<p>The <code>hyperreduce</code> folder contains utilities to reduce full-order models, including: - Randomized SVD preprocessing routines - Bounded NNLS solve integrations (<code>custom_nnls</code>) - Plotting helpers for diagnostic visualization of reduction errors</p>
+<p>Dependencies: - NumPy for array operations - scikit-learn’s <code>randomized_svd</code> for fast SVD - Matplotlib for plotting diagnostics - Custom <code>NNLSSolver</code> implementation in <code>custom_nnls</code></p>
 <p>Usage example:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperreduce.hyperreduce <span class="im">import</span> hyperreduce</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x, flag <span class="op">=</span> hyperreduce(qoi_data, n_components<span class="op">=</span><span class="dv">100</span>, svd<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>[Code: Suparno Bhattacharyya]</p>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">

@@ -67,6 +67,8 @@ each invocation.
 ...              out_dir="vtk_outputs", split_dim=True)
 ```
 
+[Author: Suparno Bhattacharyya]
+
 ### save_vtk_solution { #skrom.utils.visualization.generate_vtk.save_vtk_solution }
 
 ```python
@@ -100,9 +102,10 @@ the resulting geometry along with point data fields.
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type   | Description   |
-|--------|--------|---------------|
-|        | None   |               |
+| Name   | Type                              | Description   |
+|--------|-----------------------------------|---------------|
+|        | None                              |               |
+|        | \[Author: Suparno Bhattacharyya\] |               |
 
 ### save_vtk_time_series { #skrom.utils.visualization.generate_vtk.save_vtk_time_series }
 
@@ -127,3 +130,5 @@ basis  : skfem basis
 scale  : displacement scale
 run_dir: output directory
 prefix : file prefix, e.g. "beam"
+
+[Author: Suparno Bhattacharyya]

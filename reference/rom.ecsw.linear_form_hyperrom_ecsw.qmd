@@ -7,20 +7,20 @@
 Implements Hyper-Reduction (HYPERROM) for reduced-order load vector assembly.
 
 This module provides:
-
   - `LinearFormHYPERROM`: a subclass of `skfem.assembly.form.linear_form.LinearForm`
     that projects element-wise load contributions onto a reduced basis, clusters
     elements by free-DOF count after Dirichlet condensation, and assembles the
     global reduced load vector via vectorized weighted projections.
 
 The `hyperreduce` folder contains all tools to perform hyper-reduction, including:
-
   - Reduced-order bilinear forms (`BilinearFormHYPERROM`) and linear forms
     (`LinearFormHYPERROM`)
   - Routines for extracting element stiffness matrices and load vectors in a
     reduced basis
   - Utilities for efficient handling of Dirichlet conditions and element clustering
   - Support for weights, parallelization, and reconstruction of full-order data
+
+  [Author: Suparno Bhattacharyya]
 
 ## Classes
 

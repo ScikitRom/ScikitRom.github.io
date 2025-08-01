@@ -519,18 +519,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.rom_error_est</h1>
 <p><code>rom.rom_error_est</code></p>
 <p>Compute and visualize ROM error metrics for flat data reconstructions.</p>
-<p>This module provides:</p>
-<ul>
-<li><code>compute_rom_error_metrics_flat</code>: calculates time-dependent and global error measures (L2, L∞, RMSE, MAE, R², explained variance, quantiles, and optional energy norm).</li>
-<li><code>plot_rom_error_diagnostics_flat</code>: diagnostic plots including true vs.&nbsp;ROM scatter, spatial snapshots for selected snapshots, and raincloud plots of error and speed-up.</li>
-<li><code>generate_rom_error_report</code>: prints a structured summary of global and time-dependent ROM error statistics to the console.</li>
-</ul>
-<p>The <code>rom</code> folder contains core tools for reduced-order modeling, including:</p>
-<ul>
-<li>Assembly abstractions for reduced bilinear and linear forms</li>
-<li>Error evaluation and reporting utilities (this module)</li>
-<li>Hyper-reduction and cubature integration tools</li>
-</ul>
+<p>This module provides: - <code>compute_rom_error_metrics_flat</code>: calculates time-dependent and global error measures (L2, L∞, RMSE, MAE, R², explained variance, quantiles, and optional energy norm). - <code>plot_rom_error_diagnostics_flat</code>: diagnostic plots including true vs.&nbsp;ROM scatter, spatial snapshots for selected snapshots, and raincloud plots of error and speed-up. - <code>generate_rom_error_report</code>: prints a structured summary of global and time-dependent ROM error statistics to the console.</p>
+<p>The <code>rom</code> folder contains core tools for reduced-order modeling, including: - Assembly abstractions for reduced bilinear and linear forms - Error evaluation and reporting utilities (this module) - Hyper-reduction and cubature integration tools</p>
+<p>[Author: Suparno Bhattacharyya]</p>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">

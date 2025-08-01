@@ -503,6 +503,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#skrom.fom.fem_utils.build_pc_amgsa" id="toc-skrom.fom.fem_utils.build_pc_amgsa" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.build_pc_amgsa">build_pc_amgsa</a></li>
   <li><a href="#skrom.fom.fem_utils.compute_basis_regions" id="toc-skrom.fom.fem_utils.compute_basis_regions" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.compute_basis_regions">compute_basis_regions</a></li>
   <li><a href="#skrom.fom.fem_utils.element2location" id="toc-skrom.fom.fem_utils.element2location" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.element2location">element2location</a></li>
+  <li><a href="#skrom.fom.fem_utils.load_domain" id="toc-skrom.fom.fem_utils.load_domain" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.load_domain">load_domain</a></li>
   <li><a href="#skrom.fom.fem_utils.load_mesh_and_basis" id="toc-skrom.fom.fem_utils.load_mesh_and_basis" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</a></li>
   <li><a href="#skrom.fom.fem_utils.newton_solver" id="toc-skrom.fom.fem_utils.newton_solver" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.newton_solver">newton_solver</a></li>
   <li><a href="#skrom.fom.fem_utils.unwrap_attr" id="toc-skrom.fom.fem_utils.unwrap_attr" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.unwrap_attr">unwrap_attr</a></li>
@@ -520,12 +521,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="skrom.fom.fem_utils" class="level1">
 <h1>fom.fem_utils</h1>
 <p><code>fom.fem_utils</code></p>
-<p>This module includes:</p>
-<ul>
-<li><code>build_pc_amgsa</code>: construct AMG smoothed aggregation preconditioner.</li>
-<li><code>element2location</code>: generate element-to-coordinate mappings from mesh data.</li>
-<li><code>newton_solver</code> and its helpers: perform Newton–Raphson solves with or without Dirichlet BC.</li>
-</ul>
+<p>Finite element utilities for preconditioning, mesh operations, and nonlinear solving.</p>
+<p>This module includes: - <code>build_pc_amgsa</code>: construct AMG smoothed aggregation preconditioner. - <code>element2location</code>: generate element-to-coordinate mappings from mesh data. - <code>newton_solver</code> and its helpers: perform Newton–Raphson solves with or without Dirichlet BC. - <code>compute_basis_regions</code>: create reduced bases for mesh regions. - <code>load_domain</code>, <code>load_mesh_and_basis</code>: domain/mesh loading utilities. - <code>unwrap_attr</code>: attribute unwrapping helper.</p>
+<p>Author: Suparno Bhattacharyya</p>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
@@ -542,23 +540,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td><a href="#skrom.fom.fem_utils.compute_basis_regions">compute_basis_regions</a></td>
-<td>Given a dict mapping region names to boolean element‐masks,</td>
+<td>Create reduced basis functions for specified mesh regions.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.fom.fem_utils.element2location">element2location</a></td>
 <td>Map mesh elements to their spatial coordinates.</td>
 </tr>
 <tr class="even">
-<td><a href="#skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</a></td>
-<td>Call domain() and assign just mesh and basis onto self.</td>
+<td><a href="#skrom.fom.fem_utils.load_domain">load_domain</a></td>
+<td>Load domain information and assign attributes to instance.</td>
 </tr>
 <tr class="odd">
-<td><a href="#skrom.fom.fem_utils.newton_solver">newton_solver</a></td>
-<td>Solve a nonlinear system using the Newton–Raphson method with optional Dirichlet boundary conditions.</td>
+<td><a href="#skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</a></td>
+<td>Load only mesh and basis from domain and assign to instance.</td>
 </tr>
 <tr class="even">
+<td><a href="#skrom.fom.fem_utils.newton_solver">newton_solver</a></td>
+<td>Solve a nonlinear system using the Newton–Raphson method.</td>
+</tr>
+<tr class="odd">
 <td><a href="#skrom.fom.fem_utils.unwrap_attr">unwrap_attr</a></td>
-<td>If self.<attr_name> is a 0-d object ndarray, replace it with its .item().</attr_name></td>
+<td>Unwrap 0-dimensional object arrays to their scalar values.</td>
 </tr>
 </tbody>
 </table>
@@ -566,6 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.build_pc_amgsa">build_pc_amgsa</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.build_pc_amgsa(A, <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Build an algebraic multigrid smoothed aggregation preconditioner.</p>
+<p><strong>TL;DR</strong>: Creates an AMG preconditioner from a system matrix for efficient iterative solving of large sparse linear systems.</p>
 <section id="parameters" class="level4 doc-section doc-section-parameters">
 <h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
@@ -592,7 +595,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td>**kwargs</td>
-<td></td>
+<td>dict</td>
 <td>Additional keyword arguments passed to pyamg.smoothed_aggregation_solver.</td>
 <td><code>{}</code></td>
 </tr>
@@ -603,9 +606,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 29%">
-<col style="width: 64%">
+<col style="width: 5%">
+<col style="width: 24%">
+<col style="width: 70%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -618,29 +621,102 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>M</td>
 <td>scipy.sparse.linalg.LinearOperator</td>
-<td>The preconditioner as a linear operator suitable for use in iterative solvers.</td>
+<td>The preconditioner as a linear operator suitable for use in iterative solvers like conjugate gradient.</td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="examples" class="level4 doc-section doc-section-examples">
+<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> scipy.sparse <span class="im">as</span> sp</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> A <span class="op">=</span> sp.diags([<span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>], [<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>], shape<span class="op">=</span>(<span class="dv">100</span>, <span class="dv">100</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> M <span class="op">=</span> build_pc_amgsa(A)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Use M as preconditioner in iterative solver</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 </section>
 <section id="skrom.fom.fem_utils.compute_basis_regions" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.compute_basis_regions">compute_basis_regions</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.compute_basis_regions(basis, masks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Given a dict mapping region names to boolean element‐masks, returns a dict of reduced bases for each region.</p>
-</section>
-<section id="skrom.fom.fem_utils.element2location" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.element2location">element2location</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.element2location(mesh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Map mesh elements to their spatial coordinates.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.compute_basis_regions(basis, masks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Create reduced basis functions for specified mesh regions.</p>
+<p><strong>TL;DR</strong>: Given boolean masks defining mesh regions, returns basis functions restricted to each region for efficient regional computations.</p>
 <section id="parameters-1" class="level4 doc-section doc-section-parameters">
 <h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 75%">
-<col style="width: 10%">
+<col style="width: 4%">
+<col style="width: 16%">
+<col style="width: 72%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>basis</td>
+<td>object</td>
+<td>Finite element basis object with <code>nelems</code> attribute and <code>with_elements</code> method.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>masks</td>
+<td>dict of str to ndarray of bool</td>
+<td>Dictionary mapping region names to boolean element masks of shape (basis.nelems,). True values indicate elements belonging to the region.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-1" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>region_bases</td>
+<td>dict of str to object</td>
+<td>Dictionary mapping region names to reduced basis objects containing only elements specified by the corresponding mask.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="examples-1" class="level4 doc-section doc-section-examples">
+<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-1">Examples</h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> masks <span class="op">=</span> {<span class="st">'left'</span>: np.array([<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>]), </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>...          <span class="st">'right'</span>: np.array([<span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>])}</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> region_bases <span class="op">=</span> compute_basis_regions(basis, masks)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># region_bases['left'] contains basis for left region elements</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="skrom.fom.fem_utils.element2location" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.element2location">element2location</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.element2location(mesh)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Map mesh elements to their spatial coordinates.</p>
+<p><strong>TL;DR</strong>: Extracts element-wise coordinate information from mesh connectivity, useful for element-based computations in finite element methods.</p>
+<section id="parameters-2" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 87%">
+<col style="width: 5%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -654,19 +730,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>mesh</td>
 <td>object</td>
-<td>Mesh object with attributes <code>p</code> (node coordinates) and <code>t</code> (element connectivity).</td>
+<td>Mesh object with attributes <code>p</code> (node coordinates) and <code>t</code> (element connectivity). Expected to have <code>p</code> as shape (spatial_dim, n_nodes) and <code>t</code> as shape (n_local_nodes_per_element, n_elements).</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h4>
+<section id="returns-2" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 23%">
-<col style="width: 68%">
+<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 76%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -679,38 +755,124 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>element_coords</td>
 <td>ndarray of shape (n_elements, n_local_nodes)</td>
-<td>Array of element coordinates, where each row corresponds to an element and each column corresponds to a local node within the element.</td>
+<td>Array of element coordinates, where each row corresponds to an element and each column corresponds to a local node within the element. For 1D meshes, this gives coordinates of element endpoints.</td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="examples-2" class="level4 doc-section doc-section-examples">
+<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-2">Examples</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># For a 1D mesh with 3 elements and 4 nodes</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> element_coords <span class="op">=</span> element2location(mesh)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># element_coords[0] gives coordinates of first element's nodes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="skrom.fom.fem_utils.load_mesh_and_basis" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_mesh_and_basis(instance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Call domain() and assign just mesh and basis onto self.</p>
 </section>
-<section id="skrom.fom.fem_utils.newton_solver" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.newton_solver">newton_solver</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.newton_solver(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    assemble_fn,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    rhs_fn,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    u0,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    dirichlet_dofs<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    dirichlet_vals<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>assemble_args,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    tol<span class="op">=</span><span class="fl">0.01</span>,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    maxit<span class="op">=</span><span class="dv">50</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">1.0</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Solve a nonlinear system using the Newton–Raphson method with optional Dirichlet boundary conditions.</p>
-<section id="parameters-2" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
+<section id="skrom.fom.fem_utils.load_domain" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_domain">load_domain</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_domain(instance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Load domain information and assign attributes to instance.</p>
+<p><strong>TL;DR</strong>: Calls instance.domain() and assigns all returned attributes to the instance object for convenient access.</p>
+<section id="parameters-3" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 73%">
 <col style="width: 10%">
-<col style="width: 74%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instance</td>
+<td>object</td>
+<td>Object with a <code>domain()</code> method that returns a dictionary of domain attributes.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
+<p>This function modifies the instance in-place by setting attributes based on the domain dictionary keys and values.</p>
+</section>
+<section id="examples-3" class="level4 doc-section doc-section-examples">
+<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-3">Examples</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> load_domain(problem_instance)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Now problem_instance.mesh, problem_instance.basis, etc. are available</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="skrom.fom.fem_utils.load_mesh_and_basis" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_mesh_and_basis(instance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Load only mesh and basis from domain and assign to instance.</p>
+<p><strong>TL;DR</strong>: Extracts just mesh and basis from instance.domain() for cases where only these two components are needed.</p>
+<section id="parameters-4" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 77%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instance</td>
+<td>object</td>
+<td>Object with a <code>domain()</code> method returning a dictionary containing at least ‘mesh’ and ‘basis’ keys.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes-1" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-1">Notes</h4>
+<p>This function modifies the instance in-place by setting only <code>mesh</code> and <code>basis</code> attributes, ignoring other domain components.</p>
+</section>
+<section id="examples-4" class="level4 doc-section doc-section-examples">
+<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-4">Examples</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> load_mesh_and_basis(problem_instance)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Now problem_instance.mesh and problem_instance.basis are available</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="skrom.fom.fem_utils.newton_solver" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.newton_solver">newton_solver</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.newton_solver(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    assemble_fn,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    rhs_fn,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    u0,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    dirichlet_dofs<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    dirichlet_vals<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>assemble_args,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    tol<span class="op">=</span><span class="fl">0.01</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    maxit<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">1.0</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Solve a nonlinear system using the Newton–Raphson method.</p>
+<p><strong>TL;DR</strong>: Newton solver with optional Dirichlet boundary conditions that iteratively solves F(u) = 0 by computing Jacobian and RHS at each iteration.</p>
+<section id="parameters-5" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 71%">
 <col style="width: 6%">
 </colgroup>
 <thead>
@@ -725,51 +887,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>assemble_fn</td>
 <td>callable</td>
-<td>Function that assembles the system. Should return either (RHS, J) for functions with dirichlet BC or (J, RHS) for no-dirichlet variant.</td>
+<td>Function that assembles the Jacobian matrix. Should accept (u, *assemble_args) and return the Jacobian matrix J where J[i,j] = ∂F_i/∂u_j.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td>u0</td>
-<td>ndarray</td>
-<td>Initial guess for the solution vector.</td>
+<td>rhs_fn</td>
+<td>callable</td>
+<td>Function that assembles the RHS vector. Should accept (u, *assemble_args) and return the residual vector F(u).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
+<td>u0</td>
+<td>ndarray of shape (n_dofs,)</td>
+<td>Initial guess for the solution vector.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
 <td>dirichlet_dofs</td>
 <td>array_like of int</td>
 <td>Indices of degrees of freedom with prescribed Dirichlet boundary conditions. If None or empty, no Dirichlet BC are applied.</td>
 <td><code>None</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>dirichlet_vals</td>
 <td>ndarray</td>
-<td>Values at the Dirichlet DOFs.</td>
+<td>Prescribed values at the Dirichlet DOFs. Must have same length as <code>dirichlet_dofs</code>.</td>
 <td><code>None</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>*assemble_args</td>
-<td></td>
-<td>Additional positional arguments passed to <code>assemble_fn</code>.</td>
+<td>tuple</td>
+<td>Additional positional arguments passed to <code>assemble_fn</code> and <code>rhs_fn</code>.</td>
 <td><code>()</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>tol</td>
 <td>float</td>
-<td>Tolerance for convergence based on the norm of the update.</td>
+<td>Convergence tolerance based on the L2 norm of the solution update.</td>
 <td><code>1e-2</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>maxit</td>
 <td>int</td>
-<td>Maximum number of Newton iterations.</td>
+<td>Maximum number of Newton iterations before giving up.</td>
 <td><code>50</code></td>
+</tr>
+<tr class="odd">
+<td>alpha</td>
+<td>float</td>
+<td>Step length parameter for solution updates.</td>
+<td><code>1.0</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-2" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
+<section id="returns-3" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h4>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 26%">
+<col style="width: 66%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -780,8 +959,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>u</td>
-<td>ndarray</td>
-<td>Approximate solution vector after convergence.</td>
+<td>ndarray of shape (n_dofs,)</td>
+<td>Approximate solution vector after convergence or maximum iterations.</td>
 </tr>
 </tbody>
 </table>
@@ -790,9 +969,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 17%">
-<col style="width: 73%">
+<col style="width: 5%">
+<col style="width: 10%">
+<col style="width: 83%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -805,18 +984,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td></td>
 <td>RuntimeError</td>
-<td>If the solver fails to converge within <code>maxit</code> iterations.</td>
+<td>If the solver fails to converge within <code>maxit</code> iterations and no Dirichlet boundary conditions are specified.</td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="notes-2" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-2">Notes</h4>
+<p>The Newton method solves F(u) = 0 by iterating u_{k+1} = u_k - α * J_k^{-1} * F(u_k), where J_k is the Jacobian at u_k. For problems with Dirichlet BC, the system is condensed to solve only for free DOFs.</p>
+</section>
 </section>
 <section id="skrom.fom.fem_utils.unwrap_attr" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.unwrap_attr">unwrap_attr</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.unwrap_attr(instance, attr_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If self.<attr_name> is a 0-d object ndarray, replace it with its .item().</attr_name></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.unwrap_attr(instance, attr_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Unwrap 0-dimensional object arrays to their scalar values.</p>
+<p><strong>TL;DR</strong>: Converts 0-d numpy object arrays to their contained scalar value using .item(), useful for cleaning up attributes after certain operations.</p>
+<section id="parameters-6" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-6">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 58%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instance</td>
+<td>object</td>
+<td>Object containing the attribute to unwrap.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>attr_name</td>
+<td>str</td>
+<td>Name of the attribute to unwrap.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes-3" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-3">Notes</h4>
+<p>Only applies unwrapping if the attribute is a 0-dimensional numpy array with object dtype. The instance is modified in-place.</p>
+</section>
+<section id="examples-5" class="level4 doc-section doc-section-examples">
+<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-5">Examples</h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># If instance.result is np.array(42, dtype=object)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> unwrap_attr(instance, <span class="st">'result'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Now instance.result is 42 (scalar int)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 </section>
 </section>
 </section>

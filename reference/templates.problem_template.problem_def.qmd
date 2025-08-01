@@ -8,7 +8,7 @@
 
 | Name | Description |
 | --- | --- |
-| [ProblemTemplate](#skrom.templates.problem_template.problem_def.ProblemTemplate) | Template for an affine or non-linear ROM problem. |
+| [ProblemTemplate](#skrom.templates.problem_template.problem_def.ProblemTemplate) | Template for an affine or non-linear reduced-order-model (ROM) problem. |
 
 ### ProblemTemplate { #skrom.templates.problem_template.problem_def.ProblemTemplate }
 
@@ -16,23 +16,26 @@
 templates.problem_template.problem_def.ProblemTemplate()
 ```
 
-Template for an affine or non-linear ROM problem.
+Template for an affine or non-linear reduced-order-model (ROM) problem.
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [bilinear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms) | Return a list of bilinear form callables (or Jacobian forms for nonlinear problems). |
-| [domain](#skrom.templates.problem_template.problem_def.ProblemTemplate.domain) | Setup mesh, basis, DOFs, and boundary conditions. |
-| [fom_operators](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators) | Assemble (and cache on first call) the full-order operators |
-| [fom_rhs](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs) | Assemble (and cache on first call) the full-order right-hand side vector. |
-| [fom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver) | Solve the full-order model for given parameters. |
-| [hyper_rom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver) | Solve hyper-reduced-order model for given parameters. |
-| [linear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms) | Return a list of linear form callables (or residual forms for nonlinear problems). |
-| [parameters](#skrom.templates.problem_template.problem_def.ProblemTemplate.parameters) | Generate sampling design over parameter space. |
-| [properties](#skrom.templates.problem_template.problem_def.ProblemTemplate.properties) | Return a list of functions mapping physical parameters to coefficients. |
-| [reduced_operators](#skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators) | Project FOM operators onto the reduced basis and compute |
-| [rom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver) | Solve the reduced-order model and reconstruct the full solution. |
+| [bilinear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms) | Import element-level bilinear (or Jacobian) forms from |
+| [domain](#skrom.templates.problem_template.problem_def.ProblemTemplate.domain) | Import domain information from **domain.py** in the local directory. |
+| [fom_operators](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators) | Assemble (and cache) full-order operators (e.g. stiffness, mass) |
+| [fom_rhs](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs) | Assemble (and cache) the full-order RHS vector consumed by |
+| [fom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver) | Solve the high-fidelity model for one parameter point. |
+| [hyper_rom_operators_deim](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim) | Compute operators (interpolation indices, projection matrices, …) |
+| [hyper_rom_operators_ecsw](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw) | Compute operators (sampling matrices, weights, …) for the ECSW method. |
+| [hyper_rom_solver_deim](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim) | Solve the DEIM hyper-reduced model. |
+| [hyper_rom_solver_ecsw](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw) | Solve the ECSW hyper-reduced model. |
+| [linear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms) | Import element-level linear / residual forms from **linear_forms.py**. |
+| [parameters](#skrom.templates.problem_template.problem_def.ProblemTemplate.parameters) | Import a sampling-design generator from **params.py**.  The helper |
+| [properties](#skrom.templates.problem_template.problem_def.ProblemTemplate.properties) | Import coefficient-generating functions (e.g. *k(μ)*, *q(β)*, …) from |
+| [reduced_operators](#skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators) | Project FOM operators onto the reduced basis so **rom_solver** can work |
+| [rom_solver](#skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver) | Solve the reduced-order model and reconstruct the high-dimensional |
 
 ##### bilinear_forms { #skrom.templates.problem_template.problem_def.ProblemTemplate.bilinear_forms }
 
@@ -40,8 +43,14 @@ Template for an affine or non-linear ROM problem.
 templates.problem_template.problem_def.ProblemTemplate.bilinear_forms()
 ```
 
-Return a list of bilinear form callables (or Jacobian forms for nonlinear problems).
-Each form should have signature a(u, v, w).
+Import element-level bilinear (or Jacobian) forms from
+**bilinear_forms.py**.  Nothing is assembled here – we merely hand back
+the callables.
+
+###### Example {.doc-section .doc-section-example}
+
+>>> from bilinear_forms import a1, a2
+>>> return [a1, a2]
 
 ##### domain { #skrom.templates.problem_template.problem_def.ProblemTemplate.domain }
 
@@ -49,16 +58,17 @@ Each form should have signature a(u, v, w).
 templates.problem_template.problem_def.ProblemTemplate.domain()
 ```
 
-Setup mesh, basis, DOFs, and boundary conditions.
+Import domain information from **domain.py** in the local directory.
+No geometry is built here – we simply delegate to *domain_*.
 
-Returns:
-    dict with keys like
-    - 'mesh'
-    - 'basis'
-    - 'free_dofs'
-    - 'dirichlet_dofs'
-    - 'dirichlet_value'
-    # …any other domain-specific items…
+###### Example {.doc-section .doc-section-example}
+
+>>> from domain import domain_
+>>> return domain_()
+
+Required keys (but not limited to) in the returned dict:
+* 'mesh', 'basis'
+* 'free_dofs', 'dirichlet_dofs', 'dirichlet_value'
 
 ##### fom_operators { #skrom.templates.problem_template.problem_def.ProblemTemplate.fom_operators }
 
@@ -66,11 +76,14 @@ Returns:
 templates.problem_template.problem_def.ProblemTemplate.fom_operators(cls)
 ```
 
-Assemble (and cache on first call) the full-order operators
-needed by the FOM solver (e.g. stiffness matrix).
+Assemble (and cache) full-order operators (e.g. stiffness, mass)
+used by **fom_solver**.
 
-Returns:
-    tuple of FOM operators
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                | Description                                                                                                                                                              | Default    |
+|--------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| cls    | master_class object | Runtime-state container injected by the master class.  Provides simulation metadata such as **cls.cur_itr** (current sample), solver tolerances, logging utilities, etc. | _required_ |
 
 ##### fom_rhs { #skrom.templates.problem_template.problem_def.ProblemTemplate.fom_rhs }
 
@@ -78,10 +91,14 @@ Returns:
 templates.problem_template.problem_def.ProblemTemplate.fom_rhs(cls)
 ```
 
-Assemble (and cache on first call) the full-order right-hand side vector.
+Assemble (and cache) the full-order RHS vector consumed by
+**fom_solver** and hyper-reduction routines.
 
-Returns:
-    full-order RHS vector
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                | Description                                         | Default    |
+|--------|---------------------|-----------------------------------------------------|------------|
+| cls    | master_class object | Simulation context (see *fom_operators* docstring). | _required_ |
 
 ##### fom_solver { #skrom.templates.problem_template.problem_def.ProblemTemplate.fom_solver }
 
@@ -89,18 +106,101 @@ Returns:
 templates.problem_template.problem_def.ProblemTemplate.fom_solver(cls, param)
 ```
 
-Solve the full-order model for given parameters.
+Solve the high-fidelity model for one parameter point.
 
-Returns:
-    solution array satisfying BCs
+Called automatically by the master class when a simulation is run.
 
-##### hyper_rom_solver { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver }
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                | Description                                     | Default    |
+|--------|---------------------|-------------------------------------------------|------------|
+| cls    | master_class object | Contains run-time info such as **cls.cur_itr**. | _required_ |
+| param  | ndarray or scalar   | Parameter vector/value μ at which to solve.     | _required_ |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name          | Type    | Description   |
+|---------------|---------|---------------|
+| full_solution | ndarray |               |
+
+##### hyper_rom_operators_deim { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim }
 
 ```python
-templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver()
+templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim(
+    cls,
+    param,
+)
 ```
 
-Solve hyper-reduced-order model for given parameters.
+Compute operators (interpolation indices, projection matrices, …)
+for the DEIM method.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                                           | Description   | Default    |
+|--------|------------------------------------------------|---------------|------------|
+| cls    | master_class object   – simulation context     |               | _required_ |
+| param  | ndarray or scalar   – parameter vector/value μ |               | _required_ |
+
+##### hyper_rom_operators_ecsw { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw(
+    cls,
+    param,
+)
+```
+
+Compute operators (sampling matrices, weights, …) for the ECSW method.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                                           | Description   | Default    |
+|--------|------------------------------------------------|---------------|------------|
+| cls    | master_class object   – simulation context     |               | _required_ |
+| param  | ndarray or scalar   – parameter vector/value μ |               | _required_ |
+
+##### hyper_rom_solver_deim { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim(
+    cls,
+    param,
+)
+```
+
+Solve the DEIM hyper-reduced model.
+
+Called automatically by the master class when a DEIM-based simulation
+is executed.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                                           | Description   | Default    |
+|--------|------------------------------------------------|---------------|------------|
+| cls    | master_class object   – simulation context     |               | _required_ |
+| param  | ndarray or scalar   – parameter vector/value μ |               | _required_ |
+
+##### hyper_rom_solver_ecsw { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw(
+    cls,
+    param,
+)
+```
+
+Solve the ECSW hyper-reduced model.
+
+Called automatically by the master class when an ECSW-based simulation
+is executed.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                                           | Description   | Default    |
+|--------|------------------------------------------------|---------------|------------|
+| cls    | master_class object   – simulation context     |               | _required_ |
+| param  | ndarray or scalar   – parameter vector/value μ |               | _required_ |
 
 ##### linear_forms { #skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms }
 
@@ -108,8 +208,13 @@ Solve hyper-reduced-order model for given parameters.
 templates.problem_template.problem_def.ProblemTemplate.linear_forms()
 ```
 
-Return a list of linear form callables (or residual forms for nonlinear problems).
-Each form should have signature l(v, w).
+Import element-level linear / residual forms from **linear_forms.py**.
+No assembly happens here – we just return the callables.
+
+###### Example {.doc-section .doc-section-example}
+
+>>> from linear_forms import f1, f2
+>>> return [f1, f2]
 
 ##### parameters { #skrom.templates.problem_template.problem_def.ProblemTemplate.parameters }
 
@@ -117,13 +222,13 @@ Each form should have signature l(v, w).
 templates.problem_template.problem_def.ProblemTemplate.parameters(n_samples)
 ```
 
-Generate sampling design over parameter space.
+Import a sampling-design generator from **params.py**.  The helper
+function constructs training / test parameter sets.
 
-Parameters:
-    n_samples (int): number of samples to draw.
+###### Example {.doc-section .doc-section-example}
 
-Returns:
-    params, param_ranges, train_mask, test_mask
+>>> from params import parameters
+>>> return parameters(n_samples)
 
 ##### properties { #skrom.templates.problem_template.problem_def.ProblemTemplate.properties }
 
@@ -131,8 +236,13 @@ Returns:
 templates.problem_template.problem_def.ProblemTemplate.properties()
 ```
 
-Return a list of functions mapping physical parameters to coefficients.
-E.g. [k_func, q_func, …]
+Import coefficient-generating functions (e.g. *k(μ)*, *q(β)*, …) from
+**properties.py** located in the same folder.
+
+###### Example {.doc-section .doc-section-example}
+
+>>> from properties import k_func, q_func
+>>> return [k_func, q_func]
 
 ##### reduced_operators { #skrom.templates.problem_template.problem_def.ProblemTemplate.reduced_operators }
 
@@ -143,11 +253,15 @@ templates.problem_template.problem_def.ProblemTemplate.reduced_operators(
 )
 ```
 
-Project FOM operators onto the reduced basis and compute
-any mean or offset terms needed for the ROM.
+Project FOM operators onto the reduced basis so **rom_solver** can work
+in a low-dimensional space.
 
-Returns:
-    (modal_solution_full_space, mean_correction)
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                                           | Description   | Default    |
+|--------|------------------------------------------------|---------------|------------|
+| cls    | master_class object   – simulation context     |               | _required_ |
+| param  | ndarray or scalar   – parameter vector/value μ |               | _required_ |
 
 ##### rom_solver { #skrom.templates.problem_template.problem_def.ProblemTemplate.rom_solver }
 
@@ -155,7 +269,20 @@ Returns:
 templates.problem_template.problem_def.ProblemTemplate.rom_solver(cls, param)
 ```
 
-Solve the reduced-order model and reconstruct the full solution.
+Solve the reduced-order model and reconstruct the high-dimensional
+field.
 
-Returns:
-    (parameter_scaled_modal_solution, mean_correction)
+Called automatically by the master class during a simulation.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                | Description                                               | Default    |
+|--------|---------------------|-----------------------------------------------------------|------------|
+| cls    | master_class object | Gives access to run-time metadata (e.g. **cls.cur_itr**). | _required_ |
+| param  | ndarray or scalar   | Parameter vector/value μ.                                 | _required_ |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description                                   |
+|--------|--------|-----------------------------------------------|
+|        | u_red  | *u_red* – parameter-scaled modal coefficients |

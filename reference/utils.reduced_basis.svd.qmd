@@ -54,6 +54,8 @@ Select SVD modes based on relative reconstruction-error tolerance and plot the e
 4
 ```
 
+[Author: Suparno Bhattacharyya]
+
 ### svd_mode_selector_var { #skrom.utils.reduced_basis.svd.svd_mode_selector_var }
 
 ```python
@@ -97,3 +99,5 @@ Select SVD modes based on an uncaptured variance tolerance and plot the uncaptur
 >>> print(num_modes)
 5
 ```
+
+[Author: Suparno Bhattacharyya]

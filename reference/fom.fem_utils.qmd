@@ -2,22 +2,29 @@
 
 `fom.fem_utils`
 
-This module includes:
+Finite element utilities for preconditioning, mesh operations, and nonlinear solving.
 
+This module includes:
 - `build_pc_amgsa`: construct AMG smoothed aggregation preconditioner.
 - `element2location`: generate element-to-coordinate mappings from mesh data.
 - `newton_solver` and its helpers: perform Newton–Raphson solves with or without Dirichlet BC.
+- `compute_basis_regions`: create reduced bases for mesh regions.
+- `load_domain`, `load_mesh_and_basis`: domain/mesh loading utilities.
+- `unwrap_attr`: attribute unwrapping helper.
+
+Author: Suparno Bhattacharyya
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
 | [build_pc_amgsa](#skrom.fom.fem_utils.build_pc_amgsa) | Build an algebraic multigrid smoothed aggregation preconditioner. |
-| [compute_basis_regions](#skrom.fom.fem_utils.compute_basis_regions) | Given a dict mapping region names to boolean element‐masks, |
+| [compute_basis_regions](#skrom.fom.fem_utils.compute_basis_regions) | Create reduced basis functions for specified mesh regions. |
 | [element2location](#skrom.fom.fem_utils.element2location) | Map mesh elements to their spatial coordinates. |
-| [load_mesh_and_basis](#skrom.fom.fem_utils.load_mesh_and_basis) | Call domain() and assign just mesh and basis onto self. |
-| [newton_solver](#skrom.fom.fem_utils.newton_solver) | Solve a nonlinear system using the Newton–Raphson method with optional Dirichlet boundary conditions. |
-| [unwrap_attr](#skrom.fom.fem_utils.unwrap_attr) | If self.<attr_name> is a 0-d object ndarray, replace it with its .item(). |
+| [load_domain](#skrom.fom.fem_utils.load_domain) | Load domain information and assign attributes to instance. |
+| [load_mesh_and_basis](#skrom.fom.fem_utils.load_mesh_and_basis) | Load only mesh and basis from domain and assign to instance. |
+| [newton_solver](#skrom.fom.fem_utils.newton_solver) | Solve a nonlinear system using the Newton–Raphson method. |
+| [unwrap_attr](#skrom.fom.fem_utils.unwrap_attr) | Unwrap 0-dimensional object arrays to their scalar values. |
 
 ### build_pc_amgsa { #skrom.fom.fem_utils.build_pc_amgsa }
 
@@ -27,18 +34,30 @@ fom.fem_utils.build_pc_amgsa(A, **kwargs)
 
 Build an algebraic multigrid smoothed aggregation preconditioner.
 
+**TL;DR**: Creates an AMG preconditioner from a system matrix for efficient 
+iterative solving of large sparse linear systems.
+
 #### Parameters {.doc-section .doc-section-parameters}
 
 | Name     | Type                              | Description                                                               | Default    |
 |----------|-----------------------------------|---------------------------------------------------------------------------|------------|
 | A        | scipy.sparse matrix or array_like | The system matrix for which the preconditioner is constructed.            | _required_ |
-| **kwargs |                                   | Additional keyword arguments passed to pyamg.smoothed_aggregation_solver. | `{}`       |
+| **kwargs | dict                              | Additional keyword arguments passed to pyamg.smoothed_aggregation_solver. | `{}`       |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type                               | Description                                                                    |
-|--------|------------------------------------|--------------------------------------------------------------------------------|
-| M      | scipy.sparse.linalg.LinearOperator | The preconditioner as a linear operator suitable for use in iterative solvers. |
+| Name   | Type                               | Description                                                                                             |
+|--------|------------------------------------|---------------------------------------------------------------------------------------------------------|
+| M      | scipy.sparse.linalg.LinearOperator | The preconditioner as a linear operator suitable for use in iterative  solvers like conjugate gradient. |
+
+#### Examples {.doc-section .doc-section-examples}
+
+```python
+>>> import scipy.sparse as sp
+>>> A = sp.diags([1, -2, 1], [-1, 0, 1], shape=(100, 100))
+>>> M = build_pc_amgsa(A)
+>>> # Use M as preconditioner in iterative solver
+```
 
 ### compute_basis_regions { #skrom.fom.fem_utils.compute_basis_regions }
 
@@ -46,8 +65,32 @@ Build an algebraic multigrid smoothed aggregation preconditioner.
 fom.fem_utils.compute_basis_regions(basis, masks)
 ```
 
-Given a dict mapping region names to boolean element‐masks,
-returns a dict of reduced bases for each region.
+Create reduced basis functions for specified mesh regions.
+
+**TL;DR**: Given boolean masks defining mesh regions, returns basis functions
+restricted to each region for efficient regional computations.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                           | Description                                                                                                                                | Default    |
+|--------|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| basis  | object                         | Finite element basis object with `nelems` attribute and `with_elements` method.                                                            | _required_ |
+| masks  | dict of str to ndarray of bool | Dictionary mapping region names to boolean element masks of shape  (basis.nelems,). True values indicate elements belonging to the region. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name         | Type                  | Description                                                                                                             |
+|--------------|-----------------------|-------------------------------------------------------------------------------------------------------------------------|
+| region_bases | dict of str to object | Dictionary mapping region names to reduced basis objects containing only  elements specified by the corresponding mask. |
+
+#### Examples {.doc-section .doc-section-examples}
+
+```python
+>>> masks = {'left': np.array([True, False, True]), 
+...          'right': np.array([False, True, False])}
+>>> region_bases = compute_basis_regions(basis, masks)
+>>> # region_bases['left'] contains basis for left region elements
+```
 
 ### element2location { #skrom.fom.fem_utils.element2location }
 
@@ -57,17 +100,57 @@ fom.fem_utils.element2location(mesh)
 
 Map mesh elements to their spatial coordinates.
 
+**TL;DR**: Extracts element-wise coordinate information from mesh connectivity,
+useful for element-based computations in finite element methods.
+
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name   | Type   | Description                                                                        | Default    |
-|--------|--------|------------------------------------------------------------------------------------|------------|
-| mesh   | object | Mesh object with attributes `p` (node coordinates) and `t` (element connectivity). | _required_ |
+| Name   | Type   | Description                                                                                                                                                                                         | Default    |
+|--------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| mesh   | object | Mesh object with attributes `p` (node coordinates) and `t` (element  connectivity). Expected to have `p` as shape (spatial_dim, n_nodes)  and `t` as shape (n_local_nodes_per_element, n_elements). | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name           | Type                                         | Description                                                                                                                            |
-|----------------|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| element_coords | ndarray of shape (n_elements, n_local_nodes) | Array of element coordinates, where each row corresponds to an element and each column corresponds to a local node within the element. |
+| Name           | Type                                         | Description                                                                                                                                                                                          |
+|----------------|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| element_coords | ndarray of shape (n_elements, n_local_nodes) | Array of element coordinates, where each row corresponds to an element  and each column corresponds to a local node within the element. For 1D  meshes, this gives coordinates of element endpoints. |
+
+#### Examples {.doc-section .doc-section-examples}
+
+```python
+>>> # For a 1D mesh with 3 elements and 4 nodes
+>>> element_coords = element2location(mesh)
+>>> # element_coords[0] gives coordinates of first element's nodes
+```
+
+### load_domain { #skrom.fom.fem_utils.load_domain }
+
+```python
+fom.fem_utils.load_domain(instance)
+```
+
+Load domain information and assign attributes to instance.
+
+**TL;DR**: Calls instance.domain() and assigns all returned attributes 
+to the instance object for convenient access.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type   | Description                                                                      | Default    |
+|----------|--------|----------------------------------------------------------------------------------|------------|
+| instance | object | Object with a `domain()` method that returns a dictionary of domain  attributes. | _required_ |
+
+#### Notes {.doc-section .doc-section-notes}
+
+This function modifies the instance in-place by setting attributes based 
+on the domain dictionary keys and values.
+
+#### Examples {.doc-section .doc-section-examples}
+
+```python
+>>> load_domain(problem_instance)
+>>> # Now problem_instance.mesh, problem_instance.basis, etc. are available
+```
 
 ### load_mesh_and_basis { #skrom.fom.fem_utils.load_mesh_and_basis }
 
@@ -75,7 +158,28 @@ Map mesh elements to their spatial coordinates.
 fom.fem_utils.load_mesh_and_basis(instance)
 ```
 
-Call domain() and assign just mesh and basis onto self.
+Load only mesh and basis from domain and assign to instance.
+
+**TL;DR**: Extracts just mesh and basis from instance.domain() for cases 
+where only these two components are needed.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type   | Description                                                                                          | Default    |
+|----------|--------|------------------------------------------------------------------------------------------------------|------------|
+| instance | object | Object with a `domain()` method returning a dictionary containing  at least 'mesh' and 'basis' keys. | _required_ |
+
+#### Notes {.doc-section .doc-section-notes}
+
+This function modifies the instance in-place by setting only `mesh` and 
+`basis` attributes, ignoring other domain components.
+
+#### Examples {.doc-section .doc-section-examples}
+
+```python
+>>> load_mesh_and_basis(problem_instance)
+>>> # Now problem_instance.mesh and problem_instance.basis are available
+```
 
 ### newton_solver { #skrom.fom.fem_utils.newton_solver }
 
@@ -93,31 +197,42 @@ fom.fem_utils.newton_solver(
 )
 ```
 
-Solve a nonlinear system using the Newton–Raphson method with optional Dirichlet boundary conditions.
+Solve a nonlinear system using the Newton–Raphson method.
+
+**TL;DR**: Newton solver with optional Dirichlet boundary conditions that 
+iteratively solves F(u) = 0 by computing Jacobian and RHS at each iteration.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name           | Type              | Description                                                                                                                             | Default    |
-|----------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------|------------|
-| assemble_fn    | callable          | Function that assembles the system. Should return either (RHS, J) for functions with dirichlet BC or (J, RHS) for no-dirichlet variant. | _required_ |
-| u0             | ndarray           | Initial guess for the solution vector.                                                                                                  | _required_ |
-| dirichlet_dofs | array_like of int | Indices of degrees of freedom with prescribed Dirichlet boundary conditions. If None or empty, no Dirichlet BC are applied.             | `None`     |
-| dirichlet_vals | ndarray           | Values at the Dirichlet DOFs.                                                                                                           | `None`     |
-| *assemble_args |                   | Additional positional arguments passed to `assemble_fn`.                                                                                | `()`       |
-| tol            | float             | Tolerance for convergence based on the norm of the update.                                                                              | `1e-2`     |
-| maxit          | int               | Maximum number of Newton iterations.                                                                                                    | `50`       |
+| Name           | Type                       | Description                                                                                                                                | Default    |
+|----------------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| assemble_fn    | callable                   | Function that assembles the Jacobian matrix. Should accept (u, *assemble_args)  and return the Jacobian matrix J where J[i,j] = ∂F_i/∂u_j. | _required_ |
+| rhs_fn         | callable                   | Function that assembles the RHS vector. Should accept (u, *assemble_args)  and return the residual vector F(u).                            | _required_ |
+| u0             | ndarray of shape (n_dofs,) | Initial guess for the solution vector.                                                                                                     | _required_ |
+| dirichlet_dofs | array_like of int          | Indices of degrees of freedom with prescribed Dirichlet boundary conditions. If None or empty, no Dirichlet BC are applied.                | `None`     |
+| dirichlet_vals | ndarray                    | Prescribed values at the Dirichlet DOFs. Must have same length as  `dirichlet_dofs`.                                                       | `None`     |
+| *assemble_args | tuple                      | Additional positional arguments passed to `assemble_fn` and `rhs_fn`.                                                                      | `()`       |
+| tol            | float                      | Convergence tolerance based on the L2 norm of the solution update.                                                                         | `1e-2`     |
+| maxit          | int                        | Maximum number of Newton iterations before giving up.                                                                                      | `50`       |
+| alpha          | float                      | Step length parameter for solution updates.                                                                                                | `1.0`      |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type    | Description                                    |
-|--------|---------|------------------------------------------------|
-| u      | ndarray | Approximate solution vector after convergence. |
+| Name   | Type                       | Description                                                          |
+|--------|----------------------------|----------------------------------------------------------------------|
+| u      | ndarray of shape (n_dofs,) | Approximate solution vector after convergence or maximum iterations. |
 
 #### Raises {.doc-section .doc-section-raises}
 
-| Name   | Type         | Description                                                |
-|--------|--------------|------------------------------------------------------------|
-|        | RuntimeError | If the solver fails to converge within `maxit` iterations. |
+| Name   | Type         | Description                                                                                                    |
+|--------|--------------|----------------------------------------------------------------------------------------------------------------|
+|        | RuntimeError | If the solver fails to converge within `maxit` iterations and no  Dirichlet boundary conditions are specified. |
+
+#### Notes {.doc-section .doc-section-notes}
+
+The Newton method solves F(u) = 0 by iterating u_{k+1} = u_k - α * J_k^{-1} * F(u_k),
+where J_k is the Jacobian at u_k. For problems with Dirichlet BC, the system 
+is condensed to solve only for free DOFs.
 
 ### unwrap_attr { #skrom.fom.fem_utils.unwrap_attr }
 
@@ -125,4 +240,27 @@ Solve a nonlinear system using the Newton–Raphson method with optional Dirichl
 fom.fem_utils.unwrap_attr(instance, attr_name)
 ```
 
-If self.<attr_name> is a 0-d object ndarray, replace it with its .item().
+Unwrap 0-dimensional object arrays to their scalar values.
+
+**TL;DR**: Converts 0-d numpy object arrays to their contained scalar value
+using .item(), useful for cleaning up attributes after certain operations.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name      | Type   | Description                                | Default    |
+|-----------|--------|--------------------------------------------|------------|
+| instance  | object | Object containing the attribute to unwrap. | _required_ |
+| attr_name | str    | Name of the attribute to unwrap.           | _required_ |
+
+#### Notes {.doc-section .doc-section-notes}
+
+Only applies unwrapping if the attribute is a 0-dimensional numpy array 
+with object dtype. The instance is modified in-place.
+
+#### Examples {.doc-section .doc-section-examples}
+
+```python
+>>> # If instance.result is np.array(42, dtype=object)
+>>> unwrap_attr(instance, 'result')
+>>> # Now instance.result is 42 (scalar int)
+```

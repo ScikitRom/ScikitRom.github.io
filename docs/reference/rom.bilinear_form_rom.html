@@ -517,17 +517,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.bilinear_form_rom</h1>
 <p><code>rom.bilinear_form_rom</code></p>
 <p>Implements reduced-order bilinear form assembly for full-order to reduced-order transformations.</p>
-<p>This module provides:</p>
-<ul>
-<li><code>BilinearFormROM</code>: a subclass of <code>skfem.assembly.form.bilinear_form.BilinearForm</code> that projects full-order element stiffness matrices onto reduced bases, groups elements by Dirichlet-free and mixed-Dirichlet sets for memory-efficient handling, and assembles the global reduced stiffness matrix with optional chunked computation.</li>
-</ul>
-<p>The <code>rom</code> folder contains core tools for reduced-order modeling (ROM), including:</p>
-<ul>
-<li>Classes for projecting and assembling reduced-order bilinear and linear forms</li>
-<li>Utilities for handling Dirichlet boundary conditions in reduced spaces</li>
-<li>Chunked and clustered assembly routines to manage large-scale stiffness/load data</li>
-<li>Mapping utilities between full-order and reduced-order degrees of freedom</li>
-</ul>
+<p>This module provides: - <code>BilinearFormROM</code>: a subclass of <code>skfem.assembly.form.bilinear_form.BilinearForm</code> that projects full-order element stiffness matrices onto reduced bases, groups elements by Dirichlet-free and mixed-Dirichlet sets for memory-efficient handling, and assembles the global reduced stiffness matrix with optional chunked computation.</p>
+<p>The <code>rom</code> folder contains core tools for reduced-order modeling (ROM), including: - Classes for projecting and assembling reduced-order bilinear and linear forms - Utilities for handling Dirichlet boundary conditions in reduced spaces - Chunked and clustered assembly routines to manage large-scale stiffness/load data - Mapping utilities between full-order and reduced-order degrees of freedom</p>
+<p>[Author: Suparno Bhattacharyya]</p>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
 <table class="caption-top table">

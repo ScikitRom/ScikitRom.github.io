@@ -28,7 +28,6 @@ website:
       section: Utilities
     - contents:
       - reference/utils.dynamics.integrators.qmd
-      - reference/utils.dynamics.newmark_beta.qmd
       section: Dynamics
     - contents:
       - reference/utils.visualization.generate_vtk.qmd

@@ -31,6 +31,8 @@ Newmark-β integrator with Rayleigh damping C.
 Uses copies of input matrices to avoid side effects.
 force_free(i, times) must return the load vector at times[i].
 
+[Code: Suparno Bhattacharyya]
+
 ### wbz_alpha { #skrom.utils.dynamics.integrators.wbz_alpha }
 
 ```python

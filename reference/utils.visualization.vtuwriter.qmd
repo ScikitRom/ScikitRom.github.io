@@ -66,6 +66,8 @@ that ParaView can use to load time-series data.
 >>> writer.write_pvd("simulation.pvd")
 ```
 
+[Author: Suparno Bhattacharyya]
+
 ##### write_step { #skrom.utils.visualization.vtuwriter.VTUSeriesWriter.write_step }
 
 ```python
@@ -96,3 +98,5 @@ the snapshot index matches the skip interval.
 ```python
 >>> writer.write_step(temp_array, time, step_index)
 ```
+
+[Author: Suparno Bhattacharyya]

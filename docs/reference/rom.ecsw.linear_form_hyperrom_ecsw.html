@@ -520,17 +520,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="hyperreducelinear_form_hyperrom.py" class="level2 doc-section doc-section-hyperreducelinearformhyperrompy">
 <h2 class="doc-section doc-section-hyperreducelinearformhyperrompy anchored" data-anchor-id="hyperreducelinear_form_hyperrom.py">hyperreduce/linear_form_hyperrom.py</h2>
 <p>Implements Hyper-Reduction (HYPERROM) for reduced-order load vector assembly.</p>
-<p>This module provides:</p>
-<ul>
-<li><code>LinearFormHYPERROM</code>: a subclass of <code>skfem.assembly.form.linear_form.LinearForm</code> that projects element-wise load contributions onto a reduced basis, clusters elements by free-DOF count after Dirichlet condensation, and assembles the global reduced load vector via vectorized weighted projections.</li>
-</ul>
-<p>The <code>hyperreduce</code> folder contains all tools to perform hyper-reduction, including:</p>
-<ul>
-<li>Reduced-order bilinear forms (<code>BilinearFormHYPERROM</code>) and linear forms (<code>LinearFormHYPERROM</code>)</li>
-<li>Routines for extracting element stiffness matrices and load vectors in a reduced basis</li>
-<li>Utilities for efficient handling of Dirichlet conditions and element clustering</li>
-<li>Support for weights, parallelization, and reconstruction of full-order data</li>
-</ul>
+<p>This module provides: - <code>LinearFormHYPERROM</code>: a subclass of <code>skfem.assembly.form.linear_form.LinearForm</code> that projects element-wise load contributions onto a reduced basis, clusters elements by free-DOF count after Dirichlet condensation, and assembles the global reduced load vector via vectorized weighted projections.</p>
+<p>The <code>hyperreduce</code> folder contains all tools to perform hyper-reduction, including: - Reduced-order bilinear forms (<code>BilinearFormHYPERROM</code>) and linear forms (<code>LinearFormHYPERROM</code>) - Routines for extracting element stiffness matrices and load vectors in a reduced basis - Utilities for efficient handling of Dirichlet conditions and element clustering - Support for weights, parallelization, and reconstruction of full-order data</p>
+<p>[Author: Suparno Bhattacharyya]</p>
 </section>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>

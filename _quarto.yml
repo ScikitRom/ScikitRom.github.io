@@ -214,8 +214,6 @@ quartodoc:
     - title: "Dynamics"
       contents:
         - utils.dynamics.integrators
-        - utils.dynamics.newmark_beta
-
     - title: "Visualization"
       contents:
         - utils.visualization.generate_vtk

@@ -8,7 +8,7 @@
 
 | Name | Description |
 | --- | --- |
-| [a](#skrom.templates.problem_template.bilinear_forms.a) | Template for your problem’s bilinear form (or Jacobian in a nonlinear solver): |
+| [a](#skrom.templates.problem_template.bilinear_forms.a) | Template for your problem's bilinear form (or Jacobian in a nonlinear solver): |
 
 ### a { #skrom.templates.problem_template.bilinear_forms.a }
 
@@ -16,7 +16,7 @@
 templates.problem_template.bilinear_forms.a(u, v, w)
 ```
 
-Template for your problem’s bilinear form (or Jacobian in a nonlinear solver):
+Template for your problem's bilinear form (or Jacobian in a nonlinear solver):
     ∫_Ω [your integrand here] dx
 
 #### Parameters: {.doc-section .doc-section-parameters}
