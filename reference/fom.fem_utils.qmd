@@ -5,11 +5,17 @@
 Finite element utilities for preconditioning, mesh operations, and nonlinear solving.
 
 This module includes:
+
 - `build_pc_amgsa`: construct AMG smoothed aggregation preconditioner.
+
 - `element2location`: generate element-to-coordinate mappings from mesh data.
+
 - `newton_solver` and its helpers: perform Newton–Raphson solves with or without Dirichlet BC.
+
 - `compute_basis_regions`: create reduced bases for mesh regions.
+
 - `load_domain`, `load_mesh_and_basis`: domain/mesh loading utilities.
+
 - `unwrap_attr`: attribute unwrapping helper.
 
 Author: Suparno Bhattacharyya

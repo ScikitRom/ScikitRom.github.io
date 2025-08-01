@@ -9,14 +9,19 @@ This module provides:
 
   - Snapshot train/test splitting routines:
       * `train_test_split`, `latin_hypercube_train_test_split`, `sobol_train_test_split`
+
   - Sample generators:
       * `generate_sobol`, `generate_lhs`, `generate_gaussian_samples`
-  - Basis management:
+
+  - Basis management:  
       * `update_basis` – deflation and augmentation of reduced bases
+
   - Solution reconstruction:
       * `reconstruct_solution` – expand reduced vectors back to full order
+
   - ROM data persistence:
       * `rom_data_gen`, `load_rom_data`
+
   - Newton solvers for ROM systems:
       * `newton_hyper_rom_solver`, `newton_solver_rom`
 
@@ -303,8 +308,11 @@ systems or direct solving with adaptive step damping.
 
 #### Notes {.doc-section .doc-section-notes}
 
+
 - LU mode: Reuses Jacobian factorization until relative change exceeds jac_tol
+
 - Direct mode: Applies adaptive damping every 40 iterations, includes logging
+
 - Part of ROM workflow for efficient nonlinear system solving
 
 ### reconstruct_solution { #skrom.rom.rom_utils.reconstruct_solution }

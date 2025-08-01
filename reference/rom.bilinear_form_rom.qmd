@@ -11,9 +11,13 @@ This module provides:
     and assembles the global reduced stiffness matrix with optional chunked computation.
 
 The `rom` folder contains core tools for reduced-order modeling (ROM), including:
+
   - Classes for projecting and assembling reduced-order bilinear and linear forms
+
   - Utilities for handling Dirichlet boundary conditions in reduced spaces
+
   - Chunked and clustered assembly routines to manage large-scale stiffness/load data
+
   - Mapping utilities between full-order and reduced-order degrees of freedom
 
   [Author: Suparno Bhattacharyya]

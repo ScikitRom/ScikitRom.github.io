@@ -517,7 +517,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.deim.linear_form_hyperrom_deim</h1>
 <p><code>rom.deim.linear_form_hyperrom_deim</code></p>
 <p>DEIM-based hyperreduction for finite element linear forms.</p>
-<p>This module implements hyperreduction of linear forms using the Discrete Empirical Interpolation Method (DEIM) combined with element sampling for efficient load vector assembly. It provides dramatic computational speedups by: - Assembling only a subset of finite elements based on DEIM selection - Using efficient vector assembly techniques for sparse operations - Reconstructing full load vectors via DEIM interpolation matrices - Supporting parallel element vector extraction when available</p>
+<p>This module implements hyperreduction of linear forms using the Discrete Empirical Interpolation Method (DEIM) combined with element sampling for efficient load vector assembly. It provides dramatic computational speedups by:</p>
+<ul>
+<li><p>Assembling only a subset of finite elements based on DEIM selection</p></li>
+<li><p>Using efficient vector assembly techniques for sparse operations</p></li>
+<li><p>Reconstructing full load vectors via DEIM interpolation matrices</p></li>
+<li><p>Supporting parallel element vector extraction when available</p></li>
+</ul>
 <p><strong>TL;DR</strong>: Enables speedup in linear form assembly for ROMs by evaluating only essential elements and reconstructing the full load vector through intelligent interpolation.</p>
 <p>Author: Suparno Bhattacharyya</p>
 <section id="classes" class="level2">

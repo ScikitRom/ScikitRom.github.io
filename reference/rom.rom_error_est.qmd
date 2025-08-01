@@ -5,16 +5,22 @@
 Compute and visualize ROM error metrics for flat data reconstructions.
 
 This module provides:
+
   - `compute_rom_error_metrics_flat`: calculates time-dependent and global error measures
     (L2, L∞, RMSE, MAE, R², explained variance, quantiles, and optional energy norm).
+
   - `plot_rom_error_diagnostics_flat`: diagnostic plots including true vs. ROM scatter,
     spatial snapshots for selected snapshots, and raincloud plots of error and speed-up.
+
   - `generate_rom_error_report`: prints a structured summary of global and time-dependent
     ROM error statistics to the console.
 
 The `rom` folder contains core tools for reduced-order modeling, including:
+
   - Assembly abstractions for reduced bilinear and linear forms
+
   - Error evaluation and reporting utilities (this module)
+
   - Hyper-reduction and cubature integration tools
 
   [Author: Suparno Bhattacharyya]

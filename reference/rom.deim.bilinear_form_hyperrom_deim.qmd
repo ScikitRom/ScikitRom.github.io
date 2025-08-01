@@ -7,9 +7,13 @@ DEIM-based hyperreduction for finite element bilinear forms.
 This module implements hyperreduction of bilinear forms using the Discrete 
 Empirical Interpolation Method (DEIM) combined with element sampling. It provides
 dramatic computational speedups by:
+
 - Assembling only a subset of finite elements based on DEIM selection
+
 - Using sparse matrix techniques for efficient memory usage
+
 - Reconstructing full operators via DEIM interpolation matrices
+
 - Supporting parallel element matrix extraction when available
 
 **TL;DR**: Enables ~100-1000x speedup in bilinear form assembly for ROMs by 

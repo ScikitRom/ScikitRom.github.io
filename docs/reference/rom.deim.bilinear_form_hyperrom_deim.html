@@ -517,7 +517,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.deim.bilinear_form_hyperrom_deim</h1>
 <p><code>rom.deim.bilinear_form_hyperrom_deim</code></p>
 <p>DEIM-based hyperreduction for finite element bilinear forms.</p>
-<p>This module implements hyperreduction of bilinear forms using the Discrete Empirical Interpolation Method (DEIM) combined with element sampling. It provides dramatic computational speedups by: - Assembling only a subset of finite elements based on DEIM selection - Using sparse matrix techniques for efficient memory usage - Reconstructing full operators via DEIM interpolation matrices - Supporting parallel element matrix extraction when available</p>
+<p>This module implements hyperreduction of bilinear forms using the Discrete Empirical Interpolation Method (DEIM) combined with element sampling. It provides dramatic computational speedups by:</p>
+<ul>
+<li><p>Assembling only a subset of finite elements based on DEIM selection</p></li>
+<li><p>Using sparse matrix techniques for efficient memory usage</p></li>
+<li><p>Reconstructing full operators via DEIM interpolation matrices</p></li>
+<li><p>Supporting parallel element matrix extraction when available</p></li>
+</ul>
 <p><strong>TL;DR</strong>: Enables ~100-1000x speedup in bilinear form assembly for ROMs by evaluating only essential elements and reconstructing the full operator through intelligent interpolation.</p>
 <p>Author: Suparno Bhattacharyya</p>
 <section id="classes" class="level2">

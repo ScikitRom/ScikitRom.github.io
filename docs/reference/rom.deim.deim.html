@@ -517,7 +517,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.deim.deim</h1>
 <p><code>rom.deim.deim</code></p>
 <p>Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.</p>
-<p>This module implements DEIM for reducing the dimension of nonlinear force terms in reduced-order models within finite element frameworks. DEIM enables efficient evaluation of nonlinear terms by: - Computing empirical modes from nonlinear force snapshots via SVD - Selecting optimal interpolation points using greedy algorithms - Constructing projection matrices for fast nonlinear term approximation - Mapping selected DOFs to element indicators for efficient assembly</p>
+<p>This module implements DEIM for reducing the dimension of nonlinear force terms in reduced-order models within finite element frameworks. DEIM enables efficient evaluation of nonlinear terms by:</p>
+<ul>
+<li><p>Computing empirical modes from nonlinear force snapshots via SVD</p></li>
+<li><p>Selecting optimal interpolation points using greedy algorithms</p></li>
+<li><p>Constructing projection matrices for fast nonlinear term approximation</p></li>
+<li><p>Mapping selected DOFs to element indicators for efficient assembly</p></li>
+</ul>
 <p><strong>TL;DR</strong>: Dramatically reduces computational cost of nonlinear ROM evaluation by approximating nonlinear terms using interpolation at carefully selected points, achieving significant speedups while maintaining accuracy.</p>
 <p>Author: Suparno Bhattacharyya</p>
 <section id="classes" class="level2">

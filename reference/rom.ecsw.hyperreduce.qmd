@@ -6,20 +6,31 @@ Implements the end-to-end hyper-reduction pipeline combining randomized SVD and 
 
 This module provides:
   - `hyperreduce`: function to perform hyper-reduction on a QoI matrix by:
+
     1. Optionally applying randomized SVD for dimensionality reduction
+
     2. Constructing bounded constraints for NNLS from projected data
+
     3. Solving a bounded NNLS problem via `NNLSSolver`
+
     4. Optionally visualizing singular value decay and NNLS coefficients
 
 The `hyperreduce` folder contains utilities to reduce full-order models, including:
+
   - Randomized SVD preprocessing routines
+
   - Bounded NNLS solve integrations (`custom_nnls`)
+
   - Plotting helpers for diagnostic visualization of reduction errors
 
 Dependencies:
+
   - NumPy for array operations
+
   - scikit-learn's `randomized_svd` for fast SVD
+
   - Matplotlib for plotting diagnostics
+
   - Custom `NNLSSolver` implementation in `custom_nnls`
 
 Usage example:

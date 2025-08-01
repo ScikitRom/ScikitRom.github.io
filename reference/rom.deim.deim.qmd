@@ -7,9 +7,13 @@ Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.
 This module implements DEIM for reducing the dimension of nonlinear force terms in 
 reduced-order models within finite element frameworks. DEIM enables efficient 
 evaluation of nonlinear terms by:
+
 - Computing empirical modes from nonlinear force snapshots via SVD
+
 - Selecting optimal interpolation points using greedy algorithms
+
 - Constructing projection matrices for fast nonlinear term approximation
+
 - Mapping selected DOFs to element indicators for efficient assembly
 
 **TL;DR**: Dramatically reduces computational cost of nonlinear ROM evaluation 

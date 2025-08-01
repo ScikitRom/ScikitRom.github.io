@@ -518,8 +518,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.ecsw.custom_nnls</h1>
 <p><code>rom.ecsw.custom_nnls</code></p>
 <p>Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW).</p>
-<p>This module provides: - <code>NNLS_termination</code>: enumeration of L2 and L∞ convergence criteria for NNLS. - <code>_verify</code>: internal helper to assert solver invariants. - <code>NNLSSolver</code>: a sequential active-set NNLS solver with per-entry bounds, selectable norms, stall-detection, and verbosity controls.</p>
-<p>The <code>ecsw</code> folder contains utilities for Empirical Cubature Subset Weighting, including: - Algorithms to compute cubature weights using bounded NNLS. - Selection and pruning of integration points via active-set methods. - Support functions for convergence criteria and solver configuration.</p>
+<p>This module provides:</p>
+<ul>
+<li><p><code>NNLS_termination</code>: enumeration of L2 and L∞ convergence criteria for NNLS.</p></li>
+<li><p><code>_verify</code>: internal helper to assert solver invariants.</p></li>
+<li><p><code>NNLSSolver</code>: a sequential active-set NNLS solver with per-entry bounds, selectable norms, stall-detection, and verbosity controls.</p></li>
+</ul>
+<p>The <code>ecsw</code> folder contains utilities for Empirical Cubature Subset Weighting, including:</p>
+<ul>
+<li><p>Algorithms to compute cubature weights using bounded NNLS.</p></li>
+<li><p>Selection and pruning of integration points via active-set methods.</p></li>
+<li><p>Support functions for convergence criteria and solver configuration.</p></li>
+</ul>
 <p>[Original C++ code: libROM team at LLNL, Python adaptation: Suparno Bhattacharyya]</p>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>

@@ -517,12 +517,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.ecsw.hyperreduce</h1>
 <p><code>rom.ecsw.hyperreduce</code></p>
 <p>Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS.</p>
-<p>This module provides: - <code>hyperreduce</code>: function to perform hyper-reduction on a QoI matrix by: 1. Optionally applying randomized SVD for dimensionality reduction 2. Constructing bounded constraints for NNLS from projected data 3. Solving a bounded NNLS problem via <code>NNLSSolver</code> 4. Optionally visualizing singular value decay and NNLS coefficients</p>
-<p>The <code>hyperreduce</code> folder contains utilities to reduce full-order models, including: - Randomized SVD preprocessing routines - Bounded NNLS solve integrations (<code>custom_nnls</code>) - Plotting helpers for diagnostic visualization of reduction errors</p>
-<p>Dependencies: - NumPy for array operations - scikit-learn’s <code>randomized_svd</code> for fast SVD - Matplotlib for plotting diagnostics - Custom <code>NNLSSolver</code> implementation in <code>custom_nnls</code></p>
+<p>This module provides: - <code>hyperreduce</code>: function to perform hyper-reduction on a QoI matrix by:</p>
+<pre><code>1. Optionally applying randomized SVD for dimensionality reduction
+
+2. Constructing bounded constraints for NNLS from projected data
+
+3. Solving a bounded NNLS problem via `NNLSSolver`
+
+4. Optionally visualizing singular value decay and NNLS coefficients</code></pre>
+<p>The <code>hyperreduce</code> folder contains utilities to reduce full-order models, including:</p>
+<ul>
+<li><p>Randomized SVD preprocessing routines</p></li>
+<li><p>Bounded NNLS solve integrations (<code>custom_nnls</code>)</p></li>
+<li><p>Plotting helpers for diagnostic visualization of reduction errors</p></li>
+</ul>
+<p>Dependencies:</p>
+<ul>
+<li><p>NumPy for array operations</p></li>
+<li><p>scikit-learn’s <code>randomized_svd</code> for fast SVD</p></li>
+<li><p>Matplotlib for plotting diagnostics</p></li>
+<li><p>Custom <code>NNLSSolver</code> implementation in <code>custom_nnls</code></p></li>
+</ul>
 <p>Usage example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperreduce.hyperreduce <span class="im">import</span> hyperreduce</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x, flag <span class="op">=</span> hyperreduce(qoi_data, n_components<span class="op">=</span><span class="dv">100</span>, svd<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperreduce.hyperreduce <span class="im">import</span> hyperreduce</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x, flag <span class="op">=</span> hyperreduce(qoi_data, n_components<span class="op">=</span><span class="dv">100</span>, svd<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>[Code: Suparno Bhattacharyya]</p>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
@@ -542,15 +560,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.rom.ecsw.hyperreduce.hyperreduce" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecsw.hyperreduce.hyperreduce">hyperreduce</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.hyperreduce.hyperreduce(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    qoi,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    n_components<span class="op">=</span><span class="dv">500</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    verbosity<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    plot<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-10</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    zero_tol<span class="op">=</span><span class="fl">1e-14</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    svd<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.hyperreduce.hyperreduce(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    qoi,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    n_components<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    verbosity<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    plot<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-10</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    zero_tol<span class="op">=</span><span class="fl">1e-14</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    svd<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Perform hyper-reduction via randomized SVD followed by a bounded NNLS solve.</p>
 <p>The hyper-reduction pipeline includes:</p>
 <ol type="1">
@@ -691,12 +709,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="examples" class="level4 doc-section doc-section-examples">
 <h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h4>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> hyperreduce_module <span class="im">import</span> hyperreduce</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> np.random.rand(<span class="dv">100</span>, <span class="dv">200</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> x, flag <span class="op">=</span> hyperreduce(data, n_components<span class="op">=</span><span class="dv">50</span>, svd<span class="op">=</span><span class="va">True</span>, plot<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Exit flag:"</span>, flag)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Active basis vectors:"</span>, np.<span class="bu">sum</span>(x <span class="op">&gt;</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> hyperreduce_module <span class="im">import</span> hyperreduce</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> np.random.rand(<span class="dv">100</span>, <span class="dv">200</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> x, flag <span class="op">=</span> hyperreduce(data, n_components<span class="op">=</span><span class="dv">50</span>, svd<span class="op">=</span><span class="va">True</span>, plot<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Exit flag:"</span>, flag)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Active basis vectors:"</span>, np.<span class="bu">sum</span>(x <span class="op">&gt;</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
