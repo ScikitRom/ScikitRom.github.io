@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>utils.imports – SCIKIT-ROM</title>
+<title>Nonlinear Heat Conduction Jacobian – SCIKIT-ROM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8b43f76cf93b2e91b074b20fe55a15c2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-3010b69d5f7db0f4958bcfac2ddfa03b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,7 +105,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light">
@@ -80,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">SCIKIT-ROM</span>
     </a>
   </div>
@@ -97,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="https://tamids.tamu.edu"> 
-<span class="menu-text"><img src="..\images/image_tamids.png" class="img-fluid" width="35"></span></a>
+<span class="menu-text"><img src=".\images/image_tamids.png" class="img-fluid" width="35"></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -110,14 +145,14 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/utils.imports.html">Utilities</a></li><li class="breadcrumb-item"><a href="../reference/utils.imports.html">utils.imports</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Nonlinear Heat Conduction Jacobian</li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
@@ -133,7 +168,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/index.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
@@ -148,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">fom.fem_utils</span></a>
   </div>
 </li>
@@ -165,25 +200,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.bilinear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.linear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_error_est</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.rom_utils</span></a>
   </div>
 </li>
@@ -200,19 +235,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.bilinear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.deim</span></a>
   </div>
 </li>
@@ -229,25 +264,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.bilinear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.linear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.custom_nnls</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.hyperreduce</span></a>
   </div>
 </li>
@@ -255,22 +290,22 @@ ul.task-list li input[type="checkbox"] {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
  <span class="menu-text">Utilities</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.imports.html" class="sidebar-item-text sidebar-link active">
+  <a href="./reference/utils.imports.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.imports</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.reduced_basis.svd</span></a>
   </div>
 </li>
@@ -287,7 +322,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.dynamics.integrators</span></a>
   </div>
 </li>
@@ -304,31 +339,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtk</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.generate_vtu</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.vtuwriter</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.color_palette</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">utils.visualization.plot_utils</span></a>
   </div>
 </li>
@@ -345,37 +380,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.bilinear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.linear_forms</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.params</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.domain</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.problem_def</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
+  <a href="./reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">templates.problem_template.properties</span></a>
   </div>
 </li>
@@ -394,7 +429,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../problem_structure.html" class="sidebar-item-text sidebar-link">
+  <a href="./problem_structure.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
   </div>
 </li>
@@ -409,19 +444,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
+  <a href="./nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../twisting.html" class="sidebar-item-text sidebar-link">
+  <a href="./twisting.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.2 Twisting of a Neo-Hookean Block</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../linear bending.html" class="sidebar-item-text sidebar-link">
+  <a href="./linear bending.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.3 Heterogeneous linear elasticity in a two-material 3D block</span></a>
   </div>
 </li>
@@ -438,13 +473,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../linear star.html" class="sidebar-item-text sidebar-link">
+  <a href="./linear star.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../non_linear.html" class="sidebar-item-text sidebar-link">
+  <a href="./non_linear.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.5 Nonlinear heat conduction in a two-material 1-D rod</span></a>
   </div>
 </li>
@@ -457,26 +492,97 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#skrom.utils.imports" id="toc-skrom.utils.imports" class="nav-link active" data-scroll-target="#skrom.utils.imports">utils.imports</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/utils.imports.html">Utilities</a></li><li class="breadcrumb-item"><a href="../reference/utils.imports.html">utils.imports</a></li></ol></nav></header>
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Nonlinear Heat Conduction Jacobian</h1>
+</div>
 
 
 
+<div class="quarto-title-meta column-page-right">
 
-<section id="skrom.utils.imports" class="level1">
-<h1>utils.imports</h1>
-<p><code>utils.imports</code></p>
-<p>The <code>utils</code> package aggregates frequently used libraries and helper routines for the pyHyperRom framework: – Core imports for OS, filesystem, timing, and randomness – Numerical &amp; symbolic computing: NumPy, SciPy (dense &amp; sparse), Sympy – Finite‐element tools: scikit‐fem (<code>from skfem import *</code>), mesh I/O via meshio – Linear algebra solvers: dense (LU), sparse (splu, spilu, CG), and multigrid (pyamg) – Sampling &amp; design‐of‐experiments: Sobol, Latin Hypercube (SciPy QMC &amp; pyDOE) – Plotting &amp; visualization: Matplotlib (2D/3D, custom styles), ptitprince, and optional animation modules<br>
-– Utilities for dynamic imports, path handling, and Cartesian products These imports and utilities ensure consistent, ready‐to‐use functionality across the entire reduced‐order modeling pipeline.</p>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="jacobian-bilinear-form" class="level1">
+<h1>Jacobian bilinear form</h1>
+<p>This section defines the Jacobian bilinear form for nonlinear heat conduction, using scikit-fem’s <code>BilinearForm</code> decorator and helper functions <code>grad</code> and <code>dot</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np                      <span class="co"># core numerical arrays</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skfem <span class="im">import</span> BilinearForm          <span class="co"># decorator for bilinear forms</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skfem.helpers <span class="im">import</span> grad, dot     <span class="co"># gradient and inner-product ops</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> properties <span class="im">import</span> k, q             <span class="co"># conductivity and source functions</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">@BilinearForm</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> J_form(du, v, p):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Assemble Jacobian bilinear form for nonlinear heat conduction.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Weak form</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">    ---------</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">    J(du, v) = ∫ [ k(u) ∇du·∇v</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">                   + dk(u)·du·⟨∇u,∇v⟩</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">                   − dq(u)·du·v ] dx</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">    du : array_like or callable</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">        Trial function increment at quadrature points.</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">    v : array_like or callable</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">        Test function at quadrature points.</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">    p : dict</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">        Assembly context:</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">        - u_prev       : ndarray, current solution u</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">        - k_param      : float, conductivity offset</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co">        - q_param      : float, source offset</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co">        - global_mask  : dict of region masks</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">        - elem_indices : ndarray of int, optional subset indices</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co">    array_like</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">        Elementwise contributions for the Jacobian.</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># unpack current state and parameters</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    u           <span class="op">=</span> p[<span class="st">'u_prev'</span>]</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    k_param     <span class="op">=</span> p[<span class="st">'k_param'</span>]</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    q_param     <span class="op">=</span> p[<span class="st">'q_param'</span>]</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    mask_dict   <span class="op">=</span> p[<span class="st">'global_mask'</span>]</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    elems       <span class="op">=</span> p.get(<span class="st">'elem_indices'</span>, <span class="va">None</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># evaluate conductivity and its derivative</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    k_val, dk_val <span class="op">=</span> k(</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        u,</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>        k_param,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        global_mask<span class="op">=</span>mask_dict,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        elem_indices<span class="op">=</span>elems,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># evaluate source derivative (we ignore q_val here)</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    _, dq_val <span class="op">=</span> q(</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        u,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        q_param,</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        global_mask<span class="op">=</span>mask_dict,</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        elem_indices<span class="op">=</span>elems,</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># return the bilinear integrand</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        k_val  <span class="op">*</span> dot(grad(du), grad(v))</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>        <span class="op">+</span> dk_val <span class="op">*</span> du <span class="op">*</span> dot(grad(u), grad(v))</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        <span class="op">-</span> dq_val <span class="op">*</span> du <span class="op">*</span> v</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.imports.html</loc>
-    <lastmod>2025-08-01T22:29:42.673Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.errors.html</loc>
@@ -42,7 +42,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.dynamics.integrators.html</loc>
-    <lastmod>2025-08-01T22:29:42.699Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.basis.pod.html</loc>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.rom_utils.html</loc>
-    <lastmod>2025-08-01T22:43:37.503Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.html</loc>
@@ -74,19 +74,19 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.linear_form_hyperrom_ecsw.html</loc>
-    <lastmod>2025-08-01T22:43:37.608Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.090Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.custom_nnls.html</loc>
-    <lastmod>2025-08-01T22:43:37.633Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.linear_form_hyperrom_deim.html</loc>
-    <lastmod>2025-08-01T22:43:37.552Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.bilinear_form_hyperrom_deim.html</loc>
-    <lastmod>2025-08-01T22:43:37.528Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_structure.html</loc>
@@ -122,11 +122,11 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/linear bending.html</loc>
-    <lastmod>2025-07-31T13:40:23.747Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/index.html</loc>
-    <lastmod>2025-07-30T22:20:53.130Z</lastmod>
+    <lastmod>2025-07-30T21:05:11.490Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/linear star.html</loc>
@@ -138,7 +138,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/fom.fem_utils.html</loc>
-    <lastmod>2025-08-01T22:43:37.370Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/hyperreduction.bilinear_form_hyperrom.html</loc>
@@ -154,7 +154,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/index.html</loc>
-    <lastmod>2025-08-01T22:43:37.328Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_classes.html</loc>
@@ -162,19 +162,19 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.bilinear_form_rom.html</loc>
-    <lastmod>2025-08-01T22:43:37.393Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.deim.html</loc>
-    <lastmod>2025-08-01T22:43:37.570Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html</loc>
-    <lastmod>2025-08-01T22:29:42.613Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.hyperreduce.html</loc>
-    <lastmod>2025-08-01T22:43:37.645Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.html</loc>
@@ -182,15 +182,15 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.linear_form_rom.html</loc>
-    <lastmod>2025-08-01T22:43:37.420Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.rom_error_est.html</loc>
-    <lastmod>2025-08-01T22:43:37.437Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/templates.problem_template.bilinear_forms.html</loc>
-    <lastmod>2025-08-01T22:29:42.764Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/templates.problem_template.linear_forms.html</loc>
@@ -198,7 +198,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/templates.problem_template.problem_def.html</loc>
-    <lastmod>2025-08-01T22:29:42.815Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.basic.html</loc>
@@ -226,7 +226,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.reduced_basis.svd.html</loc>
-    <lastmod>2025-08-01T22:29:42.686Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.rom_utils.html</loc>
@@ -242,10 +242,62 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/utils.visualization.vtuwriter.html</loc>
-    <lastmod>2025-08-01T22:29:42.741Z</lastmod>
+    <lastmod>2026-02-09T14:31:53.092Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/Resources/intro/rom_intro_ex.html</loc>
     <lastmod>2025-07-29T20:30:38.587Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/Test.html</loc>
+    <lastmod>2026-02-09T13:24:04.542Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/fom.html</loc>
+    <lastmod>2026-02-09T13:35:39.696Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/fom_fem_utils.html</loc>
+    <lastmod>2026-02-09T14:32:03.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_problrm_classes_static_master_class.html</loc>
+    <lastmod>2026-02-09T13:45:49.589Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/fom_init.html</loc>
+    <lastmod>2026-02-09T14:32:03.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_problem_classes_static_master_class_parallel.html</loc>
+    <lastmod>2026-02-09T14:32:03.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_problem_classes_static_master_class.html</loc>
+    <lastmod>2026-02-09T14:32:03.744Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_rom_init.html</loc>
+    <lastmod>2026-02-09T13:54:50.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_rom_bilinear_form_rom.html</loc>
+    <lastmod>2026-02-09T13:59:16.430Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_rom_linear_form_rom.html</loc>
+    <lastmod>2026-02-09T14:32:03.753Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_rom_rom_error_est.html</loc>
+    <lastmod>2026-02-09T14:32:03.753Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_rom_rom_error_est_t.html</loc>
+    <lastmod>2026-02-09T14:32:03.753Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/src/skrom_rom_utils.html</loc>
+    <lastmod>2026-02-09T14:32:03.753Z</lastmod>
   </url>
 </urlset>

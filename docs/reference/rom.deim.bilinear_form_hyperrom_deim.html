@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -67,14 +67,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-63ea34c0b45e8cab2e1fcb82dbf94eba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8b43f76cf93b2e91b074b20fe55a15c2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -136,7 +137,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -544,7 +544,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim">BilinearFormHYPERROM_deim</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    form,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    elem_weight,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
@@ -557,7 +557,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>DEIM-based hyperreduced bilinear form for efficient ROM assembly.</p>
 <p><strong>TL;DR</strong>: Dramatically accelerates bilinear form assembly by ~1000x through strategic element sampling and DEIM interpolation, essential for real-time nonlinear ROM applications.</p>
 <p>This class implements a hyperreduction strategy that combines element sampling with the Discrete Empirical Interpolation Method (DEIM) to achieve massive computational savings in bilinear form assembly. The approach works by:</p>
@@ -767,9 +767,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim">assemble_deim</h5>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Assemble the hyperreduced bilinear form using DEIM reconstruction.</p>
 <p><strong>TL;DR</strong>: Main assembly method that combines sparse element assembly with DEIM interpolation to produce the reduced-order operator matrix.</p>
 <p>This method orchestrates the complete hyperreduction assembly process:</p>
@@ -835,9 +835,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly">deim_elem_assembly</h5>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Assemble sparse matrix over hyperreduced element set.</p>
 <p><strong>TL;DR</strong>: Performs efficient sparse assembly by extracting element matrices only from selected elements and building the global sparse matrix using optimized COO format construction.</p>
 <p>This method handles the computationally intensive element-level assembly phase of hyperreduction:</p>
@@ -902,12 +902,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom">extract_element_matrices_rom</h5>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Extract element matrices for hyperreduced mesh assembly.</p>
 <p><strong>TL;DR</strong>: Computes local element stiffness matrices for the reduced element set using either serial or parallel execution, providing the fundamental building blocks for sparse global assembly.</p>
 <p>This method performs the core finite element integration to compute element-level contributions to the global bilinear form. The integration is performed only over elements selected by the hyperreduction strategy, dramatically reducing computational cost.</p>
@@ -1067,13 +1067,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
