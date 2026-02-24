@@ -1,0 +1,76 @@
+# utils.visualization.plot_utils { #skrom.utils.visualization.plot_utils }
+
+`utils.visualization.plot_utils`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [plot_deim_weights](#skrom.utils.visualization.plot_utils.plot_deim_weights) | Create a stem plot of `xi` with a zoomed inset. |
+| [plot_ecsw_weights_3d](#skrom.utils.visualization.plot_utils.plot_ecsw_weights_3d) | Visualize ECSW weights on a 3D mesh, fading out near-zero weights. |
+
+### plot_deim_weights { #skrom.utils.visualization.plot_utils.plot_deim_weights }
+
+```python
+utils.visualization.plot_utils.plot_deim_weights(
+    xi,
+    zoom_indices=(0, 1),
+    figsize=(12, 3),
+    nbins=6,
+    line_color='#163e64',
+    stem_color='#a6a6a6',
+    zoom_loc='upper left',
+    zoom_size=('25%', '40%'),
+    zoom_title='Zoomed-in view',
+    zoom_box_offset_x=-0.5,
+    zoom_box_offset_y=-0.2,
+    zoom_box_width=1.0,
+    zoom_box_height_scale=0.4,
+    zoom_box_color='red',
+    zoom_box_linestyle='--',
+    zoom_box_linewidth=1.0,
+)
+```
+
+Create a stem plot of `xi` with a zoomed inset.
+Uses constrained_layout for automatic spacing.
+
+### plot_ecsw_weights_3d { #skrom.utils.visualization.plot_utils.plot_ecsw_weights_3d }
+
+```python
+utils.visualization.plot_utils.plot_ecsw_weights_3d(
+    mesh,
+    weights,
+    projection='3d',
+    plane='xy',
+    figsize=(8, 6),
+    cmap='viridis',
+    zero_color='#eeeeee',
+    zero_alpha=0.3,
+    weight_threshold=0.001,
+)
+```
+
+Visualize ECSW weights on a 3D mesh, fading out near-zero weights.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name             | Type                                     | Description                                                                                                              | Default     |
+|------------------|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|-------------|
+| mesh             | object                                   | Mesh with attributes:  - p: array of shape (3, n_nodes) for node coords.  - t: array of shape (nodes_per_elem, n_elems). | _required_  |
+| weights          | 1D ndarray of length n_elems             | ECSW weight per element.                                                                                                 | _required_  |
+| projection       | \'3d\' or projected                      | '3d' = scatter in 3D; 'projected' = heatmap on a plane.                                                                  | `'3d'`      |
+| plane            | \'xy\', \'xz\', or \'yz\'                | which plane to project onto if projected.                                                                                | `'xy'`      |
+| figsize          | figure size.                             |                                                                                                                          | `(8, 6)`    |
+| cmap             | name of colormap for >threshold weights. |                                                                                                                          | `'viridis'` |
+| zero_color       | color for weights ≤ threshold.           |                                                                                                                          | `'#eeeeee'` |
+| zero_alpha       | alpha for zero_color points.             |                                                                                                                          | `0.3`       |
+| weight_threshold | float                                    | any w ≤ this will be considered “zero” for display.                                                                      | `0.001`     |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type      | Description   |
+|--------|-----------|---------------|
+|        | (fig, ax) |               |

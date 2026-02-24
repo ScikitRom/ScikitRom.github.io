@@ -504,6 +504,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw" id="toc-skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw" class="nav-link" data-scroll-target="#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw">LinearFormHYPERROM_ecsw</a></li>
   </ul></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
+  <ul class="collapse">
+  <li><a href="#skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements" id="toc-skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements" class="nav-link" data-scroll-target="#skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements">with_elements</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -520,17 +524,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="hyperreducelinear_form_hyperrom.py" class="level2 doc-section doc-section-hyperreducelinearformhyperrompy">
 <h2 class="doc-section doc-section-hyperreducelinearformhyperrompy anchored" data-anchor-id="hyperreducelinear_form_hyperrom.py">hyperreduce/linear_form_hyperrom.py</h2>
 <p>Implements Hyper-Reduction (HYPERROM) for reduced-order load vector assembly.</p>
-<p>This module provides:</p>
-<ul>
-<li><code>LinearFormHYPERROM</code>: a subclass of <code>skfem.assembly.form.linear_form.LinearForm</code> that projects element-wise load contributions onto a reduced basis, clusters elements by free-DOF count after Dirichlet condensation, and assembles the global reduced load vector via vectorized weighted projections.</li>
-</ul>
-<p>The <code>hyperreduce</code> folder contains all tools to perform hyper-reduction, including:</p>
-<ul>
-<li><p>Reduced-order bilinear forms (<code>BilinearFormHYPERROM</code>) and linear forms (<code>LinearFormHYPERROM</code>)</p></li>
-<li><p>Routines for extracting element stiffness matrices and load vectors in a reduced basis</p></li>
-<li><p>Utilities for efficient handling of Dirichlet conditions and element clustering</p></li>
-<li><p>Support for weights, parallelization, and reconstruction of full-order data</p></li>
-</ul>
+<p>This module provides: - <code>LinearFormHYPERROM</code>: a subclass of <code>skfem.assembly.form.linear_form.LinearForm</code> that projects element-wise load contributions onto a reduced basis, clusters elements by free-DOF count after Dirichlet condensation, and assembles the global reduced load vector via vectorized weighted projections.</p>
+<p>The <code>hyperreduce</code> folder contains all tools to perform hyper-reduction, including: - Reduced-order bilinear forms (<code>BilinearFormHYPERROM</code>) and linear forms (<code>LinearFormHYPERROM</code>) - Routines for extracting element stiffness matrices and load vectors in a reduced basis - Utilities for efficient handling of Dirichlet conditions and element clustering - Support for weights, parallelization, and reconstruction of full-order data</p>
 <p>[Author: Suparno Bhattacharyya]</p>
 </section>
 <section id="classes" class="level2">
@@ -552,15 +547,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw">LinearFormHYPERROM_ecsw</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    form,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    elem_weight,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    lob,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    free_dofs<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    form,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    elem_weight,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    lob,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    free_dofs<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Reduced-order linear form for hyper-reduction of load vectors.</p>
 <p>Projects element-level load vectors onto a reduced basis and assembles the global reduced load vector. Handles Dirichlet boundary conditions via mapping from full degrees of freedom (DOFs) to free (non-Dirichlet) DOFs. All operations occur only on free DOFs, with Dirichlet and mean field contributions reinserted during reconstruction.</p>
 <section id="parameters" class="level4 doc-section doc-section-parameters">
@@ -796,11 +792,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+</section>
+</section>
+</section>
+</section>
+</section>
+<section id="functions" class="level2">
+<h2 class="anchored" data-anchor-id="functions">Functions</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements">with_elements</a></td>
+<td>Return a similar basis on a subset of element indices.</td>
+</tr>
+</tbody>
+</table>
+<section id="skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements">with_elements</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.linear_form_hyperrom_ecsw.with_elements(<span class="va">self</span>, elements<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Return a similar basis on a subset of element indices.</p>
 
 
-</section>
-</section>
-</section>
 </section>
 </section>
 </section>

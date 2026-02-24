@@ -518,18 +518,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.ecsw.custom_nnls</h1>
 <p><code>rom.ecsw.custom_nnls</code></p>
 <p>Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW).</p>
-<p>This module provides:</p>
-<ul>
-<li><p><code>NNLS_termination</code>: enumeration of L2 and L∞ convergence criteria for NNLS.</p></li>
-<li><p><code>_verify</code>: internal helper to assert solver invariants.</p></li>
-<li><p><code>NNLSSolver</code>: a sequential active-set NNLS solver with per-entry bounds, selectable norms, stall-detection, and verbosity controls.</p></li>
-</ul>
-<p>The <code>ecsw</code> folder contains utilities for Empirical Cubature Subset Weighting, including:</p>
-<ul>
-<li><p>Algorithms to compute cubature weights using bounded NNLS.</p></li>
-<li><p>Selection and pruning of integration points via active-set methods.</p></li>
-<li><p>Support functions for convergence criteria and solver configuration.</p></li>
-</ul>
+<p>This module provides: - <code>NNLS_termination</code>: enumeration of L2 and L∞ convergence criteria for NNLS. - <code>_verify</code>: internal helper to assert solver invariants. - <code>NNLSSolver</code>: a sequential active-set NNLS solver with per-entry bounds, selectable norms, stall-detection, and verbosity controls.</p>
+<p>The <code>ecsw</code> folder contains utilities for Empirical Cubature Subset Weighting, including: - Algorithms to compute cubature weights using bounded NNLS. - Selection and pruning of integration points via active-set methods. - Support functions for convergence criteria and solver configuration.</p>
 <p>[Original C++ code: libROM team at LLNL, Python adaptation: Suparno Bhattacharyya]</p>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
@@ -554,16 +544,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="skrom.rom.ecsw.custom_nnls.NNLSSolver" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecsw.custom_nnls.NNLSSolver">NNLSSolver</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.custom_nnls.NNLSSolver(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-06</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    min_nnz<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    max_nnz<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    verbosity<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    res_change_termination_tol<span class="op">=</span><span class="fl">1e-10</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    zero_tol<span class="op">=</span><span class="fl">1e-15</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    n_outer<span class="op">=</span><span class="dv">1000</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n_inner<span class="op">=</span><span class="dv">400</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    criterion<span class="op">=</span>NNLS_termination.LINF,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-06</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    min_nnz<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    max_nnz<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    verbosity<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    res_change_termination_tol<span class="op">=</span><span class="fl">1e-10</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    zero_tol<span class="op">=</span><span class="fl">1e-15</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n_outer<span class="op">=</span><span class="dv">1000</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    n_inner<span class="op">=</span><span class="dv">400</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    criterion<span class="op">=</span>NNLS_termination.LINF,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Sequential bounded NNLS (non-negative least squares) solver.</p>
 <p>Implements an active-set method for finding x ≥ 0 that approximately satisfies A x ≈ b, with per-entry bounds on b and two convergence tests (L₂‐ and L∞‐norm).</p>
 <section id="parameters" class="level4 doc-section doc-section-parameters">

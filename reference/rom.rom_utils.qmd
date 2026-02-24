@@ -2,53 +2,43 @@
 
 `rom.rom_utils`
 
-General-purpose utilities for snapshot splitting, sampling, basis updates, data I/O,
-and Newton solvers in reduced‐order modeling (ROM) workflows.
+Utilities for ROM workflows.
 
-This module provides:
+The module includes functions for:
+- snapshot index splitting for training and testing
+- parameter sampling (Sobol, Latin hypercube, Gaussian)
+- basis updates by deflation and augmentation
+- reconstruction from reduced to full coordinates
+- ROM data save/load helpers
+- Newton solvers for reduced and hyper-reduced systems
+- residual collection routines used in hyperreduction
 
-  - Snapshot train/test splitting routines:
-      * `train_test_split`, `latin_hypercube_train_test_split`, `sobol_train_test_split`
+## Notes {.doc-section .doc-section-notes}
 
-  - Sample generators:
-      * `generate_sobol`, `generate_lhs`, `generate_gaussian_samples`
-
-  - Basis management:  
-      * `update_basis` – deflation and augmentation of reduced bases
-
-  - Solution reconstruction:
-      * `reconstruct_solution` – expand reduced vectors back to full order
-
-  - ROM data persistence:
-      * `rom_data_gen`, `load_rom_data`
-
-  - Newton solvers for ROM systems:
-      * `newton_hyper_rom_solver`, `newton_solver_rom`
-
-Together, these functions support data preparation, sampling design,
-basis enrichment, I/O, and nonlinear solves in full‐to‐reduced‐order pipelines.
-
-[Authors: Suparno Bhattacharyya, Ali Hamza Abidi Syed]
+Authors: Suparno Bhattacharyya; Ali Hamza Abidi Syed
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [collect_residuals](#skrom.rom.rom_utils.collect_residuals) | Collect reduced evaluations of the ROM residual functional for hyperreduction. |
-| [compute_nonlinear_snapshots](#skrom.rom.rom_utils.compute_nonlinear_snapshots) | Evaluate a nonlinear RHS function over a set of FOM snapshots. |
-| [generate_gaussian_samples](#skrom.rom.rom_utils.generate_gaussian_samples) | Generate Gaussian-distributed samples based on bounds-derived statistics. |
-| [generate_lhs](#skrom.rom.rom_utils.generate_lhs) | Generate a Latin Hypercube Sample (LHS) scaled to given bounds. |
-| [generate_sobol](#skrom.rom.rom_utils.generate_sobol) | Generate a Sobol sequence scaled to given bounds. |
-| [latin_hypercube_train_test_split](#skrom.rom.rom_utils.latin_hypercube_train_test_split) | Split snapshots into training and testing masks via Latin Hypercube Sampling. |
-| [load_rom_data](#skrom.rom.rom_utils.load_rom_data) | Load ROM data from a ROM_data directory or module path. |
-| [newton_hyper_rom_solver](#skrom.rom.rom_utils.newton_hyper_rom_solver) | Solve a hyper-reduced ROM system via Newton's method. |
-| [newton_solver_rom](#skrom.rom.rom_utils.newton_solver_rom) | Solve nonlinear reduced-order system using Newton's method. |
-| [reconstruct_solution](#skrom.rom.rom_utils.reconstruct_solution) | Reconstruct a full-order solution from a reduced solution vector. |
-| [rom_data_gen](#skrom.rom.rom_utils.rom_data_gen) | Save ROM simulation data to disk. |
-| [select_elements_and_gauss_weights](#skrom.rom.rom_utils.select_elements_and_gauss_weights) | Select elements and corresponding weights from Gauss points, ensuring consistency |
-| [sobol_train_test_split](#skrom.rom.rom_utils.sobol_train_test_split) | Split snapshots into training and testing masks via Sobol sequence ordering. |
-| [train_test_split](#skrom.rom.rom_utils.train_test_split) | Split snapshot indices into training and testing masks. |
-| [update_basis](#skrom.rom.rom_utils.update_basis) | Update a reduced basis by appending new modes from deflated snapshots. |
+| [collect_residuals](#skrom.rom.rom_utils.collect_residuals) | Evaluate and store residual samples used in hyperreduction training. |
+| [collect_residuals_t](#skrom.rom.rom_utils.collect_residuals_t) | Evaluate residual samples for a set of snapshot groups. |
+| [compute_nonlinear_snapshots](#skrom.rom.rom_utils.compute_nonlinear_snapshots) | Evaluate a function on each (solution, parameter) pair and stack results. |
+| [generate_gaussian_samples](#skrom.rom.rom_utils.generate_gaussian_samples) | Generate samples from normal draws based on bounds. |
+| [generate_lhs](#skrom.rom.rom_utils.generate_lhs) | Generate Latin hypercube samples and scale them to bounds. |
+| [generate_sobol](#skrom.rom.rom_utils.generate_sobol) | Generate Sobol samples and scale them to bounds. |
+| [latin_hypercube_train_test_split](#skrom.rom.rom_utils.latin_hypercube_train_test_split) | Create train/test masks by ordering indices from a Latin hypercube draw. |
+| [load_rom_data](#skrom.rom.rom_utils.load_rom_data) | Load ROM data from a ROM_data folder. |
+| [newton_hyper_rom_solver](#skrom.rom.rom_utils.newton_hyper_rom_solver) | Newton solve for a reduced system defined by assemble_func. |
+| [newton_hyper_rom_solver2](#skrom.rom.rom_utils.newton_hyper_rom_solver2) | Hyper-ROM Newton wrapper: |
+| [newton_solver_rom](#skrom.rom.rom_utils.newton_solver_rom) | Single-mode ROM Newton: always solve (A * delta = -y) each iteration |
+| [reconstruct_solution](#skrom.rom.rom_utils.reconstruct_solution) | Map reduced coordinates to full coordinates and add the mean. |
+| [rom_data_gen](#skrom.rom.rom_utils.rom_data_gen) | Save ROM outputs to a ROM_data folder. |
+| [select_elements_and_gauss_weights](#skrom.rom.rom_utils.select_elements_and_gauss_weights) | Build a mapping from element index to a weight list per Gauss point. |
+| [sobol_train_test_split](#skrom.rom.rom_utils.sobol_train_test_split) | Create train/test masks by ordering indices from a Sobol draw. |
+| [solve_linear](#skrom.rom.rom_utils.solve_linear) | Solve A x = b with a chosen backend. |
+| [train_test_split](#skrom.rom.rom_utils.train_test_split) | Create boolean masks that split snapshot indices into train and test sets. |
+| [update_basis](#skrom.rom.rom_utils.update_basis) | Update a basis by deflating snapshots and appending modes from an SVD. |
 
 ### collect_residuals { #skrom.rom.rom_utils.collect_residuals }
 
@@ -62,30 +52,81 @@ rom.rom_utils.collect_residuals(
     training_params,
     assemble_kwargs,
     extra_kwargs=None,
+    hyper_basis=None,
 )
 ```
 
-Collect reduced evaluations of the ROM residual functional for hyperreduction.
+Evaluate and store residual samples used in hyperreduction training.
 
-This function processes training snapshots to collect residual evaluations that will
-be used for hyperreduction (reducing computational cost of nonlinear ROM terms).
+For each snapshot:
+- project snapshot to reduced coordinates
+- reconstruct a field
+- build keyword arguments by assemble_kwargs
+- call Residual.hyperreduction(**kw)
+- stack results along axis 0
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name                 | Type                                  | Description                                                                                                                          | Default    |
-|----------------------|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|------------|
-| fos_solutions        | ndarray                               | Full order solutions (not directly used but maintained for interface consistency)                                                    | _required_ |
-| NLS_train_ms         | (ndarray, shape(n_snapshots, n_dofs)) | Mean-subtracted training snapshots (temperature fluctuations from mean)                                                              | _required_ |
-| NLS_train_mean       | (ndarray, shape(n_dofs))              | Mean temperature field across all training snapshots                                                                                 | _required_ |
-| V_sel                | (ndarray, shape(n_dofs, n_modes))     | Selected POD basis matrix (reduced basis vectors)                                                                                    | _required_ |
-| reconstruct_solution | callable                              | Function to reconstruct full-order solution from ROM coefficients Signature: u_full = reconstruct_solution(u_reduced, V_sel, u_mean) | _required_ |
-| Residual             | LinearFormROM object                  | ROM residual operator with hyperreduction capability Must have method: hyperreduction(prev=solution, k_param=k, q_param=q)           | _required_ |
+| Name                 | Type           | Description                                                                | Default    |
+|----------------------|----------------|----------------------------------------------------------------------------|------------|
+| NLS_train_ms         | ndarray        | Mean-shifted snapshots.                                                    | _required_ |
+| NLS_train_mean       | ndarray        | Mean field.                                                                | _required_ |
+| V_sel                | ndarray        | Basis used for projection and reconstruction.                              | _required_ |
+| reconstruct_solution | callable       | Function that maps reduced coordinates to full coordinates.                | _required_ |
+| Residual             | object         | Object with method hyperreduction(**kw) that returns an array.             | _required_ |
+| training_params      | sequence       | Parameter list aligned with NLS_train_ms.                                  | _required_ |
+| assemble_kwargs      | callable       | Function that maps (u_recon, param) to a dict for Residual.hyperreduction. | _required_ |
+| extra_kwargs         | dict or None   | Dict merged into kw.                                                       | `None`     |
+| hyper_basis          | object or None | If given, call hyper_basis.interpolate(u_recon) before assemble_kwargs.    | `None`     |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type                                                 | Description                                                                                                                          |
-|--------|------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| q_mus  | (ndarray, shape(n_snapshots, n_residual_components)) | Collected residual evaluations for all training snapshots Each row contains the projected residual evaluation for a single parameter |
+| Name   | Type    | Description               |
+|--------|---------|---------------------------|
+| q_mus  | ndarray | Stacked residual samples. |
+
+### collect_residuals_t { #skrom.rom.rom_utils.collect_residuals_t }
+
+```python
+rom.rom_utils.collect_residuals_t(
+    NLS_train_ms,
+    NLS_train_mean,
+    V_sel,
+    reconstruct_solution,
+    Residual,
+    training_params,
+    assemble_kwargs,
+    snapshot_downsampling=1,
+    extra_kwargs=None,
+    hyper_basis=None,
+)
+```
+
+Evaluate residual samples for a set of snapshot groups.
+
+This variant loops over an outer list/array of snapshot groups and
+applies downsampling by index.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name                  | Type           | Description                                                                     | Default    |
+|-----------------------|----------------|---------------------------------------------------------------------------------|------------|
+| NLS_train_ms          | sequence       | Collection of snapshot groups.                                                  | _required_ |
+| NLS_train_mean        | sequence       | Collection of mean fields aligned with snapshot groups.                         | _required_ |
+| V_sel                 | ndarray        | Basis used for projection and reconstruction.                                   | _required_ |
+| reconstruct_solution  | callable       | Function that maps reduced coordinates to full coordinates.                     | _required_ |
+| Residual              | object         | Object with method hyperreduction(**kw) that returns an array.                  | _required_ |
+| training_params       | sequence       | Parameter list. Kept for interface consistency.                                 | _required_ |
+| assemble_kwargs       | callable       | Function that maps a reconstructed field to a dict for Residual.hyperreduction. | _required_ |
+| snapshot_downsampling | int            | Keep one snapshot per this interval.                                            | `1`        |
+| extra_kwargs          | dict or None   | Dict merged into kw.                                                            | `None`     |
+| hyper_basis           | object or None | If given, call hyper_basis.interpolate(u_recon) before assemble_kwargs.         | `None`     |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type    | Description               |
+|--------|---------|---------------------------|
+| q_mus  | ndarray | Stacked residual samples. |
 
 ### compute_nonlinear_snapshots { #skrom.rom.rom_utils.compute_nonlinear_snapshots }
 
@@ -97,21 +138,21 @@ rom.rom_utils.compute_nonlinear_snapshots(
 )
 ```
 
-Evaluate a nonlinear RHS function over a set of FOM snapshots.
+Evaluate a function on each (solution, parameter) pair and stack results.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name            | Type   | Description                                                                     | Default    |
-|-----------------|--------|---------------------------------------------------------------------------------|------------|
-| non_linear_func |        | A function with signature non_linear_func(u=<solution>, param=<param>) → array. | _required_ |
-| fos_solutions   |        | Sequence of full-order solutions (each an ndarray).                             | _required_ |
-| param_list      |        | Sequence of parameter values, same length as fos_solutions.                     | _required_ |
+| Name            | Type     | Description                                                           | Default    |
+|-----------------|----------|-----------------------------------------------------------------------|------------|
+| non_linear_func | callable | Function with signature non_linear_func(u=<solution>, param=<param>). | _required_ |
+| fos_solutions   | sequence | Sequence of full-order solutions.                                     | _required_ |
+| param_list      | sequence | Sequence of parameters aligned with fos_solutions.                    | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type    | Description                                                                                                             |
-|--------|---------|-------------------------------------------------------------------------------------------------------------------------|
-| F_nl   | ndarray | Array of shape (n_snapshots, ...) where each slice F_nl[i] is non_linear_func(u=fos_solutions[i], param=param_list[i]). |
+| Name   | Type    | Description                         |
+|--------|---------|-------------------------------------|
+| F_nl   | ndarray | Stacked outputs of non_linear_func. |
 
 ### generate_gaussian_samples { #skrom.rom.rom_utils.generate_gaussian_samples }
 
@@ -119,21 +160,24 @@ Evaluate a nonlinear RHS function over a set of FOM snapshots.
 rom.rom_utils.generate_gaussian_samples(dimensions, num_points, bounds)
 ```
 
-Generate Gaussian-distributed samples based on bounds-derived statistics.
+Generate samples from normal draws based on bounds.
+
+Mean is (lower+upper)/2.
+Std is (upper-lower)/5.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name       | Type                   | Description                                                                              | Default    |
-|------------|------------------------|------------------------------------------------------------------------------------------|------------|
-| dimensions | int                    | Number of dimensions.                                                                    | _required_ |
-| num_points | int                    | Number of points to generate.                                                            | _required_ |
-| bounds     | list of tuple of float | List of (lower, upper) bounds for each dimension; means and stds are derived from these. | _required_ |
+| Name       | Type                          | Description                        | Default    |
+|------------|-------------------------------|------------------------------------|------------|
+| dimensions | int                           | Count of parameters.               | _required_ |
+| num_points | int                           | Count of samples.                  | _required_ |
+| bounds     | list\[tuple\[float, float\]\] | (lower, upper) for each parameter. | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name    | Type                                     | Description                                                           |
-|---------|------------------------------------------|-----------------------------------------------------------------------|
-| samples | (ndarray, shape(num_points, dimensions)) | Gaussian-distributed samples without clipping to the original bounds. |
+| Name    | Type                                     | Description                                        |
+|---------|------------------------------------------|----------------------------------------------------|
+| samples | (ndarray, shape(num_points, dimensions)) | Samples from normal draws. No clipping is applied. |
 
 ### generate_lhs { #skrom.rom.rom_utils.generate_lhs }
 
@@ -141,21 +185,21 @@ Generate Gaussian-distributed samples based on bounds-derived statistics.
 rom.rom_utils.generate_lhs(dimensions, num_points, bounds)
 ```
 
-Generate a Latin Hypercube Sample (LHS) scaled to given bounds.
+Generate Latin hypercube samples and scale them to bounds.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name       | Type                   | Description                                       | Default    |
-|------------|------------------------|---------------------------------------------------|------------|
-| dimensions | int                    | Number of dimensions in the sample.               | _required_ |
-| num_points | int                    | Number of points to generate.                     | _required_ |
-| bounds     | list of tuple of float | List of (lower, upper) bounds for each dimension. | _required_ |
+| Name       | Type                          | Description                        | Default    |
+|------------|-------------------------------|------------------------------------|------------|
+| dimensions | int                           | Count of parameters.               | _required_ |
+| num_points | int                           | Count of samples.                  | _required_ |
+| bounds     | list\[tuple\[float, float\]\] | (lower, upper) for each parameter. | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name           | Type                                     | Description                                |
-|----------------|------------------------------------------|--------------------------------------------|
-| scaled_samples | (ndarray, shape(num_points, dimensions)) | LHS samples scaled to the provided bounds. |
+| Name           | Type                                     | Description                 |
+|----------------|------------------------------------------|-----------------------------|
+| scaled_samples | (ndarray, shape(num_points, dimensions)) | Samples in parameter space. |
 
 ### generate_sobol { #skrom.rom.rom_utils.generate_sobol }
 
@@ -163,21 +207,21 @@ Generate a Latin Hypercube Sample (LHS) scaled to given bounds.
 rom.rom_utils.generate_sobol(dimensions, num_points, bounds)
 ```
 
-Generate a Sobol sequence scaled to given bounds.
+Generate Sobol samples and scale them to bounds.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name       | Type                   | Description                                                | Default    |
-|------------|------------------------|------------------------------------------------------------|------------|
-| dimensions | int                    | Number of dimensions in the Sobol sequence.                | _required_ |
-| num_points | int                    | Number of points in the sequence (must be a power of two). | _required_ |
-| bounds     | list of tuple of float | List of (lower, upper) bounds for each dimension.          | _required_ |
+| Name       | Type                          | Description                                                        | Default    |
+|------------|-------------------------------|--------------------------------------------------------------------|------------|
+| dimensions | int                           | Count of parameters.                                               | _required_ |
+| num_points | int                           | Count of samples. Input is used as 2**m with m = log2(num_points). | _required_ |
+| bounds     | list\[tuple\[float, float\]\] | (lower, upper) for each parameter.                                 | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name           | Type                                     | Description                                           |
-|----------------|------------------------------------------|-------------------------------------------------------|
-| scaled_samples | (ndarray, shape(num_points, dimensions)) | Sobol sequence samples scaled to the provided bounds. |
+| Name           | Type                                     | Description                 |
+|----------------|------------------------------------------|-----------------------------|
+| scaled_samples | (ndarray, shape(num_points, dimensions)) | Samples in parameter space. |
 
 ### latin_hypercube_train_test_split { #skrom.rom.rom_utils.latin_hypercube_train_test_split }
 
@@ -185,21 +229,21 @@ Generate a Sobol sequence scaled to given bounds.
 rom.rom_utils.latin_hypercube_train_test_split(N_snap, train_percentage=0.8)
 ```
 
-Split snapshots into training and testing masks via Latin Hypercube Sampling.
+Create train/test masks by ordering indices from a Latin hypercube draw.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name             | Type   | Description                                                              | Default    |
-|------------------|--------|--------------------------------------------------------------------------|------------|
-| N_snap           | int    | Total number of snapshots.                                               | _required_ |
-| train_percentage | float  | Proportion of snapshots to include in the training set. Defaults to 0.8. | `0.8`      |
+| Name             | Type   | Description                         | Default    |
+|------------------|--------|-------------------------------------|------------|
+| N_snap           | int    | Count of snapshots.                 | _required_ |
+| train_percentage | float  | Fraction assigned to the train set. | `0.8`      |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name       | Type                             | Description                                 |
-|------------|----------------------------------|---------------------------------------------|
-| train_mask | ndarray of bool, shape (N_snap,) | Boolean mask indicating training snapshots. |
-| test_mask  | ndarray of bool, shape (N_snap,) | Boolean mask indicating testing snapshots.  |
+| Name       | Type                             | Description             |
+|------------|----------------------------------|-------------------------|
+| train_mask | (ndarray\[bool\], shape(N_snap)) | Mask for train indices. |
+| test_mask  | (ndarray\[bool\], shape(N_snap)) | Mask for test indices.  |
 
 ### load_rom_data { #skrom.rom.rom_utils.load_rom_data }
 
@@ -207,21 +251,25 @@ Split snapshots into training and testing masks via Latin Hypercube Sampling.
 rom.rom_utils.load_rom_data(self, rom_data_dir=None)
 ```
 
-Load ROM data from a ROM_data directory or module path.
+Load ROM data from a ROM_data folder.
+
+#### Behavior {.doc-section .doc-section-behavior}
+
+- If self is None, return (fos_solutions, sim_data_dict).
+- If self is not None, set attributes on self and return None.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name         | Type               | Description                                                                            | Default    |
-|--------------|--------------------|----------------------------------------------------------------------------------------|------------|
-| self         | object or None     | If an instance is provided, data is loaded into attributes; if None, data is returned. | _required_ |
-| rom_data_dir | str, Path, or None | Directory or module path to load ROM_data from. Default is None (auto-detect).         | `None`     |
+| Name         | Type                | Description                                                       | Default    |
+|--------------|---------------------|-------------------------------------------------------------------|------------|
+| self         | object or None      | Target instance that holds problem_name, or None for return mode. | _required_ |
+| rom_data_dir | str \| Path \| None | Path to ROM_data, or a module path string, or None for auto path. | `None`     |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name          | Type    | Description                                                                                |
-|---------------|---------|--------------------------------------------------------------------------------------------|
-| fos_solutions | ndarray | Loaded full-order solution snapshots.                                                      |
-| sim_data      | dict    | Dictionary of loaded simulation data when self is None; otherwise sets attributes on self. |
+| Name   | Type                              | Description                      |
+|--------|-----------------------------------|----------------------------------|
+|        | (fos_solutions, sim_data) : tuple | Returned only when self is None. |
 
 ### newton_hyper_rom_solver { #skrom.rom.rom_utils.newton_hyper_rom_solver }
 
@@ -235,85 +283,81 @@ rom.rom_utils.newton_hyper_rom_solver(
 )
 ```
 
-Solve a hyper-reduced ROM system via Newton's method.
+Newton solve for a reduced system defined by assemble_func.
+
+assemble_func(u, param) must return (A, y) such that:
+    A * delta = -y
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name     | Type    | Description                                                               | Default    |
-|----------|---------|---------------------------------------------------------------------------|------------|
-| instance | object  | Object with method assemble_hyper_rom_system(u, params) returning (A, y). | _required_ |
-| u        | ndarray | Initial reduced solution vector, updated in place.                        | _required_ |
-| tol      | float   | Convergence tolerance on the norm of the update. Defaults to 1e-2.        | `0.03`     |
-| maxit    | int     | Maximum number of Newton iterations. Defaults to 50.                      | `200`      |
-| params   | any     | Additional parameters passed to assemble_hyper_rom_system.                | _required_ |
+| Name          | Type     | Description                                               | Default    |
+|---------------|----------|-----------------------------------------------------------|------------|
+| assemble_func | callable | Function with signature (A, y) = assemble_func(u, param). | _required_ |
+| u             | ndarray  | Initial iterate. Updated in place.                        | _required_ |
+| tol           | float    | Stop threshold on \|\|delta\|\|.                          | `0.03`     |
+| maxit         | int      | Iteration cap.                                            | `200`      |
+| param         | any      | Input passed to assemble_func.                            | `None`     |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type    | Description                 |
-|--------|---------|-----------------------------|
-| u      | ndarray | Converged reduced solution. |
+| Name   | Type    | Description    |
+|--------|---------|----------------|
+| u      | ndarray | Final iterate. |
 
-#### Raises {.doc-section .doc-section-raises}
+### newton_hyper_rom_solver2 { #skrom.rom.rom_utils.newton_hyper_rom_solver2 }
 
-| Name   | Type         | Description                                             |
-|--------|--------------|---------------------------------------------------------|
-|        | RuntimeError | If convergence is not achieved within maxit iterations. |
+```python
+rom.rom_utils.newton_hyper_rom_solver2(
+    J_rom_fn,
+    rhs_rom_fn,
+    u0,
+    *J_args,
+    tol=0.01,
+    maxit=50,
+    alpha=1.0,
+    damp_freq=40,
+    rhs_args=(),
+    linear_backend='numpy',
+    linear_method='cg',
+    linear_rtol=1e-08,
+    linear_atol=0.0,
+    linear_maxit=500,
+    petsc_pc='ilu',
+    petsc_options=None,
+    verbose=True,
+)
+```
+
+Hyper-ROM Newton wrapper:
+  J_rom_fn(u, *J_args) -> J(u)   (dense reduced Jacobian)
+  rhs_rom_fn(u, *rhs_args) -> R(u) (reduced residual)
+Solves: J(u) * delta = -R(u)
 
 ### newton_solver_rom { #skrom.rom.rom_utils.newton_solver_rom }
 
 ```python
 rom.rom_utils.newton_solver_rom(
     assemble_func,
-    u_rom,
+    u0,
     *args,
-    alpha=1.0,
-    tol=0.001,
+    tol=0.01,
     maxit=100,
-    use_lu=False,
-    jac_tol=0.1,
+    alpha=1.0,
+    damp_freq=40,
+    linear_backend='numpy',
+    linear_method='cg',
+    linear_rtol=1e-08,
+    linear_atol=0.0,
+    linear_maxit=500,
+    petsc_pc='jacobi',
+    petsc_options=None,
+    verbose=True,
     **kwargs,
 )
 ```
 
-Solve nonlinear reduced-order system using Newton's method.
-
-Provides two solution strategies: efficient LU refactorization for ROM
-systems or direct solving with adaptive step damping.
-
-#### Parameters {.doc-section .doc-section-parameters}
-
-| Name          | Type         | Description                                                                                                                             | Default    |
-|---------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------|------------|
-| assemble_func | callable     | Function that assembles Jacobian and residual: (J, R) = func(u_rom, ...)                                                                | _required_ |
-| u_rom         | array - like | Initial guess for reduced-order state vector                                                                                            | _required_ |
-| *args         | tuple        | Additional positional arguments passed to assemble_func                                                                                 | `()`       |
-| alpha         | float        | Step size damping factor (only used when use_lu=False)                                                                                  | `1.0`      |
-| tol           | float        | Convergence tolerance on Newton step norm                                                                                               | `1e-3`     |
-| maxit         | int          | Maximum number of Newton iterations                                                                                                     | `100`      |
-| use_lu        | bool         | If True, use LU factorization with Jacobian reuse for efficiency. If False, use direct solve with step damping and full reconstruction. | `False`    |
-| jac_tol       | float        | Relative tolerance for Jacobian reuse (only used when use_lu=True)                                                                      | `1e-1`     |
-| **kwargs      | dict         | Additional keyword arguments passed to assemble_func                                                                                    | `{}`       |
-
-#### Returns {.doc-section .doc-section-returns}
-
-| Name   | Type         | Description                                |
-|--------|--------------|--------------------------------------------|
-|        | array - like | Converged reduced-order state vector u_rom |
-
-#### Raises {.doc-section .doc-section-raises}
-
-| Name   | Type         | Description                                                                           |
-|--------|--------------|---------------------------------------------------------------------------------------|
-|        | RuntimeError | If Newton iteration fails to converge within maxit iterations (only when use_lu=True) |
-
-#### Notes {.doc-section .doc-section-notes}
-
-
-- LU mode: Reuses Jacobian factorization until relative change exceeds jac_tol
-
-- Direct mode: Applies adaptive damping every 40 iterations, includes logging
-
-- Part of ROM workflow for efficient nonlinear system solving
+Single-mode ROM Newton: always solve (A * delta = -y) each iteration
+using the selected linear backend (dense direct or iterative).
 
 ### reconstruct_solution { #skrom.rom.rom_utils.reconstruct_solution }
 
@@ -321,21 +365,21 @@ systems or direct solving with adaptive step damping.
 rom.rom_utils.reconstruct_solution(u_reduced, V_sel, mean)
 ```
 
-Reconstruct a full-order solution from a reduced solution vector.
+Map reduced coordinates to full coordinates and add the mean.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name      | Type                     | Description                                                | Default    |
-|-----------|--------------------------|------------------------------------------------------------|------------|
-| u_reduced | (ndarray, shape(r))      | Reduced solution vector.                                   | _required_ |
-| V_sel     | (ndarray, shape(N_h, r)) | Basis matrix for free degrees of freedom.                  | _required_ |
-| mean      | (ndarray, shape(N_h))    | Mean vector that was subtracted during snapshot centering. | _required_ |
+| Name      | Type                     | Description                                                          | Default    |
+|-----------|--------------------------|----------------------------------------------------------------------|------------|
+| u_reduced | ndarray                  | Reduced coordinates. Shape can be (r,) or (n, r) depending on usage. | _required_ |
+| V_sel     | (ndarray, shape(N_h, r)) | Basis matrix used for reconstruction.                                | _required_ |
+| mean      | (ndarray, shape(N_h))    | Mean field used in centering.                                        | _required_ |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type                  | Description                                       |
-|--------|-----------------------|---------------------------------------------------|
-| u_full | (ndarray, shape(N_h)) | Full-order solution vector, including mean shift. |
+| Name       | Type    | Description                          |
+|------------|---------|--------------------------------------|
+| u_complete | ndarray | Reconstructed field with mean added. |
 
 ### rom_data_gen { #skrom.rom.rom_utils.rom_data_gen }
 
@@ -343,20 +387,24 @@ Reconstruct a full-order solution from a reduced solution vector.
 rom.rom_utils.rom_data_gen(save_kw, problem_path)
 ```
 
-Save ROM simulation data to disk.
+Save ROM outputs to a ROM_data folder.
+
+This function stores:
+- fos_solutions.npy
+- ROM_simulation_data.npz (all other items from save_kw)
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name         | Type        | Description                                                             | Default    |
-|--------------|-------------|-------------------------------------------------------------------------|------------|
-| save_kw      | dict        | Dictionary containing simulation outputs; must include 'fos_solutions'. | _required_ |
-| problem_path | str or Path | Filesystem path to the problem directory.                               | _required_ |
+| Name         | Type        | Description                                     | Default    |
+|--------------|-------------|-------------------------------------------------|------------|
+| save_kw      | dict        | Data to save. Must contain key "fos_solutions". | _required_ |
+| problem_path | str or Path | Path to the problem folder.                     | _required_ |
 
 #### Raises {.doc-section .doc-section-raises}
 
 | Name   | Type     | Description                                   |
 |--------|----------|-----------------------------------------------|
-|        | KeyError | If 'fos_solutions' key is missing in save_kw. |
+|        | KeyError | If "fos_solutions" is not present in save_kw. |
 
 ### select_elements_and_gauss_weights { #skrom.rom.rom_utils.select_elements_and_gauss_weights }
 
@@ -368,17 +416,25 @@ rom.rom_utils.select_elements_and_gauss_weights(
 )
 ```
 
-Select elements and corresponding weights from Gauss points, ensuring consistency
-by including all Gauss points for each selected element with zero weights for unselected points.
+Build a mapping from element index to a weight list per Gauss point.
 
-Parameters:
-n_gauss_points (int): Number of Gauss points per element.
-element_indices (list or array): Selected Gauss point indices from ECM.
-weights (list or array): Corresponding weights for selected indices.
+Input indices are Gauss-point indices. The mapping includes one entry per
+element that appears in element_indices. For each mapped element, the list
+length equals n_gauss_points. Unselected Gauss points keep weight 0.0.
 
-Returns:
-dict: Mapping from each selected element to a list of weights, with zeros for unselected Gauss points.
-      For each selected element, the list will have exactly `n_gauss_points` entries.
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name            | Type              | Description                                      | Default    |
+|-----------------|-------------------|--------------------------------------------------|------------|
+| n_gauss_points  | int               | Gauss point count per element.                   | _required_ |
+| element_indices | sequence\[int\]   | Gauss-point indices selected by a sampling step. | _required_ |
+| weights         | sequence\[float\] | Weights aligned with element_indices.            | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name                     | Type                       | Description                                                   |
+|--------------------------|----------------------------|---------------------------------------------------------------|
+| element_to_gauss_weights | dict\[int, list\[float\]\] | Map element_id -> list of weights with length n_gauss_points. |
 
 ### sobol_train_test_split { #skrom.rom.rom_utils.sobol_train_test_split }
 
@@ -386,21 +442,45 @@ dict: Mapping from each selected element to a list of weights, with zeros for un
 rom.rom_utils.sobol_train_test_split(N_snap, train_percentage=0.8)
 ```
 
-Split snapshots into training and testing masks via Sobol sequence ordering.
+Create train/test masks by ordering indices from a Sobol draw.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name             | Type   | Description                                                              | Default    |
-|------------------|--------|--------------------------------------------------------------------------|------------|
-| N_snap           | int    | Total number of snapshots.                                               | _required_ |
-| train_percentage | float  | Proportion of snapshots to include in the training set. Defaults to 0.8. | `0.8`      |
+| Name             | Type   | Description                         | Default    |
+|------------------|--------|-------------------------------------|------------|
+| N_snap           | int    | Count of snapshots.                 | _required_ |
+| train_percentage | float  | Fraction assigned to the train set. | `0.8`      |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name       | Type                             | Description                                 |
-|------------|----------------------------------|---------------------------------------------|
-| train_mask | ndarray of bool, shape (N_snap,) | Boolean mask indicating training snapshots. |
-| test_mask  | ndarray of bool, shape (N_snap,) | Boolean mask indicating testing snapshots.  |
+| Name       | Type                             | Description             |
+|------------|----------------------------------|-------------------------|
+| train_mask | (ndarray\[bool\], shape(N_snap)) | Mask for train indices. |
+| test_mask  | (ndarray\[bool\], shape(N_snap)) | Mask for test indices.  |
+
+### solve_linear { #skrom.rom.rom_utils.solve_linear }
+
+```python
+rom.rom_utils.solve_linear(
+    A,
+    b,
+    *,
+    backend='numpy',
+    method='cg',
+    rtol=1e-08,
+    atol=0.0,
+    maxit=500,
+    petsc_pc='jacobi',
+    petsc_options=None,
+)
+```
+
+Solve A x = b with a chosen backend.
+
+Notes:
+  - CG requires SPD.
+  - MINRES requires symmetric (can be indefinite).
+  - GMRES works for general matrices.
 
 ### train_test_split { #skrom.rom.rom_utils.train_test_split }
 
@@ -408,22 +488,22 @@ Split snapshots into training and testing masks via Sobol sequence ordering.
 rom.rom_utils.train_test_split(N_snap, N_sel=None, train_percentage=0.8)
 ```
 
-Split snapshot indices into training and testing masks.
+Create boolean masks that split snapshot indices into train and test sets.
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name             | Type        | Description                                                                                       | Default    |
-|------------------|-------------|---------------------------------------------------------------------------------------------------|------------|
-| N_snap           | int         | Total number of snapshots.                                                                        | _required_ |
-| N_sel            | int or None | Number of snapshots to select before splitting. If None, all snapshots are used. Default is None. | `None`     |
-| train_percentage | float       | Proportion of snapshots to include in the training set. Defaults to 0.8.                          | `0.8`      |
+| Name             | Type        | Description                                                            | Default    |
+|------------------|-------------|------------------------------------------------------------------------|------------|
+| N_snap           | int         | Count of snapshots.                                                    | _required_ |
+| N_sel            | int or None | Count of indices to select before the split. If None, use all indices. | `None`     |
+| train_percentage | float       | Fraction assigned to the train set.                                    | `0.8`      |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name       | Type                             | Description                                 |
-|------------|----------------------------------|---------------------------------------------|
-| train_mask | ndarray of bool, shape (N_snap,) | Boolean mask indicating training snapshots. |
-| test_mask  | ndarray of bool, shape (N_snap,) | Boolean mask indicating testing snapshots.  |
+| Name       | Type                             | Description             |
+|------------|----------------------------------|-------------------------|
+| train_mask | (ndarray\[bool\], shape(N_snap)) | Mask for train indices. |
+| test_mask  | (ndarray\[bool\], shape(N_snap)) | Mask for test indices.  |
 
 ### update_basis { #skrom.rom.rom_utils.update_basis }
 
@@ -431,18 +511,25 @@ Split snapshot indices into training and testing masks.
 rom.rom_utils.update_basis(V, W_mu, max_modes=5)
 ```
 
-Update a reduced basis by appending new modes from deflated snapshots.
+Update a basis by deflating snapshots and appending modes from an SVD.
+
+#### Steps {.doc-section .doc-section-steps}
+
+1) Deflate snapshots: W_deflated = W_mu - V(V^T W_mu)
+2) Compute SVD of W_deflated
+3) Append up to max_modes left singular vectors
+4) Re-orthonormalize by QR
 
 #### Parameters {.doc-section .doc-section-parameters}
 
-| Name      | Type                         | Description                                                          | Default    |
-|-----------|------------------------------|----------------------------------------------------------------------|------------|
-| V         | (ndarray, shape(N_h, r_old)) | Current orthonormal reduced basis.                                   | _required_ |
-| W_mu      | (ndarray, shape(N_h, N_t))   | New high-fidelity snapshots for parameter μ.                         | _required_ |
-| max_modes | int                          | Maximum number of new modes to append from deflation. Defaults to 5. | `5`        |
+| Name      | Type                         | Description                              | Default    |
+|-----------|------------------------------|------------------------------------------|------------|
+| V         | (ndarray, shape(N_h, r_old)) | Basis matrix.                            | _required_ |
+| W_mu      | (ndarray, shape(N_h, N_t))   | Snapshot matrix for one parameter value. | _required_ |
+| max_modes | int                          | Cap on appended modes.                   | `5`        |
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type                             | Description                                                   |
-|--------|----------------------------------|---------------------------------------------------------------|
-| V_new  | (ndarray, shape(N_h, r_old + k)) | Re-orthonormalized basis combining old and newly added modes. |
+| Name   | Type                             | Description           |
+|--------|----------------------------------|-----------------------|
+| V_new  | (ndarray, shape(N_h, r_old + k)) | Updated basis matrix. |

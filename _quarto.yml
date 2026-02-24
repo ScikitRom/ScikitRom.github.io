@@ -87,6 +87,7 @@ website:
   #         - non_linear.qmd
   #         section: Heat transfer
 
+
   sidebar:
     style: "docked"
     contents:
@@ -94,47 +95,54 @@ website:
         contents:
           - reference/index.qmd
           - contents:
-              - reference/fom.fem_utils.qmd
+            - reference/fom.fem_utils.qmd
             section: Full-Order Model (FOM)
           - contents:
-              - reference/rom.bilinear_form_rom.qmd
-              - reference/rom.linear_form_rom.qmd
-              - reference/rom.rom_error_est.qmd
-              - reference/rom.rom_utils.qmd
-            section: Reduced-Order Model (ROM)
+            - reference/problem_classes.static.master_class.qmd
+            - reference/problem_classes.static.master_class_parallel.qmd
+            section: Problem Classes
           - contents:
-              - reference/rom.deim.bilinear_form_hyperrom_deim.qmd
-              - reference/rom.deim.linear_form_hyperrom_deim.qmd
-              - reference/rom.deim.deim.qmd
-            section: DEIM Hyper-Reduction
+            - reference/rom.deim.bilinear_form_hyperrom_deim.qmd
+            - reference/rom.deim.deim.qmd
+            - reference/rom.deim.linear_form_hyperrom_deim.qmd
+            section: ROM
           - contents:
-              - reference/rom.ecsw.bilinear_form_hyperrom_ecsw.qmd
-              - reference/rom.ecsw.linear_form_hyperrom_ecsw.qmd
-              - reference/rom.ecsw.custom_nnls.qmd
-              - reference/rom.ecsw.hyperreduce.qmd
-            section: ECSW Hyper-Reduction
+            - reference/rom.ecsw.bilinear_form_hyperrom_ecsw.qmd
+            - reference/rom.ecsw.custom_nnls.qmd
+            - reference/rom.ecsw.hyperreduce.qmd
+            - reference/rom.ecsw.linear_form_hyperrom_ecsw.qmd
+            section: ROM
           - contents:
-              - reference/utils.imports.qmd
-              - reference/utils.reduced_basis.svd.qmd
-            section: Utilities
+            - reference/rom.bilinear_form_rom.qmd
+            - reference/rom.linear_form_rom.qmd
+            - reference/rom.rom_error_est.qmd
+            - reference/rom.rom_error_est_t.qmd
+            - reference/rom.rom_utils.qmd
+            section: ROM
           - contents:
-              - reference/utils.dynamics.integrators.qmd
-            section: Dynamics
-          - contents:
-              - reference/utils.visualization.generate_vtk.qmd
-              - reference/utils.visualization.generate_vtu.qmd
-              - reference/utils.visualization.vtuwriter.qmd
-              - reference/utils.visualization.color_palette.qmd
-              - reference/utils.visualization.plot_utils.qmd
-            section: Visualization
-          - contents:
-              - reference/templates.problem_template.bilinear_forms.qmd
-              - reference/templates.problem_template.linear_forms.qmd
-              - reference/templates.problem_template.params.qmd
-              - reference/templates.problem_template.domain.qmd
-              - reference/templates.problem_template.problem_def.qmd
-              - reference/templates.problem_template.properties.qmd
+            - reference/templates.problem_template.bilinear_forms.qmd
+            - reference/templates.problem_template.domain.qmd
+            - reference/templates.problem_template.linear_forms.qmd
+            - reference/templates.problem_template.params.qmd
+            - reference/templates.problem_template.problem_def.qmd
+            - reference/templates.problem_template.properties.qmd
             section: Templates
+          - contents:
+            - reference/utils.data_io.save_h5.qmd
+            - reference/utils.dynamics.integrators.qmd
+            - reference/utils.reduced_basis.svd.qmd
+            - reference/utils.visualization.color_palette.qmd
+            - reference/utils.visualization.generate_vtk.qmd
+            - reference/utils.visualization.generate_vtu.qmd
+            - reference/utils.visualization.plot_utils.qmd
+            - reference/utils.visualization.vtuwriter.qmd
+            - reference/utils.hdf5_store.qmd
+            - reference/utils.imports.qmd
+            - reference/utils.save_h5.qmd
+            section: Utils
+          - contents:
+            - reference/cli.qmd
+            section: CLI
       - section: "**Examples**"
         contents:
           - problem_structure.qmd  
@@ -186,47 +194,55 @@ quartodoc:
       contents:
         - fom.fem_utils
 
-    - title: "Reduced-Order Model (ROM)"
+    - title: "Problem Classes"
+      contents:
+        - problem_classes.static.master_class
+        - problem_classes.static.master_class_parallel
+    
+    - title: "ROM"
+      contents:
+        - rom.deim.bilinear_form_hyperrom_deim
+        - rom.deim.deim
+        - rom.deim.linear_form_hyperrom_deim
+        
+    - title: "ROM"
+      contents:
+        - rom.ecsw.bilinear_form_hyperrom_ecsw
+        - rom.ecsw.custom_nnls
+        - rom.ecsw.hyperreduce
+        - rom.ecsw.linear_form_hyperrom_ecsw
+        
+    - title: "ROM"
       contents:
         - rom.bilinear_form_rom
         - rom.linear_form_rom
         - rom.rom_error_est
+        - rom.rom_error_est_t
         - rom.rom_utils
-
-    - title: "DEIM Hyper-Reduction"
-      contents:
-        - rom.deim.bilinear_form_hyperrom_deim
-        - rom.deim.linear_form_hyperrom_deim
-        - rom.deim.deim
-
-    - title: "ECSW Hyper-Reduction"
-      contents:
-        - rom.ecsw.bilinear_form_hyperrom_ecsw
-        - rom.ecsw.linear_form_hyperrom_ecsw
-        - rom.ecsw.custom_nnls
-        - rom.ecsw.hyperreduce
-
-    - title: "Utilities"
-      contents:
-        - utils.imports
-        - utils.reduced_basis.svd
-
-    - title: "Dynamics"
-      contents:
-        - utils.dynamics.integrators
-    - title: "Visualization"
-      contents:
-        - utils.visualization.generate_vtk
-        - utils.visualization.generate_vtu
-        - utils.visualization.vtuwriter
-        - utils.visualization.color_palette
-        - utils.visualization.plot_utils
-
+        
     - title: "Templates"
       contents:
         - templates.problem_template.bilinear_forms
+        - templates.problem_template.domain
         - templates.problem_template.linear_forms
         - templates.problem_template.params
-        - templates.problem_template.domain
         - templates.problem_template.problem_def
         - templates.problem_template.properties
+        
+    - title: "Utils"
+      contents:
+        - utils.data_io.save_h5
+        - utils.dynamics.integrators
+        - utils.reduced_basis.svd
+        - utils.visualization.color_palette
+        - utils.visualization.generate_vtk
+        - utils.visualization.generate_vtu
+        - utils.visualization.plot_utils
+        - utils.visualization.vtuwriter
+        - utils.hdf5_store
+        - utils.imports
+        - utils.save_h5
+    
+    - title: "CLI"
+      contents:
+        - cli

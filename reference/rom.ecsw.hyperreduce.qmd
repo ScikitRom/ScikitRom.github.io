@@ -6,31 +6,20 @@ Implements the end-to-end hyper-reduction pipeline combining randomized SVD and 
 
 This module provides:
   - `hyperreduce`: function to perform hyper-reduction on a QoI matrix by:
-
     1. Optionally applying randomized SVD for dimensionality reduction
-
     2. Constructing bounded constraints for NNLS from projected data
-
     3. Solving a bounded NNLS problem via `NNLSSolver`
-
     4. Optionally visualizing singular value decay and NNLS coefficients
 
 The `hyperreduce` folder contains utilities to reduce full-order models, including:
-
   - Randomized SVD preprocessing routines
-
   - Bounded NNLS solve integrations (`custom_nnls`)
-
   - Plotting helpers for diagnostic visualization of reduction errors
 
 Dependencies:
-
   - NumPy for array operations
-
   - scikit-learn's `randomized_svd` for fast SVD
-
   - Matplotlib for plotting diagnostics
-
   - Custom `NNLSSolver` implementation in `custom_nnls`
 
 Usage example:
@@ -87,10 +76,10 @@ The hyper-reduction pipeline includes:
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name   | Type                                            | Description                                                                              |
-|--------|-------------------------------------------------|------------------------------------------------------------------------------------------|
-| x      | (ndarray, shape(n_features) or (n_components,)) | Coefficients from the bounded NNLS solve representing the hyper-reduction weights.       |
-| flag   | int                                             | Exit status flag returned by the NNLS solver (e.g., 0 indicates successful convergence). |
+| Name   | Type                                           | Description                                                                              |
+|--------|------------------------------------------------|------------------------------------------------------------------------------------------|
+| x      | (ndarray, shape(n_features) or (n_components)) | Coefficients from the bounded NNLS solve representing the hyper-reduction weights.       |
+| flag   | int                                            | Exit status flag returned by the NNLS solver (e.g., 0 indicates successful convergence). |
 
 #### Raises {.doc-section .doc-section-raises}
 

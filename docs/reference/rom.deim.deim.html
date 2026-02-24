@@ -517,13 +517,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>rom.deim.deim</h1>
 <p><code>rom.deim.deim</code></p>
 <p>Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.</p>
-<p>This module implements DEIM for reducing the dimension of nonlinear force terms in reduced-order models within finite element frameworks. DEIM enables efficient evaluation of nonlinear terms by:</p>
-<ul>
-<li><p>Computing empirical modes from nonlinear force snapshots via SVD</p></li>
-<li><p>Selecting optimal interpolation points using greedy algorithms</p></li>
-<li><p>Constructing projection matrices for fast nonlinear term approximation</p></li>
-<li><p>Mapping selected DOFs to element indicators for efficient assembly</p></li>
-</ul>
+<p>This module implements DEIM for reducing the dimension of nonlinear force terms in reduced-order models within finite element frameworks. DEIM enables efficient evaluation of nonlinear terms by: - Computing empirical modes from nonlinear force snapshots via SVD - Selecting optimal interpolation points using greedy algorithms - Constructing projection matrices for fast nonlinear term approximation - Mapping selected DOFs to element indicators for efficient assembly</p>
 <p><strong>TL;DR</strong>: Dramatically reduces computational cost of nonlinear ROM evaluation by approximating nonlinear terms using interpolation at carefully selected points, achieving significant speedups while maintaining accuracy.</p>
 <p>Author: Suparno Bhattacharyya</p>
 <section id="classes" class="level2">
@@ -544,7 +538,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.rom.deim.deim.deim" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim">deim</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.deim.deim(mesh, F_nl, V_sel, tol_f<span class="op">=</span><span class="fl">0.01</span>, extra_modes<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.deim.deim(<span class="va">self</span>, mesh, F_nl, V_sel, tol_f<span class="op">=</span><span class="fl">0.01</span>, extra_modes<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Discrete Empirical Interpolation Method for nonlinear ROM acceleration.</p>
 <p><strong>TL;DR</strong>: Reduces computational cost of nonlinear terms in ROMs by ~1000x through strategic sampling and interpolation, enabling real-time nonlinear PDE solutions.</p>
 <p>The Discrete Empirical Interpolation Method (DEIM) addresses the computational bottleneck in nonlinear reduced-order models where nonlinear terms must still be evaluated at all degrees of freedom. DEIM constructs an efficient approximation by:</p>

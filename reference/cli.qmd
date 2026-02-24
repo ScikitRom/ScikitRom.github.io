@@ -1,0 +1,28 @@
+# cli { #skrom.cli }
+
+`cli`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [cli](#skrom.cli.cli) | Command-line tool for skrom. |
+| [create_problem](#skrom.cli.create_problem) | Create a new problem_<name> folder with starter code. |
+
+### cli { #skrom.cli.cli }
+
+```python
+cli.cli()
+```
+
+Command-line tool for skrom.
+
+### create_problem { #skrom.cli.create_problem }
+
+```python
+cli.create_problem(name)
+```
+
+Create a new problem_<name> folder with starter code.

@@ -1,0 +1,31 @@
+# templates.problem_template.properties { #skrom.templates.problem_template.properties }
+
+`templates.problem_template.properties`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [property_fn](#skrom.templates.problem_template.properties.property_fn) | Template for a material or source property function. |
+
+### property_fn { #skrom.templates.problem_template.properties.property_fn }
+
+```python
+templates.problem_template.properties.property_fn(param)
+```
+
+Template for a material or source property function.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type   | Description                                      | Default    |
+|--------|--------|--------------------------------------------------|------------|
+| param  | float  | User-defined parameter controlling the property. | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description              |
+|--------|--------|--------------------------|
+|        | float  | Computed property value. |

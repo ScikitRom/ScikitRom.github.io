@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -67,14 +67,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-63ea34c0b45e8cab2e1fcb82dbf94eba.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-8b43f76cf93b2e91b074b20fe55a15c2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -136,7 +137,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -501,8 +501,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#skrom.utils.visualization.generate_vtu.build_mesh_from_params" id="toc-skrom.utils.visualization.generate_vtu.build_mesh_from_params" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtu.build_mesh_from_params">build_mesh_from_params</a></li>
-  <li><a href="#skrom.utils.visualization.generate_vtu.convert_to_vtu_series" id="toc-skrom.utils.visualization.generate_vtu.convert_to_vtu_series" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtu.convert_to_vtu_series">convert_to_vtu_series</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtu.save_vtu_point_vertexsample" id="toc-skrom.utils.visualization.generate_vtu.save_vtu_point_vertexsample" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtu.save_vtu_point_vertexsample">save_vtu_point_vertexsample</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtu.save_vtu_time_series_point" id="toc-skrom.utils.visualization.generate_vtu.save_vtu_time_series_point" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtu.save_vtu_time_series_point">save_vtu_time_series_point</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample" id="toc-skrom.utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample">save_vtu_time_series_point_vertexsample</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -528,104 +529,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="#skrom.utils.visualization.generate_vtu.build_mesh_from_params">build_mesh_from_params</a></td>
-<td>Construct a SciKit-FEM mesh from JSON parameter entries.</td>
+<td><a href="#skrom.utils.visualization.generate_vtu.save_vtu_point_vertexsample">save_vtu_point_vertexsample</a></td>
+<td>U: (n_steps, ndofs_P2)</td>
 </tr>
 <tr class="even">
-<td><a href="#skrom.utils.visualization.generate_vtu.convert_to_vtu_series">convert_to_vtu_series</a></td>
-<td>Convert NumPy solution snapshots to a VTU series with PVD index.</td>
+<td><a href="#skrom.utils.visualization.generate_vtu.save_vtu_time_series_point">save_vtu_time_series_point</a></td>
+<td>Write point-data frames to VTK on an undeformed mesh.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample">save_vtu_time_series_point_vertexsample</a></td>
+<td>U: (n_steps, ndofs_P2)</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.utils.visualization.generate_vtu.build_mesh_from_params" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtu.build_mesh_from_params">build_mesh_from_params</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtu.build_mesh_from_params(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Construct a SciKit-FEM mesh from JSON parameter entries.</p>
-<p>Reads domain dimensions and mesh refinement factor from a parameter dictionary and uses them to build a finite-element mesh via the <code>domain</code> factory.</p>
+<section id="skrom.utils.visualization.generate_vtu.save_vtu_point_vertexsample" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtu.save_vtu_point_vertexsample">save_vtu_point_vertexsample</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtu.save_vtu_point_vertexsample(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    basis,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    fname,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    point_data_name<span class="op">=</span><span class="st">'Temperature'</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>U: (n_steps, ndofs_P2) Saves vertex-sampled field (n_vertices,) on the original mesh.</p>
+</section>
+<section id="skrom.utils.visualization.generate_vtu.save_vtu_time_series_point" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtu.save_vtu_time_series_point">save_vtu_time_series_point</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtu.save_vtu_time_series_point(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    interval<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    point_data_name<span class="op">=</span><span class="st">'Temperature'</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Write point-data frames to VTK on an undeformed mesh.</p>
+<p>The function writes frames named <code>{prefix}_{k:04d}.vtk</code> with a point-data array stored under <code>point_data_name</code>.</p>
+<p>The time axis handling is: - if <code>U.shape[0] == n_points</code>: treat U as (n_points, n_steps) and save columns - else: treat U as (n_steps, n_points) and save rows</p>
 <section id="parameters" class="level4 doc-section doc-section-parameters">
 <h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 1%">
-<col style="width: 1%">
-<col style="width: 93%">
-<col style="width: 2%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>p</td>
-<td>dict</td>
-<td>Dictionary of mesh parameters. Expected keys (3D): - <code>lx</code> : float, optional Domain length in the x-direction (default is 1.0). - <code>ly</code> : float, optional Domain length in the y-direction (default is 1.0). - <code>lz</code> : float, optional Domain length in the z-direction (default is 1.0). - <code>factor</code> : int, optional Mesh refinement factor controlling element subdivision (default is 4).</td>
-<td><em>required</em></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="returns" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 85%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>mesh</td>
-<td>Mesh</td>
-<td>A SciKit-FEM mesh object constructed with the specified dimensions and refinement factor.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="examples" class="level4 doc-section doc-section-examples">
-<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h4>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> params <span class="op">=</span> {<span class="st">'lx'</span>: <span class="fl">2.0</span>, <span class="st">'ly'</span>: <span class="fl">1.0</span>, <span class="st">'lz'</span>: <span class="fl">0.5</span>, <span class="st">'factor'</span>: <span class="dv">6</span>}</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> mesh <span class="op">=</span> build_mesh_from_params(params)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> mesh.p.shape  <span class="co"># number of spatial dimensions and nodes</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>(<span class="dv">3</span>, N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="notes" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
-<ul>
-<li>If any of the dimension keys are missing, defaults of 1.0 each are used.</li>
-<li><code>factor</code> must be convertible to int; non-integer inputs will be cast.</li>
-</ul>
-</section>
-</section>
-<section id="skrom.utils.visualization.generate_vtu.convert_to_vtu_series" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtu.convert_to_vtu_series">convert_to_vtu_series</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtu.convert_to_vtu_series(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    root_dir,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    sol_file_name<span class="op">=</span><span class="st">'u_solution.npy'</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    vtu_folder_name<span class="op">=</span><span class="st">'VTU'</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    steps<span class="op">=</span><span class="dv">300</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    stride<span class="op">=</span><span class="dv">10</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Convert NumPy solution snapshots to a VTU series with PVD index.</p>
-<p>Scans all subdirectories under <code>root_dir</code> for pairs of <code>params.json</code> and solution files, rebuilds the corresponding mesh, writes VTU files for each snapshot at intervals defined by <code>stride</code> up to <code>steps</code>, and aggregates outputs into a PVD file for streamlined visualization.</p>
-<section id="parameters-1" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 8%">
-<col style="width: 65%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 60%">
 <col style="width: 13%">
 </colgroup>
 <thead>
@@ -638,70 +586,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>root_dir</td>
-<td>str or Path</td>
-<td>Base directory to search recursively for solution runs.</td>
+<td>U</td>
+<td>numpy.ndarray</td>
+<td>Point-data history with shape (n_steps, n_points) or (n_points, n_steps).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td>sol_file_name</td>
-<td>str</td>
-<td>Filename of the NumPy solution array (default is <code>"u_solution.npy"</code>).</td>
-<td><code>'u_solution.npy'</code></td>
+<td>mesh</td>
+<td>object</td>
+<td>Mesh object that provides <code>save(path, point_data=...)</code>.</td>
+<td><em>required</em></td>
 </tr>
 <tr class="odd">
-<td>vtu_folder_name</td>
-<td>str</td>
-<td>Name of the subfolder to create for VTU outputs in each run directory (default is <code>"VTU"</code>).</td>
-<td><code>'VTU'</code></td>
+<td>run_dir</td>
+<td>pathlib.Path</td>
+<td>Output directory.</td>
+<td><em>required</em></td>
 </tr>
 <tr class="even">
-<td>steps</td>
-<td>int</td>
-<td>Maximum number of time steps to process from each solution array (default is 300).</td>
-<td><code>300</code></td>
+<td>prefix</td>
+<td>str</td>
+<td>Base name used for VTU frames.</td>
+<td><em>required</em></td>
 </tr>
 <tr class="odd">
-<td>stride</td>
+<td>interval</td>
 <td>int</td>
-<td>Interval between snapshots to write (every <code>stride</code> steps) (default is 10).</td>
+<td>Save every <code>interval</code> steps. Default is 10.</td>
 <td><code>10</code></td>
 </tr>
-</tbody>
-</table>
-</section>
-<section id="returns-1" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 8%">
-<col style="width: 6%">
-<col style="width: 85%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>processed</td>
-<td>int</td>
-<td>Total number of run folders processed (i.e., those containing both <code>params.json</code> and the solution file).</td>
+<tr class="even">
+<td>point_data_name</td>
+<td>str</td>
+<td>Key used in VTK point_data. Default is “Temperature”.</td>
+<td><code>'Temperature'</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="raises" class="level4 doc-section doc-section-raises">
-<h4 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h4>
+<section id="returns" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 8%">
-<col style="width: 9%">
-<col style="width: 81%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -712,30 +637,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td></td>
-<td>IOError</td>
-<td>If reading <code>params.json</code> or the NumPy array fails for a detected folder.</td>
+<td>None</td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="examples-1" class="level4 doc-section doc-section-examples">
-<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples-1">Examples</h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> n <span class="op">=</span> convert_to_vtu_series(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>...     <span class="st">'sim_runs'</span>, sol_file_name<span class="op">=</span><span class="st">'solutions/u.npy'</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>...     vtu_folder_name<span class="op">=</span><span class="st">'VTU_out'</span>, steps<span class="op">=</span><span class="dv">200</span>, stride<span class="op">=</span><span class="dv">5</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>... )</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="ss">f"Processed </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> runs."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="notes" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
+<p>Authors: Suparno Bhattacharyya</p>
 </section>
-<section id="notes-1" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-1">Notes</h4>
-<ul>
-<li>Existing <code>root_dir</code> contents are not modified or deleted; new VTU folders are created alongside original data.</li>
-<li>Uses <code>tqdm</code> for a progress bar when scanning directories.</li>
-<li>PVD writer organizes all snapshot VTU files for each run into a single index file for use with ParaView or similar tools.</li>
-</ul>
+</section>
+<section id="skrom.utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample">save_vtu_time_series_point_vertexsample</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtu.save_vtu_time_series_point_vertexsample(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    basis,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    interval<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    point_data_name<span class="op">=</span><span class="st">'Temperature'</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>U: (n_steps, ndofs_P2) Saves vertex-sampled field (n_vertices,) on the original mesh.</p>
 
 
-</section>
 </section>
 </section>
 </section>
@@ -792,13 +718,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

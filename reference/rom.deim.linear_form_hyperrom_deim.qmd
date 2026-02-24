@@ -7,13 +7,9 @@ DEIM-based hyperreduction for finite element linear forms.
 This module implements hyperreduction of linear forms using the Discrete 
 Empirical Interpolation Method (DEIM) combined with element sampling for 
 efficient load vector assembly. It provides dramatic computational speedups by:
-
 - Assembling only a subset of finite elements based on DEIM selection
-
 - Using efficient vector assembly techniques for sparse operations
-
 - Reconstructing full load vectors via DEIM interpolation matrices
-
 - Supporting parallel element vector extraction when available
 
 **TL;DR**: Enables speedup in linear form assembly for ROMs by 
@@ -32,6 +28,7 @@ Author: Suparno Bhattacharyya
 
 ```python
 rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim(
+    self,
     form,
     elem_weight,
     ubasis,

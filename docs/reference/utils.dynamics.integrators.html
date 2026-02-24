@@ -501,7 +501,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#skrom.utils.dynamics.integrators.newmark_with_damping" id="toc-skrom.utils.dynamics.integrators.newmark_with_damping" class="nav-link" data-scroll-target="#skrom.utils.dynamics.integrators.newmark_with_damping">newmark_with_damping</a></li>
   <li><a href="#skrom.utils.dynamics.integrators.wbz_alpha" id="toc-skrom.utils.dynamics.integrators.wbz_alpha" class="nav-link" data-scroll-target="#skrom.utils.dynamics.integrators.wbz_alpha">wbz_alpha</a></li>
   </ul></li>
   </ul></li>
@@ -528,18 +527,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="#skrom.utils.dynamics.integrators.newmark_with_damping">newmark_with_damping</a></td>
-<td>Newmark-β integrator with Rayleigh damping C.</td>
-</tr>
-<tr class="even">
 <td><a href="#skrom.utils.dynamics.integrators.wbz_alpha">wbz_alpha</a></td>
 <td>Wood-Bossak-Zienkiewicz (WBZ-α) method.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.utils.dynamics.integrators.newmark_with_damping" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.utils.dynamics.integrators.newmark_with_damping">newmark_with_damping</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utils.dynamics.integrators.newmark_with_damping(</span>
+<section id="skrom.utils.dynamics.integrators.wbz_alpha" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.dynamics.integrators.wbz_alpha">wbz_alpha</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utils.dynamics.integrators.wbz_alpha(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    M,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    C,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    K,</span>
@@ -547,26 +542,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    times,</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    U0<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    V0<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="fl">0.25</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    gamma<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Newmark-β integrator with Rayleigh damping C. Uses copies of input matrices to avoid side effects. force_free(i, times) must return the load vector at times[i].</p>
-<p>[Code: Suparno Bhattacharyya]</p>
-</section>
-<section id="skrom.utils.dynamics.integrators.wbz_alpha" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.utils.dynamics.integrators.wbz_alpha">wbz_alpha</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utils.dynamics.integrators.wbz_alpha(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    M,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    C,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    K,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    force_free,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    times,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    U0<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    V0<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    gamma<span class="op">=</span><span class="fl">0.5</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="fl">0.25</span>,</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    alpha_m<span class="op">=</span><span class="fl">0.0</span>,</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    gamma<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="fl">0.25</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    alpha_m<span class="op">=</span><span class="fl">0.0</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Wood-Bossak-Zienkiewicz (WBZ-α) method. Extension of Newmark method with algorithmic damping parameter alpha_m. alpha_m: numerical damping parameter (0 ≤ alpha_m ≤ 1)</p>
 
 

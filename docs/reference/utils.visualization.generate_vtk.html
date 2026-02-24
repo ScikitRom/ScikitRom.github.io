@@ -2,11 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<<<<<<< Updated upstream
-<meta name="generator" content="quarto-1.7.32">
-=======
 <meta name="generator" content="quarto-1.8.26">
->>>>>>> Stashed changes
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -76,11 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<<<<<<< Updated upstream
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-=======
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
->>>>>>> Stashed changes
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-8b43f76cf93b2e91b074b20fe55a15c2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -507,11 +499,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#skrom.utils.visualization.generate_vtk" id="toc-skrom.utils.visualization.generate_vtk" class="nav-link active" data-scroll-target="#skrom.utils.visualization.generate_vtk">utils.visualization.generate_vtk</a>
   <ul class="collapse">
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
   <li><a href="#skrom.utils.visualization.generate_vtk.generate_vtk" id="toc-skrom.utils.visualization.generate_vtk.generate_vtk" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.generate_vtk">generate_vtk</a></li>
   <li><a href="#skrom.utils.visualization.generate_vtk.save_vtk_solution" id="toc-skrom.utils.visualization.generate_vtk.save_vtk_solution" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.save_vtk_solution">save_vtk_solution</a></li>
   <li><a href="#skrom.utils.visualization.generate_vtk.save_vtk_time_series" id="toc-skrom.utils.visualization.generate_vtk.save_vtk_time_series" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.save_vtk_time_series">save_vtk_time_series</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtk.save_vtk_time_series_point" id="toc-skrom.utils.visualization.generate_vtk.save_vtk_time_series_point" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.save_vtk_time_series_point">save_vtk_time_series_point</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtk.save_vtu_time_series_point" id="toc-skrom.utils.visualization.generate_vtk.save_vtu_time_series_point" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.save_vtu_time_series_point">save_vtu_time_series_point</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample" id="toc-skrom.utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample">save_vtu_time_series_point_vertexsample</a></li>
+  <li><a href="#skrom.utils.visualization.generate_vtk.visualize2D" id="toc-skrom.utils.visualization.generate_vtk.visualize2D" class="nav-link" data-scroll-target="#skrom.utils.visualization.generate_vtk.visualize2D">visualize2D</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -526,6 +523,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="skrom.utils.visualization.generate_vtk" class="level1">
 <h1>utils.visualization.generate_vtk</h1>
 <p><code>utils.visualization.generate_vtk</code></p>
+<p>VTK export utilities.</p>
+<p>This module provides functions for: - plotting a 2D field on a scikit-fem basis - writing one displacement vector to a VTK file, with mesh translation - exporting paired full-order and reduced-order solutions to VTK - exporting a displacement time series to VTK with a PVD collection file - exporting a point-data time series to VTK on an undeformed mesh</p>
+<section id="notes" class="level2 doc-section doc-section-notes">
+<h2 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h2>
+<p>Authors: Suparno Bhattacharyya</p>
+</section>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
@@ -538,15 +541,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.utils.visualization.generate_vtk.generate_vtk">generate_vtk</a></td>
-<td>Batch export of full-order and reduced-order solutions to VTK.</td>
+<td>Export paired full-order and reduced-order solutions to VTK.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.utils.visualization.generate_vtk.save_vtk_solution">save_vtk_solution</a></td>
-<td>Write a single solution vector to a VTK file.</td>
+<td>Write one solution vector to a VTK file.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.utils.visualization.generate_vtk.save_vtk_time_series">save_vtk_time_series</a></td>
-<td>Write one VTK per time-step and a .pvd that collects them.</td>
+<td>Write one VTK per saved time step and write a PVD collection file.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.utils.visualization.generate_vtk.save_vtk_time_series_point">save_vtk_time_series_point</a></td>
+<td>Write point-data frames to VTK on an undeformed mesh.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.utils.visualization.generate_vtk.save_vtu_time_series_point">save_vtu_time_series_point</a></td>
+<td>Write point-data frames to VTK on an undeformed mesh.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample">save_vtu_time_series_point_vertexsample</a></td>
+<td>U: (n_steps, ndofs_P2)</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.utils.visualization.generate_vtk.visualize2D">visualize2D</a></td>
+<td>Plot a scalar field on a 2D scikit-fem basis.</td>
 </tr>
 </tbody>
 </table>
@@ -561,17 +580,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    num_test<span class="op">=</span><span class="dv">5</span>,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    out_dir<span class="op">=</span><span class="st">'sol_vtk_files'</span>,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    split_dim<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Batch export of full-order and reduced-order solutions to VTK.</p>
-<p>Randomly selects solution indices, generates translated meshes, and writes both full-order (FOS) and reduced-order (ROM) displacement fields to VTK files within separate test directories. Cleans output directory on each invocation.</p>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    clean_out_dir<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Export paired full-order and reduced-order solutions to VTK.</p>
+<p>The function selects <code>num_test</code> random indices and writes one full-order and one reduced-order VTK file in a subfolder <code>Test_i</code>.</p>
 <section id="parameters" class="level4 doc-section doc-section-parameters">
 <h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 14%">
-<col style="width: 67%">
-<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 15%">
+<col style="width: 63%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -585,49 +605,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>LS_test</td>
 <td>sequence of array_like</td>
-<td>List or array of full-order solution vectors.</td>
+<td>Full-order solution vectors.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>LS_rom</td>
 <td>sequence of array_like</td>
-<td>List or array of reduced-order solution vectors corresponding to <code>LS_test</code> indices.</td>
+<td>Reduced-order solution vectors aligned with LS_test by index.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>mesh</td>
 <td>object</td>
-<td>Mesh object used for geometry translations (see <code>_save_vtk_solution</code>).</td>
+<td>Mesh object passed to <code>save_vtk_solution</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>basis</td>
 <td>object</td>
-<td>Basis object with attribute <code>nodal_dofs</code> for nodal indexing.</td>
+<td>Basis object passed to <code>save_vtk_solution</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>scale</td>
 <td>float</td>
-<td>Scale factor for displacements before applying to the mesh (default is 1.0).</td>
+<td>Scale factor for nodal values. Default is 1.0.</td>
 <td><code>1.0</code></td>
 </tr>
 <tr class="even">
 <td>num_test</td>
 <td>int</td>
-<td>Number of random test cases to export (default is 5).</td>
+<td>Number of cases to export. Default is 5.</td>
 <td><code>5</code></td>
 </tr>
 <tr class="odd">
 <td>out_dir</td>
 <td>str</td>
-<td>Base directory path where subdirectories <code>Test_1</code>, <code>Test_2</code>, … will be created (default is “sol_vtk_files”).</td>
+<td>Output directory. Subfolders <code>Test_1</code>, <code>Test_2</code>, … are created. Default is “sol_vtk_files”.</td>
 <td><code>'sol_vtk_files'</code></td>
 </tr>
 <tr class="even">
 <td>split_dim</td>
 <td>bool</td>
-<td>If True, split displacement into per-axis scalar fields in VTK outputs (default is False).</td>
+<td>Passed to <code>save_vtk_solution</code>. Default is False.</td>
+<td><code>False</code></td>
+</tr>
+<tr class="odd">
+<td>clean_out_dir</td>
+<td>bool</td>
+<td>If True, remove <code>out_dir</code> before writing. Default is False.</td>
 <td><code>False</code></td>
 </tr>
 </tbody>
@@ -652,45 +678,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="notes" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
-<ul>
-<li>If <code>out_dir</code> already exists, it will be removed entirely before new output is written.</li>
-<li>Each <code>Test_i</code> directory contains two files: <code>test_sol_fos_i.vtk</code> and <code>test_sol_rom_i.vtk</code>.</li>
-</ul>
-</section>
-<section id="examples" class="level4 doc-section doc-section-examples">
-<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h4>
-<<<<<<< Updated upstream
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> generate_vtk(LS_test, LS_rom, mesh, basis, scale<span class="op">=</span><span class="fl">0.5</span>, num_test<span class="op">=</span><span class="dv">3</span>,</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>...              out_dir<span class="op">=</span><span class="st">"vtk_outputs"</span>, split_dim<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>[Author: Suparno Bhattacharyya]</p>
-=======
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> generate_vtk(LS_test, LS_rom, mesh, basis, scale<span class="op">=</span><span class="fl">0.5</span>, num_test<span class="op">=</span><span class="dv">3</span>,</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>...              out_dir<span class="op">=</span><span class="st">"vtk_outputs"</span>, split_dim<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
->>>>>>> Stashed changes
+<section id="notes-1" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-1">Notes</h4>
+<p>Authors: Suparno Bhattacharyya</p>
 </section>
 </section>
 <section id="skrom.utils.visualization.generate_vtk.save_vtk_solution" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.save_vtk_solution">save_vtk_solution</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtk_solution(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    basis,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    scale,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    split_dim<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Write a single solution vector to a VTK file.</p>
-<p>Applies a translation to the mesh based on displacement values and saves the resulting geometry along with point data fields.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtk_solution(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    basis,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    scale,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    split_dim<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Write one solution vector to a VTK file.</p>
+<p>The function extracts nodal degrees of freedom from <code>u</code> using <code>basis.nodal_dofs</code>, scales the nodal values by <code>scale</code>, translates the mesh, and writes one <code>.vtk</code> file. If <code>split_dim</code> is True, the nodal displacement components are stored as scalar point-data fields.</p>
 <section id="parameters-1" class="level4 doc-section doc-section-parameters">
 <h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 5%">
-<col style="width: 7%">
-<col style="width: 81%">
+<col style="width: 11%">
+<col style="width: 76%">
 <col style="width: 6%">
 </colgroup>
 <thead>
@@ -705,43 +717,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>u</td>
 <td>array_like</td>
-<td>Displacement vector of length matching the mesh degrees of freedom.</td>
+<td>Global solution vector that contains nodal degrees of freedom indexed by <code>basis.nodal_dofs</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>mesh</td>
 <td>object</td>
-<td>Mesh object supporting <code>translated(displacements)</code> to return a new mesh and <code>save(path, point_data=...)</code> to write VTK files.</td>
+<td>Mesh object that provides: - <code>translated(u_node)</code> returning a new mesh - <code>save(path, point_data=...)</code> writing a VTK file</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>basis</td>
 <td>object</td>
-<td>Basis object containing attribute <code>nodal_dofs</code>, an integer array indexing into the global solution vector for nodal degrees of freedom.</td>
+<td>Basis object that provides <code>nodal_dofs</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>scale</td>
 <td>float</td>
-<td>Scalar multiplier applied to the displacement values before translation.</td>
+<td>Scale factor applied to nodal values before translation.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>run_dir</td>
-<td>pathlib.Path</td>
-<td>Directory in which the <code>.vtk</code> file will be created.</td>
+<td>str or pathlib.Path</td>
+<td>Output directory.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>prefix</td>
 <td>str</td>
-<td>Filename prefix (e.g., “test_sol_fos”).</td>
+<td>Output file prefix. The file name is <code>{prefix}.vtk</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>split_dim</td>
 <td>bool</td>
-<td>If True, splits the displacement into separate scalar fields (<code>u_x</code>, <code>u_y</code>, and <code>u_z</code> for 3D) in the VTK output; otherwise writes a single vector field <code>u</code>.</td>
+<td>If True, write scalar fields <code>u_x</code>, <code>u_y</code>, <code>u_z</code> (up to the mesh dimension). If False, write only the displaced mesh. Default is False.</td>
 <td><code>False</code></td>
 </tr>
 </tbody>
@@ -763,31 +775,380 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>None</td>
 <td></td>
 </tr>
+</tbody>
+</table>
+</section>
+<section id="notes-2" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-2">Notes</h4>
+<p>Authors: Suparno Bhattacharyya</p>
+</section>
+</section>
+<section id="skrom.utils.visualization.generate_vtk.save_vtk_time_series" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.save_vtk_time_series">save_vtk_time_series</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtk_time_series(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    times,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    basis,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    scale,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    interval<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Write one VTK per saved time step and write a PVD collection file.</p>
+<p>The function saves frames named <code>{prefix}_{k:04d}.vtk</code> and writes a PVD file named <code>{prefix}.pvd</code> that references the frames and their times.</p>
+<section id="parameters-2" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 17%">
+<col style="width: 57%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U</td>
+<td>numpy.ndarray</td>
+<td>Displacement history with shape (ndofs, n_steps).</td>
+<td><em>required</em></td>
+</tr>
 <tr class="even">
+<td>times</td>
+<td>numpy.ndarray</td>
+<td>Time values with shape (n_steps,).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>mesh</td>
+<td>object</td>
+<td>Mesh object passed to <code>save_vtk_solution</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>basis</td>
+<td>object</td>
+<td>Basis object passed to <code>save_vtk_solution</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>scale</td>
+<td>float</td>
+<td>Scale factor for nodal values before translation.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>run_dir</td>
+<td>pathlib.Path</td>
+<td>Output directory.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>prefix</td>
+<td>str</td>
+<td>Base name used for VTK frames and the PVD file.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>interval</td>
+<td>int</td>
+<td>Save every <code>interval</code> steps. Default is 10.</td>
+<td><code>10</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-2" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
 <td></td>
-<td>[Author: Suparno Bhattacharyya]</td>
+<td>None</td>
 <td></td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="notes-3" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-3">Notes</h4>
+<p>Authors: Suparno Bhattacharyya</p>
 </section>
-<section id="skrom.utils.visualization.generate_vtk.save_vtk_time_series" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.save_vtk_time_series">save_vtk_time_series</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtk_time_series(</span>
+</section>
+<section id="skrom.utils.visualization.generate_vtk.save_vtk_time_series_point" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.save_vtk_time_series_point">save_vtk_time_series_point</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtk_time_series_point(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    times,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    basis,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    scale,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Write one VTK per time-step and a .pvd that collects them.</p>
-<p>U : full displacement history times : time vector mesh : skfem mesh basis : skfem basis scale : displacement scale run_dir: output directory prefix : file prefix, e.g.&nbsp;“beam”</p>
-<p>[Author: Suparno Bhattacharyya]</p>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    interval<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    point_data_name<span class="op">=</span><span class="st">'Temperature'</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Write point-data frames to VTK on an undeformed mesh.</p>
+<p>The function writes frames named <code>{prefix}_{k:04d}.vtk</code> with a point-data array stored under <code>point_data_name</code>.</p>
+<p>The time axis handling is: - if <code>U.shape[0] == n_points</code>: treat U as (n_points, n_steps) and save columns - else: treat U as (n_steps, n_points) and save rows</p>
+<section id="parameters-3" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 60%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U</td>
+<td>numpy.ndarray</td>
+<td>Point-data history with shape (n_steps, n_points) or (n_points, n_steps).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>mesh</td>
+<td>object</td>
+<td>Mesh object that provides <code>save(path, point_data=...)</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>run_dir</td>
+<td>pathlib.Path</td>
+<td>Output directory.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>prefix</td>
+<td>str</td>
+<td>Base name used for VTK frames.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>interval</td>
+<td>int</td>
+<td>Save every <code>interval</code> steps. Default is 10.</td>
+<td><code>10</code></td>
+</tr>
+<tr class="even">
+<td>point_data_name</td>
+<td>str</td>
+<td>Key used in VTK point_data. Default is “Temperature”.</td>
+<td><code>'Temperature'</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-3" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>None</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes-4" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-4">Notes</h4>
+<p>Authors: Suparno Bhattacharyya</p>
+</section>
+</section>
+<section id="skrom.utils.visualization.generate_vtk.save_vtu_time_series_point" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.save_vtu_time_series_point">save_vtu_time_series_point</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtu_time_series_point(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    interval<span class="op">=</span><span class="dv">10</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    point_data_name<span class="op">=</span><span class="st">'Temperature'</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Write point-data frames to VTK on an undeformed mesh.</p>
+<p>The function writes frames named <code>{prefix}_{k:04d}.vtk</code> with a point-data array stored under <code>point_data_name</code>.</p>
+<p>The time axis handling is: - if <code>U.shape[0] == n_points</code>: treat U as (n_points, n_steps) and save columns - else: treat U as (n_steps, n_points) and save rows</p>
+<section id="parameters-4" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 60%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U</td>
+<td>numpy.ndarray</td>
+<td>Point-data history with shape (n_steps, n_points) or (n_points, n_steps).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>mesh</td>
+<td>object</td>
+<td>Mesh object that provides <code>save(path, point_data=...)</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>run_dir</td>
+<td>pathlib.Path</td>
+<td>Output directory.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>prefix</td>
+<td>str</td>
+<td>Base name used for VTU frames.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>interval</td>
+<td>int</td>
+<td>Save every <code>interval</code> steps. Default is 10.</td>
+<td><code>10</code></td>
+</tr>
+<tr class="even">
+<td>point_data_name</td>
+<td>str</td>
+<td>Key used in VTK point_data. Default is “Temperature”.</td>
+<td><code>'Temperature'</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-4" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-4">Returns</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>None</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes-5" class="level4 doc-section doc-section-notes">
+<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-5">Notes</h4>
+<p>Authors: Suparno Bhattacharyya</p>
+</section>
+</section>
+<section id="skrom.utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample">save_vtu_time_series_point_vertexsample</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.save_vtu_time_series_point_vertexsample(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    U,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    mesh,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    basis,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    run_dir,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    prefix,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    interval<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    point_data_name<span class="op">=</span><span class="st">'Temperature'</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>U: (n_steps, ndofs_P2) Saves vertex-sampled field (n_vertices,) on the original mesh.</p>
+</section>
+<section id="skrom.utils.visualization.generate_vtk.visualize2D" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.utils.visualization.generate_vtk.visualize2D">visualize2D</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>utils.visualization.generate_vtk.visualize2D(u, basis)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Plot a scalar field on a 2D scikit-fem basis.</p>
+<section id="parameters-5" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 59%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>u</td>
+<td>array_like</td>
+<td>Field values compatible with the given basis.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>basis</td>
+<td>object</td>
+<td>scikit-fem basis.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-5" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-5">Returns</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>out</td>
+<td>Return value from the backend plot/show call.</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 </section>
 </section>

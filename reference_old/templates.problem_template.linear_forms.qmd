@@ -1,0 +1,37 @@
+# templates.problem_template.linear_forms { #skrom.templates.problem_template.linear_forms }
+
+`templates.problem_template.linear_forms`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [l](#skrom.templates.problem_template.linear_forms.l) | Template for your problem’s linear (load or residual) form: |
+
+### l { #skrom.templates.problem_template.linear_forms.l }
+
+```python
+templates.problem_template.linear_forms.l(v, w)
+```
+
+Template for your problem’s linear (load or residual) form:
+    ∫_Ω [your integrand here] dx
+
+#### Parameters: {.doc-section .doc-section-parameters}
+
+v : array_like or callable
+    Test function values at quadrature points.
+w : dict
+    Assembly context carrying any coefficients or parameters.
+
+#### Returns: {.doc-section .doc-section-returns}
+
+array_like or float
+    Elementwise integrand for right-hand side vector assembly.
+
+#### Note: {.doc-section .doc-section-note}
+
+In a nonlinear problem solved by Newton’s method,
+this form assembles the residual vector.

@@ -1,0 +1,119 @@
+# utils.hdf5_store { #skrom.utils.hdf5_store }
+
+`utils.hdf5_store`
+
+hdf5_arraylist.py
+
+Utilities to store and retrieve a Python list of NumPy arrays with variable shapes
+in a single HDF5 file (chunked + compressed).
+
+## Dependencies {.doc-section .doc-section-dependencies}
+
+- numpy
+- h5py
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [H5ArrayListSpec](#skrom.utils.hdf5_store.H5ArrayListSpec) | Naming spec for datasets in the group. |
+
+### H5ArrayListSpec { #skrom.utils.hdf5_store.H5ArrayListSpec }
+
+```python
+utils.hdf5_store.H5ArrayListSpec(
+    self,
+    group='solutions',
+    dataset_prefix='sol',
+    digits=6,
+)
+```
+
+Naming spec for datasets in the group.
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [iter_array_list_h5](#skrom.utils.hdf5_store.iter_array_list_h5) | Iterate arrays one-by-one (reduces peak RAM versus loading all at once). |
+| [list_keys_h5](#skrom.utils.hdf5_store.list_keys_h5) | Return dataset keys under the target group. |
+| [load_array_h5](#skrom.utils.hdf5_store.load_array_h5) | Load a single array by index. |
+| [load_array_list_h5](#skrom.utils.hdf5_store.load_array_list_h5) | Load the full list into memory. |
+| [load_metadata_h5](#skrom.utils.hdf5_store.load_metadata_h5) | Load optional metadata dict stored at save time; returns {} if absent. |
+| [save_array_list_h5](#skrom.utils.hdf5_store.save_array_list_h5) | Save a list of arrays (variable shapes allowed) into a single HDF5 file. |
+
+### iter_array_list_h5 { #skrom.utils.hdf5_store.iter_array_list_h5 }
+
+```python
+utils.hdf5_store.iter_array_list_h5(filepath, *, spec=H5ArrayListSpec())
+```
+
+Iterate arrays one-by-one (reduces peak RAM versus loading all at once).
+
+### list_keys_h5 { #skrom.utils.hdf5_store.list_keys_h5 }
+
+```python
+utils.hdf5_store.list_keys_h5(filepath, *, spec=H5ArrayListSpec())
+```
+
+Return dataset keys under the target group.
+
+### load_array_h5 { #skrom.utils.hdf5_store.load_array_h5 }
+
+```python
+utils.hdf5_store.load_array_h5(filepath, index, *, spec=H5ArrayListSpec())
+```
+
+Load a single array by index.
+
+### load_array_list_h5 { #skrom.utils.hdf5_store.load_array_list_h5 }
+
+```python
+utils.hdf5_store.load_array_list_h5(filepath, *, spec=H5ArrayListSpec())
+```
+
+Load the full list into memory.
+
+### load_metadata_h5 { #skrom.utils.hdf5_store.load_metadata_h5 }
+
+```python
+utils.hdf5_store.load_metadata_h5(filepath, *, spec=H5ArrayListSpec())
+```
+
+Load optional metadata dict stored at save time; returns {} if absent.
+
+### save_array_list_h5 { #skrom.utils.hdf5_store.save_array_list_h5 }
+
+```python
+utils.hdf5_store.save_array_list_h5(
+    filepath,
+    arrays,
+    *,
+    spec=H5ArrayListSpec(),
+    compression='gzip',
+    compression_opts=4,
+    chunks=True,
+    overwrite=True,
+    metadata=None,
+)
+```
+
+Save a list of arrays (variable shapes allowed) into a single HDF5 file.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name             | Type                         | Description                                                                                                 | Default             |
+|------------------|------------------------------|-------------------------------------------------------------------------------------------------------------|---------------------|
+| filepath         | Union\[str, \'Path\'\]       | Target .h5/.hdf5 path.                                                                                      | _required_          |
+| arrays           | Sequence\[ArrayLike\]        | Sequence of array-like objects. Each entry is converted by np.asarray.                                      | _required_          |
+| spec             | H5ArrayListSpec              | Group name and dataset naming scheme.                                                                       | `H5ArrayListSpec()` |
+| compression      | Optional\[str\]              | HDF5 compression filter (e.g., "gzip", "lzf", None).                                                        | `'gzip'`            |
+| compression_opts | Optional\[int\]              | Compression level for gzip (0-9). Ignored for None and some filters.                                        | `4`                 |
+| chunks           | Union\[bool, tuple, None\]   | Use chunking (True/False) or pass an explicit chunk shape tuple. For compression, chunking must be enabled. | `True`              |
+| overwrite        | bool                         | If True, recreate the file. If False, update/replace the target group.                                      | `True`              |
+| metadata         | Optional\[Dict\[str, Any\]\] | Optional dict stored as JSON in group attrs ("metadata_json").                                              | `None`              |
+
+#### Notes {.doc-section .doc-section-notes}
+
+- Do not load untrusted HDF5 files if your workflow executes code based on
+  stored metadata. The array payload itself is data-only.
