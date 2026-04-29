@@ -1,0 +1,26 @@
+---
+title: "P.11 Three-material steady diffusion-reaction problem on a heterogeneous 2D domain"
+format:
+  html:
+    theme:
+      light: flatly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+
+![](images/P11_banner.png){fig-align="center"}
+
+## Problem Setup
+<img
+  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  alt="GitHub logo"
+  width="32"
+  height="32"
+  style="vertical-align:middle; margin-right:8px;"
+/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/reaction_diffusion\problem_1)
+
+![](examples_docs/P11.pdf){width="85%" height="1000px"}
+
+

@@ -1,0 +1,331 @@
+---
+title: "Tutorial: Building a Reduced-Order Model with scikit-rom"
+format:
+  html:
+    theme:
+      light: flatly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](videos/beam_vid.mp4)
+
+This tutorial demonstrates the process of developing a reduced-order model (ROM) for a three-dimensional static linear elasticity problem using scikit-rom. The files in this example define the mesh, boundary conditions, regionwise material scaling, affine stiffness blocks, parameter sampling, full-order solves, POD basis construction, ROM solves, error reporting, and VTK export.
+
+## Problem Description
+
+We analyze a 3D block governed by static linear elasticity. The structure is split into two material regions along the $x$-direction. The first region uses Lamé parameters scaled by a factor of $50$, while the second region uses the baseline material values. The example demonstrates how region-dependent material behavior can be represented through an affine decomposition.
+
+**Linear Affine Elasticity**: The stiffness matrix is assembled from unit-coefficient blocks associated with the Lamé parameters $\lambda$ and $\mu$. The parameter-dependent coefficients are applied later during FOM and ROM solves.
+
+**Domain Partitioning**: The block is divided into two element regions using the element locations along the $x$-axis.
+
+**Parameter Space**: Young's modulus $E$ and Poisson's ratio $\nu$ are sampled for training and testing.
+
+**Boundary Conditions**: Dirichlet constraints fix the displacement on the left face. A constant Neumann traction is applied on the right face.
+
+<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_1)
+
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_squircle_%282017%29.svg" alt="YouTube logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"/> [Video tutorial](https://www.youtube.com/playlist?list=PLVweTj3PB5sINcUVpPnPp_rJZ6Z2YkbNG)
+
+![](examples_docs/P3.pdf){width="100%" height="1000px"}
+
+## Project Architecture
+
+The simulation workflow is organized through the following directory structure and files:
+
+```         
+problem_1/
+├─ domain.py           # Mesh generation, basis setup, boundary DOFs, and region partitioning
+├─ bilinear_forms.py   # Unit-coefficient affine weak forms for λ and μ
+├─ linear_forms.py     # Neumann traction right-hand-side term
+├─ properties.py       # Regionwise Lamé parameter computation
+├─ params.py           # Sobol sampling of (E, ν) for training and testing
+├─ problem_def.py      # Main problem class registered with scikit-rom
+└─ problem_1.ipynb     # Executes FOM generation, POD basis construction, ROM simulation, reporting, and VTK export
+```
+
+## 1. Geometry & Finite Element Framework — domain.py
+
+**Mesh Construction**: The domain is a 3D block with default dimensions $(l_x,l_y,l_z)=(10,1,1)$. The default refinement factor is `factor=8`, giving $(n_x,n_y,n_z)=(80,8,8)$ hexahedral subdivisions before vector-valued finite element assembly.
+
+**Basis Functions**: The code uses `ElementVector(ElementHex1())`, which gives a vector-valued trilinear hexahedral basis for the displacement field.
+
+**Boundary Identification**:
+
+-   `'left'`: $x=0$, used for Dirichlet displacement constraints
+-   `'right'`: $x=l_x$, used for the Neumann traction
+-   `'front'`: $y=0$
+-   `'back'`: $y=l_y$
+-   `'bottom'`: $z=0$
+-   `'top'`: $z=l_z$
+
+**Facet Bases and DOFs**: The code builds `fbasis_dirichlet` on the left face, `fbasis_neumann` on the right face, and `fbasis_faces` on the top, bottom, front, and back faces. It also extracts `dirichlet_dofs`, `neumann_dofs`, and `faces_dofs`.
+
+**Region Partitioning**: The mesh is divided at $x=0.5\,l_x$ using the element locations returned by `element2location(mesh)`:
+
+-   `region_1`: elements whose element-location $x$-coordinates satisfy $x \leq 0.5\,l_x$
+-   `region_2`: the complement of `region_1`
+
+The function returns a dictionary containing the mesh, global basis, element object, facet bases, boundary DOFs, boundary data, mesh dimensions, and `basis_regions`.
+
+## 2. Material Properties & Lamé Coefficient Functions — properties.py
+
+**Lamé Parameters**: The function `lame_params(E, nu, region)` converts Young's modulus $E$ and Poisson's ratio $\nu$ into Lamé parameters $(\lambda,\mu)$ using `skfem.models.elasticity.lame_parameters`.
+
+**Region Handling**:
+
+-   For `region_1`, both $\lambda$ and $\mu$ are multiplied by `50.0`
+-   For `region_2`, both parameters are returned without scaling
+-   For any other region name, the baseline values are returned unchanged
+
+The material mapping therefore depends on both the sampled parameters and the region name.
+
+## 3. Affine Stiffness Matrix Assembly — bilinear_forms.py
+
+**Affine Bilinear Forms**:
+
+-   `stiffness_lam`: the $\lambda$ contribution to the linear elasticity bilinear form
+-   `stiffness_mu`: the $\mu$ contribution to the linear elasticity bilinear form
+
+The helper functions are:
+
+-   `C_lam(T, lam)`: returns $\lambda\,\operatorname{tr}(T)\,I$
+-   `C_mu(T, mu)`: returns $2\mu\,T$
+
+**Mathematics**: The bilinear forms evaluate the elasticity terms using `sym_grad`, `trace`, `eye`, and `ddot`. The parameter-dependent stiffness is represented as
+
+$$K(E,\nu) = \sum_{r\,\in\,\text{regions}} \Bigl(\lambda_r(E,\nu)\,K^{\lambda}_{r} + \mu_r(E,\nu)\,K^{\mu}_{r}\Bigr).$$
+
+**Unit-Coefficient Blocks**: In `problem_def.py`, the affine stiffness blocks are assembled using `asm(form, basis).copy()` without passing `E`, `nu`, or `region`. Because no parameters are provided, the forms fall back to `lam=1.0` and `mu=1.0` during block assembly. The actual Lamé coefficients are applied as scalar multipliers later in `fom_solver()` and `rom_solver()`.
+
+This unit-coefficient strategy is the central affine decomposition used by this example.
+
+## 4. Right-Hand Side (Loads) — linear_forms.py
+
+**Neumann Traction**: The function `traction(v, w)` applies a constant traction of magnitude $-10^{-2}$ in the global $y$-direction on the right face:
+
+$$F = -10^{-2}\,y.$$
+
+**Parameter Independence**: The load vector does not depend on $E$ or $\nu$. In `problem_def.py`, it is assembled once on `fbasis_neumann` and stored as `rhs_linear`.
+
+## 5. Parameter Sampling — params.py
+
+**Parameter Ranges**:
+
+-   $E$: $[2.0,\;10.0]$
+-   $\nu$: $[0.2,\;0.4]$
+
+**Sampling Strategy**: The function `parameters(N_snap=32)` uses Sobol samples through `generate_sobol`. It creates one set of `N_snap` training samples and one set of `N_snap` testing samples independently.
+
+**Returned Objects**: The function returns four objects:
+
+1.  `params`: the combined array of training samples followed by testing samples, with shape `(2*N_snap, 2)`
+2.  `param_ranges`: the parameter bounds `[(2, 10), (0.2, 0.4)]`
+3.  `train_mask`: a Boolean mask that selects the first `N_snap` samples
+4.  `test_mask`: a Boolean mask that selects the last `N_snap` samples
+
+The two columns of `params` correspond to $E$ and $\nu$, in that order.
+
+## 6. Problem Orchestration — problem_def.py
+
+**Registered Problem Class**: The class `ProblemAffine` inherits from `Problem` and is registered using `@register_problem(PROBLEM_NAME)`.
+
+**Core Methods**:
+
+-   `domain()`: loads `domain_()` from `domain.py`
+-   `bilinear_forms()`: returns `[stiffness_lam, stiffness_mu]`
+-   `linear_forms()`: returns `[traction]`
+-   `properties()`: returns `lame_params`
+-   `parameters(n_samples)`: returns `params`, `param_ranges`, `train_mask`, and `test_mask`
+-   `assemble_kwargs(param)`: maps a parameter vector to `{'E': param[0], 'nu': param[1]}`
+
+### Affine FOM Block Assembly — fom_operators()
+
+On the first FOM iteration (`cls.cur_itr == 0`), `fom_operators()` calls `load_domain(self)` to initialize the mesh, basis, and DOFs. It then builds `self.stiffnesses`, a dictionary mapping `"lam"` and `"mu"` to their respective bilinear form handles, and assembles the regional unit-coefficient blocks:
+
+```python
+cls.K_list = {
+    region: {
+        mat: asm(form, basis).copy()
+        for mat, form in self.stiffnesses.items()
+    }
+    for region, basis in self.basis_regions.items()
+}
+```
+
+Here `mat` is either `"lam"` or `"mu"`. No Lamé coefficients are applied at this stage — the blocks carry unit coefficients only. The assembled `cls.K_list` is a nested dictionary indexed by `[region][mat]` and is reused for all subsequent FOM and ROM solves.
+
+### Right-Hand-Side Assembly — fom_rhs()
+
+On the first FOM iteration, `fom_rhs()` calls `load_domain(self)` and assembles the Neumann load vector on the right facet basis:
+
+```python
+cls.rhs_linear = asm(b_linear, self.fbasis_neumann)
+```
+
+The vector is stored in `cls.rhs_linear` and reused without reassembly for every subsequent parameter evaluation.
+
+### Full-Order Solve — fom_solver()
+
+The method `fom_solver(cls, param)` retrieves the cached `K_list` and `rhs_linear`, computes regionwise Lamé coefficients $(\lambda_r,\mu_r)$ for $(E,\nu)$ via `self.properties()(E, nu, region)`, and combines the affine blocks:
+
+$$K(E,\nu) = \sum_{r}\sum_{m\,\in\,\{\lambda,\mu\}} \theta^m_r(E,\nu)\,K^m_r,$$
+
+where $\theta^\lambda_r = \lambda_r(E,\nu)$ and $\theta^\mu_r = \mu_r(E,\nu)$. Dirichlet constraints are applied through `condense`, and the system is solved using `solve`.
+
+### Affine ROM Operator Projection — reduced_operators()
+
+This method forms the **offline** component of the affine ROM. It is called once, on the first ROM iteration, and projects every cached FOM block onto the POD basis $U \in \mathbb{R}^{N \times n}$ (where $N$ is the number of full-order DOFs and $n \ll N$ is the number of selected modes).
+
+**Offline projected stiffness blocks**: For each region $r$ and each material component $m \in \{\lambda,\mu\}$, the unit-coefficient FOM block $K^m_r \in \mathbb{R}^{N \times N}$ is projected to ROM scale:
+
+$$K^{r,m}_{r} = U^\top K^m_r\, U \;\in\; \mathbb{R}^{n \times n}.$$
+
+These are stored in `self.K_r_a[region][mat]`.
+
+**Offline mean-shift correction vectors**: The mean training displacement $T_k \in \mathbb{R}^N$ (stored as `self.T_k`) is projected through each FOM block to produce a correction vector in the ROM space:
+
+$$\mathbf{d}^m_r = U^\top K^m_r\, T_k \;\in\; \mathbb{R}^n.$$
+
+These are stored in `self.K_a_Tk[region][mat]`.
+
+**Projected load vector**:
+
+$$\mathbf{f}^r = U^\top \mathbf{f} \;\in\; \mathbb{R}^n,$$
+
+stored as `self.f_term`.
+
+In code:
+
+```python
+self.U, self.T_k = cls.V_sel.copy(), cls.train_ref.copy()
+
+self.K_r_a = {
+    region: {mat: (self.U.T @ B) @ self.U for mat, B in sub.items()}
+    for region, sub in self.K_a.items()
+}
+
+self.K_a_Tk = {
+    region: {mat: (self.U.T @ B) @ self.T_k for mat, B in sub.items()}
+    for region, sub in self.K_a.items()
+}
+
+self.f_term = self.U.T @ self.rhs_linear
+```
+
+All three quantities live in $\mathbb{R}^n$ or $\mathbb{R}^{n \times n}$ and are computed exactly once. Every subsequent online solve reuses them without touching any FOM-sized matrix.
+
+### Reduced-Order Solve — rom_solver()
+
+The method `rom_solver(cls, param)` executes the **online** phase. For a new parameter pair $(E,\nu)$, it computes the regionwise Lamé coefficients and assembles the reduced stiffness and mean-shift term entirely from the pre-projected ROM-scale blocks:
+
+$$K^r(E,\nu) = \sum_{r}\Bigl[\lambda_r(E,\nu)\,K^{r,\lambda}_{r} + \mu_r(E,\nu)\,K^{r,\mu}_{r}\Bigr] \;\in\;\mathbb{R}^{n\times n},$$
+
+$$\mathbf{g}^{T_k}(E,\nu) = \sum_{r}\Bigl[\lambda_r(E,\nu)\,\mathbf{d}^\lambda_r + \mu_r(E,\nu)\,\mathbf{d}^\mu_r\Bigr] \;\in\;\mathbb{R}^{n}.$$
+
+The reduced linear system is then:
+
+$$K^r(E,\nu)\,\mathbf{u}_r = \mathbf{f}^r - \mathbf{g}^{T_k}(E,\nu),$$
+
+solved by `numpy.linalg.solve`. The method returns the reduced coefficient vector `u_rom`. Full-field reconstruction is handled by the surrounding scikit-rom ROM simulation workflow. Because all arithmetic involves only $n \times n$ matrices and $n$-vectors, the online solve scales as $\mathcal{O}(n^3)$, independent of the full-order problem size $N$.
+
+### Hyper-Reduction Placeholders
+
+The file contains placeholder methods for `hyper_rom_solver_deim`, `hyper_rom_solver_ecsw`, and `hyper_rom_solver_ecm`. They are not implemented in this example and currently contain only `pass`.
+
+## 7. Offline Workflow: Building the ROM
+
+The notebook `problem_1.ipynb` executes the complete workflow.
+
+**Step-by-step process**:
+
+1.  **Environment Setup**: The notebook adds the parent folder to `sys.path`, obtains `PROBLEM_NAME` from the folder name, and imports `problem_def.py`. Importing `problem_def.py` registers the problem with scikit-rom.
+2.  **Full-Order Simulation**: If `generate_data=True`, the notebook creates `master.fom_simulation()` and calls `sim.run_simulation()`. Each snapshot is computed by `fom_solver()` for one $(E,\nu)$ pair.
+3.  **ROM Data Loading**: The notebook creates `rom_data = master.rom_simulation()` to load the stored FOM results and metadata from disk.
+4.  **Training and Testing Split**: It extracts `param_list`, `fos_solutions`, `train_mask`, and `test_mask` from `rom_data`. The full solution array is stored as `LS = np.asarray(rom_data.fos_solutions)`. The training snapshots are stored in `LS_train = LS[train_mask]`, and testing snapshots in `LS_test = LS[test_mask]`.
+5.  **Mean Subtraction**: The mean of the training snapshots is computed as `LS_train_mean = np.mean(LS_train, axis=0)`, and the centered snapshot matrix is `LS_train_ms = LS_train - LS_train_mean`.
+6.  **Parameter Visualization**: If `visualize=True`, the notebook plots the two parameter columns for training and testing samples. These columns correspond to $E$ and $\nu$ from `params.py`.
+7.  **SVD/POD Basis Construction**: If `run_svd=True`, `svd_mode_selector(LS_train_ms, tolerance=1e-4, modes=True)` returns the selected number of modes $n$ and the left singular vectors. The selected basis is stored as `V_sel = U[:, :n_sel]`.
+
+## 8. Online Workflow: Fast Evaluation
+
+For a new parameter pair $(E,\nu)$, the ROM workflow proceeds as follows:
+
+1.  **Initialize ROM Simulation**: The notebook creates `master.rom_simulation(V_sel=V_sel, train_ref=LS_train_mean)`.
+2.  **Project Operators (offline, once)**: On the first ROM iteration, `reduced_operators()` projects all cached FOM blocks onto the POD basis, producing the ROM-scale quantities $K^{r,m}_r$, $\mathbf{d}^m_r$, and $\mathbf{f}^r$. This projection is performed exactly once and reused for every online query.
+3.  **Compute Lamé Coefficients**: For each new parameter pair $(E,\nu)$, `rom_solver()` evaluates $(\lambda_r, \mu_r)$ for every region using `self.properties()(E, nu, region)`.
+4.  **Assemble Reduced Stiffness**: The reduced stiffness $K^r(E,\nu)$ is formed by linearly combining the pre-projected blocks $K^{r,\lambda}_r$ and $K^{r,\mu}_r$ with the current Lamé coefficients. No FOM-sized matrix is touched during this step.
+5.  **Assemble Mean-Shift Correction**: The correction $\mathbf{g}^{T_k}(E,\nu)$ is formed by linearly combining the pre-projected vectors $\mathbf{d}^m_r$ with the current Lamé coefficients.
+6.  **Solve Reduced System**: `numpy.linalg.solve` solves the $n \times n$ system $K^r\,\mathbf{u}_r = \mathbf{f}^r - \mathbf{g}^{T_k}$ for the reduced coefficient vector `u_rom`.
+7.  **Recover ROM Solutions**: The outer `master.rom_simulation` workflow reconstructs and stores the full-field displacement solutions in `rom.rom_solutions`.
+
+## 9. Validation, Error Assessment, and VTK Export
+
+**Test Set**: The test snapshots are selected using `test_mask`.
+
+**Error Metrics**: If `rom_report=True`, the notebook computes error metrics with:
+
+```python
+matrix = compute_rom_error_metrics_flat(LS_test, LS_rom)
+generate_rom_error_report(matrix)
+```
+
+**Diagnostics**: The notebook also calls:
+
+```python
+plot_rom_error_diagnostics_flat(
+    LS_test,
+    LS_rom,
+    ROM_relative_error,
+    ROM_speed_up,
+    sim_axis=['True', 'ROM'],
+    metrics=matrix
+)
+```
+
+**VTK Export**: The notebook exports one test comparison using:
+
+```python
+generate_vtk(
+    LS_test,
+    LS_rom,
+    rom_data.mesh,
+    rom_data.basis,
+    scale=1.0,
+    num_test=1,
+    out_dir="sol_vtk_files",
+)
+```
+
+The exported files can be opened in ParaView.
+
+## 10. Summary Table of Key Methods
+
+| Method | Purpose | Typical Location in Pipeline |
+|:------------------------|:-------------------------------|:-----------------------------|
+| `domain()` | Setup mesh, boundary definitions, DOFs, and regional bases | Before FOM assembly |
+| `bilinear_forms()` | Return unit-coefficient affine form handles for $\lambda$ and $\mu$ | Operator initialization |
+| `linear_forms()` | Return the Neumann traction form | RHS assembly |
+| `properties()` | Map $(E,\nu,\text{region})$ to $(\lambda,\mu)$ | FOM and ROM coefficient evaluation |
+| `parameters()` | Produce sampled $(E,\nu)$ values, parameter ranges, and train/test masks | Data generation |
+| `fom_operators()` | Assemble and cache regional unit-coefficient affine stiffness blocks | First FOM iteration (offline) |
+| `fom_rhs()` | Assemble and cache the Neumann load vector | First FOM iteration (offline) |
+| `fom_solver()` | Combine affine blocks with Lamé coefficients and solve the full-order system | Snapshot generation |
+| `reduced_operators()` | Project cached FOM blocks and RHS onto the POD basis; compute $K^{r,m}_r$, $\mathbf{d}^m_r$, $\mathbf{f}^r$ | First ROM iteration (offline projection) |
+| `rom_solver()` | Linearly combine pre-projected ROM-scale blocks and solve the $n\times n$ reduced system | Online ROM evaluation |
+
+## 11. Best Practices
+
+-   Keep the parameter order consistent as $(E,\nu)$ in `params.py`, `assemble_kwargs()`, `fom_solver()`, and `rom_solver()`
+-   Assemble affine blocks without parameter coefficients so they can be reused across all parameter evaluations
+-   Call `reduced_operators()` only once per ROM session; reuse the projected blocks for every online query
+-   Use `train_mask` and `test_mask` to avoid mixing training and validation snapshots
+-   Center the training snapshots before computing the POD basis; pass `LS_train_mean` as `train_ref` to the ROM simulation
+-   Check ROM error on held-out test samples before using the ROM for prediction
+-   Use VTK export to inspect displacement fields and local error patterns
+-   Treat the `hyper_rom_solver_deim`, `hyper_rom_solver_ecsw`, and `hyper_rom_solver_ecm` methods as placeholders unless they are implemented later
+
+This workflow and modular codebase provide a compact example of a regionwise affine ROM for a parametrized 3D linear elasticity problem in scikit-rom.

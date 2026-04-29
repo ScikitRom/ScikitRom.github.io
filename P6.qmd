@@ -1,0 +1,21 @@
+---
+title: "P.6 Two-segment Timoshenko cantilever beam vibration eigen problem"
+format:
+  html:
+    theme:
+      light: flatly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+
+
+
+## Problem Setup
+
+<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/dynamic/linear/problem_2)
+
+
+![](examples_docs/P6.pdf){width="85%" height="1000px"}
+

@@ -1,5 +1,5 @@
 ---
-title: "P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate"
+title: "P.7 Linear heat conduction with non-affine parametric source on a star-shaped plate"
 format:
   html:
     theme:
@@ -9,9 +9,9 @@ format:
     toc: false
 ---
 
-![](star.png){fig-align="center"}
+![](images/P7_banner.png){fig-align="center"}
 
-## **Problem Setup**
+## Problem Setup
 <img
   src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
   alt="GitHub logo"
@@ -20,4 +20,4 @@ format:
   style="vertical-align:middle; margin-right:8px;"
 />[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/heat_transfer/static/linear/problem_4)
 
-![](linear star shaped.pdf){width="85%" height="1000px"}
+![](examples_docs/P7.pdf){width="85%" height="1000px"}

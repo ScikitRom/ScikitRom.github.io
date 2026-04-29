@@ -1,5 +1,5 @@
 ---
-title: "P.5 Nonlinear heat conduction in a two-material 1-D rod"
+title: "P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load"
 format:
   html:
     theme:
@@ -9,7 +9,7 @@ format:
     toc: false
 ---
 
-![](HC.png){fig-align="center"}
+![](images/P1_banner.png){fig-align="center"}
 
 ## **Problem Setup**
 <img
@@ -18,8 +18,6 @@ format:
   width="32"
   height="32"
   style="vertical-align:middle; margin-right:8px;"
-/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/heat_transfer/static/non_linear/problem_1_h)
+/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/non_linear/problem_2_h)
 
-![](non_linear heat conduction.pdf){width="85%" height="1000px"}
-
-
+![](examples_docs/P1.pdf){width="85%" height="1000px"}

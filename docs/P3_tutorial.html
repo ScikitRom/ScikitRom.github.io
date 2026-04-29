@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Welcome to skrom – SCIKIT-ROM</title>
+<title>Tutorial: Building a Reduced-Order Model with scikit-rom – SCIKIT-ROM</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -106,6 +106,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -147,7 +176,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Welcome to skrom</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./P3_tutorial.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./P3_tutorial.html">Tutorial: Building a Reduced-Order Model with scikit-rom</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -451,7 +480,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./P3_tutorial.html" class="sidebar-item-text sidebar-link">
+  <a href="./P3_tutorial.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
   </div>
 </li>
@@ -571,9 +600,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./P3_tutorial.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./P3_tutorial.html">Tutorial: Building a Reduced-Order Model with scikit-rom</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Welcome to skrom</h1>
+<h1 class="title">Tutorial: Building a Reduced-Order Model with scikit-rom</h1>
 </div>
 
 
@@ -590,79 +619,317 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="scikit-rom" class="level3">
-<h3 class="anchored" data-anchor-id="scikit-rom"><strong>scikit-rom</strong></h3>
-<p><em>scikit-rom</em> is a lightweight, Python-based platform designed for projection-based model reduction of finite element models with moderate to large problem sizes (up to approximately 600,000 degrees of freedom). Built on top of <code>scikit-fem</code>, an easy-to-use finite element assembly library, this repository demonstrates reduced-order modeling (ROM) techniques for a range of linear and nonlinear problems, including time-dependent ones. Current examples primarily focus on thermal and mechanical systems, with extensions to fluid dynamics planned for future releases.</p>
-<p>Beyond its application to real-world finite element problems, the library also serves as a valuable testing ground for new model reduction algorithms and as a tutorial resource for those new to the field.</p>
-<hr>
+<p><video src="videos/beam_vid.mp4" class="img-fluid" controls=""><a href="videos/beam_vid.mp4">Video</a></video></p>
+<p>This tutorial demonstrates the process of developing a reduced-order model (ROM) for a three-dimensional static linear elasticity problem using scikit-rom. The files in this example define the mesh, boundary conditions, regionwise material scaling, affine stiffness blocks, parameter sampling, full-order solves, POD basis construction, ROM solves, error reporting, and VTK export.</p>
+<section id="problem-description" class="level2">
+<h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
+<p>We analyze a 3D block governed by static linear elasticity. The structure is split into two material regions along the <span class="math inline">\(x\)</span>-direction. The first region uses Lamé parameters scaled by a factor of <span class="math inline">\(50\)</span>, while the second region uses the baseline material values. The example demonstrates how region-dependent material behavior can be represented through an affine decomposition.</p>
+<p><strong>Linear Affine Elasticity</strong>: The stiffness matrix is assembled from unit-coefficient blocks associated with the Lamé parameters <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span>. The parameter-dependent coefficients are applied later during FOM and ROM solves.</p>
+<p><strong>Domain Partitioning</strong>: The block is divided into two element regions using the element locations along the <span class="math inline">\(x\)</span>-axis.</p>
+<p><strong>Parameter Space</strong>: Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> are sampled for training and testing.</p>
+<p><strong>Boundary Conditions</strong>: Dirichlet constraints fix the displacement on the left face. A constant Neumann traction is applied on the right face.</p>
+<p><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><a href="https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_1">Link</a></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_squircle_%282017%29.svg" alt="YouTube logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"> <a href="https://www.youtube.com/playlist?list=PLVweTj3PB5sINcUVpPnPp_rJZ6Z2YkbNG">Video tutorial</a></p>
+<p><embed src="examples_docs/P3.pdf" style="width:100.0%" height="1000"></p>
 </section>
-<section id="what-is-reduced-order-modeling" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-reduced-order-modeling"><strong>What is Reduced-Order Modeling?</strong></h3>
-<p>Reduced-order modeling (ROM) is a computational strategy for approximating high-fidelity numerical models with significantly reduced computational cost. Instead of solving large-scale systems—often with millions of unknowns—ROM techniques construct low-dimensional surrogates that retain the dominant physics of the system, enabling efficient and repeated evaluations.</p>
-<p>The underlying principle is that many physical systems exhibit behavior that can be captured by a small number of dominant modes, despite their discretization on fine spatial meshes. Techniques such as Proper Orthogonal Decomposition (POD) extract these modes from full-order simulations, enabling the construction of reduced models that are both accurate and computationally efficient.</p>
-<hr>
+<section id="project-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="project-architecture">Project Architecture</h2>
+<p>The simulation workflow is organized through the following directory structure and files:</p>
+<pre><code>problem_1/
+├─ domain.py           # Mesh generation, basis setup, boundary DOFs, and region partitioning
+├─ bilinear_forms.py   # Unit-coefficient affine weak forms for λ and μ
+├─ linear_forms.py     # Neumann traction right-hand-side term
+├─ properties.py       # Regionwise Lamé parameter computation
+├─ params.py           # Sobol sampling of (E, ν) for training and testing
+├─ problem_def.py      # Main problem class registered with scikit-rom
+└─ problem_1.ipynb     # Executes FOM generation, POD basis construction, ROM simulation, reporting, and VTK export</code></pre>
 </section>
-<section id="offlineonline-decomposition" class="level3">
-<h3 class="anchored" data-anchor-id="offlineonline-decomposition"><strong>Offline–Online Decomposition</strong></h3>
-<p><em>scikit-rom</em> implements the classical offline–online decomposition paradigm:</p>
+<section id="geometry-finite-element-framework-domain.py" class="level2">
+<h2 class="anchored" data-anchor-id="geometry-finite-element-framework-domain.py">1. Geometry &amp; Finite Element Framework — domain.py</h2>
+<p><strong>Mesh Construction</strong>: The domain is a 3D block with default dimensions <span class="math inline">\((l_x,l_y,l_z)=(10,1,1)\)</span>. The default refinement factor is <code>factor=8</code>, giving <span class="math inline">\((n_x,n_y,n_z)=(80,8,8)\)</span> hexahedral subdivisions before vector-valued finite element assembly.</p>
+<p><strong>Basis Functions</strong>: The code uses <code>ElementVector(ElementHex1())</code>, which gives a vector-valued trilinear hexahedral basis for the displacement field.</p>
+<p><strong>Boundary Identification</strong>:</p>
 <ul>
-<li><p><strong>Offline Phase</strong> (computationally intensive, performed once):</p>
-<ul>
-<li>Sampling of the parameter space</li>
-<li>Generation of full-order solution snapshots</li>
-<li>Computation of the reduced basis via singular value decomposition (SVD)</li>
-<li>Assembly of parameter-independent reduced operators</li>
-</ul></li>
-<li><p><strong>Online Phase</strong> (efficient, performed repeatedly):</p>
-<ul>
-<li>Evaluation of the system response for new parameter values using preassembled reduced operators</li>
-<li>Speedups on the order of 10–500× relative to full-order models are typical</li>
-</ul></li>
+<li><code>'left'</code>: <span class="math inline">\(x=0\)</span>, used for Dirichlet displacement constraints</li>
+<li><code>'right'</code>: <span class="math inline">\(x=l_x\)</span>, used for the Neumann traction</li>
+<li><code>'front'</code>: <span class="math inline">\(y=0\)</span></li>
+<li><code>'back'</code>: <span class="math inline">\(y=l_y\)</span></li>
+<li><code>'bottom'</code>: <span class="math inline">\(z=0\)</span></li>
+<li><code>'top'</code>: <span class="math inline">\(z=l_z\)</span></li>
 </ul>
+<p><strong>Facet Bases and DOFs</strong>: The code builds <code>fbasis_dirichlet</code> on the left face, <code>fbasis_neumann</code> on the right face, and <code>fbasis_faces</code> on the top, bottom, front, and back faces. It also extracts <code>dirichlet_dofs</code>, <code>neumann_dofs</code>, and <code>faces_dofs</code>.</p>
+<p><strong>Region Partitioning</strong>: The mesh is divided at <span class="math inline">\(x=0.5\,l_x\)</span> using the element locations returned by <code>element2location(mesh)</code>:</p>
+<ul>
+<li><code>region_1</code>: elements whose element-location <span class="math inline">\(x\)</span>-coordinates satisfy <span class="math inline">\(x \leq 0.5\,l_x\)</span></li>
+<li><code>region_2</code>: the complement of <code>region_1</code></li>
+</ul>
+<p>The function returns a dictionary containing the mesh, global basis, element object, facet bases, boundary DOFs, boundary data, mesh dimensions, and <code>basis_regions</code>.</p>
 </section>
-<section id="installation" class="level2">
-<h2 class="anchored" data-anchor-id="installation">Installation</h2>
-<iframe width="1050" height="600" src="https://www.youtube.com/embed/qlLsf27pG_w" title="installing scikit-rom [v1.0.0]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
-</iframe>
-<p>This tutorial explains how to install SKROM (scikit-ROM):</p>
-<p>Installation Steps:</p>
+<section id="material-properties-lamé-coefficient-functions-properties.py" class="level2">
+<h2 class="anchored" data-anchor-id="material-properties-lamé-coefficient-functions-properties.py">2. Material Properties &amp; Lamé Coefficient Functions — properties.py</h2>
+<p><strong>Lamé Parameters</strong>: The function <code>lame_params(E, nu, region)</code> converts Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> into Lamé parameters <span class="math inline">\((\lambda,\mu)\)</span> using <code>skfem.models.elasticity.lame_parameters</code>.</p>
+<p><strong>Region Handling</strong>:</p>
+<ul>
+<li>For <code>region_1</code>, both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span> are multiplied by <code>50.0</code></li>
+<li>For <code>region_2</code>, both parameters are returned without scaling</li>
+<li>For any other region name, the baseline values are returned unchanged</li>
+</ul>
+<p>The material mapping therefore depends on both the sampled parameters and the region name.</p>
+</section>
+<section id="affine-stiffness-matrix-assembly-bilinear_forms.py" class="level2">
+<h2 class="anchored" data-anchor-id="affine-stiffness-matrix-assembly-bilinear_forms.py">3. Affine Stiffness Matrix Assembly — bilinear_forms.py</h2>
+<p><strong>Affine Bilinear Forms</strong>:</p>
+<ul>
+<li><code>stiffness_lam</code>: the <span class="math inline">\(\lambda\)</span> contribution to the linear elasticity bilinear form</li>
+<li><code>stiffness_mu</code>: the <span class="math inline">\(\mu\)</span> contribution to the linear elasticity bilinear form</li>
+</ul>
+<p>The helper functions are:</p>
+<ul>
+<li><code>C_lam(T, lam)</code>: returns <span class="math inline">\(\lambda\,\operatorname{tr}(T)\,I\)</span></li>
+<li><code>C_mu(T, mu)</code>: returns <span class="math inline">\(2\mu\,T\)</span></li>
+</ul>
+<p><strong>Mathematics</strong>: The bilinear forms evaluate the elasticity terms using <code>sym_grad</code>, <code>trace</code>, <code>eye</code>, and <code>ddot</code>. The parameter-dependent stiffness is represented as</p>
+<p><span class="math display">\[K(E,\nu) = \sum_{r\,\in\,\text{regions}} \Bigl(\lambda_r(E,\nu)\,K^{\lambda}_{r} + \mu_r(E,\nu)\,K^{\mu}_{r}\Bigr).\]</span></p>
+<p><strong>Unit-Coefficient Blocks</strong>: In <code>problem_def.py</code>, the affine stiffness blocks are assembled using <code>asm(form, basis).copy()</code> without passing <code>E</code>, <code>nu</code>, or <code>region</code>. Because no parameters are provided, the forms fall back to <code>lam=1.0</code> and <code>mu=1.0</code> during block assembly. The actual Lamé coefficients are applied as scalar multipliers later in <code>fom_solver()</code> and <code>rom_solver()</code>.</p>
+<p>This unit-coefficient strategy is the central affine decomposition used by this example.</p>
+</section>
+<section id="right-hand-side-loads-linear_forms.py" class="level2">
+<h2 class="anchored" data-anchor-id="right-hand-side-loads-linear_forms.py">4. Right-Hand Side (Loads) — linear_forms.py</h2>
+<p><strong>Neumann Traction</strong>: The function <code>traction(v, w)</code> applies a constant traction of magnitude <span class="math inline">\(-10^{-2}\)</span> in the global <span class="math inline">\(y\)</span>-direction on the right face:</p>
+<p><span class="math display">\[F = -10^{-2}\,y.\]</span></p>
+<p><strong>Parameter Independence</strong>: The load vector does not depend on <span class="math inline">\(E\)</span> or <span class="math inline">\(\nu\)</span>. In <code>problem_def.py</code>, it is assembled once on <code>fbasis_neumann</code> and stored as <code>rhs_linear</code>.</p>
+</section>
+<section id="parameter-sampling-params.py" class="level2">
+<h2 class="anchored" data-anchor-id="parameter-sampling-params.py">5. Parameter Sampling — params.py</h2>
+<p><strong>Parameter Ranges</strong>:</p>
+<ul>
+<li><span class="math inline">\(E\)</span>: <span class="math inline">\([2.0,\;10.0]\)</span></li>
+<li><span class="math inline">\(\nu\)</span>: <span class="math inline">\([0.2,\;0.4]\)</span></li>
+</ul>
+<p><strong>Sampling Strategy</strong>: The function <code>parameters(N_snap=32)</code> uses Sobol samples through <code>generate_sobol</code>. It creates one set of <code>N_snap</code> training samples and one set of <code>N_snap</code> testing samples independently.</p>
+<p><strong>Returned Objects</strong>: The function returns four objects:</p>
 <ol type="1">
-<li><strong>Clone the repository:</strong></li>
+<li><code>params</code>: the combined array of training samples followed by testing samples, with shape <code>(2*N_snap, 2)</code></li>
+<li><code>param_ranges</code>: the parameter bounds <code>[(2, 10), (0.2, 0.4)]</code></li>
+<li><code>train_mask</code>: a Boolean mask that selects the first <code>N_snap</code> samples</li>
+<li><code>test_mask</code>: a Boolean mask that selects the last <code>N_snap</code> samples</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/suparnob100/scikit-rom</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> scikit-rom</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol start="2" type="1">
-<li><strong>Install with pip:</strong></li>
+<p>The two columns of <code>params</code> correspond to <span class="math inline">\(E\)</span> and <span class="math inline">\(\nu\)</span>, in that order.</p>
+</section>
+<section id="problem-orchestration-problem_def.py" class="level2">
+<h2 class="anchored" data-anchor-id="problem-orchestration-problem_def.py">6. Problem Orchestration — problem_def.py</h2>
+<p><strong>Registered Problem Class</strong>: The class <code>ProblemAffine</code> inherits from <code>Problem</code> and is registered using <code>@register_problem(PROBLEM_NAME)</code>.</p>
+<p><strong>Core Methods</strong>:</p>
+<ul>
+<li><code>domain()</code>: loads <code>domain_()</code> from <code>domain.py</code></li>
+<li><code>bilinear_forms()</code>: returns <code>[stiffness_lam, stiffness_mu]</code></li>
+<li><code>linear_forms()</code>: returns <code>[traction]</code></li>
+<li><code>properties()</code>: returns <code>lame_params</code></li>
+<li><code>parameters(n_samples)</code>: returns <code>params</code>, <code>param_ranges</code>, <code>train_mask</code>, and <code>test_mask</code></li>
+<li><code>assemble_kwargs(param)</code>: maps a parameter vector to <code>{'E': param[0], 'nu': param[1]}</code></li>
+</ul>
+<section id="affine-fom-block-assembly-fom_operators" class="level3">
+<h3 class="anchored" data-anchor-id="affine-fom-block-assembly-fom_operators">Affine FOM Block Assembly — fom_operators()</h3>
+<p>On the first FOM iteration (<code>cls.cur_itr == 0</code>), <code>fom_operators()</code> calls <code>load_domain(self)</code> to initialize the mesh, basis, and DOFs. It then builds <code>self.stiffnesses</code>, a dictionary mapping <code>"lam"</code> and <code>"mu"</code> to their respective bilinear form handles, and assembles the regional unit-coefficient blocks:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cls.K_list <span class="op">=</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    region: {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        mat: asm(form, basis).copy()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> mat, form <span class="kw">in</span> <span class="va">self</span>.stiffnesses.items()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region, basis <span class="kw">in</span> <span class="va">self</span>.basis_regions.items()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here <code>mat</code> is either <code>"lam"</code> or <code>"mu"</code>. No Lamé coefficients are applied at this stage — the blocks carry unit coefficients only. The assembled <code>cls.K_list</code> is a nested dictionary indexed by <code>[region][mat]</code> and is reused for all subsequent FOM and ROM solves.</p>
+</section>
+<section id="right-hand-side-assembly-fom_rhs" class="level3">
+<h3 class="anchored" data-anchor-id="right-hand-side-assembly-fom_rhs">Right-Hand-Side Assembly — fom_rhs()</h3>
+<p>On the first FOM iteration, <code>fom_rhs()</code> calls <code>load_domain(self)</code> and assembles the Neumann load vector on the right facet basis:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cls.rhs_linear <span class="op">=</span> asm(b_linear, <span class="va">self</span>.fbasis_neumann)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The vector is stored in <code>cls.rhs_linear</code> and reused without reassembly for every subsequent parameter evaluation.</p>
+</section>
+<section id="full-order-solve-fom_solver" class="level3">
+<h3 class="anchored" data-anchor-id="full-order-solve-fom_solver">Full-Order Solve — fom_solver()</h3>
+<p>The method <code>fom_solver(cls, param)</code> retrieves the cached <code>K_list</code> and <code>rhs_linear</code>, computes regionwise Lamé coefficients <span class="math inline">\((\lambda_r,\mu_r)\)</span> for <span class="math inline">\((E,\nu)\)</span> via <code>self.properties()(E, nu, region)</code>, and combines the affine blocks:</p>
+<p><span class="math display">\[K(E,\nu) = \sum_{r}\sum_{m\,\in\,\{\lambda,\mu\}} \theta^m_r(E,\nu)\,K^m_r,\]</span></p>
+<p>where <span class="math inline">\(\theta^\lambda_r = \lambda_r(E,\nu)\)</span> and <span class="math inline">\(\theta^\mu_r = \mu_r(E,\nu)\)</span>. Dirichlet constraints are applied through <code>condense</code>, and the system is solved using <code>solve</code>.</p>
+</section>
+<section id="affine-rom-operator-projection-reduced_operators" class="level3">
+<h3 class="anchored" data-anchor-id="affine-rom-operator-projection-reduced_operators">Affine ROM Operator Projection — reduced_operators()</h3>
+<p>This method forms the <strong>offline</strong> component of the affine ROM. It is called once, on the first ROM iteration, and projects every cached FOM block onto the POD basis <span class="math inline">\(U \in \mathbb{R}^{N \times n}\)</span> (where <span class="math inline">\(N\)</span> is the number of full-order DOFs and <span class="math inline">\(n \ll N\)</span> is the number of selected modes).</p>
+<p><strong>Offline projected stiffness blocks</strong>: For each region <span class="math inline">\(r\)</span> and each material component <span class="math inline">\(m \in \{\lambda,\mu\}\)</span>, the unit-coefficient FOM block <span class="math inline">\(K^m_r \in \mathbb{R}^{N \times N}\)</span> is projected to ROM scale:</p>
+<p><span class="math display">\[K^{r,m}_{r} = U^\top K^m_r\, U \;\in\; \mathbb{R}^{n \times n}.\]</span></p>
+<p>These are stored in <code>self.K_r_a[region][mat]</code>.</p>
+<p><strong>Offline mean-shift correction vectors</strong>: The mean training displacement <span class="math inline">\(T_k \in \mathbb{R}^N\)</span> (stored as <code>self.T_k</code>) is projected through each FOM block to produce a correction vector in the ROM space:</p>
+<p><span class="math display">\[\mathbf{d}^m_r = U^\top K^m_r\, T_k \;\in\; \mathbb{R}^n.\]</span></p>
+<p>These are stored in <code>self.K_a_Tk[region][mat]</code>.</p>
+<p><strong>Projected load vector</strong>:</p>
+<p><span class="math display">\[\mathbf{f}^r = U^\top \mathbf{f} \;\in\; \mathbb{R}^n,\]</span></p>
+<p>stored as <code>self.f_term</code>.</p>
+<p>In code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.U, <span class="va">self</span>.T_k <span class="op">=</span> cls.V_sel.copy(), cls.train_ref.copy()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.K_r_a <span class="op">=</span> {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    region: {mat: (<span class="va">self</span>.U.T <span class="op">@</span> B) <span class="op">@</span> <span class="va">self</span>.U <span class="cf">for</span> mat, B <span class="kw">in</span> sub.items()}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region, sub <span class="kw">in</span> <span class="va">self</span>.K_a.items()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.K_a_Tk <span class="op">=</span> {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    region: {mat: (<span class="va">self</span>.U.T <span class="op">@</span> B) <span class="op">@</span> <span class="va">self</span>.T_k <span class="cf">for</span> mat, B <span class="kw">in</span> sub.items()}</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region, sub <span class="kw">in</span> <span class="va">self</span>.K_a.items()</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.f_term <span class="op">=</span> <span class="va">self</span>.U.T <span class="op">@</span> <span class="va">self</span>.rhs_linear</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>All three quantities live in <span class="math inline">\(\mathbb{R}^n\)</span> or <span class="math inline">\(\mathbb{R}^{n \times n}\)</span> and are computed exactly once. Every subsequent online solve reuses them without touching any FOM-sized matrix.</p>
+</section>
+<section id="reduced-order-solve-rom_solver" class="level3">
+<h3 class="anchored" data-anchor-id="reduced-order-solve-rom_solver">Reduced-Order Solve — rom_solver()</h3>
+<p>The method <code>rom_solver(cls, param)</code> executes the <strong>online</strong> phase. For a new parameter pair <span class="math inline">\((E,\nu)\)</span>, it computes the regionwise Lamé coefficients and assembles the reduced stiffness and mean-shift term entirely from the pre-projected ROM-scale blocks:</p>
+<p><span class="math display">\[K^r(E,\nu) = \sum_{r}\Bigl[\lambda_r(E,\nu)\,K^{r,\lambda}_{r} + \mu_r(E,\nu)\,K^{r,\mu}_{r}\Bigr] \;\in\;\mathbb{R}^{n\times n},\]</span></p>
+<p><span class="math display">\[\mathbf{g}^{T_k}(E,\nu) = \sum_{r}\Bigl[\lambda_r(E,\nu)\,\mathbf{d}^\lambda_r + \mu_r(E,\nu)\,\mathbf{d}^\mu_r\Bigr] \;\in\;\mathbb{R}^{n}.\]</span></p>
+<p>The reduced linear system is then:</p>
+<p><span class="math display">\[K^r(E,\nu)\,\mathbf{u}_r = \mathbf{f}^r - \mathbf{g}^{T_k}(E,\nu),\]</span></p>
+<p>solved by <code>numpy.linalg.solve</code>. The method returns the reduced coefficient vector <code>u_rom</code>. Full-field reconstruction is handled by the surrounding scikit-rom ROM simulation workflow. Because all arithmetic involves only <span class="math inline">\(n \times n\)</span> matrices and <span class="math inline">\(n\)</span>-vectors, the online solve scales as <span class="math inline">\(\mathcal{O}(n^3)\)</span>, independent of the full-order problem size <span class="math inline">\(N\)</span>.</p>
+</section>
+<section id="hyper-reduction-placeholders" class="level3">
+<h3 class="anchored" data-anchor-id="hyper-reduction-placeholders">Hyper-Reduction Placeholders</h3>
+<p>The file contains placeholder methods for <code>hyper_rom_solver_deim</code>, <code>hyper_rom_solver_ecsw</code>, and <code>hyper_rom_solver_ecm</code>. They are not implemented in this example and currently contain only <code>pass</code>.</p>
+</section>
+</section>
+<section id="offline-workflow-building-the-rom" class="level2">
+<h2 class="anchored" data-anchor-id="offline-workflow-building-the-rom">7. Offline Workflow: Building the ROM</h2>
+<p>The notebook <code>problem_1.ipynb</code> executes the complete workflow.</p>
+<p><strong>Step-by-step process</strong>:</p>
+<ol type="1">
+<li><strong>Environment Setup</strong>: The notebook adds the parent folder to <code>sys.path</code>, obtains <code>PROBLEM_NAME</code> from the folder name, and imports <code>problem_def.py</code>. Importing <code>problem_def.py</code> registers the problem with scikit-rom.</li>
+<li><strong>Full-Order Simulation</strong>: If <code>generate_data=True</code>, the notebook creates <code>master.fom_simulation()</code> and calls <code>sim.run_simulation()</code>. Each snapshot is computed by <code>fom_solver()</code> for one <span class="math inline">\((E,\nu)\)</span> pair.</li>
+<li><strong>ROM Data Loading</strong>: The notebook creates <code>rom_data = master.rom_simulation()</code> to load the stored FOM results and metadata from disk.</li>
+<li><strong>Training and Testing Split</strong>: It extracts <code>param_list</code>, <code>fos_solutions</code>, <code>train_mask</code>, and <code>test_mask</code> from <code>rom_data</code>. The full solution array is stored as <code>LS = np.asarray(rom_data.fos_solutions)</code>. The training snapshots are stored in <code>LS_train = LS[train_mask]</code>, and testing snapshots in <code>LS_test = LS[test_mask]</code>.</li>
+<li><strong>Mean Subtraction</strong>: The mean of the training snapshots is computed as <code>LS_train_mean = np.mean(LS_train, axis=0)</code>, and the centered snapshot matrix is <code>LS_train_ms = LS_train - LS_train_mean</code>.</li>
+<li><strong>Parameter Visualization</strong>: If <code>visualize=True</code>, the notebook plots the two parameter columns for training and testing samples. These columns correspond to <span class="math inline">\(E\)</span> and <span class="math inline">\(\nu\)</span> from <code>params.py</code>.</li>
+<li><strong>SVD/POD Basis Construction</strong>: If <code>run_svd=True</code>, <code>svd_mode_selector(LS_train_ms, tolerance=1e-4, modes=True)</code> returns the selected number of modes <span class="math inline">\(n\)</span> and the left singular vectors. The selected basis is stored as <code>V_sel = U[:, :n_sel]</code>.</li>
 </ol>
-<ul>
-<li>For developers (editable install):</li>
-</ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-e</span> .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ul>
-<li>For regular users:</li>
-</ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>(Use pip3 instead of pip on Mac)</p>
-<p>Notes:</p>
-<ul>
-<li>Use <code>-e</code> for development; it lets you edit the code without reinstalling.</li>
-<li>Regular users should use standard installation.</li>
-<li>Reinstallation automatically removes the old version.</li>
-<li>The installation completes in seconds and shows “successfully built SKROM.”</li>
-<li>All instructions are available on the GitHub page.</li>
-</ul>
 </section>
-<section id="getting-started" class="level2">
-<h2 class="anchored" data-anchor-id="getting-started">Getting Started</h2>
-<iframe width="1050" height="600" src="https://www.youtube.com/embed/zvUlaBeBRBw" title="Getting started [Coding up your problem]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
-</iframe>
+<section id="online-workflow-fast-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="online-workflow-fast-evaluation">8. Online Workflow: Fast Evaluation</h2>
+<p>For a new parameter pair <span class="math inline">\((E,\nu)\)</span>, the ROM workflow proceeds as follows:</p>
+<ol type="1">
+<li><strong>Initialize ROM Simulation</strong>: The notebook creates <code>master.rom_simulation(V_sel=V_sel, train_ref=LS_train_mean)</code>.</li>
+<li><strong>Project Operators (offline, once)</strong>: On the first ROM iteration, <code>reduced_operators()</code> projects all cached FOM blocks onto the POD basis, producing the ROM-scale quantities <span class="math inline">\(K^{r,m}_r\)</span>, <span class="math inline">\(\mathbf{d}^m_r\)</span>, and <span class="math inline">\(\mathbf{f}^r\)</span>. This projection is performed exactly once and reused for every online query.</li>
+<li><strong>Compute Lamé Coefficients</strong>: For each new parameter pair <span class="math inline">\((E,\nu)\)</span>, <code>rom_solver()</code> evaluates <span class="math inline">\((\lambda_r, \mu_r)\)</span> for every region using <code>self.properties()(E, nu, region)</code>.</li>
+<li><strong>Assemble Reduced Stiffness</strong>: The reduced stiffness <span class="math inline">\(K^r(E,\nu)\)</span> is formed by linearly combining the pre-projected blocks <span class="math inline">\(K^{r,\lambda}_r\)</span> and <span class="math inline">\(K^{r,\mu}_r\)</span> with the current Lamé coefficients. No FOM-sized matrix is touched during this step.</li>
+<li><strong>Assemble Mean-Shift Correction</strong>: The correction <span class="math inline">\(\mathbf{g}^{T_k}(E,\nu)\)</span> is formed by linearly combining the pre-projected vectors <span class="math inline">\(\mathbf{d}^m_r\)</span> with the current Lamé coefficients.</li>
+<li><strong>Solve Reduced System</strong>: <code>numpy.linalg.solve</code> solves the <span class="math inline">\(n \times n\)</span> system <span class="math inline">\(K^r\,\mathbf{u}_r = \mathbf{f}^r - \mathbf{g}^{T_k}\)</span> for the reduced coefficient vector <code>u_rom</code>.</li>
+<li><strong>Recover ROM Solutions</strong>: The outer <code>master.rom_simulation</code> workflow reconstructs and stores the full-field displacement solutions in <code>rom.rom_solutions</code>.</li>
+</ol>
 </section>
-<section id="recommended-reading" class="level2">
-<h2 class="anchored" data-anchor-id="recommended-reading">Recommended Reading</h2>
-<p>To dive deeper, check out:</p>
+<section id="validation-error-assessment-and-vtk-export" class="level2">
+<h2 class="anchored" data-anchor-id="validation-error-assessment-and-vtk-export">9. Validation, Error Assessment, and VTK Export</h2>
+<p><strong>Test Set</strong>: The test snapshots are selected using <code>test_mask</code>.</p>
+<p><strong>Error Metrics</strong>: If <code>rom_report=True</code>, the notebook computes error metrics with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> compute_rom_error_metrics_flat(LS_test, LS_rom)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>generate_rom_error_report(matrix)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Diagnostics</strong>: The notebook also calls:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_rom_error_diagnostics_flat(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    LS_test,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    LS_rom,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    ROM_relative_error,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ROM_speed_up,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    sim_axis<span class="op">=</span>[<span class="st">'True'</span>, <span class="st">'ROM'</span>],</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    metrics<span class="op">=</span>matrix</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>VTK Export</strong>: The notebook exports one test comparison using:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>generate_vtk(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    LS_test,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    LS_rom,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    rom_data.mesh,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    rom_data.basis,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    scale<span class="op">=</span><span class="fl">1.0</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    num_test<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    out_dir<span class="op">=</span><span class="st">"sol_vtk_files"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The exported files can be opened in ParaView.</p>
+</section>
+<section id="summary-table-of-key-methods" class="level2">
+<h2 class="anchored" data-anchor-id="summary-table-of-key-methods">10. Summary Table of Key Methods</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 36%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Typical Location in Pipeline</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>domain()</code></td>
+<td style="text-align: left;">Setup mesh, boundary definitions, DOFs, and regional bases</td>
+<td style="text-align: left;">Before FOM assembly</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>bilinear_forms()</code></td>
+<td style="text-align: left;">Return unit-coefficient affine form handles for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span></td>
+<td style="text-align: left;">Operator initialization</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>linear_forms()</code></td>
+<td style="text-align: left;">Return the Neumann traction form</td>
+<td style="text-align: left;">RHS assembly</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>properties()</code></td>
+<td style="text-align: left;">Map <span class="math inline">\((E,\nu,\text{region})\)</span> to <span class="math inline">\((\lambda,\mu)\)</span></td>
+<td style="text-align: left;">FOM and ROM coefficient evaluation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>parameters()</code></td>
+<td style="text-align: left;">Produce sampled <span class="math inline">\((E,\nu)\)</span> values, parameter ranges, and train/test masks</td>
+<td style="text-align: left;">Data generation</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fom_operators()</code></td>
+<td style="text-align: left;">Assemble and cache regional unit-coefficient affine stiffness blocks</td>
+<td style="text-align: left;">First FOM iteration (offline)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fom_rhs()</code></td>
+<td style="text-align: left;">Assemble and cache the Neumann load vector</td>
+<td style="text-align: left;">First FOM iteration (offline)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>fom_solver()</code></td>
+<td style="text-align: left;">Combine affine blocks with Lamé coefficients and solve the full-order system</td>
+<td style="text-align: left;">Snapshot generation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>reduced_operators()</code></td>
+<td style="text-align: left;">Project cached FOM blocks and RHS onto the POD basis; compute <span class="math inline">\(K^{r,m}_r\)</span>, <span class="math inline">\(\mathbf{d}^m_r\)</span>, <span class="math inline">\(\mathbf{f}^r\)</span></td>
+<td style="text-align: left;">First ROM iteration (offline projection)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>rom_solver()</code></td>
+<td style="text-align: left;">Linearly combine pre-projected ROM-scale blocks and solve the <span class="math inline">\(n\times n\)</span> reduced system</td>
+<td style="text-align: left;">Online ROM evaluation</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="best-practices">11. Best Practices</h2>
 <ul>
-<li><a href="https://link.springer.com/article/10.1007/s11831-025-10299-4">Hyper-reduction Techniques for Efficient Simulation</a></li>
+<li>Keep the parameter order consistent as <span class="math inline">\((E,\nu)\)</span> in <code>params.py</code>, <code>assemble_kwargs()</code>, <code>fom_solver()</code>, and <code>rom_solver()</code></li>
+<li>Assemble affine blocks without parameter coefficients so they can be reused across all parameter evaluations</li>
+<li>Call <code>reduced_operators()</code> only once per ROM session; reuse the projected blocks for every online query</li>
+<li>Use <code>train_mask</code> and <code>test_mask</code> to avoid mixing training and validation snapshots</li>
+<li>Center the training snapshots before computing the POD basis; pass <code>LS_train_mean</code> as <code>train_ref</code> to the ROM simulation</li>
+<li>Check ROM error on held-out test samples before using the ROM for prediction</li>
+<li>Use VTK export to inspect displacement fields and local error patterns</li>
+<li>Treat the <code>hyper_rom_solver_deim</code>, <code>hyper_rom_solver_ecsw</code>, and <code>hyper_rom_solver_ecm</code> methods as placeholders unless they are implemented later</li>
 </ul>
+<p>This workflow and modular codebase provide a compact example of a regionwise affine ROM for a parametrized 3D linear elasticity problem in scikit-rom.</p>
 
 
 </section>

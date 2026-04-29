@@ -1,0 +1,23 @@
+---
+title: "P.9 Piecewise 1D heat conduction with parameterized conductivity and source"
+format:
+  html:
+    theme:
+      light: flatly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](images/P9_banner.png){fig-align="center"}
+
+## Problem Setup
+<img
+  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  alt="GitHub logo"
+  width="32"
+  height="32"
+  style="vertical-align:middle; margin-right:8px;"
+/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/heat_transfer/static/linear/problem_2)
+
+![](examples_docs/P9.pdf){width="85%" height="1000px"}

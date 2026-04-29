@@ -1,0 +1,19 @@
+---
+title: "P.4 Plane-stress plate with a circular hole in tension"
+format:
+  html:
+    theme:
+      light: flatly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](images/P4_banner.png){fig-align="center" width="100%"}
+
+
+## Problem Setup
+
+<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_2)
+
+![](examples_docs/P4.pdf){width="85%" height="1000px"}

@@ -1,0 +1,24 @@
+---
+title: "P.10 Piecewise 1D heat conduction with parameterized conductivity and source"
+format:
+  html:
+    theme:
+      light: flatly
+    page-layout: full
+    css: styles.css
+    toc: false
+---
+
+![](images/P10_banner.jpg){fig-align="center" width="80%"}
+
+## Problem Setup
+<img
+  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+  alt="GitHub logo"
+  width="32"
+  height="32"
+  style="vertical-align:middle; margin-right:8px;"
+/>[Link](https://github.com/suparnob100/scikit-rom/tree/main/examples/heat_transfer/dynamic/problem_transient_heat_2d)
+
+![](examples_docs/P10.pdf){width="85%" height="1000px"}
+

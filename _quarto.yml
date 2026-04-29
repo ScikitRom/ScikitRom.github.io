@@ -84,16 +84,25 @@ website:
             section: CLI
       - section: "**Examples**"
         contents:
-          - problem_structure.qmd  
+          - P3_tutorial.qmd
+          - P8_tutorial.qmd
           - contents:
-              - nonlinear_power_law.qmd
-              - twisting.qmd
-              - linear bending.qmd
+              - P1.qmd
+              - P2.qmd
+              - P3.qmd
+              - P4.qmd
+              - P5.qmd
+              - P6.qmd
             section: Computational Mechanics
           - contents:
-              - linear star.qmd
-              - non_linear.qmd
+              - P7.qmd
+              - P8.qmd
+              - P9.qmd
+              - P10.qmd
             section: Heat Transfer
+          - contents:
+              - P11.qmd
+            section: Neutronics
 
           
 extensions:
