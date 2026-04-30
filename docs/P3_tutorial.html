@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial: Building a Reduced-Order Model with scikit-rom – SCIKIT-ROM</title>
+<title>Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model – SCIKIT-ROM</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,41 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -176,7 +141,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./P3_tutorial.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./P3_tutorial.html">Tutorial: Building a Reduced-Order Model with scikit-rom</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./P3_tutorial.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./P3_tutorial.html">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -481,7 +446,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./P3_tutorial.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
+ <span class="menu-text">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -600,9 +565,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./P3_tutorial.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./P3_tutorial.html">Tutorial: Building a Reduced-Order Model with scikit-rom</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./P3_tutorial.html"><strong>Examples</strong></a></li><li class="breadcrumb-item"><a href="./P3_tutorial.html">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Tutorial: Building a Reduced-Order Model with scikit-rom</h1>
+<h1 class="title">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</h1>
 </div>
 
 
@@ -620,14 +585,20 @@ window.Quarto = {
 
 
 <p><video src="videos/beam_vid.mp4" class="img-fluid" controls=""><a href="videos/beam_vid.mp4">Video</a></video></p>
-<p>This tutorial demonstrates the process of developing a reduced-order model (ROM) for a three-dimensional static linear elasticity problem using scikit-rom. The files in this example define the mesh, boundary conditions, regionwise material scaling, affine stiffness blocks, parameter sampling, full-order solves, POD basis construction, ROM solves, error reporting, and VTK export.</p>
-<section id="problem-description" class="level2">
-<h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
-<p>We analyze a 3D block governed by static linear elasticity. The structure is split into two material regions along the <span class="math inline">\(x\)</span>-direction. The first region uses Lamé parameters scaled by a factor of <span class="math inline">\(50\)</span>, while the second region uses the baseline material values. The example demonstrates how region-dependent material behavior can be represented through an affine decomposition.</p>
-<p><strong>Linear Affine Elasticity</strong>: The stiffness matrix is assembled from unit-coefficient blocks associated with the Lamé parameters <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span>. The parameter-dependent coefficients are applied later during FOM and ROM solves.</p>
-<p><strong>Domain Partitioning</strong>: The block is divided into two element regions using the element locations along the <span class="math inline">\(x\)</span>-axis.</p>
-<p><strong>Parameter Space</strong>: Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> are sampled for training and testing.</p>
-<p><strong>Boundary Conditions</strong>: Dirichlet constraints fix the displacement on the left face. A constant Neumann traction is applied on the right face.</p>
+<section id="problem-overview" class="level2">
+<h2 class="anchored" data-anchor-id="problem-overview">Problem Overview</h2>
+<p>This problem formulates and solves a three-dimensional <strong>static linear elasticity</strong> boundary value problem on a heterogeneous rectangular block. The block is composed of two distinct material subregions with the same constitutive model (isotropic linear elasticity) but different stiffness magnitudes. The problem is <strong>parametric</strong> in the elastic constants — Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> — and admits an <strong>affine decomposition</strong> of the stiffness operator, making it well-suited for Reduced Order Modeling (ROM) via Proper Orthogonal Decomposition (POD).</p>
+<p>The mathematical treatment proceeds in the following stages:</p>
+<ol type="1">
+<li>Define the physical domain, boundary conditions, and material properties.</li>
+<li>State the governing equations in strong and weak form.</li>
+<li>Explain how the domain is partitioned into subregions and how their FE bases are constructed.</li>
+<li>Derive the affine decomposition of the bilinear form, including the unit-coefficient assembly mechanism.</li>
+<li>Describe the finite element discretization and natural boundary condition enforcement.</li>
+<li>Formulate the Full Order Model (FOM).</li>
+<li>Formulate the POD-based Reduced Order Model (ROM) with mean-shift correction.</li>
+<li>Note the planned hyper-reduction extensions.</li>
+</ol>
 <p><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><a href="https://github.com/suparnob100/scikit-rom/tree/main/examples/computational_mechanics/static/linear/problem_1">Link</a></p>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_social_white_squircle_%282017%29.svg" alt="YouTube logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;"> <a href="https://www.youtube.com/playlist?list=PLVweTj3PB5sINcUVpPnPp_rJZ6Z2YkbNG">Video tutorial</a></p>
 <p><embed src="examples_docs/P3.pdf" style="width:100.0%" height="1000"></p>
@@ -644,292 +615,638 @@ window.Quarto = {
 ├─ problem_def.py      # Main problem class registered with scikit-rom
 └─ problem_1.ipynb     # Executes FOM generation, POD basis construction, ROM simulation, reporting, and VTK export</code></pre>
 </section>
-<section id="geometry-finite-element-framework-domain.py" class="level2">
-<h2 class="anchored" data-anchor-id="geometry-finite-element-framework-domain.py">1. Geometry &amp; Finite Element Framework — domain.py</h2>
-<p><strong>Mesh Construction</strong>: The domain is a 3D block with default dimensions <span class="math inline">\((l_x,l_y,l_z)=(10,1,1)\)</span>. The default refinement factor is <code>factor=8</code>, giving <span class="math inline">\((n_x,n_y,n_z)=(80,8,8)\)</span> hexahedral subdivisions before vector-valued finite element assembly.</p>
-<p><strong>Basis Functions</strong>: The code uses <code>ElementVector(ElementHex1())</code>, which gives a vector-valued trilinear hexahedral basis for the displacement field.</p>
-<p><strong>Boundary Identification</strong>:</p>
-<ul>
-<li><code>'left'</code>: <span class="math inline">\(x=0\)</span>, used for Dirichlet displacement constraints</li>
-<li><code>'right'</code>: <span class="math inline">\(x=l_x\)</span>, used for the Neumann traction</li>
-<li><code>'front'</code>: <span class="math inline">\(y=0\)</span></li>
-<li><code>'back'</code>: <span class="math inline">\(y=l_y\)</span></li>
-<li><code>'bottom'</code>: <span class="math inline">\(z=0\)</span></li>
-<li><code>'top'</code>: <span class="math inline">\(z=l_z\)</span></li>
-</ul>
-<p><strong>Facet Bases and DOFs</strong>: The code builds <code>fbasis_dirichlet</code> on the left face, <code>fbasis_neumann</code> on the right face, and <code>fbasis_faces</code> on the top, bottom, front, and back faces. It also extracts <code>dirichlet_dofs</code>, <code>neumann_dofs</code>, and <code>faces_dofs</code>.</p>
-<p><strong>Region Partitioning</strong>: The mesh is divided at <span class="math inline">\(x=0.5\,l_x\)</span> using the element locations returned by <code>element2location(mesh)</code>:</p>
-<ul>
-<li><code>region_1</code>: elements whose element-location <span class="math inline">\(x\)</span>-coordinates satisfy <span class="math inline">\(x \leq 0.5\,l_x\)</span></li>
-<li><code>region_2</code>: the complement of <code>region_1</code></li>
-</ul>
-<p>The function returns a dictionary containing the mesh, global basis, element object, facet bases, boundary DOFs, boundary data, mesh dimensions, and <code>basis_regions</code>.</p>
+<section id="physical-domain" class="level2">
+<h2 class="anchored" data-anchor-id="physical-domain">Physical Domain</h2>
+<section id="geometry" class="level3">
+<h3 class="anchored" data-anchor-id="geometry">Geometry</h3>
+<p>The computational domain is the rectangular parallelepiped:</p>
+<p><span class="math display">\[\Omega = (0,\, L_x) \times (0,\, L_y) \times (0,\, L_z)\]</span></p>
+<p>with physical dimensions <span class="math inline">\(L_x = 10\)</span>, <span class="math inline">\(L_y = 1\)</span>, <span class="math inline">\(L_z = 1\)</span>. The geometry resembles a slender beam-like block clamped at one end and loaded at the other.</p>
 </section>
-<section id="material-properties-lamé-coefficient-functions-properties.py" class="level2">
-<h2 class="anchored" data-anchor-id="material-properties-lamé-coefficient-functions-properties.py">2. Material Properties &amp; Lamé Coefficient Functions — properties.py</h2>
-<p><strong>Lamé Parameters</strong>: The function <code>lame_params(E, nu, region)</code> converts Young’s modulus <span class="math inline">\(E\)</span> and Poisson’s ratio <span class="math inline">\(\nu\)</span> into Lamé parameters <span class="math inline">\((\lambda,\mu)\)</span> using <code>skfem.models.elasticity.lame_parameters</code>.</p>
-<p><strong>Region Handling</strong>:</p>
-<ul>
-<li>For <code>region_1</code>, both <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span> are multiplied by <code>50.0</code></li>
-<li>For <code>region_2</code>, both parameters are returned without scaling</li>
-<li>For any other region name, the baseline values are returned unchanged</li>
-</ul>
-<p>The material mapping therefore depends on both the sampled parameters and the region name.</p>
-</section>
-<section id="affine-stiffness-matrix-assembly-bilinear_forms.py" class="level2">
-<h2 class="anchored" data-anchor-id="affine-stiffness-matrix-assembly-bilinear_forms.py">3. Affine Stiffness Matrix Assembly — bilinear_forms.py</h2>
-<p><strong>Affine Bilinear Forms</strong>:</p>
-<ul>
-<li><code>stiffness_lam</code>: the <span class="math inline">\(\lambda\)</span> contribution to the linear elasticity bilinear form</li>
-<li><code>stiffness_mu</code>: the <span class="math inline">\(\mu\)</span> contribution to the linear elasticity bilinear form</li>
-</ul>
-<p>The helper functions are:</p>
-<ul>
-<li><code>C_lam(T, lam)</code>: returns <span class="math inline">\(\lambda\,\operatorname{tr}(T)\,I\)</span></li>
-<li><code>C_mu(T, mu)</code>: returns <span class="math inline">\(2\mu\,T\)</span></li>
-</ul>
-<p><strong>Mathematics</strong>: The bilinear forms evaluate the elasticity terms using <code>sym_grad</code>, <code>trace</code>, <code>eye</code>, and <code>ddot</code>. The parameter-dependent stiffness is represented as</p>
-<p><span class="math display">\[K(E,\nu) = \sum_{r\,\in\,\text{regions}} \Bigl(\lambda_r(E,\nu)\,K^{\lambda}_{r} + \mu_r(E,\nu)\,K^{\mu}_{r}\Bigr).\]</span></p>
-<p><strong>Unit-Coefficient Blocks</strong>: In <code>problem_def.py</code>, the affine stiffness blocks are assembled using <code>asm(form, basis).copy()</code> without passing <code>E</code>, <code>nu</code>, or <code>region</code>. Because no parameters are provided, the forms fall back to <code>lam=1.0</code> and <code>mu=1.0</code> during block assembly. The actual Lamé coefficients are applied as scalar multipliers later in <code>fom_solver()</code> and <code>rom_solver()</code>.</p>
-<p>This unit-coefficient strategy is the central affine decomposition used by this example.</p>
-</section>
-<section id="right-hand-side-loads-linear_forms.py" class="level2">
-<h2 class="anchored" data-anchor-id="right-hand-side-loads-linear_forms.py">4. Right-Hand Side (Loads) — linear_forms.py</h2>
-<p><strong>Neumann Traction</strong>: The function <code>traction(v, w)</code> applies a constant traction of magnitude <span class="math inline">\(-10^{-2}\)</span> in the global <span class="math inline">\(y\)</span>-direction on the right face:</p>
-<p><span class="math display">\[F = -10^{-2}\,y.\]</span></p>
-<p><strong>Parameter Independence</strong>: The load vector does not depend on <span class="math inline">\(E\)</span> or <span class="math inline">\(\nu\)</span>. In <code>problem_def.py</code>, it is assembled once on <code>fbasis_neumann</code> and stored as <code>rhs_linear</code>.</p>
-</section>
-<section id="parameter-sampling-params.py" class="level2">
-<h2 class="anchored" data-anchor-id="parameter-sampling-params.py">5. Parameter Sampling — params.py</h2>
-<p><strong>Parameter Ranges</strong>:</p>
-<ul>
-<li><span class="math inline">\(E\)</span>: <span class="math inline">\([2.0,\;10.0]\)</span></li>
-<li><span class="math inline">\(\nu\)</span>: <span class="math inline">\([0.2,\;0.4]\)</span></li>
-</ul>
-<p><strong>Sampling Strategy</strong>: The function <code>parameters(N_snap=32)</code> uses Sobol samples through <code>generate_sobol</code>. It creates one set of <code>N_snap</code> training samples and one set of <code>N_snap</code> testing samples independently.</p>
-<p><strong>Returned Objects</strong>: The function returns four objects:</p>
-<ol type="1">
-<li><code>params</code>: the combined array of training samples followed by testing samples, with shape <code>(2*N_snap, 2)</code></li>
-<li><code>param_ranges</code>: the parameter bounds <code>[(2, 10), (0.2, 0.4)]</code></li>
-<li><code>train_mask</code>: a Boolean mask that selects the first <code>N_snap</code> samples</li>
-<li><code>test_mask</code>: a Boolean mask that selects the last <code>N_snap</code> samples</li>
-</ol>
-<p>The two columns of <code>params</code> correspond to <span class="math inline">\(E\)</span> and <span class="math inline">\(\nu\)</span>, in that order.</p>
-</section>
-<section id="problem-orchestration-problem_def.py" class="level2">
-<h2 class="anchored" data-anchor-id="problem-orchestration-problem_def.py">6. Problem Orchestration — problem_def.py</h2>
-<p><strong>Registered Problem Class</strong>: The class <code>ProblemAffine</code> inherits from <code>Problem</code> and is registered using <code>@register_problem(PROBLEM_NAME)</code>.</p>
-<p><strong>Core Methods</strong>:</p>
-<ul>
-<li><code>domain()</code>: loads <code>domain_()</code> from <code>domain.py</code></li>
-<li><code>bilinear_forms()</code>: returns <code>[stiffness_lam, stiffness_mu]</code></li>
-<li><code>linear_forms()</code>: returns <code>[traction]</code></li>
-<li><code>properties()</code>: returns <code>lame_params</code></li>
-<li><code>parameters(n_samples)</code>: returns <code>params</code>, <code>param_ranges</code>, <code>train_mask</code>, and <code>test_mask</code></li>
-<li><code>assemble_kwargs(param)</code>: maps a parameter vector to <code>{'E': param[0], 'nu': param[1]}</code></li>
-</ul>
-<section id="affine-fom-block-assembly-fom_operators" class="level3">
-<h3 class="anchored" data-anchor-id="affine-fom-block-assembly-fom_operators">Affine FOM Block Assembly — fom_operators()</h3>
-<p>On the first FOM iteration (<code>cls.cur_itr == 0</code>), <code>fom_operators()</code> calls <code>load_domain(self)</code> to initialize the mesh, basis, and DOFs. It then builds <code>self.stiffnesses</code>, a dictionary mapping <code>"lam"</code> and <code>"mu"</code> to their respective bilinear form handles, and assembles the regional unit-coefficient blocks:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cls.K_list <span class="op">=</span> {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    region: {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        mat: asm(form, basis).copy()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> mat, form <span class="kw">in</span> <span class="va">self</span>.stiffnesses.items()</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region, basis <span class="kw">in</span> <span class="va">self</span>.basis_regions.items()</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Here <code>mat</code> is either <code>"lam"</code> or <code>"mu"</code>. No Lamé coefficients are applied at this stage — the blocks carry unit coefficients only. The assembled <code>cls.K_list</code> is a nested dictionary indexed by <code>[region][mat]</code> and is reused for all subsequent FOM and ROM solves.</p>
-</section>
-<section id="right-hand-side-assembly-fom_rhs" class="level3">
-<h3 class="anchored" data-anchor-id="right-hand-side-assembly-fom_rhs">Right-Hand-Side Assembly — fom_rhs()</h3>
-<p>On the first FOM iteration, <code>fom_rhs()</code> calls <code>load_domain(self)</code> and assembles the Neumann load vector on the right facet basis:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cls.rhs_linear <span class="op">=</span> asm(b_linear, <span class="va">self</span>.fbasis_neumann)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The vector is stored in <code>cls.rhs_linear</code> and reused without reassembly for every subsequent parameter evaluation.</p>
-</section>
-<section id="full-order-solve-fom_solver" class="level3">
-<h3 class="anchored" data-anchor-id="full-order-solve-fom_solver">Full-Order Solve — fom_solver()</h3>
-<p>The method <code>fom_solver(cls, param)</code> retrieves the cached <code>K_list</code> and <code>rhs_linear</code>, computes regionwise Lamé coefficients <span class="math inline">\((\lambda_r,\mu_r)\)</span> for <span class="math inline">\((E,\nu)\)</span> via <code>self.properties()(E, nu, region)</code>, and combines the affine blocks:</p>
-<p><span class="math display">\[K(E,\nu) = \sum_{r}\sum_{m\,\in\,\{\lambda,\mu\}} \theta^m_r(E,\nu)\,K^m_r,\]</span></p>
-<p>where <span class="math inline">\(\theta^\lambda_r = \lambda_r(E,\nu)\)</span> and <span class="math inline">\(\theta^\mu_r = \mu_r(E,\nu)\)</span>. Dirichlet constraints are applied through <code>condense</code>, and the system is solved using <code>solve</code>.</p>
-</section>
-<section id="affine-rom-operator-projection-reduced_operators" class="level3">
-<h3 class="anchored" data-anchor-id="affine-rom-operator-projection-reduced_operators">Affine ROM Operator Projection — reduced_operators()</h3>
-<p>This method forms the <strong>offline</strong> component of the affine ROM. It is called once, on the first ROM iteration, and projects every cached FOM block onto the POD basis <span class="math inline">\(U \in \mathbb{R}^{N \times n}\)</span> (where <span class="math inline">\(N\)</span> is the number of full-order DOFs and <span class="math inline">\(n \ll N\)</span> is the number of selected modes).</p>
-<p><strong>Offline projected stiffness blocks</strong>: For each region <span class="math inline">\(r\)</span> and each material component <span class="math inline">\(m \in \{\lambda,\mu\}\)</span>, the unit-coefficient FOM block <span class="math inline">\(K^m_r \in \mathbb{R}^{N \times N}\)</span> is projected to ROM scale:</p>
-<p><span class="math display">\[K^{r,m}_{r} = U^\top K^m_r\, U \;\in\; \mathbb{R}^{n \times n}.\]</span></p>
-<p>These are stored in <code>self.K_r_a[region][mat]</code>.</p>
-<p><strong>Offline mean-shift correction vectors</strong>: The mean training displacement <span class="math inline">\(T_k \in \mathbb{R}^N\)</span> (stored as <code>self.T_k</code>) is projected through each FOM block to produce a correction vector in the ROM space:</p>
-<p><span class="math display">\[\mathbf{d}^m_r = U^\top K^m_r\, T_k \;\in\; \mathbb{R}^n.\]</span></p>
-<p>These are stored in <code>self.K_a_Tk[region][mat]</code>.</p>
-<p><strong>Projected load vector</strong>:</p>
-<p><span class="math display">\[\mathbf{f}^r = U^\top \mathbf{f} \;\in\; \mathbb{R}^n,\]</span></p>
-<p>stored as <code>self.f_term</code>.</p>
-<p>In code:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.U, <span class="va">self</span>.T_k <span class="op">=</span> cls.V_sel.copy(), cls.train_ref.copy()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.K_r_a <span class="op">=</span> {</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    region: {mat: (<span class="va">self</span>.U.T <span class="op">@</span> B) <span class="op">@</span> <span class="va">self</span>.U <span class="cf">for</span> mat, B <span class="kw">in</span> sub.items()}</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region, sub <span class="kw">in</span> <span class="va">self</span>.K_a.items()</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.K_a_Tk <span class="op">=</span> {</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    region: {mat: (<span class="va">self</span>.U.T <span class="op">@</span> B) <span class="op">@</span> <span class="va">self</span>.T_k <span class="cf">for</span> mat, B <span class="kw">in</span> sub.items()}</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> region, sub <span class="kw">in</span> <span class="va">self</span>.K_a.items()</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.f_term <span class="op">=</span> <span class="va">self</span>.U.T <span class="op">@</span> <span class="va">self</span>.rhs_linear</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>All three quantities live in <span class="math inline">\(\mathbb{R}^n\)</span> or <span class="math inline">\(\mathbb{R}^{n \times n}\)</span> and are computed exactly once. Every subsequent online solve reuses them without touching any FOM-sized matrix.</p>
-</section>
-<section id="reduced-order-solve-rom_solver" class="level3">
-<h3 class="anchored" data-anchor-id="reduced-order-solve-rom_solver">Reduced-Order Solve — rom_solver()</h3>
-<p>The method <code>rom_solver(cls, param)</code> executes the <strong>online</strong> phase. For a new parameter pair <span class="math inline">\((E,\nu)\)</span>, it computes the regionwise Lamé coefficients and assembles the reduced stiffness and mean-shift term entirely from the pre-projected ROM-scale blocks:</p>
-<p><span class="math display">\[K^r(E,\nu) = \sum_{r}\Bigl[\lambda_r(E,\nu)\,K^{r,\lambda}_{r} + \mu_r(E,\nu)\,K^{r,\mu}_{r}\Bigr] \;\in\;\mathbb{R}^{n\times n},\]</span></p>
-<p><span class="math display">\[\mathbf{g}^{T_k}(E,\nu) = \sum_{r}\Bigl[\lambda_r(E,\nu)\,\mathbf{d}^\lambda_r + \mu_r(E,\nu)\,\mathbf{d}^\mu_r\Bigr] \;\in\;\mathbb{R}^{n}.\]</span></p>
-<p>The reduced linear system is then:</p>
-<p><span class="math display">\[K^r(E,\nu)\,\mathbf{u}_r = \mathbf{f}^r - \mathbf{g}^{T_k}(E,\nu),\]</span></p>
-<p>solved by <code>numpy.linalg.solve</code>. The method returns the reduced coefficient vector <code>u_rom</code>. Full-field reconstruction is handled by the surrounding scikit-rom ROM simulation workflow. Because all arithmetic involves only <span class="math inline">\(n \times n\)</span> matrices and <span class="math inline">\(n\)</span>-vectors, the online solve scales as <span class="math inline">\(\mathcal{O}(n^3)\)</span>, independent of the full-order problem size <span class="math inline">\(N\)</span>.</p>
-</section>
-<section id="hyper-reduction-placeholders" class="level3">
-<h3 class="anchored" data-anchor-id="hyper-reduction-placeholders">Hyper-Reduction Placeholders</h3>
-<p>The file contains placeholder methods for <code>hyper_rom_solver_deim</code>, <code>hyper_rom_solver_ecsw</code>, and <code>hyper_rom_solver_ecm</code>. They are not implemented in this example and currently contain only <code>pass</code>.</p>
-</section>
-</section>
-<section id="offline-workflow-building-the-rom" class="level2">
-<h2 class="anchored" data-anchor-id="offline-workflow-building-the-rom">7. Offline Workflow: Building the ROM</h2>
-<p>The notebook <code>problem_1.ipynb</code> executes the complete workflow.</p>
-<p><strong>Step-by-step process</strong>:</p>
-<ol type="1">
-<li><strong>Environment Setup</strong>: The notebook adds the parent folder to <code>sys.path</code>, obtains <code>PROBLEM_NAME</code> from the folder name, and imports <code>problem_def.py</code>. Importing <code>problem_def.py</code> registers the problem with scikit-rom.</li>
-<li><strong>Full-Order Simulation</strong>: If <code>generate_data=True</code>, the notebook creates <code>master.fom_simulation()</code> and calls <code>sim.run_simulation()</code>. Each snapshot is computed by <code>fom_solver()</code> for one <span class="math inline">\((E,\nu)\)</span> pair.</li>
-<li><strong>ROM Data Loading</strong>: The notebook creates <code>rom_data = master.rom_simulation()</code> to load the stored FOM results and metadata from disk.</li>
-<li><strong>Training and Testing Split</strong>: It extracts <code>param_list</code>, <code>fos_solutions</code>, <code>train_mask</code>, and <code>test_mask</code> from <code>rom_data</code>. The full solution array is stored as <code>LS = np.asarray(rom_data.fos_solutions)</code>. The training snapshots are stored in <code>LS_train = LS[train_mask]</code>, and testing snapshots in <code>LS_test = LS[test_mask]</code>.</li>
-<li><strong>Mean Subtraction</strong>: The mean of the training snapshots is computed as <code>LS_train_mean = np.mean(LS_train, axis=0)</code>, and the centered snapshot matrix is <code>LS_train_ms = LS_train - LS_train_mean</code>.</li>
-<li><strong>Parameter Visualization</strong>: If <code>visualize=True</code>, the notebook plots the two parameter columns for training and testing samples. These columns correspond to <span class="math inline">\(E\)</span> and <span class="math inline">\(\nu\)</span> from <code>params.py</code>.</li>
-<li><strong>SVD/POD Basis Construction</strong>: If <code>run_svd=True</code>, <code>svd_mode_selector(LS_train_ms, tolerance=1e-4, modes=True)</code> returns the selected number of modes <span class="math inline">\(n\)</span> and the left singular vectors. The selected basis is stored as <code>V_sel = U[:, :n_sel]</code>.</li>
-</ol>
-</section>
-<section id="online-workflow-fast-evaluation" class="level2">
-<h2 class="anchored" data-anchor-id="online-workflow-fast-evaluation">8. Online Workflow: Fast Evaluation</h2>
-<p>For a new parameter pair <span class="math inline">\((E,\nu)\)</span>, the ROM workflow proceeds as follows:</p>
-<ol type="1">
-<li><strong>Initialize ROM Simulation</strong>: The notebook creates <code>master.rom_simulation(V_sel=V_sel, train_ref=LS_train_mean)</code>.</li>
-<li><strong>Project Operators (offline, once)</strong>: On the first ROM iteration, <code>reduced_operators()</code> projects all cached FOM blocks onto the POD basis, producing the ROM-scale quantities <span class="math inline">\(K^{r,m}_r\)</span>, <span class="math inline">\(\mathbf{d}^m_r\)</span>, and <span class="math inline">\(\mathbf{f}^r\)</span>. This projection is performed exactly once and reused for every online query.</li>
-<li><strong>Compute Lamé Coefficients</strong>: For each new parameter pair <span class="math inline">\((E,\nu)\)</span>, <code>rom_solver()</code> evaluates <span class="math inline">\((\lambda_r, \mu_r)\)</span> for every region using <code>self.properties()(E, nu, region)</code>.</li>
-<li><strong>Assemble Reduced Stiffness</strong>: The reduced stiffness <span class="math inline">\(K^r(E,\nu)\)</span> is formed by linearly combining the pre-projected blocks <span class="math inline">\(K^{r,\lambda}_r\)</span> and <span class="math inline">\(K^{r,\mu}_r\)</span> with the current Lamé coefficients. No FOM-sized matrix is touched during this step.</li>
-<li><strong>Assemble Mean-Shift Correction</strong>: The correction <span class="math inline">\(\mathbf{g}^{T_k}(E,\nu)\)</span> is formed by linearly combining the pre-projected vectors <span class="math inline">\(\mathbf{d}^m_r\)</span> with the current Lamé coefficients.</li>
-<li><strong>Solve Reduced System</strong>: <code>numpy.linalg.solve</code> solves the <span class="math inline">\(n \times n\)</span> system <span class="math inline">\(K^r\,\mathbf{u}_r = \mathbf{f}^r - \mathbf{g}^{T_k}\)</span> for the reduced coefficient vector <code>u_rom</code>.</li>
-<li><strong>Recover ROM Solutions</strong>: The outer <code>master.rom_simulation</code> workflow reconstructs and stores the full-field displacement solutions in <code>rom.rom_solutions</code>.</li>
-</ol>
-</section>
-<section id="validation-error-assessment-and-vtk-export" class="level2">
-<h2 class="anchored" data-anchor-id="validation-error-assessment-and-vtk-export">9. Validation, Error Assessment, and VTK Export</h2>
-<p><strong>Test Set</strong>: The test snapshots are selected using <code>test_mask</code>.</p>
-<p><strong>Error Metrics</strong>: If <code>rom_report=True</code>, the notebook computes error metrics with:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>matrix <span class="op">=</span> compute_rom_error_metrics_flat(LS_test, LS_rom)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>generate_rom_error_report(matrix)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Diagnostics</strong>: The notebook also calls:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_rom_error_diagnostics_flat(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    LS_test,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    LS_rom,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    ROM_relative_error,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ROM_speed_up,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    sim_axis<span class="op">=</span>[<span class="st">'True'</span>, <span class="st">'ROM'</span>],</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    metrics<span class="op">=</span>matrix</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>VTK Export</strong>: The notebook exports one test comparison using:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>generate_vtk(</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    LS_test,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    LS_rom,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    rom_data.mesh,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    rom_data.basis,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    scale<span class="op">=</span><span class="fl">1.0</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    num_test<span class="op">=</span><span class="dv">1</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    out_dir<span class="op">=</span><span class="st">"sol_vtk_files"</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The exported files can be opened in ParaView.</p>
-</section>
-<section id="summary-table-of-key-methods" class="level2">
-<h2 class="anchored" data-anchor-id="summary-table-of-key-methods">10. Summary Table of Key Methods</h2>
+<section id="boundary-partitioning" class="level3">
+<h3 class="anchored" data-anchor-id="boundary-partitioning">Boundary Partitioning</h3>
+<p>The boundary <span class="math inline">\(\partial\Omega\)</span> is partitioned into three disjoint parts:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 28%">
-<col style="width: 36%">
-<col style="width: 34%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Method</th>
-<th style="text-align: left;">Purpose</th>
-<th style="text-align: left;">Typical Location in Pipeline</th>
+<th>Boundary</th>
+<th>Location</th>
+<th>Mechanical Condition</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><code>domain()</code></td>
-<td style="text-align: left;">Setup mesh, boundary definitions, DOFs, and regional bases</td>
-<td style="text-align: left;">Before FOM assembly</td>
+<td><span class="math inline">\(\Gamma_D\)</span></td>
+<td><span class="math inline">\(x = 0\)</span> (left face)</td>
+<td>Clamped: <span class="math inline">\(\mathbf{u} = \mathbf{0}\)</span> (essential BC)</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>bilinear_forms()</code></td>
-<td style="text-align: left;">Return unit-coefficient affine form handles for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\mu\)</span></td>
-<td style="text-align: left;">Operator initialization</td>
+<td><span class="math inline">\(\Gamma_N\)</span></td>
+<td><span class="math inline">\(x = L_x = 10\)</span> (right face)</td>
+<td>Neumann: prescribed traction <span class="math inline">\(\mathbf{t}\)</span> (natural BC)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><code>linear_forms()</code></td>
-<td style="text-align: left;">Return the Neumann traction form</td>
-<td style="text-align: left;">RHS assembly</td>
+<td><span class="math inline">\(\Gamma_\text{free}\)</span></td>
+<td>top, bottom, front, back faces</td>
+<td>Traction-free: <span class="math inline">\(\boldsymbol{\sigma}\mathbf{n} = \mathbf{0}\)</span> (natural BC)</td>
+</tr>
+</tbody>
+</table>
+<p>The essential (Dirichlet) condition on <span class="math inline">\(\Gamma_D\)</span> is enforced explicitly by eliminating the corresponding degrees of freedom from the system. The natural conditions on <span class="math inline">\(\Gamma_N\)</span> and <span class="math inline">\(\Gamma_\text{free}\)</span> arise automatically from the variational formulation and require no additional enforcement beyond assembling the appropriate boundary integrals.</p>
+</section>
+<section id="material-subregions" class="level3">
+<h3 class="anchored" data-anchor-id="material-subregions">Material Subregions</h3>
+<p>The domain is partitioned into two non-overlapping subregions at the midpoint <span class="math inline">\(x = L_x/2 = 5\)</span>:</p>
+<p><span class="math display">\[\Omega_1 = \{(x, y, z) \in \Omega : x \leq 5\}, \qquad \Omega_2 = \{(x, y, z) \in \Omega : x &gt; 5\}\]</span></p>
+<p>so that <span class="math inline">\(\Omega = \Omega_1 \cup \Omega_2\)</span> and <span class="math inline">\(\Omega_1 \cap \Omega_2 = \emptyset\)</span> (up to the shared interface at <span class="math inline">\(x=5\)</span>). Region <span class="math inline">\(\Omega_1\)</span> (the left half) is assigned a stiffness <strong>50 times larger</strong> than Region <span class="math inline">\(\Omega_2\)</span> (the right half), for all parameter values <span class="math inline">\((E, \nu)\)</span>.</p>
+<hr>
+</section>
+</section>
+<section id="governing-equations" class="level2">
+<h2 class="anchored" data-anchor-id="governing-equations">Governing Equations</h2>
+<section id="kinematics-linearized-strain-tensor" class="level3">
+<h3 class="anchored" data-anchor-id="kinematics-linearized-strain-tensor">Kinematics: Linearized Strain Tensor</h3>
+<p>For small deformations, the linearized (symmetric) strain tensor is the symmetric part of the displacement gradient:</p>
+<p><span class="math display">\[\boldsymbol{\varepsilon}(\mathbf{u}) = \frac{1}{2}\left(\nabla \mathbf{u} + (\nabla \mathbf{u})^T\right)\]</span></p>
+<p>Component-wise, for displacement <span class="math inline">\(\mathbf{u} = (u_1, u_2, u_3)^T\)</span>:</p>
+<p><span class="math display">\[\varepsilon_{ij}(\mathbf{u}) = \frac{1}{2}\left(\frac{\partial u_i}{\partial x_j} + \frac{\partial u_j}{\partial x_i}\right), \quad i,j \in \{1,2,3\}\]</span></p>
+<p>The volumetric strain (trace of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>) is:</p>
+<p><span class="math display">\[\mathrm{tr}(\boldsymbol{\varepsilon}) = \varepsilon_{11} + \varepsilon_{22} + \varepsilon_{33} = \nabla \cdot \mathbf{u}\]</span></p>
+</section>
+<section id="constitutive-law-isotropic-linear-elasticity" class="level3">
+<h3 class="anchored" data-anchor-id="constitutive-law-isotropic-linear-elasticity">Constitutive Law: Isotropic Linear Elasticity</h3>
+<p>The material obeys <strong>Hooke’s law</strong> for isotropic linear elastic solids. The Cauchy stress tensor <span class="math inline">\(\boldsymbol{\sigma}\)</span> is related to the strain tensor by:</p>
+<p><span class="math display">\[\boldsymbol{\sigma}(\mathbf{u}) = \lambda\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{u}))\,\mathbf{I} + 2\mu\,\boldsymbol{\varepsilon}(\mathbf{u})\]</span></p>
+<p>where <span class="math inline">\(\mathbf{I}\)</span> is the second-order identity tensor, and <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\mu\)</span> are the <strong>Lamé parameters</strong>. The component-wise form is:</p>
+<p><span class="math display">\[\sigma_{ij} = \lambda\,\varepsilon_{kk}\,\delta_{ij} + 2\mu\,\varepsilon_{ij}\]</span></p>
+<p>where <span class="math inline">\(\delta_{ij}\)</span> is the Kronecker delta and the repeated index <span class="math inline">\(k\)</span> denotes summation (Einstein convention).</p>
+</section>
+<section id="lamé-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="lamé-parameters">Lamé Parameters</h3>
+<p>Given Young’s modulus <span class="math inline">\(E &gt; 0\)</span> and Poisson’s ratio <span class="math inline">\(\nu \in (0, 0.5)\)</span>, the Lamé parameters are:</p>
+<p><span class="math display">\[\lambda(E, \nu) = \frac{E\nu}{(1+\nu)(1-2\nu)}\]</span></p>
+<p><span class="math display">\[\mu(E, \nu) = \frac{E}{2(1+\nu)}\]</span></p>
+<p>Here <span class="math inline">\(\mu\)</span> is the shear modulus and <span class="math inline">\(\lambda\)</span> is the first Lamé parameter. Both are strictly positive for the admissible parameter range <span class="math inline">\(E \in [2, 10]\)</span>, <span class="math inline">\(\nu \in [0.2, 0.4]\)</span>.</p>
+</section>
+<section id="strong-form-of-the-boundary-value-problem" class="level3">
+<h3 class="anchored" data-anchor-id="strong-form-of-the-boundary-value-problem">Strong Form of the Boundary Value Problem</h3>
+<p>Find the displacement field <span class="math inline">\(\mathbf{u}: \Omega \to \mathbb{R}^3\)</span> satisfying the equilibrium equation with zero body forces:</p>
+<p><span class="math display">\[-\nabla \cdot \boldsymbol{\sigma}(\mathbf{u}) = \mathbf{0} \quad \text{in } \Omega\]</span></p>
+<p>subject to the boundary conditions:</p>
+<p><span class="math display">\[\mathbf{u} = \mathbf{0} \quad \text{on } \Gamma_D\]</span></p>
+<p><span class="math display">\[\boldsymbol{\sigma}(\mathbf{u})\,\mathbf{n} = \mathbf{t} \quad \text{on } \Gamma_N\]</span></p>
+<p><span class="math display">\[\boldsymbol{\sigma}(\mathbf{u})\,\mathbf{n} = \mathbf{0} \quad \text{on } \Gamma_\text{free}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{n}\)</span> is the outward unit normal to <span class="math inline">\(\partial\Omega\)</span>.</p>
+</section>
+<section id="prescribed-traction" class="level3">
+<h3 class="anchored" data-anchor-id="prescribed-traction">Prescribed Traction</h3>
+<p>A uniform traction of magnitude <span class="math inline">\(0.01\)</span> is applied in the <strong>negative <span class="math inline">\(y\)</span>-direction</strong> on the right face <span class="math inline">\(\Gamma_N\)</span>:</p>
+<p><span class="math display">\[\mathbf{t} = \begin{pmatrix} 0 \\ -0.01 \\ 0 \end{pmatrix}\]</span></p>
+<p>This corresponds to a downward shear load applied at the free end of the block.</p>
+<hr>
+</section>
+</section>
+<section id="weak-formulation" class="level2">
+<h2 class="anchored" data-anchor-id="weak-formulation">Weak Formulation</h2>
+<section id="function-spaces" class="level3">
+<h3 class="anchored" data-anchor-id="function-spaces">Function Spaces</h3>
+<p>Define the <strong>energy space</strong> for admissible displacements:</p>
+<p><span class="math display">\[V = \left\{\mathbf{v} \in \left[H^1(\Omega)\right]^3 : \mathbf{v}\big|_{\Gamma_D} = \mathbf{0}\right\}\]</span></p>
+<p>where <span class="math inline">\([H^1(\Omega)]^3\)</span> denotes the Sobolev space of square-integrable vector fields with square-integrable first derivatives. This space encodes both the regularity required for the strain energy to be finite and the homogeneous Dirichlet condition.</p>
+</section>
+<section id="variational-problem" class="level3">
+<h3 class="anchored" data-anchor-id="variational-problem">Variational Problem</h3>
+<p>Multiply the equilibrium equation <span class="math inline">\(-\nabla \cdot \boldsymbol{\sigma} = \mathbf{0}\)</span> by a test function <span class="math inline">\(\mathbf{v} \in V\)</span>, integrate over <span class="math inline">\(\Omega\)</span>, and apply the divergence theorem together with the boundary conditions. This yields the <strong>weak (variational) formulation</strong>:</p>
+<p>Find <span class="math inline">\(\mathbf{u} \in V\)</span> such that</p>
+<p><span class="math display">\[a(\mathbf{u},\, \mathbf{v}) = \ell(\mathbf{v}) \qquad \forall\, \mathbf{v} \in V\]</span></p>
+</section>
+<section id="bilinear-form" class="level3">
+<h3 class="anchored" data-anchor-id="bilinear-form">Bilinear Form</h3>
+<p>The bilinear form <span class="math inline">\(a: V \times V \to \mathbb{R}\)</span> represents the virtual work of internal stresses:</p>
+<p><span class="math display">\[a(\mathbf{u}, \mathbf{v}) = \int_\Omega \boldsymbol{\sigma}(\mathbf{u}) : \boldsymbol{\varepsilon}(\mathbf{v})\, d\Omega\]</span></p>
+<p>where the double contraction (Frobenius inner product) of two second-order tensors <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span> is:</p>
+<p><span class="math display">\[\mathbf{A} : \mathbf{B} = \sum_{i=1}^3 \sum_{j=1}^3 A_{ij}\, B_{ij}\]</span></p>
+<p>Substituting the constitutive law and using the identity</p>
+<p><span class="math display">\[\left(\lambda\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{u}))\,\mathbf{I}\right) : \boldsymbol{\varepsilon}(\mathbf{v}) = \lambda\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{u}))\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{v}))\]</span></p>
+<p>the bilinear form expands to:</p>
+<p><span class="math display">\[a(\mathbf{u}, \mathbf{v}) = \int_\Omega \left[\lambda\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{u}))\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{v})) + 2\mu\,\boldsymbol{\varepsilon}(\mathbf{u}):\boldsymbol{\varepsilon}(\mathbf{v})\right] d\Omega\]</span></p>
+<p>This form is <strong>symmetric</strong>, <strong>continuous</strong>, and <strong>coercive</strong> on <span class="math inline">\(V\)</span>, guaranteeing a unique solution by the Lax–Milgram theorem.</p>
+</section>
+<section id="linear-form" class="level3">
+<h3 class="anchored" data-anchor-id="linear-form">Linear Form</h3>
+<p>The linear form <span class="math inline">\(\ell: V \to \mathbb{R}\)</span> represents the virtual work of the external traction. Since <span class="math inline">\(\Gamma_\text{free}\)</span> carries zero traction and <span class="math inline">\(\Gamma_D\)</span> contributes nothing (test functions vanish there), only the right-face integral survives:</p>
+<p><span class="math display">\[\ell(\mathbf{v}) = \int_{\Gamma_N} \mathbf{t} \cdot \mathbf{v}\, d\Gamma = -0.01 \int_{\Gamma_N} v_2\, d\Gamma\]</span></p>
+<p>where <span class="math inline">\(v_2\)</span> is the <span class="math inline">\(y\)</span>-component of the test function.</p>
+</section>
+<section id="natural-boundary-condition-enforcement-for-traction-free-faces" class="level3">
+<h3 class="anchored" data-anchor-id="natural-boundary-condition-enforcement-for-traction-free-faces">Natural Boundary Condition Enforcement for Traction-Free Faces</h3>
+<p>The four remaining faces — top, bottom, front, and back (<span class="math inline">\(\Gamma_\text{free}\)</span>) — carry zero traction. In the finite element method, these faces require <strong>no explicit enforcement</strong>: the condition <span class="math inline">\(\boldsymbol{\sigma}\,\mathbf{n} = \mathbf{0}\)</span> is the natural boundary condition of the variational formulation, satisfied automatically when the corresponding boundary integral is omitted. Specifically:</p>
+<ul>
+<li>A separate facet basis (<code>fbasis_faces</code>) is constructed over <span class="math inline">\(\{\)</span>top, bottom, front, back<span class="math inline">\(\}\)</span>, and the corresponding DOF indices are identified.</li>
+<li>No constraint is applied to these DOFs. The system is assembled without any traction contribution from these faces, which is equivalent to setting <span class="math inline">\(\mathbf{t} = \mathbf{0}\)</span> there.</li>
+<li>The traction-free condition thus drops out of the weak form at no additional cost.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="domain-partitioning-and-region-local-fe-bases" class="level2">
+<h2 class="anchored" data-anchor-id="domain-partitioning-and-region-local-fe-bases">Domain Partitioning and Region-Local FE Bases</h2>
+<section id="element-to-location-mapping" class="level3">
+<h3 class="anchored" data-anchor-id="element-to-location-mapping">Element-to-Location Mapping</h3>
+<p>To assemble the affine stiffness blocks separately over <span class="math inline">\(\Omega_1\)</span> and <span class="math inline">\(\Omega_2\)</span>, the code must identify which elements belong to each subregion. This is done via the function <code>element2location</code>, which computes the physical <span class="math inline">\(x\)</span>-coordinates of all quadrature/element nodes:</p>
+<p><span class="math display">\[\text{loc}[e, g, 0] = x\text{-coordinate of quadrature point } g \text{ in element } e\]</span></p>
+<p>An element belongs to Region 1 if all its nodal <span class="math inline">\(x\)</span>-coordinates satisfy <span class="math inline">\(x \leq 5\)</span> (the midpoint break):</p>
+<p><span class="math display">\[\text{mask}_1[e] = \bigwedge_{g} \left(\text{loc}[e, g, 0] \leq \tfrac{L_x}{2}\right), \qquad \text{mask}_2[e] = \neg\,\text{mask}_1[e]\]</span></p>
+<p>That is, an element is assigned to <span class="math inline">\(\Omega_1\)</span> only if <strong>all</strong> of its nodes lie in the left half; otherwise it belongs to <span class="math inline">\(\Omega_2\)</span>.</p>
+</section>
+<section id="region-local-basis-objects" class="level3">
+<h3 class="anchored" data-anchor-id="region-local-basis-objects">Region-Local Basis Objects</h3>
+<p>Given the boolean element masks <span class="math inline">\(\text{mask}_i\)</span>, the function <code>compute_basis_regions</code> constructs a separate FE <code>Basis</code> object restricted to each subregion:</p>
+<p><span class="math display">\[\texttt{basis\_regions} = \left\{\,\texttt{region\_1}: \mathcal{B}^{(1)},\quad \texttt{region\_2}: \mathcal{B}^{(2)}\,\right\}\]</span></p>
+<p>where <span class="math inline">\(\mathcal{B}^{(i)}\)</span> is the FE basis assembled over only the elements in <span class="math inline">\(\Omega_i\)</span>. Assembly over <span class="math inline">\(\mathcal{B}^{(i)}\)</span> integrates only over the elements of the corresponding subregion, producing the parameter-independent stiffness blocks <span class="math inline">\(\mathbf{K}_q\)</span> needed for the affine decomposition.</p>
+<hr>
+</section>
+</section>
+<section id="material-heterogeneity" class="level2">
+<h2 class="anchored" data-anchor-id="material-heterogeneity">Material Heterogeneity</h2>
+<p>For a given parameter pair <span class="math inline">\(\boldsymbol{\mu} = (E, \nu)\)</span>, the <strong>region-wise Lamé parameters</strong> are:</p>
+<p><strong>Region 1</strong> (<span class="math inline">\(\Omega_1\)</span>, stiffer left half):</p>
+<p><span class="math display">\[\lambda_1(E,\nu) = 50\,\lambda(E,\nu), \qquad \mu_1(E,\nu) = 50\,\mu(E,\nu)\]</span></p>
+<p><strong>Region 2</strong> (<span class="math inline">\(\Omega_2\)</span>, softer right half):</p>
+<p><span class="math display">\[\lambda_2(E,\nu) = \lambda(E,\nu), \qquad \mu_2(E,\nu) = \mu(E,\nu)\]</span></p>
+<p>The stiffness ratio between the two subregions is exactly <span class="math inline">\(50:1\)</span> for all <span class="math inline">\((E, \nu)\)</span> in the parameter space. For any region not explicitly assigned (fallback), the base parameters <span class="math inline">\((\lambda, \mu)\)</span> are returned unchanged.</p>
+<hr>
+</section>
+<section id="affine-decomposition-of-the-bilinear-form" class="level2">
+<h2 class="anchored" data-anchor-id="affine-decomposition-of-the-bilinear-form">Affine Decomposition of the Bilinear Form</h2>
+<p>The affine decomposition is the key structural property that enables efficient Reduced Order Modeling. It separates parameter-dependent scalar coefficients from parameter-independent integral operators.</p>
+<section id="unit-coefficient-assembly-mechanism" class="level3">
+<h3 class="anchored" data-anchor-id="unit-coefficient-assembly-mechanism">Unit-Coefficient Assembly Mechanism</h3>
+<p>The four stiffness blocks <span class="math inline">\(\mathbf{K}_q\)</span> are assembled <strong>without any parameter values</strong>: when the assembly routine is called without specifying <span class="math inline">\(E\)</span> or <span class="math inline">\(\nu\)</span>, the bilinear forms fall back to <strong>unit Lamé coefficients</strong> <span class="math inline">\(\lambda = 1\)</span>, <span class="math inline">\(\mu = 1\)</span>. This yields four purely geometric, parameter-free matrices:</p>
+<p><span class="math display">\[(\mathbf{K}_\lambda^{(i)})_{jk} = \int_{\Omega_i} \mathrm{tr}(\boldsymbol{\varepsilon}(\boldsymbol{\phi}_k))\,\mathrm{tr}(\boldsymbol{\varepsilon}(\boldsymbol{\phi}_j))\, d\Omega, \quad i = 1, 2\]</span></p>
+<p><span class="math display">\[(\mathbf{K}_\mu^{(i)})_{jk} = \int_{\Omega_i} 2\,\boldsymbol{\varepsilon}(\boldsymbol{\phi}_k):\boldsymbol{\varepsilon}(\boldsymbol{\phi}_j)\, d\Omega, \quad i = 1, 2\]</span></p>
+<p>where <span class="math inline">\(\{\boldsymbol{\phi}_j\}_{j=1}^N\)</span> are the vector FE basis functions. These four matrices are assembled <strong>once</strong> during the offline stage (at iteration counter <code>cur_itr == 0</code>) and cached. All subsequent queries reuse these cached blocks without re-assembly.</p>
+<p>The actual material stiffness for a given <span class="math inline">\((E, \nu)\)</span> is then recovered by <strong>scaling these unit blocks</strong> with the appropriate Lamé coefficients:</p>
+<p><span class="math display">\[\mathbf{K}(E,\nu) = \theta_1\,\mathbf{K}_\lambda^{(1)} + \theta_2\,\mathbf{K}_\mu^{(1)} + \theta_3\,\mathbf{K}_\lambda^{(2)} + \theta_4\,\mathbf{K}_\mu^{(2)}\]</span></p>
+<p>This unit-coefficient assembly is precisely the mechanism that makes the affine decomposition exact and exact at no approximation cost.</p>
+</section>
+<section id="splitting-over-subregions" class="level3">
+<h3 class="anchored" data-anchor-id="splitting-over-subregions">Splitting Over Subregions</h3>
+<p>Since <span class="math inline">\(\Omega = \Omega_1 \cup \Omega_2\)</span>, the bilinear form splits as:</p>
+<p><span class="math display">\[a(\mathbf{u}, \mathbf{v};\, E, \nu) = a^{(1)}(\mathbf{u}, \mathbf{v};\, E, \nu) + a^{(2)}(\mathbf{u}, \mathbf{v};\, E, \nu)\]</span></p>
+<p>where the contribution from subregion <span class="math inline">\(i\)</span> is:</p>
+<p><span class="math display">\[a^{(i)}(\mathbf{u}, \mathbf{v};\, E, \nu) = \int_{\Omega_i} \left[\lambda_i\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{u}))\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{v})) + 2\mu_i\,\boldsymbol{\varepsilon}(\mathbf{u}):\boldsymbol{\varepsilon}(\mathbf{v})\right] d\Omega\]</span></p>
+</section>
+<section id="parameter-independent-sub-forms" class="level3">
+<h3 class="anchored" data-anchor-id="parameter-independent-sub-forms">Parameter-Independent Sub-Forms</h3>
+<p>Define four <strong>parameter-independent</strong> bilinear sub-forms (assembled with unit coefficients as described above):</p>
+<p><span class="math display">\[\mathcal{A}_\lambda^{(i)}(\mathbf{u}, \mathbf{v}) = \int_{\Omega_i} \mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{u}))\,\mathrm{tr}(\boldsymbol{\varepsilon}(\mathbf{v}))\, d\Omega, \quad i = 1, 2\]</span></p>
+<p><span class="math display">\[\mathcal{A}_\mu^{(i)}(\mathbf{u}, \mathbf{v}) = \int_{\Omega_i} 2\,\boldsymbol{\varepsilon}(\mathbf{u}):\boldsymbol{\varepsilon}(\mathbf{v})\, d\Omega, \quad i = 1, 2\]</span></p>
+<p>These integrals depend only on the geometry and mesh, not on <span class="math inline">\(E\)</span> or <span class="math inline">\(\nu\)</span>.</p>
+</section>
+<section id="affine-expansion" class="level3">
+<h3 class="anchored" data-anchor-id="affine-expansion">Affine Expansion</h3>
+<p>Substituting the region-wise Lamé parameters, the full bilinear form admits the following <strong><span class="math inline">\(Q = 4\)</span> term affine expansion</strong>:</p>
+<p><span class="math display">\[a(\mathbf{u}, \mathbf{v};\, E, \nu) = \underbrace{50\lambda(E,\nu)}_{\theta_1}\,\mathcal{A}_\lambda^{(1)} + \underbrace{50\mu(E,\nu)}_{\theta_2}\,\mathcal{A}_\mu^{(1)} + \underbrace{\lambda(E,\nu)}_{\theta_3}\,\mathcal{A}_\lambda^{(2)} + \underbrace{\mu(E,\nu)}_{\theta_4}\,\mathcal{A}_\mu^{(2)}\]</span></p>
+<p>In compact notation, using <span class="math inline">\(\boldsymbol{\mu} = (E, \nu)\)</span>:</p>
+<p><span class="math display">\[a(\mathbf{u}, \mathbf{v};\, \boldsymbol{\mu}) = \sum_{q=1}^{Q} \theta_q(\boldsymbol{\mu})\,\mathcal{A}_q(\mathbf{u}, \mathbf{v}), \qquad Q = 4\]</span></p>
+<p>The four parameter-dependent coefficient functions and their corresponding sub-forms are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Index <span class="math inline">\(q\)</span></th>
+<th>Coefficient <span class="math inline">\(\theta_q(E, \nu)\)</span></th>
+<th>Sub-form <span class="math inline">\(\mathcal{A}_q\)</span></th>
+<th style="text-align: center;">Subregion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td><span class="math inline">\(50\,\lambda(E,\nu)\)</span></td>
+<td><span class="math inline">\(\mathcal{A}_\lambda^{(1)}\)</span> (<span class="math inline">\(\lambda\)</span>-term)</td>
+<td style="text-align: center;"><span class="math inline">\(\Omega_1\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>properties()</code></td>
-<td style="text-align: left;">Map <span class="math inline">\((E,\nu,\text{region})\)</span> to <span class="math inline">\((\lambda,\mu)\)</span></td>
-<td style="text-align: left;">FOM and ROM coefficient evaluation</td>
+<td style="text-align: center;">2</td>
+<td><span class="math inline">\(50\,\mu(E,\nu)\)</span></td>
+<td><span class="math inline">\(\mathcal{A}_\mu^{(1)}\)</span> (<span class="math inline">\(\mu\)</span>-term)</td>
+<td style="text-align: center;"><span class="math inline">\(\Omega_1\)</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><code>parameters()</code></td>
-<td style="text-align: left;">Produce sampled <span class="math inline">\((E,\nu)\)</span> values, parameter ranges, and train/test masks</td>
-<td style="text-align: left;">Data generation</td>
+<td style="text-align: center;">3</td>
+<td><span class="math inline">\(\lambda(E,\nu)\)</span></td>
+<td><span class="math inline">\(\mathcal{A}_\lambda^{(2)}\)</span> (<span class="math inline">\(\lambda\)</span>-term)</td>
+<td style="text-align: center;"><span class="math inline">\(\Omega_2\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>fom_operators()</code></td>
-<td style="text-align: left;">Assemble and cache regional unit-coefficient affine stiffness blocks</td>
-<td style="text-align: left;">First FOM iteration (offline)</td>
+<td style="text-align: center;">4</td>
+<td><span class="math inline">\(\mu(E,\nu)\)</span></td>
+<td><span class="math inline">\(\mathcal{A}_\mu^{(2)}\)</span> (<span class="math inline">\(\mu\)</span>-term)</td>
+<td style="text-align: center;"><span class="math inline">\(\Omega_2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The linear form <span class="math inline">\(\ell(\mathbf{v})\)</span> does not depend on the parameters <span class="math inline">\((E, \nu)\)</span> and requires no affine decomposition.</p>
+<hr>
+</section>
+</section>
+<section id="finite-element-discretization" class="level2">
+<h2 class="anchored" data-anchor-id="finite-element-discretization">Finite Element Discretization</h2>
+<section id="element-type" class="level3">
+<h3 class="anchored" data-anchor-id="element-type">Element Type</h3>
+<p>The domain <span class="math inline">\(\Omega\)</span> is discretized with a structured mesh of <strong>trilinear hexahedral elements</strong> (Q1 elements). Each element has 8 nodes located at its corners. The isoparametric shape functions on the reference cube <span class="math inline">\(\hat{e} = [-1,1]^3\)</span> are:</p>
+<p><span class="math display">\[\hat{N}_I(\xi, \eta, \zeta) = \frac{1}{8}\left(1 + \xi_I\,\xi\right)\left(1 + \eta_I\,\eta\right)\left(1 + \zeta_I\,\zeta\right), \quad I = 1, \ldots, 8\]</span></p>
+<p>where <span class="math inline">\((\xi_I, \eta_I, \zeta_I) \in \{-1,+1\}^3\)</span> are the reference coordinates of the <span class="math inline">\(I\)</span>-th corner node.</p>
+<p>The displacement field within each element is approximated using a <strong>vector-valued</strong> basis — each nodal shape function multiplies each of the three displacement components independently:</p>
+<p><span class="math display">\[\mathbf{u}^h(\mathbf{x}) = \sum_{I=1}^{8} \hat{N}_I\!\left(\boldsymbol{\xi}(\mathbf{x})\right)\,\mathbf{u}_I, \qquad \mathbf{u}_I \in \mathbb{R}^3\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\xi}(\mathbf{x})\)</span> denotes the inverse isoparametric mapping from physical to reference coordinates.</p>
+<p>The symmetric gradient entering the bilinear forms is computed on each element as:</p>
+<p><span class="math display">\[\boldsymbol{\varepsilon}(\mathbf{u}^h)\big|_e = \frac{1}{2}\left(\nabla \mathbf{u}^h + (\nabla \mathbf{u}^h)^T\right)\big|_e\]</span></p>
+<p>using the Jacobian of the isoparametric mapping to transform reference-element derivatives to physical derivatives.</p>
+</section>
+<section id="mesh-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="mesh-parameters">Mesh Parameters</h3>
+<p>The mesh is generated with 8 divisions per unit length (refinement factor <code>factor = 8</code>), giving:</p>
+<p><span class="math display">\[n_x = 8 \times L_x = 80, \quad n_y = 8 \times L_y = 8, \quad n_z = 8 \times L_z = 8\]</span></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Block dimensions <span class="math inline">\((L_x \times L_y \times L_z)\)</span></td>
+<td><span class="math inline">\(10 \times 1 \times 1\)</span></td>
+</tr>
+<tr class="even">
+<td>Elements in <span class="math inline">\(x\)</span>-direction</td>
+<td>80</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><code>fom_rhs()</code></td>
-<td style="text-align: left;">Assemble and cache the Neumann load vector</td>
-<td style="text-align: left;">First FOM iteration (offline)</td>
+<td>Elements in <span class="math inline">\(y\)</span>-direction</td>
+<td>8</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>fom_solver()</code></td>
-<td style="text-align: left;">Combine affine blocks with Lamé coefficients and solve the full-order system</td>
-<td style="text-align: left;">Snapshot generation</td>
+<td>Elements in <span class="math inline">\(z\)</span>-direction</td>
+<td>8</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><code>reduced_operators()</code></td>
-<td style="text-align: left;">Project cached FOM blocks and RHS onto the POD basis; compute <span class="math inline">\(K^{r,m}_r\)</span>, <span class="math inline">\(\mathbf{d}^m_r\)</span>, <span class="math inline">\(\mathbf{f}^r\)</span></td>
-<td style="text-align: left;">First ROM iteration (offline projection)</td>
+<td>Total hexahedral elements</td>
+<td><span class="math inline">\(80 \times 8 \times 8 = 5{,}120\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>rom_solver()</code></td>
-<td style="text-align: left;">Linearly combine pre-projected ROM-scale blocks and solve the <span class="math inline">\(n\times n\)</span> reduced system</td>
-<td style="text-align: left;">Online ROM evaluation</td>
+<td>Nodes in <span class="math inline">\(x\)</span>-direction</td>
+<td>81</td>
+</tr>
+<tr class="odd">
+<td>Nodes in <span class="math inline">\(y\)</span>-direction</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>Nodes in <span class="math inline">\(z\)</span>-direction</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td>Total nodes</td>
+<td><span class="math inline">\(81 \times 9 \times 9 = 6{,}561\)</span></td>
+</tr>
+<tr class="even">
+<td>DOFs per node</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>Total degrees of freedom <span class="math inline">\(N\)</span></td>
+<td><span class="math inline">\(6{,}561 \times 3 = 19{,}683\)</span></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="best-practices" class="level2">
-<h2 class="anchored" data-anchor-id="best-practices">11. Best Practices</h2>
+<section id="discrete-system" class="level3">
+<h3 class="anchored" data-anchor-id="discrete-system">Discrete System</h3>
+<p>After FE assembly, the variational problem reduces to the parametric <strong>linear algebraic system</strong>:</p>
+<p><span class="math display">\[\mathbf{K}(\boldsymbol{\mu})\,\mathbf{u} = \mathbf{f}\]</span></p>
+<p>where:</p>
 <ul>
-<li>Keep the parameter order consistent as <span class="math inline">\((E,\nu)\)</span> in <code>params.py</code>, <code>assemble_kwargs()</code>, <code>fom_solver()</code>, and <code>rom_solver()</code></li>
-<li>Assemble affine blocks without parameter coefficients so they can be reused across all parameter evaluations</li>
-<li>Call <code>reduced_operators()</code> only once per ROM session; reuse the projected blocks for every online query</li>
-<li>Use <code>train_mask</code> and <code>test_mask</code> to avoid mixing training and validation snapshots</li>
-<li>Center the training snapshots before computing the POD basis; pass <code>LS_train_mean</code> as <code>train_ref</code> to the ROM simulation</li>
-<li>Check ROM error on held-out test samples before using the ROM for prediction</li>
-<li>Use VTK export to inspect displacement fields and local error patterns</li>
-<li>Treat the <code>hyper_rom_solver_deim</code>, <code>hyper_rom_solver_ecsw</code>, and <code>hyper_rom_solver_ecm</code> methods as placeholders unless they are implemented later</li>
+<li><span class="math inline">\(\mathbf{K}(\boldsymbol{\mu}) \in \mathbb{R}^{N \times N}\)</span> is the global sparse stiffness matrix,</li>
+<li><span class="math inline">\(\mathbf{f} \in \mathbb{R}^N\)</span> is the global load vector (assembled from the Neumann traction over <span class="math inline">\(\Gamma_N\)</span>),</li>
+<li><span class="math inline">\(\mathbf{u} \in \mathbb{R}^N\)</span> is the global displacement vector.</li>
 </ul>
-<p>This workflow and modular codebase provide a compact example of a regionwise affine ROM for a parametrized 3D linear elasticity problem in scikit-rom.</p>
+<p>The affine structure is preserved exactly at the discrete level:</p>
+<p><span class="math display">\[\mathbf{K}(\boldsymbol{\mu}) = \sum_{q=1}^{Q} \theta_q(\boldsymbol{\mu})\,\mathbf{K}_q, \qquad Q = 4\]</span></p>
+<p>where each <span class="math inline">\(\mathbf{K}_q \in \mathbb{R}^{N \times N}\)</span> is a sparse, symmetric, positive semi-definite matrix assembled over the corresponding subregion with unit Lamé coefficients, as described in the affine decomposition section.</p>
+<p>The load vector is:</p>
+<p><span class="math display">\[f_j = -0.01 \int_{\Gamma_N} \phi_j^{(2)}\, d\Gamma\]</span></p>
+<p>where <span class="math inline">\(\phi_j^{(2)}\)</span> denotes the <span class="math inline">\(y\)</span>-component of the <span class="math inline">\(j\)</span>-th vector shape function, integrated over the right-face facets.</p>
+</section>
+<section id="dirichlet-boundary-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="dirichlet-boundary-conditions">Dirichlet Boundary Conditions</h3>
+<p>The homogeneous Dirichlet condition <span class="math inline">\(\mathbf{u} = \mathbf{0}\)</span> on <span class="math inline">\(\Gamma_D\)</span> is enforced by <strong>static condensation</strong> (elimination). The DOF indices on <span class="math inline">\(\Gamma_D\)</span> are identified and the corresponding rows and columns are eliminated from the system. The condensed system involves only the free DOFs:</p>
+<p><span class="math display">\[\widetilde{\mathbf{K}}(\boldsymbol{\mu})\,\tilde{\mathbf{u}} = \tilde{\mathbf{f}}\]</span></p>
+<p>and is solved by a direct sparse solver. Since the Dirichlet value is zero (<span class="math inline">\(\mathbf{u}|_{\Gamma_D} = \mathbf{0}\)</span>), no lift correction is needed on the right-hand side.</p>
+<hr>
+</section>
+</section>
+<section id="parameter-space" class="level2">
+<h2 class="anchored" data-anchor-id="parameter-space">Parameter Space</h2>
+<p>The problem is parametrized by two material constants:</p>
+<p><span class="math display">\[\boldsymbol{\mu} = (E,\, \nu) \in \mathcal{P} = [2,\, 10] \times [0.2,\, 0.4]\]</span></p>
+<section id="sobol-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="sobol-sampling">Sobol Sampling</h3>
+<p>Parameter samples are drawn using a <strong>Sobol quasi-random sequence</strong>, which is a low-discrepancy sequence that provides superior space-filling coverage of <span class="math inline">\(\mathcal{P}\)</span> compared to random (Monte Carlo) sampling. The combined parameter array is arranged as training samples followed by testing samples, with boolean masks distinguishing the two sets:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Number of Samples</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Training set <span class="math inline">\(\mathcal{P}_\text{train}\)</span></td>
+<td>32</td>
+<td>Sobol sequence</td>
+</tr>
+<tr class="even">
+<td>Testing set <span class="math inline">\(\mathcal{P}_\text{test}\)</span></td>
+<td>32</td>
+<td>Sobol sequence</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td>64</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>The training set is used in the <strong>offline phase</strong> to construct the reduced basis. The testing set is used in the <strong>online phase</strong> to evaluate ROM accuracy at unseen parameters.</p>
+<hr>
+</section>
+</section>
+<section id="full-order-model-fom" class="level2">
+<h2 class="anchored" data-anchor-id="full-order-model-fom">Full Order Model (FOM)</h2>
+<p>The FOM solve for a given parameter <span class="math inline">\(\boldsymbol{\mu} = (E, \nu)\)</span> proceeds as follows.</p>
+<section id="step-1-assemble-and-cache-affine-stiffness-blocks-offline-once" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-assemble-and-cache-affine-stiffness-blocks-offline-once">Step 1 — Assemble and Cache Affine Stiffness Blocks (Offline, Once)</h3>
+<p>At the first iteration (<code>cur_itr == 0</code>), load the domain data (mesh, basis, DOF indices, region bases), then assemble the four parameter-independent stiffness blocks over their respective region-local bases using unit Lamé coefficients. These blocks are stored in a nested dictionary <code>K_list[region][material]</code> and <strong>reused for all subsequent parameter queries</strong> without re-assembly:</p>
+<p><span class="math display">\[\mathbf{K}_\lambda^{(i)} = \mathrm{asm}\!\left(\mathcal{A}_\lambda^{(i)},\; \mathcal{B}^{(i)}\right), \qquad \mathbf{K}_\mu^{(i)} = \mathrm{asm}\!\left(\mathcal{A}_\mu^{(i)},\; \mathcal{B}^{(i)}\right), \qquad i = 1, 2\]</span></p>
+</section>
+<section id="step-2-assemble-and-cache-load-vector-offline-once" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-assemble-and-cache-load-vector-offline-once">Step 2 — Assemble and Cache Load Vector (Offline, Once)</h3>
+<p>Assemble the Neumann load vector by integrating the traction over the right-face facet basis:</p>
+<p><span class="math display">\[f_j = \int_{\Gamma_N} \mathbf{t} \cdot \boldsymbol{\phi}_j\, d\Gamma = -0.01 \int_{\Gamma_N} \phi_j^{(2)}\, d\Gamma\]</span></p>
+<p>This vector is also cached after the first assembly.</p>
+</section>
+<section id="step-3-combine-stiffness-matrix-online-per-query" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-combine-stiffness-matrix-online-per-query">Step 3 — Combine Stiffness Matrix (Online, Per Query)</h3>
+<p>For each new <span class="math inline">\((E, \nu)\)</span>, compute the Lamé parameters and scale the cached unit blocks:</p>
+<p><span class="math display">\[\mathbf{K}(E,\nu) = 50\lambda\,\mathbf{K}_\lambda^{(1)} + 50\mu\,\mathbf{K}_\mu^{(1)} + \lambda\,\mathbf{K}_\lambda^{(2)} + \mu\,\mathbf{K}_\mu^{(2)}\]</span></p>
+</section>
+<section id="step-4-apply-boundary-conditions-and-solve" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-apply-boundary-conditions-and-solve">Step 4 — Apply Boundary Conditions and Solve</h3>
+<p>Initialize <span class="math inline">\(\mathbf{u} = \mathbf{0}\)</span>, set <span class="math inline">\(u[\Gamma_D] = 0\)</span>, condense out the <span class="math inline">\(\Gamma_D\)</span> DOFs, and solve the condensed system by a direct sparse solver. The full displacement vector <span class="math inline">\(\mathbf{u}^h \in \mathbb{R}^N\)</span> is returned as the FOM solution.</p>
+<hr>
+</section>
+</section>
+<section id="reduced-order-model-rom" class="level2">
+<h2 class="anchored" data-anchor-id="reduced-order-model-rom">Reduced Order Model (ROM)</h2>
+<section id="offline-phase-snapshot-collection-and-pod-basis-construction" class="level3">
+<h3 class="anchored" data-anchor-id="offline-phase-snapshot-collection-and-pod-basis-construction">Offline Phase: Snapshot Collection and POD Basis Construction</h3>
+<section id="step-1-snapshot-collection" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-snapshot-collection">Step 1 — Snapshot Collection</h4>
+<p>Solve the FOM for every training parameter sample:</p>
+<p><span class="math display">\[\mathcal{S} = \left\{\mathbf{u}(\boldsymbol{\mu}^{(i)})\right\}_{i=1}^{N_\text{train}}, \qquad N_\text{train} = 32\]</span></p>
+<p>Each snapshot <span class="math inline">\(\mathbf{u}(\boldsymbol{\mu}^{(i)}) \in \mathbb{R}^N\)</span> is the full displacement field at training parameter <span class="math inline">\(\boldsymbol{\mu}^{(i)} = (E^{(i)}, \nu^{(i)})\)</span>.</p>
+</section>
+<section id="step-2-compute-mean-snapshot-reference-mean-shift-vector" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-compute-mean-snapshot-reference-mean-shift-vector">Step 2 — Compute Mean Snapshot (Reference / Mean-Shift Vector)</h4>
+<p><span class="math display">\[\mathbf{T}_k = \frac{1}{N_\text{train}} \sum_{i=1}^{N_\text{train}} \mathbf{u}(\boldsymbol{\mu}^{(i)}) \in \mathbb{R}^N\]</span></p>
+<p>This vector serves as the <strong>mean-shift</strong> (training reference solution). It is stored and used in both the offline projection step and the online right-hand side correction.</p>
+</section>
+<section id="step-3-form-mean-centered-snapshot-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-form-mean-centered-snapshot-matrix">Step 3 — Form Mean-Centered Snapshot Matrix</h4>
+<p><span class="math display">\[\mathbf{S} = \left[\mathbf{u}(\boldsymbol{\mu}^{(1)}) - \mathbf{T}_k \;\Big|\; \mathbf{u}(\boldsymbol{\mu}^{(2)}) - \mathbf{T}_k \;\Big|\; \cdots \;\Big|\; \mathbf{u}(\boldsymbol{\mu}^{(N_\text{train})}) - \mathbf{T}_k\right] \in \mathbb{R}^{N \times N_\text{train}}\]</span></p>
+</section>
+<section id="step-4-singular-value-decomposition-pod" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-singular-value-decomposition-pod">Step 4 — Singular Value Decomposition (POD)</h4>
+<p>Compute the thin SVD of the snapshot matrix:</p>
+<p><span class="math display">\[\mathbf{S} = \mathbf{V}_\text{full}\,\boldsymbol{\Sigma}\,\mathbf{W}^T\]</span></p>
+<p>where <span class="math inline">\(\mathbf{V}_\text{full} \in \mathbb{R}^{N \times N_\text{train}}\)</span> contains the left singular vectors (POD modes), <span class="math inline">\(\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1, \ldots, \sigma_{N_\text{train}})\)</span> with <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq \cdots \geq 0\)</span>.</p>
+<p>Retain the leading <span class="math inline">\(n \ll N\)</span> modes to form the <strong>reduced basis</strong> matrix:</p>
+<p><span class="math display">\[\mathbf{V} = [\mathbf{v}_1\;|\;\mathbf{v}_2\;|\;\cdots\;|\;\mathbf{v}_n] \in \mathbb{R}^{N \times n}\]</span></p>
+<p>The POD modes are orthonormal: <span class="math inline">\(\mathbf{V}^T \mathbf{V} = \mathbf{I}_n\)</span>. The fraction of energy (variance) retained by the first <span class="math inline">\(n\)</span> modes is:</p>
+<p><span class="math display">\[\eta_n = \frac{\displaystyle\sum_{i=1}^{n} \sigma_i^2}{\displaystyle\sum_{i=1}^{N_\text{train}} \sigma_i^2}\]</span></p>
+<p>A standard criterion is to choose <span class="math inline">\(n\)</span> such that <span class="math inline">\(\eta_n \geq 1 - \varepsilon^2\)</span> for a prescribed tolerance <span class="math inline">\(\varepsilon\)</span>.</p>
+</section>
+<section id="step-5-convert-stiffness-blocks-to-sparse-csr-format" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-convert-stiffness-blocks-to-sparse-csr-format">Step 5 — Convert Stiffness Blocks to Sparse CSR Format</h4>
+<p>Before performing the matrix projections, each cached stiffness block is converted to <strong>Compressed Sparse Row (CSR)</strong> format:</p>
+<p><span class="math display">\[\mathbf{K}_q^\text{CSR} = \mathrm{csr}(\mathbf{K}_q), \qquad q = 1, \ldots, Q\]</span></p>
+<p>CSR format enables efficient sparse matrix–dense matrix products of the form <span class="math inline">\(\mathbf{V}^T \mathbf{K}_q^\text{CSR} \mathbf{V}\)</span>, which would otherwise be prohibitively expensive with unstructured sparse formats.</p>
+</section>
+<section id="step-6-project-fom-operators-onto-reduced-basis" class="level4">
+<h4 class="anchored" data-anchor-id="step-6-project-fom-operators-onto-reduced-basis">Step 6 — Project FOM Operators onto Reduced Basis</h4>
+<p>Precompute and store the following reduced-dimension quantities:</p>
+<p><strong>Projected stiffness blocks</strong> (<span class="math inline">\(n \times n\)</span> dense matrices):</p>
+<p><span class="math display">\[\mathbf{K}_{r,q} = \mathbf{V}^T \mathbf{K}_q\, \mathbf{V} \in \mathbb{R}^{n \times n}, \qquad q = 1, \ldots, Q\]</span></p>
+<p><strong>Projected mean-shift correction vectors</strong> (<span class="math inline">\(n\)</span>-vectors):</p>
+<p><span class="math display">\[\mathbf{c}_q = \mathbf{V}^T \mathbf{K}_q\, \mathbf{T}_k \in \mathbb{R}^n, \qquad q = 1, \ldots, Q\]</span></p>
+<p><strong>Projected load vector</strong> (<span class="math inline">\(n\)</span>-vector):</p>
+<p><span class="math display">\[\mathbf{f}_r = \mathbf{V}^T \mathbf{f} \in \mathbb{R}^n\]</span></p>
+<p>All offline projections have cost <span class="math inline">\(O(N \cdot n)\)</span> per block and are computed once during the offline stage (also triggered at <code>cur_itr == 0</code>).</p>
+<hr>
+</section>
+</section>
+<section id="online-phase-rom-solve" class="level3">
+<h3 class="anchored" data-anchor-id="online-phase-rom-solve">Online Phase: ROM Solve</h3>
+<p>For a new query parameter <span class="math inline">\(\boldsymbol{\mu} = (E, \nu) \in \mathcal{P}\)</span>:</p>
+<section id="step-1-compute-parameter-dependent-coefficients" class="level4">
+<h4 class="anchored" data-anchor-id="step-1-compute-parameter-dependent-coefficients">Step 1 — Compute Parameter-Dependent Coefficients</h4>
+<p>Evaluate the four affine coefficients using the Lamé formulas:</p>
+<p><span class="math display">\[\theta_1 = 50\lambda(E,\nu), \quad \theta_2 = 50\mu(E,\nu), \quad \theta_3 = \lambda(E,\nu), \quad \theta_4 = \mu(E,\nu)\]</span></p>
+</section>
+<section id="step-2-assemble-reduced-stiffness-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="step-2-assemble-reduced-stiffness-matrix">Step 2 — Assemble Reduced Stiffness Matrix</h4>
+<p><span class="math display">\[\mathbf{K}_r(\boldsymbol{\mu}) = \sum_{q=1}^{Q} \theta_q(\boldsymbol{\mu})\,\mathbf{K}_{r,q} \in \mathbb{R}^{n \times n}\]</span></p>
+</section>
+<section id="step-3-assemble-reduced-right-hand-side-with-mean-shift-correction" class="level4">
+<h4 class="anchored" data-anchor-id="step-3-assemble-reduced-right-hand-side-with-mean-shift-correction">Step 3 — Assemble Reduced Right-Hand Side with Mean-Shift Correction</h4>
+<p><span class="math display">\[\mathbf{g}(\boldsymbol{\mu}) = \mathbf{f}_r - \sum_{q=1}^{Q} \theta_q(\boldsymbol{\mu})\,\mathbf{c}_q \in \mathbb{R}^n\]</span></p>
+<p>The subtracted term <span class="math inline">\(\sum_q \theta_q \mathbf{c}_q = \mathbf{V}^T \mathbf{K}(\boldsymbol{\mu})\,\mathbf{T}_k\)</span> is the <strong>mean-shift correction</strong>: it accounts for the contribution of the mean snapshot <span class="math inline">\(\mathbf{T}_k\)</span> to the residual after substituting the ROM ansatz.</p>
+</section>
+<section id="step-4-solve-the-reduced-system" class="level4">
+<h4 class="anchored" data-anchor-id="step-4-solve-the-reduced-system">Step 4 — Solve the Reduced System</h4>
+<p><span class="math display">\[\mathbf{K}_r(\boldsymbol{\mu})\,\mathbf{u}_r = \mathbf{g}(\boldsymbol{\mu})\]</span></p>
+<p>This is a dense <span class="math inline">\(n \times n\)</span> linear system solved by LU factorization at cost <span class="math inline">\(O(n^3)\)</span>. The result <span class="math inline">\(\mathbf{u}_r \in \mathbb{R}^n\)</span> contains the <strong>reduced coordinates</strong> of the solution in the POD basis.</p>
+</section>
+<section id="step-5-reconstruct-full-order-displacement-framework-level" class="level4">
+<h4 class="anchored" data-anchor-id="step-5-reconstruct-full-order-displacement-framework-level">Step 5 — Reconstruct Full-Order Displacement (Framework Level)</h4>
+<p>The <code>rom_solver</code> method returns the reduced coordinates <span class="math inline">\(\mathbf{u}_r \in \mathbb{R}^n\)</span>. The full-order displacement reconstruction is performed externally by the calling framework:</p>
+<p><span class="math display">\[\mathbf{u}_\text{ROM}(\boldsymbol{\mu}) = \mathbf{V}\,\mathbf{u}_r + \mathbf{T}_k \in \mathbb{R}^N\]</span></p>
+<p>This expands the reduced solution back into the full <span class="math inline">\(N\)</span>-dimensional space and adds the mean snapshot to account for the mean-shift. The separation between solving (inside <code>rom_solver</code>) and reconstructing (outside) reflects the library’s design: the framework handles post-processing uniformly for all problem types.</p>
+<hr>
+</section>
+</section>
+<section id="derivation-of-the-mean-shift-galerkin-projection" class="level3">
+<h3 class="anchored" data-anchor-id="derivation-of-the-mean-shift-galerkin-projection">Derivation of the Mean-Shift Galerkin Projection</h3>
+<p>The ROM ansatz introduces the approximation:</p>
+<p><span class="math display">\[\mathbf{u}(\boldsymbol{\mu}) \approx \mathbf{V}\,\mathbf{u}_r(\boldsymbol{\mu}) + \mathbf{T}_k\]</span></p>
+<p>Substituting into the FOM system <span class="math inline">\(\mathbf{K}(\boldsymbol{\mu})\,\mathbf{u} = \mathbf{f}\)</span>:</p>
+<p><span class="math display">\[\mathbf{K}(\boldsymbol{\mu})\left(\mathbf{V}\,\mathbf{u}_r + \mathbf{T}_k\right) = \mathbf{f}\]</span></p>
+<p><span class="math display">\[\mathbf{K}(\boldsymbol{\mu})\,\mathbf{V}\,\mathbf{u}_r = \mathbf{f} - \mathbf{K}(\boldsymbol{\mu})\,\mathbf{T}_k\]</span></p>
+<p>Applying the <strong>Galerkin projection</strong> by left-multiplying with <span class="math inline">\(\mathbf{V}^T\)</span>:</p>
+<p><span class="math display">\[\underbrace{\mathbf{V}^T \mathbf{K}(\boldsymbol{\mu})\,\mathbf{V}}_{\mathbf{K}_r(\boldsymbol{\mu})}\,\mathbf{u}_r = \underbrace{\mathbf{V}^T \mathbf{f}}_{\mathbf{f}_r} - \underbrace{\mathbf{V}^T \mathbf{K}(\boldsymbol{\mu})\,\mathbf{T}_k}_{\sum_q \theta_q\,\mathbf{c}_q}\]</span></p>
+<p>This is exactly the system <span class="math inline">\(\mathbf{K}_r(\boldsymbol{\mu})\,\mathbf{u}_r = \mathbf{g}(\boldsymbol{\mu})\)</span> stated in the online phase. The affine structure is preserved throughout: since <span class="math inline">\(\mathbf{K}(\boldsymbol{\mu}) = \sum_q \theta_q \mathbf{K}_q\)</span>, each projected quantity inherits the same affine expansion:</p>
+<p><span class="math display">\[\mathbf{K}_r(\boldsymbol{\mu}) = \sum_{q=1}^{Q} \theta_q(\boldsymbol{\mu})\,\mathbf{K}_{r,q}, \qquad \mathbf{V}^T \mathbf{K}(\boldsymbol{\mu})\,\mathbf{T}_k = \sum_{q=1}^{Q} \theta_q(\boldsymbol{\mu})\,\mathbf{c}_q\]</span></p>
+<p>All terms on the right-hand side are precomputed offline, so the online cost is <span class="math inline">\(O(Qn^2)\)</span> for assembly and <span class="math inline">\(O(n^3)\)</span> for the solve — fully independent of the large FOM dimension <span class="math inline">\(N\)</span>.</p>
+<hr>
+</section>
+</section>
+<section id="planned-hyper-reduction-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="planned-hyper-reduction-extensions">Planned Hyper-Reduction Extensions</h2>
+<p>Three hyper-reduction methods are defined as placeholder stubs in the problem class, with full implementations planned for future development:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Full Name</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DEIM</td>
+<td>Discrete Empirical Interpolation Method</td>
+<td>Efficient approximation of non-affine or nonlinear terms by interpolation at selected indices</td>
+</tr>
+<tr class="even">
+<td>ECSW</td>
+<td>Energy-Conserving Sampling and Weighting</td>
+<td>Reduces the cost of internal force assembly while preserving the energy structure</td>
+</tr>
+<tr class="odd">
+<td>ECM</td>
+<td>Empirical Cubature Method</td>
+<td>Constructs a sparse cubature rule to replace full numerical integration in the ROM</td>
+</tr>
+</tbody>
+</table>
+<p>These methods target the <strong>hyper-reduction</strong> stage: further reducing the online computational cost from <span class="math inline">\(O(Nn)\)</span> (reconstruction) to <span class="math inline">\(O(pn)\)</span> where <span class="math inline">\(p \ll N\)</span> is the number of selected sample points or elements. The current implementation covers only the standard POD-Galerkin ROM without hyper-reduction.</p>
+<hr>
+</section>
+<section id="computational-cost-summary" class="level2">
+<h2 class="anchored" data-anchor-id="computational-cost-summary">Computational Cost Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Phase</th>
+<th>FOM</th>
+<th>ROM Offline</th>
+<th>ROM Online</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Domain &amp; mesh setup</td>
+<td>Once</td>
+<td>Shared</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Block assembly (<span class="math inline">\(\mathbf{K}_q\)</span>, <span class="math inline">\(\mathbf{f}\)</span>)</td>
+<td>Once, cached</td>
+<td>Shared</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>FOM solve per parameter</td>
+<td><span class="math inline">\(O(N^{1.5})\)</span> sparse direct</td>
+<td><span class="math inline">\(N_\text{train}\)</span> times</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>SVD / POD basis</td>
+<td>—</td>
+<td><span class="math inline">\(O(N \cdot N_\text{train}^2)\)</span></td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Operator projection</td>
+<td>—</td>
+<td><span class="math inline">\(O(Q \cdot N \cdot n)\)</span></td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Reduced system assembly</td>
+<td>—</td>
+<td>—</td>
+<td><span class="math inline">\(O(Qn^2)\)</span></td>
+</tr>
+<tr class="odd">
+<td>Reduced solve</td>
+<td>—</td>
+<td>—</td>
+<td><span class="math inline">\(O(n^3)\)</span></td>
+</tr>
+<tr class="even">
+<td>Reconstruction</td>
+<td>—</td>
+<td>—</td>
+<td><span class="math inline">\(O(Nn)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Since <span class="math inline">\(n \ll N\)</span> and <span class="math inline">\(Q = 4\)</span>, each online ROM evaluation is several orders of magnitude faster than a FOM solve while providing an accurate approximation of the full displacement field.</p>
+<hr>
+</section>
+<section id="summary-of-the-full-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-the-full-workflow">Summary of the Full Workflow</h2>
+<p><strong>Offline stage</strong> (performed once):</p>
+<ol type="1">
+<li>Build the structured hexahedral mesh: <span class="math inline">\(80 \times 8 \times 8\)</span> elements on <span class="math inline">\(\Omega = [0,10] \times [0,1] \times [0,1]\)</span>.</li>
+<li>Partition elements into <span class="math inline">\(\Omega_1\)</span> (<span class="math inline">\(x \leq 5\)</span>) and <span class="math inline">\(\Omega_2\)</span> (<span class="math inline">\(x &gt; 5\)</span>) using <code>element2location</code>; construct region-local FE bases via <code>compute_basis_regions</code>.</li>
+<li>Assemble four parameter-independent unit-coefficient stiffness blocks <span class="math inline">\(\mathbf{K}_q\)</span> over the region bases, and the load vector <span class="math inline">\(\mathbf{f}\)</span> over the right-face facet basis. Cache all blocks.</li>
+<li>Solve the FOM for <span class="math inline">\(N_\text{train} = 32\)</span> Sobol-sampled training parameters <span class="math inline">\((E^{(i)}, \nu^{(i)}) \in [2,10] \times [0.2,0.4]\)</span>.</li>
+<li>Compute the mean snapshot <span class="math inline">\(\mathbf{T}_k\)</span> and the mean-centered snapshot matrix <span class="math inline">\(\mathbf{S}\)</span>.</li>
+<li>Compute the thin SVD of <span class="math inline">\(\mathbf{S}\)</span>; select <span class="math inline">\(n\)</span> POD modes as columns of <span class="math inline">\(\mathbf{V}\)</span> based on the energy criterion <span class="math inline">\(\eta_n \geq 1 - \varepsilon^2\)</span>.</li>
+<li>Convert stiffness blocks to CSR format; precompute and store <span class="math inline">\(\{\mathbf{K}_{r,q}\}\)</span>, <span class="math inline">\(\{\mathbf{c}_q\}\)</span>, and <span class="math inline">\(\mathbf{f}_r\)</span>.</li>
+</ol>
+<p><strong>Online stage</strong> (fast evaluation at any new <span class="math inline">\(\boldsymbol{\mu}\)</span>):</p>
+<ol type="1">
+<li>Compute <span class="math inline">\(\theta_q(E,\nu)\)</span> for <span class="math inline">\(q = 1,\ldots,4\)</span>.</li>
+<li>Assemble <span class="math inline">\(\mathbf{K}_r(\boldsymbol{\mu}) = \sum_q \theta_q \mathbf{K}_{r,q}\)</span> and <span class="math inline">\(\mathbf{g}(\boldsymbol{\mu}) = \mathbf{f}_r - \sum_q \theta_q \mathbf{c}_q\)</span>.</li>
+<li>Solve the <span class="math inline">\(n \times n\)</span> system <span class="math inline">\(\mathbf{K}_r \mathbf{u}_r = \mathbf{g}\)</span> by LU factorization.</li>
+<li>Reconstruct the full displacement: <span class="math inline">\(\mathbf{u}_\text{ROM} = \mathbf{V}\mathbf{u}_r + \mathbf{T}_k \in \mathbb{R}^N\)</span>.</li>
+</ol>
 
 
 </section>
