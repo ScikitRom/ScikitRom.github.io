@@ -151,8 +151,8 @@ quartodoc:
 
     - title: "Problem Classes"
       contents:
-        - problem_classes.static.master_class
-        - problem_classes.static.master_class_parallel
+        - problem_classes.masterclass.qmd
+        - problem_classes.masterclass_parallel.qmd
     
     - title: "ROM"
       contents:
