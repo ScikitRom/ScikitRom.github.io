@@ -48,7 +48,6 @@ website:
             - reference/rom.bilinear_form_rom.qmd
             - reference/rom.deim.bilinear_form_hyperrom_deim.qmd
             - reference/rom.deim.deim.qmd
-            - reference/rom.deim.deim_o.qmd
             - reference/rom.deim.linear_form_hyperrom_deim.qmd
             - reference/rom.ecm.bilinear_form_hyperrom_ecm.qmd
             - reference/rom.ecm.empirical_cubature_method.qmd

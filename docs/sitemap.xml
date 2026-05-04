@@ -61,6 +61,18 @@
     <lastmod>2026-05-04T04:12:48.088Z</lastmod>
   </url>
   <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecm.linear_form_hyperrom_ecm.html</loc>
+    <lastmod>2026-05-04T04:12:47.977Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecm.empirical_cubature_method.html</loc>
+    <lastmod>2026-05-04T10:34:06.310Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.deim.linear_form_hyperrom_deim.html</loc>
+    <lastmod>2026-05-04T12:22:29.991Z</lastmod>
+  </url>
+  <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.deim.html</loc>
     <lastmod>2026-05-04T12:17:06.700Z</lastmod>
   </url>
@@ -69,36 +81,68 @@
     <lastmod>2026-05-04T12:13:10.860Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/reference/problem_classes.static.master_class.html</loc>
-    <lastmod>2026-05-03T20:24:04.683Z</lastmod>
+    <loc>https://scikitrom.github.io/reference/problem_classes.masterclass.html</loc>
+    <lastmod>2026-05-04T11:38:41.053Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/fom.fem_utils.html</loc>
     <lastmod>2026-05-04T10:04:01.131Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/problem_structure.html</loc>
-    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
+    <loc>https://scikitrom.github.io/P9.html</loc>
+    <lastmod>2026-04-29T12:52:51.289Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/nonlinear_power_law.html</loc>
-    <lastmod>2025-07-30T15:43:46.533Z</lastmod>
+    <loc>https://scikitrom.github.io/P8.html</loc>
+    <lastmod>2026-04-29T17:33:52.503Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/linear bending.html</loc>
-    <lastmod>2026-02-09T14:31:53.075Z</lastmod>
+    <loc>https://scikitrom.github.io/P6.html</loc>
+    <lastmod>2026-04-29T14:23:41.637Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P4.html</loc>
+    <lastmod>2026-04-29T16:52:04.273Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P3.html</loc>
+    <lastmod>2026-04-29T17:35:12.251Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P11.html</loc>
+    <lastmod>2026-04-29T13:10:11.641Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P1.html</loc>
+    <lastmod>2026-04-29T10:59:53.860Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/index.html</loc>
     <lastmod>2026-04-27T10:14:36.069Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/linear star.html</loc>
-    <lastmod>2025-07-30T16:34:12.427Z</lastmod>
+    <loc>https://scikitrom.github.io/P10.html</loc>
+    <lastmod>2026-04-29T17:11:55.405Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/non_linear.html</loc>
-    <lastmod>2025-07-30T15:43:46.515Z</lastmod>
+    <loc>https://scikitrom.github.io/P2.html</loc>
+    <lastmod>2026-04-29T11:05:56.732Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P3_tutorial.html</loc>
+    <lastmod>2026-04-30T19:36:29.113Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P5.html</loc>
+    <lastmod>2026-04-29T17:13:16.722Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P7.html</loc>
+    <lastmod>2026-04-29T12:36:41.804Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/P8_tutorial.html</loc>
+    <lastmod>2026-04-29T17:37:40.367Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/cli.html</loc>
@@ -109,16 +153,28 @@
     <lastmod>2026-05-04T04:12:47.509Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/reference/problem_classes.static.master_class_parallel.html</loc>
-    <lastmod>2026-05-03T20:24:04.683Z</lastmod>
+    <loc>https://scikitrom.github.io/reference/problem_classes.masterclass_parallel.html</loc>
+    <lastmod>2026-05-04T10:10:09.784Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.bilinear_form_hyperrom_deim.html</loc>
     <lastmod>2026-05-04T12:15:00.009Z</lastmod>
   </url>
   <url>
-    <loc>https://scikitrom.github.io/reference/rom.deim.linear_form_hyperrom_deim.html</loc>
-    <lastmod>2026-05-04T12:22:29.991Z</lastmod>
+    <loc>https://scikitrom.github.io/reference/rom.deim.deim_o.html</loc>
+    <lastmod>2026-05-04T12:16:13.022Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecm.bilinear_form_hyperrom_ecm.html</loc>
+    <lastmod>2026-05-04T10:29:47.191Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecm.helpers.html</loc>
+    <lastmod>2026-05-04T10:36:38.541Z</lastmod>
+  </url>
+  <url>
+    <loc>https://scikitrom.github.io/reference/rom.ecm.train_ecm.html</loc>
+    <lastmod>2026-05-04T04:12:48.040Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecsw.custom_nnls.html</loc>
@@ -175,89 +231,5 @@
   <url>
     <loc>https://scikitrom.github.io/Test.html</loc>
     <lastmod>2026-02-09T14:32:03.713Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P9.html</loc>
-    <lastmod>2026-04-29T12:52:51.289Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P8.html</loc>
-    <lastmod>2026-04-29T17:33:52.503Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P6.html</loc>
-    <lastmod>2026-04-29T14:23:41.637Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P4.html</loc>
-    <lastmod>2026-04-29T16:52:04.273Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P3.html</loc>
-    <lastmod>2026-04-29T17:35:12.251Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P11.html</loc>
-    <lastmod>2026-04-29T13:10:11.641Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P1.html</loc>
-    <lastmod>2026-04-29T10:59:53.860Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P10.html</loc>
-    <lastmod>2026-04-29T17:11:55.405Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P2.html</loc>
-    <lastmod>2026-04-29T11:05:56.732Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P3_tutorial.html</loc>
-    <lastmod>2026-04-30T19:36:29.113Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P5.html</loc>
-    <lastmod>2026-04-29T17:13:16.722Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P7.html</loc>
-    <lastmod>2026-04-29T12:36:41.804Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/P8_tutorial.html</loc>
-    <lastmod>2026-04-29T17:37:40.367Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/rom.ecm.linear_form_hyperrom_ecm.html</loc>
-    <lastmod>2026-05-04T04:12:47.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/rom.ecm.empirical_cubature_method.html</loc>
-    <lastmod>2026-05-04T10:34:06.310Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/problem_classes.masterclass.html</loc>
-    <lastmod>2026-05-04T11:38:41.053Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/problem_classes.masterclass_parallel.html</loc>
-    <lastmod>2026-05-04T10:10:09.784Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/rom.deim.deim_o.html</loc>
-    <lastmod>2026-05-04T12:16:13.022Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/rom.ecm.bilinear_form_hyperrom_ecm.html</loc>
-    <lastmod>2026-05-04T10:29:47.191Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/rom.ecm.helpers.html</loc>
-    <lastmod>2026-05-04T10:36:38.541Z</lastmod>
-  </url>
-  <url>
-    <loc>https://scikitrom.github.io/reference/rom.ecm.train_ecm.html</loc>
-    <lastmod>2026-05-04T04:12:48.040Z</lastmod>
   </url>
 </urlset>

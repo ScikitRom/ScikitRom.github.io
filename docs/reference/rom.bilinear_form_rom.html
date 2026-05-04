@@ -243,12 +243,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.deim.deim_o.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">rom.deim.deim_o</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
   </div>
@@ -629,9 +623,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>rom.bilinear_form_rom</code></p>
 <p><strong>Purpose:</strong><br>
 This module helps turn <em>full-size</em> element stiffness matrices into <em>reduced</em> (ROM) versions, handling all the index mapping and memory tricks so you get efficient reduced-order stiffness matrices, even for big problems.</p>
-<p><strong>Features:</strong><br>
-- <code>BilinearFormROM</code>: Class for projecting and assembling reduced matrices - Groups elements by how they hit Dirichlet boundaries (for efficient handling) - Builds the global reduced stiffness matrix from reduced element contributions—optionally in chunks for better memory use</p>
-<p>The <code>rom</code> folder also includes: - Classes for handling reduced assembly and projection (both bilinear and linear forms) - Helper utilities for Dirichlet BCs in ROMs - Tricks for chunked and group-wise matrix assembly (so huge problems fit in memory) - Index/dof mapping tools between full and reduced problems</p>
+<p><strong>Features:</strong></p>
+<ul>
+<li><code>BilinearFormROM</code>: Class for projecting and assembling reduced matrices</li>
+<li>Groups elements by how they hit Dirichlet boundaries (for efficient handling)</li>
+<li>Builds the global reduced stiffness matrix from reduced element contributions—optionally in chunks for better memory use</li>
+</ul>
+<p>The <code>rom</code> folder also includes:</p>
+<ul>
+<li>Classes for handling reduced assembly and projection (both bilinear and linear forms)</li>
+<li>Helper utilities for Dirichlet BCs in ROMs</li>
+<li>Tricks for chunked and group-wise matrix assembly (so huge problems fit in memory)</li>
+<li>Index/dof mapping tools between full and reduced problems</li>
+</ul>
 <p><strong>[Author: Suparno Bhattacharyya]</strong></p>
 <hr>
 <section id="classes" class="level2">
@@ -947,7 +951,12 @@ For a given (full) bilinear form, returns the stiffness matrix for <em>each elem
 </tbody>
 </table>
 <hr>
-<p><strong>In Summary:</strong> - Use <code>BilinearFormROM</code> in your ROM code to efficiently build reduced stiffness matrices, even for huge models with Dirichlet BCs. - Takes care of all index mapping, boundary condition issues, and can avoid big memory spikes using grouping/chunking. - Assembly is super-efficient, and works directly with your reduced bases.</p>
+<p><strong>In Summary:</strong></p>
+<ul>
+<li>Use <code>BilinearFormROM</code> in your ROM code to efficiently build reduced stiffness matrices, even for huge models with Dirichlet BCs.</li>
+<li>Takes care of all index mapping, boundary condition issues, and can avoid big memory spikes using grouping/chunking.</li>
+<li>Assembly is super-efficient, and works directly with your reduced bases.</li>
+</ul>
 
 
 </section>
