@@ -201,11 +201,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
- <span class="menu-text">reference/problem_classes.master_class.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../reference/problem_classes.masterclass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.masterclass</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">reference/problem_classes.master_class_parallel.qmd</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../reference/problem_classes.masterclass_parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.masterclass_parallel</span></a>
+  </div>
+</li>
       </ul>
   </li>
           <li class="sidebar-item sidebar-item-section">
@@ -602,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.ecm.bilinear_form_hyperrom_ecm" id="toc-skrom.rom.ecm.bilinear_form_hyperrom_ecm" class="nav-link active" data-scroll-target="#skrom.rom.ecm.bilinear_form_hyperrom_ecm">rom.ecm.bilinear_form_hyperrom_ecm</a>
+  <li><a href="#rom.ecm.bilinear_form_hyperrom_ecm" id="toc-rom.ecm.bilinear_form_hyperrom_ecm" class="nav-link active" data-scroll-target="#rom.ecm.bilinear_form_hyperrom_ecm">rom.ecm.bilinear_form_hyperrom_ecm</a>
   <ul class="collapse">
   <li><a href="#assumption" id="toc-assumption" class="nav-link" data-scroll-target="#assumption">Assumption</a></li>
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
@@ -619,21 +625,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.ecm.bilinear_form_hyperrom_ecm" class="level1">
+<section id="rom.ecm.bilinear_form_hyperrom_ecm" class="level1">
 <h1>rom.ecm.bilinear_form_hyperrom_ecm</h1>
 <p><code>rom.ecm.bilinear_form_hyperrom_ecm</code></p>
-<p>ECM-based hyperreduction for finite element bilinear forms.</p>
-<p>This module in a way mirrors the ECSW implementation already present in the repository, but promotes the weights from the element level to the element–Gauss-point level. The assembly path stays the same at a high level:</p>
-<ol type="1">
-<li>restrict to active elements,</li>
-<li>cluster elements by the number of free local DOFs,</li>
-<li>extract local contributions,</li>
-<li>project onto the reduced basis, and</li>
-<li>accumulate the reduced operator.</li>
-</ol>
-<section id="assumption" class="level2 doc-section doc-section-assumption">
-<h2 class="doc-section doc-section-assumption anchored" data-anchor-id="assumption">Assumption</h2>
-<p>The stored ECM weights are treated as multiplicative factors applied to scikit-fem’s native per-Gauss contributions <code>form(...) * dx</code>. If an external ECM code returns <em>absolute</em> cubature weights, convert them first using the helper in <code>skrom.rom.ecm.helpers</code>.</p>
+<p><strong>ECM-based hyperreduction for finite element bilinear forms.</strong></p>
+<hr>
+<p>This module brings hyperreduction to your finite element bilinear forms using the <strong>Empirical Cubature Method (ECM)</strong>.<br>
+Unlike classic element-wise hyperreduction (as in ECSW), <strong>ECM works at the Gauss-point level</strong> inside each element, providing higher efficiency and accuracy.</p>
+<p><strong>How does it work?</strong> - Instead of weighting entire elements, ECM allows you to pick (and weight) specific <strong>quadrature (Gauss) points</strong> inside elements. - The assembly process follows these main steps: 1. <strong>Restrict</strong>: Only use elements that have nonzero (active) ECM weights. 2. <strong>Cluster</strong>: Group elements by the number of free local DOFs; this optimizes memory usage and assembly. 3. <strong>Extract</strong>: Pull out the local contributions from each relevant Gauss point. 4. <strong>Project</strong>: Project these contributions onto your reduced basis. 5. <strong>Accumulate</strong>: Sum these into the final reduced-order operator (stiffness) matrix.</p>
+<hr>
+<section id="assumption" class="level2">
+<h2 class="anchored" data-anchor-id="assumption">Assumption</h2>
+<p>The ECM weights that you store should <strong>multiply</strong> scikit-fem’s per-Gauss-point “raw” contributions:**<br>
+<code>form(...) * dx</code><br>
+If you got your weights from outside and they are not simple multipliers (but rather absolute cubature values), you must convert them first using the helper function in <code>skrom.rom.ecm.helpers</code>.</p>
+<hr>
 </section>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
@@ -651,6 +657,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm">BilinearFormHYPERROM_ecm</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm(</span>
@@ -665,7 +672,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Hyperreduced bilinear form assembled from ECM-selected Gauss points.</p>
+<p><strong>What does this class do?</strong><br>
+It assembles a reduced (hyperreduced) bilinear form (like a stiffness matrix) for ROMs, using only those Gauss points and weights picked by ECM.<br>
+You get all the computational savings of hyperreduction—potentially orders of magnitude faster assembly—while maintaining high accuracy.</p>
+<hr>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
 <table class="caption-top table">
@@ -678,20 +688,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm">assemble_weighted_ecm</a></td>
-<td>Assemble the reduced bilinear form using ECM Gauss-point weights.</td>
+<td>Build the reduced bilinear form using ECM Gauss-point weights.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom">extract_element_matrices_qp_rom</a></td>
-<td>Extract per-Gauss local element matrices.</td>
+<td>Extract all local element matrices, but separated out for each Gauss point.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm">assemble_weighted_ecm</h5>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble the reduced bilinear form using ECM Gauss-point weights.</p>
+<p>Builds the ROM’s reduced stiffness (bilinear) matrix using <strong>ECM weights for the Gauss points</strong>.</p>
+<ul>
+<li>Each relevant Gauss-point contribution is multiplied by its ECM weight.</li>
+<li>These contributions are <strong>not pre-summed</strong> over Gauss points, so the ECM weights can be used directly.</li>
+<li>The method projects the results onto the reduced basis and sums for the final operator.</li>
+</ul>
+<hr>
 </section>
 <section id="skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom">extract_element_matrices_qp_rom</h5>
@@ -701,7 +718,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Extract per-Gauss local element matrices.</p>
+<p>Extracts the <strong>full set of local stiffness matrices for all relevant elements</strong>, but, <strong>instead of summing over Gauss points</strong>, it returns the contributions per Gauss point.<br>
+This allows you to apply ECM weights individually at each quadrature point before summing, for precise hyperreduction.</p>
 <section id="returns" class="level6 doc-section doc-section-returns">
 <h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
 <table class="caption-top table">
@@ -721,10 +739,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>element_matrices_q</td>
 <td>(ndarray, shape(n_elem, n_loc_test, n_loc_trial, n_q))</td>
-<td>Per-element local matrices resolved at Gauss points, already multiplied by <code>basis.dx</code> but not yet summed over Gauss points.</td>
+<td>Each entry is a local element matrix for one element and one Gauss point, already multiplied by <code>basis.dx</code> but not yet summed</td>
 </tr>
 </tbody>
 </table>
+<p><strong>In plain language:</strong><br>
+- <code>element_matrices_q[e, :, :, q]</code> is the contribution of the <code>q</code>-th Gauss point in element <code>e</code> to the local (test, trial) matrix. - You can safely multiply by ECM weights <strong>before summing over Gauss points</strong>.</p>
+<hr>
+<p><strong>Quick Guide:</strong><br>
+- Use this approach if you want more precise and efficient control over your hyperreduction, especially when certain regions or Gauss points in your mesh matter much more than others. - Always ensure your ECM weights multiply the <em>raw</em> per-Gauss contributions — not fully-integrated values — so your reduced assembly is both correct and fast.</p>
 
 
 </section>

@@ -1,16 +1,18 @@
-# rom.ecm.empirical_cubature_method { #skrom.rom.ecm.empirical_cubature_method }
+# rom.ecm.empirical_cubature_method
 
 `rom.ecm.empirical_cubature_method`
 
-
+---
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
-| [EmpiricalCubatureMethod](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod) | This class selects a subset of elements and corresponding positive weights necessary for the construction of a hyper-reduced order model |
+| [EmpiricalCubatureMethod](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod) | Class for selecting important elements and positive weights for hyper-reduced order modeling. |
 
-### EmpiricalCubatureMethod { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod }
+---
+
+### EmpiricalCubatureMethod
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod(
@@ -21,43 +23,71 @@ rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod(
 )
 ```
 
-This class selects a subset of elements and corresponding positive weights necessary for the construction of a hyper-reduced order model
-Reference: Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models." arXiv preprint arXiv:2310.15769 (2023)"
+**What does this class do?**  
+It finds a small, optimal set of elements (e.g., mesh cells or quadrature points) and their positive weights so you can accurately and efficiently build a hyper-reduced order model (HROM). This makes large-scale model reduction practical by evaluating only these crucial points.
+
+**Reference:**  
+_Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models._  
+arXiv preprint arXiv:2310.15769 (2023)
+
+**Key Parameters:**
+- `ECM_tolerance`: Sets tolerance for how close the reduced approximation needs to be.
+- `Filter_tolerance`: Sets the threshold for filtering effects.
+- `Plotting`: If `True`, enables plotting for diagnostics or visualization.
+- `MaximumNumberUnsuccesfulIterations`: How many bad iterations before the algorithm stops.
+
+---
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [Calculate](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate) | Method calculating the elements and weights, after the Initialize method was performed |
-| [Initialize](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize) | Method performing calculations required before launching the Calculate method |
-| [Run](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run) | Method launching the element selection algorithm to find a set of elements: self.z, and weights: self.w |
-| [SetUp](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp) | Method for setting up the element selection |
+| [Calculate](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate) | Computes the final selected elements and their weights (run after `Initialize`). |
+| [Initialize](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize) | Prepares the calculation by setting up necessary data and variables. |
+| [Run](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run) | Runs the full ECM selection algorithm to find which elements and weights to use. |
+| [SetUp](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp) | Configures the selection problem using your snapshot data and options. |
 
-##### Calculate { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate }
+---
+
+##### Calculate
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate()
 ```
 
-Method calculating the elements and weights, after the Initialize method was performed
+**What it does:**  
+After calling `Initialize`, this method performs the computation to **identify** the final subset of elements and calculate their **positive weights** required for hyper-reduction.
 
-##### Initialize { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize }
+---
+
+##### Initialize
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize()
 ```
 
-Method performing calculations required before launching the Calculate method
+**What it does:**  
+Sets up the internal structures and data needed before running the main selection algorithm.  
+*Call this before you use `Calculate` or `Run`.*
 
-##### Run { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run }
+---
+
+##### Run
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run()
 ```
 
-Method launching the element selection algorithm to find a set of elements: self.z, and weights: self.w
+**What it does:**  
+Runs the **core ECM selection loop** to determine:
+- `self.z`: Indices of selected (important) elements
+- `self.w`: The corresponding positive weights
 
-##### SetUp { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp }
+This is the main entry point for actually producing your hyper-reduced model’s selection.
+
+---
+
+##### SetUp
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(
@@ -69,5 +99,20 @@ rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(
 )
 ```
 
-Method for setting up the element selection
-input:  ResidualsBasis: numpy array containing a basis to the residuals projected
+**What it does:**  
+Configures the element selection problem by specifying the snapshots or basis you want to approximate, any starting weights/candidates, and several optional settings.
+
+**Inputs:**
+- `G`: (Typically) a numpy array with **snapshot data** or a basis of projected residuals you want to approximate.
+- `Weights`: A numpy array of weights associated with the elements (for weighted norms or integration).
+- `constrain_sum_of_weights`: If `True`, forces the sum of selected weights to equal that of the original.
+- `InitialCandidatesSet`: (Optional) Start the selection with these element indices.
+- `use_L2_weighting`: Use L2-norm weighting in the selection process (can make selection more robust).
+
+---
+
+**In simple terms:**  
+- **EmpiricalCubatureMethod** automates the selection of the smallest possible set of elements and positive weights you need to build an accurate hyper-reduced-order model.
+- Run `SetUp` → `Initialize` → `Run` (or `Calculate`) in sequence for a typical workflow.
+- This saves you time and memory—your reduced model will run much faster, just using the “important” pieces of the original problem!
+

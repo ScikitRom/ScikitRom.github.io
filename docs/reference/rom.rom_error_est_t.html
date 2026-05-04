@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>rom.rom_error_est_t – SCIKIT-ROM</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -67,15 +70,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-8b43f76cf93b2e91b074b20fe55a15c2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-9a25828ea2a45a54154548f52916ebff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -145,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html">ROM</a></li><li class="breadcrumb-item"><a href="../reference/rom.rom_error_est_t.html">rom.rom_error_est_t</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/rom.bilinear_form_rom.html">ROM</a></li><li class="breadcrumb-item"><a href="../reference/rom.rom_error_est_t.html">rom.rom_error_est_t</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -200,14 +202,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/problem_classes.static.master_class.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">problem_classes.static.master_class</span></a>
+  <a href="../reference/problem_classes.masterclass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.masterclass</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/problem_classes.static.master_class_parallel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">problem_classes.static.master_class_parallel</span></a>
+  <a href="../reference/problem_classes.masterclass_parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.masterclass_parallel</span></a>
   </div>
 </li>
       </ul>
@@ -223,6 +225,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.bilinear_form_rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.bilinear_form_hyperrom_deim</span></a>
   </div>
@@ -235,8 +243,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../reference/rom.deim.deim_o.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.deim.deim_o</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.bilinear_form_hyperrom_ecm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.bilinear_form_hyperrom_ecm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.empirical_cubature_method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.empirical_cubature_method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.helpers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.helpers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.linear_form_hyperrom_ecm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.linear_form_hyperrom_ecm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.train_ecm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.train_ecm</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -267,12 +311,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.bilinear_form_rom</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../reference/rom.linear_form_rom.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">rom.linear_form_rom</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -449,8 +487,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../problem_structure.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
+  <a href="../P3_tutorial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P8_tutorial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial: Nonlinear Heat Conduction in a Two-Material 1-D Rod</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -464,20 +508,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../nonlinear_power_law.html" class="sidebar-item-text sidebar-link">
+  <a href="../P1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.1 Nonlinear power-law (strain-hardening) bar under gravity and line load</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../twisting.html" class="sidebar-item-text sidebar-link">
+  <a href="../P2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.2 Twisting of a Neo-Hookean Block</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../linear bending.html" class="sidebar-item-text sidebar-link">
+  <a href="../P3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">P.3 Heterogeneous linear elasticity in a two-material 3D block</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.4 Plane-stress plate with a circular hole in tension</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.5 Transient 3D beam vibration with affine material parameters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.6 Two-segment Timoshenko cantilever beam vibration eigen problem</span></a>
   </div>
 </li>
       </ul>
@@ -493,14 +555,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../linear star.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">P.4 Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
+  <a href="../P7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.7 Linear heat conduction with non-affine parametric source on a star-shaped plate</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../non_linear.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">P.5 Nonlinear heat conduction in a two-material 1-D rod</span></a>
+  <a href="../P8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.8 Nonlinear heat conduction in a two-material 1-D rod</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.9 Piecewise 1D heat conduction with parameterized conductivity and source</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.10 Piecewise 1D heat conduction with parameterized conductivity and source</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Neutronics</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../P11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">P.11 Three-material steady diffusion-reaction problem on a heterogeneous 2D domain</span></a>
   </div>
 </li>
       </ul>
@@ -517,34 +608,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.rom_error_est_t" id="toc-skrom.rom.rom_error_est_t" class="nav-link active" data-scroll-target="#skrom.rom.rom_error_est_t">rom.rom_error_est_t</a>
+  <li><a href="#rom.rom_error_est_t" id="toc-rom.rom_error_est_t" class="nav-link active" data-scroll-target="#rom.rom_error_est_t">rom.rom_error_est_t</a>
   <ul class="collapse">
-  <li><a href="#notes-on-shapes" id="toc-notes-on-shapes" class="nav-link" data-scroll-target="#notes-on-shapes">Notes on shapes</a></li>
+  <li><a href="#notes-on-data-shapes" id="toc-notes-on-data-shapes" class="nav-link" data-scroll-target="#notes-on-data-shapes">Notes on Data Shapes</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat" id="toc-skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></li>
-  <li><a href="#skrom.rom.rom_error_est_t.generate_rom_error_report" id="toc-skrom.rom.rom_error_est_t.generate_rom_error_report" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est_t.generate_rom_error_report">generate_rom_error_report</a></li>
-  <li><a href="#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t" id="toc-skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</a></li>
+  <li><a href="#compute_rom_error_metrics_flat" id="toc-compute_rom_error_metrics_flat" class="nav-link" data-scroll-target="#compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></li>
+  <li><a href="#generate_rom_error_report" id="toc-generate_rom_error_report" class="nav-link" data-scroll-target="#generate_rom_error_report">generate_rom_error_report</a></li>
+  <li><a href="#plot_rom_param_diagnostics_t" id="toc-plot_rom_param_diagnostics_t" class="nav-link" data-scroll-target="#plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</a></li>
   </ul></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html">ROM</a></li><li class="breadcrumb-item"><a href="../reference/rom.rom_error_est_t.html">rom.rom_error_est_t</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/rom.bilinear_form_rom.html">ROM</a></li><li class="breadcrumb-item"><a href="../reference/rom.rom_error_est_t.html">rom.rom_error_est_t</a></li></ol></nav></header>
 
 
 
 
-<section id="skrom.rom.rom_error_est_t" class="level1">
+<section id="rom.rom_error_est_t" class="level1">
 <h1>rom.rom_error_est_t</h1>
 <p><code>rom.rom_error_est_t</code></p>
-<p>Compute and visualize ROM error metrics for flat (vectorized) data reconstructions.</p>
-<p>This module provides: - compute_rom_error_metrics_flat: calculates time-dependent and global error measures (L2, L∞, RMSE, MAE, R², explained variance, quantiles, and optional energy norm). - plot_rom_error_diagnostics_flat: diagnostic plots including true vs.&nbsp;ROM scatter, spatial snapshots for selected snapshots, and raincloud plots of error and speed-up. - generate_rom_error_report: prints a structured summary of global and time-dependent ROM error statistics to the console.</p>
-<section id="notes-on-shapes" class="level2 doc-section doc-section-notes-on-shapes">
-<h2 class="doc-section doc-section-notes-on-shapes anchored" data-anchor-id="notes-on-shapes">Notes on shapes</h2>
-<p>Supported shapes for u and u_rom: - (n_snapshots, n_space) - (n_snapshots, n_time, n_space)</p>
-<p>If your data uses a different axis order, pass snapshot_axis/time_axis/space_axis.</p>
+<p><strong>Purpose:</strong><br>
+Compute and plot ROM error metrics for comparing full-order and reduced-order (ROM) solutions, especially when your data is stored in straightforward “flat” (vectorized) NumPy arrays.</p>
+<p><strong>What’s included?</strong> - Automated calculation of many standard error metrics (L2, L∞, RMSE, MAE, R²/score, explained variance, quantiles, and optionally energy norm) - Useful visualizations: scatter plots, snapshot overlays, and “raincloud” plots of error/speedup - A function to print error summaries in a clean, human-readable report</p>
+<hr>
+<section id="notes-on-data-shapes" class="level2">
+<h2 class="anchored" data-anchor-id="notes-on-data-shapes">Notes on Data Shapes</h2>
+<p>Supported shapes for your <code>u</code> (full solution) and <code>u_rom</code> (ROM solution):</p>
+<ul>
+<li>(n_snapshots, n_space): E.g., each row is a spatial solution for a parametric sample</li>
+<li>(n_snapshots, n_time, n_space): E.g., for time-dependent simulations</li>
+</ul>
+<p>If your data uses a different axis/ordering, use the keyword arguments:<br>
+<code>snapshot_axis</code>, <code>time_axis</code>, and <code>space_axis</code> to tell the functions which axes mean what.</p>
+<hr>
 </section>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
@@ -558,20 +657,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></td>
-<td>Compute various error metrics between full-order and ROM reconstructions.</td>
+<td>Calculate error metrics between full-order and ROM results.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.rom_error_est_t.generate_rom_error_report">generate_rom_error_report</a></td>
-<td>Print a structured summary of ROM error metrics.</td>
+<td>Print a structured, readable summary of ROM errors.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</a></td>
-<td>u, u_rom: (p, t, dof)</td>
+<td>Plot error and diagnostic charts for (param, time, dof) data.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</h3>
+<hr>
+<section id="compute_rom_error_metrics_flat" class="level3">
+<h3 class="anchored" data-anchor-id="compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est_t.compute_rom_error_metrics_flat(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    u_rom,</span>
@@ -582,15 +682,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    space_axis<span class="op">=-</span><span class="dv">1</span>,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    eps<span class="op">=</span><span class="fl">1e-30</span>,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Compute various error metrics between full-order and ROM reconstructions.</p>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p><strong>What does it do?</strong><br>
+Computes a range of error metrics between the full-order (<code>u</code>) and ROM (<code>u_rom</code>) data, across all snapshots/parameters—and, if present, across all timesteps.</p>
+<p><strong>Parameters:</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 6%">
-<col style="width: 79%">
-<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 73%">
+<col style="width: 8%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -602,57 +702,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>u</td>
+<td>u, u_rom</td>
 <td></td>
-<td>Full-order and ROM fields. Supported shapes: - (n_snapshots, n_space) - (n_snapshots, n_time, n_space)</td>
+<td>Arrays of full-order and ROM results, shape <code>(n_snapshots, n_space)</code> or <code>(n_snapshots, n_time, n_space)</code></td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td>u_rom</td>
-<td></td>
-<td>Full-order and ROM fields. Supported shapes: - (n_snapshots, n_space) - (n_snapshots, n_time, n_space)</td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
 <td>K</td>
 <td>array_like</td>
-<td>Stiffness matrix for energy-norm metrics. Must be (n_space, n_space). If provided and u is 3D, the energy terms are accumulated over (snapshot, time).</td>
+<td>Optional stiffness matrix for energy-norm errors. Shape <code>(n_space, n_space)</code>.</td>
 <td><code>None</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>snapshot_axis</td>
 <td>int</td>
-<td>Axis indices used if u has a different ordering. For 2D arrays, keep time_axis=None.</td>
-<td><code>0</code></td>
-</tr>
-<tr class="odd">
-<td>time_axis</td>
-<td>int</td>
-<td>Axis indices used if u has a different ordering. For 2D arrays, keep time_axis=None.</td>
+<td>Which axis is “snapshot/parameter”? Needed if <code>u</code>/<code>u_rom</code> shape/order is not standard.</td>
 <td><code>0</code></td>
 </tr>
 <tr class="even">
-<td>space_axis</td>
+<td>time_axis</td>
 <td>int</td>
-<td>Axis indices used if u has a different ordering. For 2D arrays, keep time_axis=None.</td>
-<td><code>0</code></td>
+<td>Which axis is “time”? If not time-dependent (2D), leave as <code>None</code>.</td>
+<td><code>None</code></td>
 </tr>
 <tr class="odd">
+<td>space_axis</td>
+<td>int</td>
+<td>Which axis is “space”? Needed if order is not default.</td>
+<td><code>-1</code></td>
+</tr>
+<tr class="even">
 <td>eps</td>
 <td>float</td>
-<td>Small number to avoid division-by-zero.</td>
+<td>Small value to prevent divide-by-zero in relative errors.</td>
 <td><code>1e-30</code></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="returns" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
+<p><strong>Returns:</strong></p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 6%">
-<col style="width: 87%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 77%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -665,27 +757,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>metrics</td>
 <td>dict</td>
-<td>Contains time-dependent and global metrics. For 3D inputs, time-dependent arrays have shape (n_snapshots, n_time).</td>
+<td>Dictionary with global and (if 3D) time-dependent metrics</td>
 </tr>
 </tbody>
 </table>
+<ul>
+<li>For 3D arrays (<code>n_snapshots, n_time, n_space</code>), time-dependent results are shaped <code>(n_snapshots, n_time)</code>.</li>
+</ul>
+<hr>
 </section>
-</section>
-<section id="skrom.rom.rom_error_est_t.generate_rom_error_report" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est_t.generate_rom_error_report">generate_rom_error_report</h3>
+<section id="generate_rom_error_report" class="level3">
+<h3 class="anchored" data-anchor-id="generate_rom_error_report">generate_rom_error_report</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est_t.generate_rom_error_report(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    metrics,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">'ROM Accuracy Report'</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Print a structured summary of ROM error metrics.</p>
-<section id="parameters-1" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
+<p><strong>What does it do?</strong><br>
+Prints a clean, well-structured summary of all the ROM error metrics to your screen/console—perfect for log files or quick reviews.</p>
+<p><strong>Parameters:</strong></p>
 <table class="caption-top table">
 <colgroup>
+<col style="width: 9%">
 <col style="width: 8%">
-<col style="width: 7%">
-<col style="width: 60%">
-<col style="width: 23%">
+<col style="width: 55%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -699,21 +794,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>metrics</td>
 <td>dict</td>
-<td>Error metrics dictionary from compute_rom_error_metrics_flat.</td>
+<td>Metrics dict from <code>compute_rom_error_metrics_flat</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>name</td>
 <td>str</td>
-<td>Title of the report.</td>
+<td>Title for the report.</td>
 <td><code>'ROM Accuracy Report'</code></td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
-</section>
-<section id="skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</h3>
+<section id="plot_rom_param_diagnostics_t" class="level3">
+<h3 class="anchored" data-anchor-id="plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est_t.plot_rom_param_diagnostics_t(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    u_rom,</span>
@@ -725,8 +820,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    log_error<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    use_raincloud<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>u, u_rom: (p, t, dof)</p>
-<p>Plots: 1) per-parameter aggregated relative error (bar) 2) per-parameter per-timestep error (boxplot) 3) error vs speed-up (scatter) if speedup given 4) L2 norms (bar) if l2 given 5) raincloud: rel_err_p distribution (across parameters) 6) raincloud: rel_err_pt grouped by parameter (across timesteps) 7) raincloud: speedup distribution (across parameters) if speedup given</p>
+<p><strong>Inputs:</strong><br>
+- <code>u</code>, <code>u_rom</code>: Arrays of shape <code>(p, t, dof)</code><br>
+(<code>p</code>: parameters/snapshots, <code>t</code>: timesteps, <code>dof</code>: spatial points)</p>
+<p><strong>What does it plot?</strong></p>
+<ol type="1">
+<li>Per-parameter (snapshot) error summarized as a <strong>bar</strong> chart</li>
+<li>Per-parameter, <strong>per-timestep</strong> error as a boxplot (how error changes over time)</li>
+<li><strong>Scatter plot</strong> of error vs.&nbsp;speed-up—if you provide <code>speedup_per_param</code></li>
+<li>L2-norms as a <strong>bar plot</strong>—if you provide <code>l2_per_param</code></li>
+<li><strong>Raincloud plots</strong>—showing the distribution of:
+<ul>
+<li>Per-parameter relative error (<code>rel_err_p</code>)</li>
+<li>Relative error per parameter and timestep, grouped by parameter (<code>rel_err_pt</code>)</li>
+<li>Speed-up values (if provided)</li>
+</ul></li>
+</ol>
+<p>These visualizations help you see: - How errors stack up across parameters or over time - Whether any cases are particularly good or poor - The distribution and “spread” of errors and speed-ups</p>
+<p><strong>Options:</strong> - <code>eps</code>: Small value to avoid divide-by-zero in plotting errors (default: <code>1e-16</code>) - <code>log_error</code>: Use log-scale for error axes (default: <code>True</code>) - <code>use_raincloud</code>: Turns on/off the “raincloud” plots for error/speedup distributions</p>
+<hr>
+<p><strong>Summary:</strong><br>
+- Use this module for fast, reliable error checking and visual reporting when comparing your full-order and ROM results. - Handles both steady-state and time-dependent data shapes. - Metric output and plots are suitable for publication, debug, or iterative ROM improvement.</p>
 
 
 </section>

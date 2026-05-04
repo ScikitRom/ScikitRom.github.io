@@ -1,41 +1,44 @@
-# rom.ecm.helpers { #skrom.rom.ecm.helpers }
+# rom.ecm.helpers
 
 `rom.ecm.helpers`
 
-Helper utilities for ECM-based hyperreduction.
+**Helper utilities for ECM-based hyperreduction.**
 
-This module converts ECM-selected Gauss-point data into dense per-element,
-per-Gauss-point arrays suitable for ROM assembly.
+This module supplies routines to prepare, convert, and work with ECM (Empirical Cubature Method) weights for reduced-order modeling.  
+It helps you turn selected (and possibly sparse or flat) ECM data into the **dense per-element, per-Gauss-point arrays** you need for fast, correct ROM assembly.
 
-## Notes {.doc-section .doc-section-notes}
+---
 
-The bilinear and linear ECM assemblers in this folder assume that the stored
-ECM weights act as multiplicative factors on scikit-fem's native quadrature
-contributions, i.e. on quantities that already include ``basis.dx``.
+## Notes
 
-If an external ECM implementation returns *absolute* cubature weights for the
-reference quadrature rule, pass the reference Gauss weights through
-``base_quadrature_weights`` so that the helper divides by them and produces the
-multipliers expected by the assemblers.
+- The ECM bilinear and linear assemblers in this folder **expect ECM weights as multipliers** on scikit-fem’s native quadrature-based contributions (that is, on values already including `basis.dx`).
+- If your ECM implementation gives **absolute cubature weights** (instead of multipliers for quadrature), use `base_quadrature_weights` (see below) so that the helper rescale them. This makes sure your weights are consistent and can be used as multiplicative factors during ROM assembly.
+
+---
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [active_ecm_elements](#skrom.rom.ecm.helpers.active_ecm_elements) | Return element indices whose ECM weight row has at least one active Gauss point. |
-| [dense_ecm_weights](#skrom.rom.ecm.helpers.dense_ecm_weights) | Build a dense ECM-weight array of shape ``(n_elements, n_gauss_points)``. |
-| [flat_to_element_gauss_weights](#skrom.rom.ecm.helpers.flat_to_element_gauss_weights) | Convert flat ECM-selected Gauss-point data to a dense element/Gauss array. |
-| [with_elements](#skrom.rom.ecm.helpers.with_elements) | Return a similar ``FacetBasis`` restricted to a subset of elements. |
+| [active_ecm_elements](#skrom.rom.ecm.helpers.active_ecm_elements) | Returns the indices of elements that have at least one “active” Gauss point according to their ECM weight row. |
+| [dense_ecm_weights](#skrom.rom.ecm.helpers.dense_ecm_weights) | Builds a (dense) ECM weight array with shape `(n_elements, n_gauss_points)` for use in ROM. |
+| [flat_to_element_gauss_weights](#skrom.rom.ecm.helpers.flat_to_element_gauss_weights) | Converts a list of selected (flat) Gauss points and weights into a dense element × Gauss weight array. Optionally rescales with quadrature weights. |
+| [with_elements](#skrom.rom.ecm.helpers.with_elements) | Returns a version of a FacetBasis (or similar) limited to a chosen subset of elements. |
 
-### active_ecm_elements { #skrom.rom.ecm.helpers.active_ecm_elements }
+---
+
+### active_ecm_elements
 
 ```python
 rom.ecm.helpers.active_ecm_elements(weight_array, *, atol=0.0)
 ```
 
-Return element indices whose ECM weight row has at least one active Gauss point.
+Returns the indices of all elements whose weights array has **at least one** active (non-zero, up to `atol` tolerance) Gauss point.  
+Useful for quickly identifying which elements in your mesh are used by ECM-based hyperreduction.
 
-### dense_ecm_weights { #skrom.rom.ecm.helpers.dense_ecm_weights }
+---
+
+### dense_ecm_weights
 
 ```python
 rom.ecm.helpers.dense_ecm_weights(
@@ -47,18 +50,20 @@ rom.ecm.helpers.dense_ecm_weights(
 )
 ```
 
-Build a dense ECM-weight array of shape ``(n_elements, n_gauss_points)``.
+Creates a **dense weight array** of shape `(n_elements, n_gauss_points)`, ready for ROM assembly.
 
-#### Parameters {.doc-section .doc-section-parameters}
+**Parameters:**
 
-| Name           | Type                                           | Description                                                                                                                                                                                         | Default      |
-|----------------|------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| weight_data    | Mapping\[int, Sequence\[float\]\] \| ArrayLike | Either: - a mapping ``element_id -> sequence_of_length_n_gauss_points``; or - a dense array of shape ``(n_elements, n_gauss_points)``; or - a flat array of length ``n_elements * n_gauss_points``. | _required_   |
-| n_elements     | int                                            | Number of elements in the full mesh.                                                                                                                                                                | _required_   |
-| n_gauss_points | int                                            | Number of Gauss points per element.                                                                                                                                                                 | _required_   |
-| dtype          | DTypeLike                                      | Numeric dtype of the returned array.                                                                                                                                                                | `np.float64` |
+| Name           | Type                                           | Description                                                                                                                                    | Default      |
+|----------------|------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| weight_data    | Mapping[int, Sequence[float]] \| ArrayLike     | One of: (a) mapping from `element_id` → array of per-Gauss weights; or (b) a dense array `(n_elements, n_gauss_points)` already; or (c) a flat array of length `n_elements * n_gauss_points`. | _required_   |
+| n_elements     | int                                            | Number of elements in your mesh                                                                          | _required_   |
+| n_gauss_points | int                                            | Number of Gauss points per element                                                                       | _required_   |
+| dtype          | DTypeLike                                      | Data type for the returned array                                                                         | `np.float64` |
 
-### flat_to_element_gauss_weights { #skrom.rom.ecm.helpers.flat_to_element_gauss_weights }
+---
+
+### flat_to_element_gauss_weights
 
 ```python
 rom.ecm.helpers.flat_to_element_gauss_weights(
@@ -72,23 +77,38 @@ rom.ecm.helpers.flat_to_element_gauss_weights(
 )
 ```
 
-Convert flat ECM-selected Gauss-point data to a dense element/Gauss array.
+**Converts** a flat list of selected Gauss-point indices and weights into the dense `(n_elements, n_gauss_points)` ECM weights array.
 
-#### Parameters {.doc-section .doc-section-parameters}
+**Parameters:**
 
-| Name                    | Type              | Description                                                                                                                                                                                                                          | Default      |
-|-------------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| n_elements              | int               | Number of elements in the full mesh.                                                                                                                                                                                                 | _required_   |
-| n_gauss_points          | int               | Number of Gauss points per element.                                                                                                                                                                                                  | _required_   |
-| selected_indices        | ArrayLike         | Flat Gauss-point indices as returned by an ECM solve.                                                                                                                                                                                | _required_   |
-| selected_weights        | ArrayLike         | ECM weights aligned with ``selected_indices``.                                                                                                                                                                                       | _required_   |
-| base_quadrature_weights | ArrayLike \| None | Optional base quadrature weights of length ``n_gauss_points``. When supplied, the returned values are divided by these weights so that the result acts as a multiplicative factor on scikit-fem's native ``basis.dx`` contributions. | `None`       |
-| dtype                   | DTypeLike         | Numeric dtype of the returned array.                                                                                                                                                                                                 | `np.float64` |
+| Name                    | Type              | Description                                                                                                                  | Default      |
+|-------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------------|--------------|
+| n_elements              | int               | Number of mesh elements                                                                 | _required_   |
+| n_gauss_points          | int               | Number of Gauss points per element                                                     | _required_   |
+| selected_indices        | ArrayLike         | Flat indices for the selected Gauss points (as from ECM)                               | _required_   |
+| selected_weights        | ArrayLike         | ECM weights for the corresponding Gauss points                                         | _required_   |
+| base_quadrature_weights | ArrayLike or None | (optional) Reference quadrature weights (length `n_gauss_points`). Used for scaling to match scikit-fem’s expectations.      | `None`       |
+| dtype                   | DTypeLike         | Data type for the returned array                                                       | `np.float64` |
 
-### with_elements { #skrom.rom.ecm.helpers.with_elements }
+If `base_quadrature_weights` is given, each ECM weight is **divided by the corresponding quadrature weight**.  
+This is needed if your weights are *absolute cubature* weights—not pure multipliers.
+
+---
+
+### with_elements
 
 ```python
 rom.ecm.helpers.with_elements(self, elements=None)
 ```
 
-Return a similar ``FacetBasis`` restricted to a subset of elements.
+Returns a modified `FacetBasis` (or similar basis object) restricted to a subset of elements in the mesh.
+
+- `elements` is a list or array of element indices you want included.
+- Useful to run computations only on active ECM elements or any smaller region.
+
+---
+
+**Summary:**  
+- Use these helpers to convert and prepare your ECM weights into the format needed for fast, correct ROM and hyperreduced assembly.
+- Especially helpful if your ECM solver or external software returns weights in a different format from what your ROM assemblers need!  
+- Remember: ECM weights for ROM assembly usually **multiply** each `(element, Gauss-point)` contribution, not replace them.

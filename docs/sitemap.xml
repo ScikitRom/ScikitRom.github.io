@@ -46,7 +46,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.rom_error_est_t.html</loc>
-    <lastmod>2026-02-24T11:36:33.176Z</lastmod>
+    <lastmod>2026-05-04T10:38:52.998Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.linear_form_rom.html</loc>
@@ -66,7 +66,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.bilinear_form_rom.html</loc>
-    <lastmod>2026-05-04T04:12:47.612Z</lastmod>
+    <lastmod>2026-05-04T10:21:23.584Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_classes.static.master_class.html</loc>
@@ -114,7 +114,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.bilinear_form_hyperrom_deim.html</loc>
-    <lastmod>2026-05-04T04:12:47.853Z</lastmod>
+    <lastmod>2026-05-04T10:24:53.306Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.deim.linear_form_hyperrom_deim.html</loc>
@@ -234,7 +234,7 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecm.empirical_cubature_method.html</loc>
-    <lastmod>2026-05-04T04:12:47.993Z</lastmod>
+    <lastmod>2026-05-04T10:34:06.310Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/problem_classes.masterclass.html</loc>
@@ -250,11 +250,11 @@
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecm.bilinear_form_hyperrom_ecm.html</loc>
-    <lastmod>2026-05-04T04:12:47.961Z</lastmod>
+    <lastmod>2026-05-04T10:29:47.191Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecm.helpers.html</loc>
-    <lastmod>2026-05-04T04:12:48.025Z</lastmod>
+    <lastmod>2026-05-04T10:36:38.541Z</lastmod>
   </url>
   <url>
     <loc>https://scikitrom.github.io/reference/rom.ecm.train_ecm.html</loc>

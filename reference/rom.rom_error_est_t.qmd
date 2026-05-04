@@ -1,34 +1,40 @@
-# rom.rom_error_est_t { #skrom.rom.rom_error_est_t }
+# rom.rom_error_est_t
 
 `rom.rom_error_est_t`
 
-Compute and visualize ROM error metrics for flat (vectorized) data reconstructions.
+**Purpose:**  
+Compute and plot ROM error metrics for comparing full-order and reduced-order (ROM) solutions, especially when your data is stored in straightforward “flat” (vectorized) NumPy arrays.
 
-This module provides:
-  - compute_rom_error_metrics_flat: calculates time-dependent and global error measures
-    (L2, L∞, RMSE, MAE, R², explained variance, quantiles, and optional energy norm).
-  - plot_rom_error_diagnostics_flat: diagnostic plots including true vs. ROM scatter,
-    spatial snapshots for selected snapshots, and raincloud plots of error and speed-up.
-  - generate_rom_error_report: prints a structured summary of global and time-dependent
-    ROM error statistics to the console.
+**What’s included?**
+- Automated calculation of many standard error metrics (L2, L∞, RMSE, MAE, R²/score, explained variance, quantiles, and optionally energy norm)
+- Useful visualizations: scatter plots, snapshot overlays, and “raincloud” plots of error/speedup
+- A function to print error summaries in a clean, human-readable report
 
-## Notes on shapes {.doc-section .doc-section-notes-on-shapes}
+---
 
-Supported shapes for u and u_rom:
-  - (n_snapshots, n_space)
-  - (n_snapshots, n_time, n_space)
+## Notes on Data Shapes
 
-If your data uses a different axis order, pass snapshot_axis/time_axis/space_axis.
+Supported shapes for your `u` (full solution) and `u_rom` (ROM solution):
+
+- (n_snapshots, n_space): E.g., each row is a spatial solution for a parametric sample
+- (n_snapshots, n_time, n_space): E.g., for time-dependent simulations
+
+If your data uses a different axis/ordering, use the keyword arguments:  
+`snapshot_axis`, `time_axis`, and `space_axis` to tell the functions which axes mean what.
+
+---
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [compute_rom_error_metrics_flat](#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat) | Compute various error metrics between full-order and ROM reconstructions. |
-| [generate_rom_error_report](#skrom.rom.rom_error_est_t.generate_rom_error_report) | Print a structured summary of ROM error metrics. |
-| [plot_rom_param_diagnostics_t](#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t) | u, u_rom: (p, t, dof) |
+| [compute_rom_error_metrics_flat](#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat) | Calculate error metrics between full-order and ROM results. |
+| [generate_rom_error_report](#skrom.rom.rom_error_est_t.generate_rom_error_report) | Print a structured, readable summary of ROM errors. |
+| [plot_rom_param_diagnostics_t](#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t) | Plot error and diagnostic charts for (param, time, dof) data. |
 
-### compute_rom_error_metrics_flat { #skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat }
+---
+
+### compute_rom_error_metrics_flat
 
 ```python
 rom.rom_error_est_t.compute_rom_error_metrics_flat(
@@ -43,27 +49,31 @@ rom.rom_error_est_t.compute_rom_error_metrics_flat(
 )
 ```
 
-Compute various error metrics between full-order and ROM reconstructions.
+**What does it do?**  
+Computes a range of error metrics between the full-order (`u`) and ROM (`u_rom`) data, across all snapshots/parameters—and, if present, across all timesteps.
 
-#### Parameters {.doc-section .doc-section-parameters}
+**Parameters:**
 
-| Name          | Type       | Description                                                                                                                                            | Default    |
-|---------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| u             |            | Full-order and ROM fields. Supported shapes:   - (n_snapshots, n_space)   - (n_snapshots, n_time, n_space)                                             | _required_ |
-| u_rom         |            | Full-order and ROM fields. Supported shapes:   - (n_snapshots, n_space)   - (n_snapshots, n_time, n_space)                                             | _required_ |
-| K             | array_like | Stiffness matrix for energy-norm metrics. Must be (n_space, n_space). If provided and u is 3D, the energy terms are accumulated over (snapshot, time). | `None`     |
-| snapshot_axis | int        | Axis indices used if u has a different ordering. For 2D arrays, keep time_axis=None.                                                                   | `0`        |
-| time_axis     | int        | Axis indices used if u has a different ordering. For 2D arrays, keep time_axis=None.                                                                   | `0`        |
-| space_axis    | int        | Axis indices used if u has a different ordering. For 2D arrays, keep time_axis=None.                                                                   | `0`        |
-| eps           | float      | Small number to avoid division-by-zero.                                                                                                                | `1e-30`    |
+| Name          | Type       | Description                                                                                              | Default    |
+|---------------|------------|----------------------------------------------------------------------------------------------------------|------------|
+| u, u_rom      |            | Arrays of full-order and ROM results, shape `(n_snapshots, n_space)` or `(n_snapshots, n_time, n_space)` | _required_ |
+| K             | array_like | Optional stiffness matrix for energy-norm errors. Shape `(n_space, n_space)`.                            | `None`     |
+| snapshot_axis | int        | Which axis is “snapshot/parameter”? Needed if `u`/`u_rom` shape/order is not standard.                   | `0`        |
+| time_axis     | int        | Which axis is “time”? If not time-dependent (2D), leave as `None`.                                       | `None`     |
+| space_axis    | int        | Which axis is “space”? Needed if order is not default.                                                   | `-1`       |
+| eps           | float      | Small value to prevent divide-by-zero in relative errors.                                                | `1e-30`    |
 
-#### Returns {.doc-section .doc-section-returns}
+**Returns:**
 
-| Name    | Type   | Description                                                                                                        |
-|---------|--------|--------------------------------------------------------------------------------------------------------------------|
-| metrics | dict   | Contains time-dependent and global metrics. For 3D inputs, time-dependent arrays have shape (n_snapshots, n_time). |
+| Name    | Type   | Description                                               |
+|---------|--------|-----------------------------------------------------------|
+| metrics | dict   | Dictionary with global and (if 3D) time-dependent metrics|
 
-### generate_rom_error_report { #skrom.rom.rom_error_est_t.generate_rom_error_report }
+- For 3D arrays (`n_snapshots, n_time, n_space`), time-dependent results are shaped `(n_snapshots, n_time)`.
+
+---
+
+### generate_rom_error_report
 
 ```python
 rom.rom_error_est_t.generate_rom_error_report(
@@ -72,16 +82,19 @@ rom.rom_error_est_t.generate_rom_error_report(
 )
 ```
 
-Print a structured summary of ROM error metrics.
+**What does it do?**  
+Prints a clean, well-structured summary of all the ROM error metrics to your screen/console—perfect for log files or quick reviews.
 
-#### Parameters {.doc-section .doc-section-parameters}
+**Parameters:**
 
-| Name    | Type   | Description                                                   | Default                 |
-|---------|--------|---------------------------------------------------------------|-------------------------|
-| metrics | dict   | Error metrics dictionary from compute_rom_error_metrics_flat. | _required_              |
-| name    | str    | Title of the report.                                          | `'ROM Accuracy Report'` |
+| Name    | Type   | Description                                         | Default                 |
+|---------|--------|-----------------------------------------------------|-------------------------|
+| metrics | dict   | Metrics dict from `compute_rom_error_metrics_flat`. | _required_              |
+| name    | str    | Title for the report.                               | `'ROM Accuracy Report'` |
 
-### plot_rom_param_diagnostics_t { #skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t }
+---
+
+### plot_rom_param_diagnostics_t
 
 ```python
 rom.rom_error_est_t.plot_rom_param_diagnostics_t(
@@ -97,13 +110,34 @@ rom.rom_error_est_t.plot_rom_param_diagnostics_t(
 )
 ```
 
-u, u_rom: (p, t, dof)
+**Inputs:**  
+- `u`, `u_rom`: Arrays of shape `(p, t, dof)`  
+  (`p`: parameters/snapshots, `t`: timesteps, `dof`: spatial points)
 
-Plots:
-  1) per-parameter aggregated relative error (bar)
-  2) per-parameter per-timestep error (boxplot)
-  3) error vs speed-up (scatter) if speedup given
-  4) L2 norms (bar) if l2 given
-  5) raincloud: rel_err_p distribution (across parameters)
-  6) raincloud: rel_err_pt grouped by parameter (across timesteps)
-  7) raincloud: speedup distribution (across parameters) if speedup given
+**What does it plot?**
+
+1. Per-parameter (snapshot) error summarized as a **bar** chart
+2. Per-parameter, **per-timestep** error as a boxplot (how error changes over time)
+3. **Scatter plot** of error vs. speed-up—if you provide `speedup_per_param`
+4. L2-norms as a **bar plot**—if you provide `l2_per_param`
+5. **Raincloud plots**—showing the distribution of:
+    - Per-parameter relative error (`rel_err_p`)
+    - Relative error per parameter and timestep, grouped by parameter (`rel_err_pt`)
+    - Speed-up values (if provided)
+
+These visualizations help you see:
+- How errors stack up across parameters or over time
+- Whether any cases are particularly good or poor
+- The distribution and “spread” of errors and speed-ups
+
+**Options:**
+- `eps`: Small value to avoid divide-by-zero in plotting errors (default: `1e-16`)
+- `log_error`: Use log-scale for error axes (default: `True`)
+- `use_raincloud`: Turns on/off the “raincloud” plots for error/speedup distributions
+
+---
+
+**Summary:**  
+- Use this module for fast, reliable error checking and visual reporting when comparing your full-order and ROM results.
+- Handles both steady-state and time-dependent data shapes.
+- Metric output and plots are suitable for publication, debug, or iterative ROM improvement.
