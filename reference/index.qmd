@@ -49,8 +49,6 @@
 | --- | --- |
 | [problem_classes.masterclass](problem_classes.masterclass.qmd#skrom.problem_classes.masterclass) | Static reduced-order modeling (ROM) framework. |
 | [problem_classes.masterclass_parallel](problem_classes.masterclass_parallel.qmd#skrom.problem_classes.masterclass_parallel) | Parallel implementation of master_class using multithreading for snapshot generation and ROM evaluation. |
-| [problem_classes.static.master_class](problem_classes.static.master_class.qmd#skrom.problem_classes.static.master_class) | Static reduced-order modeling (ROM) framework. |
-| [problem_classes.static.master_class_parallel](problem_classes.static.master_class_parallel.qmd#skrom.problem_classes.static.master_class_parallel) | Parallel implementation of master_class using multithreading for snapshot generation and ROM evaluation. |
 
 ## Templates
 

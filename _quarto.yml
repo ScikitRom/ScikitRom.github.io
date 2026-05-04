@@ -41,19 +41,25 @@ website:
             - reference/fom.fem_utils.qmd
             section: Full-Order Model (FOM)
           - contents:
-            - reference/problem_classes.static.master_class.qmd
-            - reference/problem_classes.static.master_class_parallel.qmd
+            - reference/problem_classes.masterclass.qmd
+            - reference/problem_classes.masterclass_parallel.qmd
             section: Problem Classes
           - contents:
+            - reference/rom.bilinear_form_rom.qmd
             - reference/rom.deim.bilinear_form_hyperrom_deim.qmd
             - reference/rom.deim.deim.qmd
+            - reference/rom.deim.deim_o.qmd
             - reference/rom.deim.linear_form_hyperrom_deim.qmd
+            - reference/rom.ecm.bilinear_form_hyperrom_ecm.qmd
+            - reference/rom.ecm.empirical_cubature_method.qmd
+            - reference/rom.ecm.helpers.qmd
+            - reference/rom.ecm.linear_form_hyperrom_ecm.qmd
+            - reference/rom.ecm.train_ecm.qmd
             - reference/rom.ecsw.bilinear_form_hyperrom_ecsw.qmd
             - reference/rom.ecsw.custom_nnls.qmd
             - reference/rom.ecsw.hyperreduce.qmd
             - reference/rom.ecsw.linear_form_hyperrom_ecsw.qmd
             - reference/rom.bilinear_form_rom.qmd
-            - reference/rom.linear_form_rom.qmd
             - reference/rom.rom_error_est.qmd
             - reference/rom.rom_error_est_t.qmd
             - reference/rom.rom_utils.qmd
@@ -82,6 +88,8 @@ website:
           - contents:
             - reference/cli.qmd
             section: CLI
+             
+        
       - section: "**Examples**"
         contents:
           - P3_tutorial.qmd

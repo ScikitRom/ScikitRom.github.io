@@ -33,8 +33,6 @@ website:
     - contents:
       - reference/problem_classes.masterclass.qmd
       - reference/problem_classes.masterclass_parallel.qmd
-      - reference/problem_classes.static.master_class.qmd
-      - reference/problem_classes.static.master_class_parallel.qmd
       section: Problem Classes
     - contents:
       - reference/templates.problem_template.bilinear_forms.qmd
