@@ -147,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/fom.fem_utils.html">Full-Order Model (FOM)</a></li><li class="breadcrumb-item"><a href="../reference/fom.fem_utils.html">fom.fem_utils</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -174,17 +174,317 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Function reference</span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
+          <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text"><strong>Examples</strong></span></a>
+ <span class="menu-text">Full-Order Model (FOM)</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/fom.fem_utils.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">fom.fem_utils</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Problem Classes</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/problem_classes.masterclass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.masterclass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/problem_classes.masterclass_parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">problem_classes.masterclass_parallel</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">ROM</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.bilinear_form_rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.deim.bilinear_form_hyperrom_deim</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.deim.deim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.deim.deim</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.deim.deim_o.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.deim.deim_o</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.deim.linear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.deim.linear_form_hyperrom_deim</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.bilinear_form_hyperrom_ecm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.bilinear_form_hyperrom_ecm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.empirical_cubature_method.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.empirical_cubature_method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.helpers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.helpers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.linear_form_hyperrom_ecm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.linear_form_hyperrom_ecm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecm.train_ecm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecm.train_ecm</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw.bilinear_form_hyperrom_ecsw</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.custom_nnls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw.custom_nnls</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.hyperreduce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw.hyperreduce</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.ecsw.linear_form_hyperrom_ecsw</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.bilinear_form_rom.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.bilinear_form_rom</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.rom_error_est.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.rom_error_est</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.rom_error_est_t.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.rom_error_est_t</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/rom.rom_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">rom.rom_utils</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/templates.problem_template.bilinear_forms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">templates.problem_template.bilinear_forms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/templates.problem_template.domain.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">templates.problem_template.domain</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/templates.problem_template.linear_forms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">templates.problem_template.linear_forms</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/templates.problem_template.params.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">templates.problem_template.params</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/templates.problem_template.problem_def.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">templates.problem_template.problem_def</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/templates.problem_template.properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">templates.problem_template.properties</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Utils</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.data_io.save_h5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.data_io.save_h5</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.dynamics.integrators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.dynamics.integrators</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.reduced_basis.svd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.reduced_basis.svd</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.color_palette.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.color_palette</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.generate_vtk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.generate_vtk</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.generate_vtu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.generate_vtu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.plot_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.plot_utils</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.visualization.vtuwriter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.visualization.vtuwriter</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.hdf5_store.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.hdf5_store</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.imports.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.imports</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/utils.save_h5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">utils.save_h5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">CLI</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reference/cli.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">cli</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text"><strong>Examples</strong></span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../P3_tutorial.html" class="sidebar-item-text sidebar-link">
@@ -199,13 +499,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
  <span class="menu-text">Computational Mechanics</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../P1.html" class="sidebar-item-text sidebar-link">
@@ -246,13 +546,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
  <span class="menu-text">Heat Transfer</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../P7.html" class="sidebar-item-text sidebar-link">
@@ -281,13 +581,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
  <span class="menu-text">Neutronics</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../P11.html" class="sidebar-item-text sidebar-link">
@@ -308,10 +608,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.fom.fem_utils" id="toc-skrom.fom.fem_utils" class="nav-link active" data-scroll-target="#skrom.fom.fem_utils">fom.fem_utils</a>
+  <li><a href="#fom.fem_utils" id="toc-fom.fem_utils" class="nav-link active" data-scroll-target="#fom.fem_utils">fom.fem_utils</a>
   <ul class="collapse">
-  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
-  <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
   <li><a href="#skrom.fom.fem_utils.build_pc_amgsa" id="toc-skrom.fom.fem_utils.build_pc_amgsa" class="nav-link" data-scroll-target="#skrom.fom.fem_utils.build_pc_amgsa">build_pc_amgsa</a></li>
@@ -328,24 +626,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/fom.fem_utils.html">Full-Order Model (FOM)</a></li><li class="breadcrumb-item"><a href="../reference/fom.fem_utils.html">fom.fem_utils</a></li></ol></nav></header>
 
 
 
 
-<section id="skrom.fom.fem_utils" class="level1">
+<section id="fom.fem_utils" class="level1">
 <h1>fom.fem_utils</h1>
-<p><code>fom.fem_utils</code></p>
-<p>Finite element utilities for preconditioning, mesh operations, and nonlinear solving.</p>
-<p>This module provides utilities for finite element computations including AMG preconditioner construction, element-to-coordinate mappings, Newton-Raphson nonlinear solvers with Dirichlet boundary condition handling, regional basis computation, domain loading utilities, and attribute unwrapping helpers.</p>
-<section id="notes" class="level2 doc-section doc-section-notes">
-<h2 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h2>
-<p><strong>TL;DR</strong>: Comprehensive toolkit for finite element method computations with focus on efficient iterative solving, mesh operations, and nonlinear problem handling.</p>
-</section>
-<section id="author" class="level2 doc-section doc-section-author">
-<h2 class="doc-section doc-section-author anchored" data-anchor-id="author">Author</h2>
-<p>Suparno Bhattacharyya</p>
-</section>
+<p>Utilities for finite element (FE) work—especially handy for preconditioners, mesh, and nonlinear solvers.</p>
+<p><strong>Summary:</strong><br>
+Provides functions for mesh/basis handling, fast solvers, region splitting, domain helpers, and attribute cleanup.<br>
+Perfect for making FE codes faster, cleaner, and easier to use.</p>
+<p><strong>Author:</strong><br>
+Suparno Bhattacharyya</p>
+<hr>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
@@ -358,51 +652,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.fom.fem_utils.build_pc_amgsa">build_pc_amgsa</a></td>
-<td>Build an algebraic multigrid smoothed aggregation preconditioner.</td>
+<td>Build a fast algebraic multigrid (AMG) preconditioner.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.fom.fem_utils.compute_basis_regions">compute_basis_regions</a></td>
-<td>Create reduced basis functions for specified mesh regions.</td>
+<td>Make basis functions limited to mesh regions.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.fom.fem_utils.element2location">element2location</a></td>
-<td>Map mesh elements to their spatial coordinates.</td>
+<td>Get coordinates (locations) for elements in your mesh.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.fom.fem_utils.load_domain">load_domain</a></td>
-<td>Load domain information and assign attributes to instance.</td>
+<td>Load all info from <code>domain()</code> into your object.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</a></td>
-<td>Load only mesh and basis from domain and assign to instance.</td>
+<td>Load just mesh and basis from domain info.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.fom.fem_utils.newton_solver">newton_solver</a></td>
-<td>If PETSc is available (and not forced off), uses PETSc KSP for the <em>linear solves only</em>.</td>
+<td>Newton nonlinear solver; uses PETSc if available.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.fom.fem_utils.petsc_solve_csr">petsc_solve_csr</a></td>
-<td>Solve A x = b using PETSc KSP, where A_csr is SciPy CSR (CPU).</td>
+<td>Solve <code>A x = b</code> with PETSc KSP, using sparse (CSR) matrices.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.fom.fem_utils.unwrap_attr">unwrap_attr</a></td>
-<td>Unwrap 0-dimensional object arrays to their scalar values.</td>
+<td>Turn a 0-d object numpy array into its plain value.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.fom.fem_utils.build_pc_amgsa" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.build_pc_amgsa">build_pc_amgsa</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.build_pc_amgsa(A, <span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Build an algebraic multigrid smoothed aggregation preconditioner.</p>
-<p><strong>TL;DR</strong>: Creates an AMG preconditioner from a system matrix for efficient iterative solving of large sparse linear systems.</p>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p>Makes an algebraic multigrid (AMG) preconditioner—this helps large iterative solves (like CG) run much faster.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 26%">
-<col style="width: 56%">
 <col style="width: 9%">
+<col style="width: 33%">
+<col style="width: 45%">
+<col style="width: 11%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -416,25 +710,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>A</td>
 <td>scipy.sparse matrix or array_like</td>
-<td>The system matrix for which the preconditioner is constructed</td>
+<td>System matrix you want to precondition.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Additional keyword arguments passed to pyamg.smoothed_aggregation_solver</td>
+<td>Extra options for AMG solver.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 24%">
-<col style="width: 70%">
+<col style="width: 6%">
+<col style="width: 30%">
+<col style="width: 63%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -447,25 +741,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>M</td>
 <td>scipy.sparse.linalg.LinearOperator</td>
-<td>The preconditioner as a linear operator suitable for use in iterative solvers like conjugate gradient</td>
+<td>The AMG preconditioner (as a linear operator for iterative solvers).</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
 <section id="skrom.fom.fem_utils.compute_basis_regions" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.compute_basis_regions">compute_basis_regions</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.compute_basis_regions(basis, masks)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Create reduced basis functions for specified mesh regions.</p>
-<p><strong>TL;DR</strong>: Given boolean masks defining mesh regions, returns basis functions restricted to each region for efficient regional computations.</p>
-<section id="parameters-1" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
+<p>Splits your basis functions into regions defined by boolean masks (True/False arrays showing which elements belong to which region).</p>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 4%">
-<col style="width: 16%">
-<col style="width: 72%">
 <col style="width: 6%">
+<col style="width: 26%">
+<col style="width: 57%">
+<col style="width: 9%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -479,25 +773,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>basis</td>
 <td>object</td>
-<td>Finite element basis object with <code>nelems</code> attribute and <code>with_elements</code> method</td>
+<td>A basis object (has <code>nelems</code> and <code>with_elements</code> method).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>masks</td>
 <td>dict of str to ndarray of bool</td>
-<td>Dictionary mapping region names to boolean element masks of shape (basis.nelems,). True values indicate elements belonging to the region</td>
+<td>Maps region names to Boolean arrays for element selection.</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h4>
+<section id="returns-1" class="level4">
+<h4 class="anchored" data-anchor-id="returns-1">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 14%">
-<col style="width: 76%">
+<col style="width: 15%">
+<col style="width: 26%">
+<col style="width: 57%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -510,116 +804,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>region_bases</td>
 <td>dict of str to object</td>
-<td>Dictionary mapping region names to reduced basis objects containing only elements specified by the corresponding mask</td>
+<td>Maps region names to basis objects for each region.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
 <section id="skrom.fom.fem_utils.element2location" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.element2location">element2location</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.element2location(mesh)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Map mesh elements to their spatial coordinates.</p>
-<p><strong>TL;DR</strong>: Extracts element-wise coordinate information from mesh connectivity, useful for element-based computations in finite element methods.</p>
-<section id="parameters-2" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 3%">
-<col style="width: 3%">
-<col style="width: 87%">
-<col style="width: 5%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>mesh</td>
-<td>object</td>
-<td>Mesh object with attributes <code>p</code> (node coordinates) and <code>t</code> (element connectivity). Expected to have <code>p</code> as shape (spatial_dim, n_nodes) and <code>t</code> as shape (n_local_nodes_per_element, n_elements)</td>
-<td><em>required</em></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="returns-2" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
+<p>Gives the spatial coordinates for every element of the mesh (based on mesh connectivity).</p>
+<section id="parameters-2" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 6%">
-<col style="width: 17%">
-<col style="width: 76%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>element_coords</td>
-<td>ndarray of shape (n_elements, n_local_nodes)</td>
-<td>Array of element coordinates, where each row corresponds to an element and each column corresponds to a local node within the element. For 1D meshes, this gives coordinates of element endpoints</td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-<section id="skrom.fom.fem_utils.load_domain" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_domain">load_domain</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_domain(instance)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Load domain information and assign attributes to instance.</p>
-<p><strong>TL;DR</strong>: Calls instance.domain() and assigns all returned attributes to the instance object for convenient access.</p>
-<section id="parameters-3" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 9%">
-<col style="width: 7%">
-<col style="width: 72%">
-<col style="width: 10%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>instance</td>
-<td>object</td>
-<td>Object with a <code>domain()</code> method that returns a dictionary of domain attributes</td>
-<td><em>required</em></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="notes-1" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-1">Notes</h4>
-<p>This function modifies the instance in-place by setting attributes based on the domain dictionary keys and values.</p>
-</section>
-</section>
-<section id="skrom.fom.fem_utils.load_mesh_and_basis" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_mesh_and_basis(instance)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Load only mesh and basis from domain and assign to instance.</p>
-<p><strong>TL;DR</strong>: Extracts just mesh and basis from instance.domain() for cases where only these two components are needed.</p>
-<section id="parameters-4" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 7%">
 <col style="width: 6%">
 <col style="width: 77%">
 <col style="width: 9%">
@@ -634,17 +834,114 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>instance</td>
+<td>mesh</td>
 <td>object</td>
-<td>Object with a <code>domain()</code> method returning a dictionary containing at least ‘mesh’ and ‘basis’ keys</td>
+<td>Has <code>p</code> (coords, shape [spatial_dim, n_nodes]) and <code>t</code> (connectivity, shape [n_nodes_elem, n_elems])</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="notes-2" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-2">Notes</h4>
-<p>This function modifies the instance in-place by setting only <code>mesh</code> and <code>basis</code> attributes, ignoring other domain components.</p>
+<section id="returns-2" class="level4">
+<h4 class="anchored" data-anchor-id="returns-2">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 31%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>element_coords</td>
+<td>ndarray of shape (n_elements, n_local_nodes)</td>
+<td>Each row: element coordinates (one coord per node, for each element).</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="skrom.fom.fem_utils.load_domain" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_domain">load_domain</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_domain(instance)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Calls your object’s <code>domain()</code> method and assigns all its outputs as attributes on the object.</p>
+<section id="parameters-3" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-3">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 70%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instance</td>
+<td>object</td>
+<td>Any object with a <code>domain()</code> method returning a dict of attributes.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p>Sets fields on your instance in-place.<br>
+Now you can use <code>instance.attr</code> to access domain attributes directly.</p>
+<hr>
+</section>
+</section>
+<section id="skrom.fom.fem_utils.load_mesh_and_basis" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.load_mesh_and_basis">load_mesh_and_basis</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.load_mesh_and_basis(instance)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Loads just <code>mesh</code> and <code>basis</code> fields from your object’s <code>domain()</code> output to the object’s attributes.</p>
+<section id="parameters-4" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-4">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 70%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>instance</td>
+<td>object</td>
+<td>Object whose <code>domain()</code> returns at least ‘mesh’ and ‘basis’ keys.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes-1" class="level4">
+<h4 class="anchored" data-anchor-id="notes-1">Notes</h4>
+<p>Only <code>mesh</code> and <code>basis</code> are loaded (rest are ignored).<br>
+Instance is modified in-place.</p>
+<hr>
 </section>
 </section>
 <section id="skrom.fom.fem_utils.newton_solver" class="level3">
@@ -670,7 +967,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    reuse_ksp<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    force_backend<span class="op">=</span><span class="st">'auto'</span>,</span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>If PETSc is available (and not forced off), uses PETSc KSP for the <em>linear solves only</em>. Otherwise, falls back to your existing SciPy-based Newton implementation.</p>
+<p>Newton’s method nonlinear solver for systems of equations.<br>
+Uses PETSc KSP for linear solves if PETSc is installed (unless you turn it off).<br>
+Otherwise uses NumPy/Scipy solvers.</p>
+<hr>
 </section>
 <section id="skrom.fom.fem_utils.petsc_solve_csr" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.petsc_solve_csr">petsc_solve_csr</h3>
@@ -686,21 +986,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    petsc_options<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    cache<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Solve A x = b using PETSc KSP, where A_csr is SciPy CSR (CPU). Uses a small cache to reuse PETSc Mat/KSP objects across calls.</p>
+<p>Solves <code>A x = b</code> using PETSc and Krylov solvers (good for large problems, uses cache for speed).<br>
+Input matrix must be CSR format (from SciPy).</p>
+<hr>
 </section>
 <section id="skrom.fom.fem_utils.unwrap_attr" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.fom.fem_utils.unwrap_attr">unwrap_attr</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fom.fem_utils.unwrap_attr(instance, attr_name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Unwrap 0-dimensional object arrays to their scalar values.</p>
-<p><strong>TL;DR</strong>: Converts 0-d numpy object arrays to their contained scalar value using .item(), useful for cleaning up attributes after certain operations.</p>
-<section id="parameters-5" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h4>
+<p>If the named attribute is a 0-dimensional <code>numpy</code> object array, unwrap (flatten) it to the contained value.</p>
+<section id="parameters-5" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-5">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 14%">
-<col style="width: 10%">
-<col style="width: 58%">
 <col style="width: 16%">
+<col style="width: 11%">
+<col style="width: 54%">
+<col style="width: 17%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -714,21 +1015,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>instance</td>
 <td>object</td>
-<td>Object containing the attribute to unwrap</td>
+<td>The object holding the attribute.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>attr_name</td>
 <td>str</td>
-<td>Name of the attribute to unwrap</td>
+<td>Attribute name (string).</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="notes-3" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes-3">Notes</h4>
-<p>Only applies unwrapping if the attribute is a 0-dimensional numpy array with object dtype. The instance is modified in-place.</p>
+<section id="notes-2" class="level4">
+<h4 class="anchored" data-anchor-id="notes-2">Notes</h4>
+<p>Only works if attribute is a 0-dim numpy array with object dtype.<br>
+Instance is modified in-place—afterwards, the attribute is a plain value.</p>
 
 
 </section>

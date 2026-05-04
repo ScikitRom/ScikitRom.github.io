@@ -1,35 +1,43 @@
-# problem_classes.masterclass_parallel { #skrom.problem_classes.masterclass_parallel }
+# problem_classes.masterclass_parallel
 
-`problem_classes.masterclass_parallel`
+Parallel version of the ROM master class—runs snapshot generation and ROM evaluation with **multithreading** for faster performance.
 
-Parallel implementation of master_class using multithreading for snapshot generation and ROM evaluation.
+---
 
-## Notes {.doc-section .doc-section-notes}
+## Notes
 
-Authors: Suparno Bhattacharyya
+**Author:** Suparno Bhattacharyya
+
+---
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [ensure_problem_registered](#skrom.problem_classes.masterclass_parallel.ensure_problem_registered) | Ensure that the requested problem is present in ``PROBLEM_REGISTRY``. |
-| [register_problem](#skrom.problem_classes.masterclass_parallel.register_problem) | Register a problem class under a string key. |
+| [ensure_problem_registered](#skrom.problem_classes.masterclass_parallel.ensure_problem_registered) | Makes sure the problem you want is in the `PROBLEM_REGISTRY`. |
+| [register_problem](#skrom.problem_classes.masterclass_parallel.register_problem) | Lets you register your problem class under a custom string key. |
 
-### ensure_problem_registered { #skrom.problem_classes.masterclass_parallel.ensure_problem_registered }
+---
+
+### ensure_problem_registered
 
 ```python
 problem_classes.masterclass_parallel.ensure_problem_registered(problem_name)
 ```
 
-Ensure that the requested problem is present in ``PROBLEM_REGISTRY``.
+Checks that the problem class (`problem_name`) is already in the registry.
 
-This handles the common case where the problem class lives in the local
-``problem_def.py`` file and has not been imported yet.
+- If it’s **not yet registered** (for example, if it’s in your `problem_def.py` but hasn’t been imported), this function will handle that for you.
 
-### register_problem { #skrom.problem_classes.masterclass_parallel.register_problem }
+---
+
+### register_problem
 
 ```python
 problem_classes.masterclass_parallel.register_problem(name)
 ```
 
-Register a problem class under a string key.
+Registers a problem class in the `PROBLEM_REGISTRY` with the given string key.
+
+- Use this so your problem class can be found and used easily, especially in parallel workflows.
+

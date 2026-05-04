@@ -1,36 +1,30 @@
-# fom.fem_utils { #skrom.fom.fem_utils }
+# fom.fem_utils
 
-`fom.fem_utils`
+Utilities for finite element (FE) work—especially handy for preconditioners, mesh, and nonlinear solvers.
 
-Finite element utilities for preconditioning, mesh operations, and nonlinear solving.
+**Summary:**  
+Provides functions for mesh/basis handling, fast solvers, region splitting, domain helpers, and attribute cleanup.  
+Perfect for making FE codes faster, cleaner, and easier to use.
 
-This module provides utilities for finite element computations including AMG 
-preconditioner construction, element-to-coordinate mappings, Newton-Raphson 
-nonlinear solvers with Dirichlet boundary condition handling, regional basis 
-computation, domain loading utilities, and attribute unwrapping helpers.
-
-## Notes {.doc-section .doc-section-notes}
-
-**TL;DR**: Comprehensive toolkit for finite element method computations with 
-focus on efficient iterative solving, mesh operations, and nonlinear problem 
-handling.
-
-## Author {.doc-section .doc-section-author}
-
+**Author:**  
 Suparno Bhattacharyya
+
+---
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [build_pc_amgsa](#skrom.fom.fem_utils.build_pc_amgsa) | Build an algebraic multigrid smoothed aggregation preconditioner. |
-| [compute_basis_regions](#skrom.fom.fem_utils.compute_basis_regions) | Create reduced basis functions for specified mesh regions. |
-| [element2location](#skrom.fom.fem_utils.element2location) | Map mesh elements to their spatial coordinates. |
-| [load_domain](#skrom.fom.fem_utils.load_domain) | Load domain information and assign attributes to instance. |
-| [load_mesh_and_basis](#skrom.fom.fem_utils.load_mesh_and_basis) | Load only mesh and basis from domain and assign to instance. |
-| [newton_solver](#skrom.fom.fem_utils.newton_solver) | If PETSc is available (and not forced off), uses PETSc KSP for the *linear solves only*. |
-| [petsc_solve_csr](#skrom.fom.fem_utils.petsc_solve_csr) | Solve A x = b using PETSc KSP, where A_csr is SciPy CSR (CPU). |
-| [unwrap_attr](#skrom.fom.fem_utils.unwrap_attr) | Unwrap 0-dimensional object arrays to their scalar values. |
+| [build_pc_amgsa](#skrom.fom.fem_utils.build_pc_amgsa) | Build a fast algebraic multigrid (AMG) preconditioner. |
+| [compute_basis_regions](#skrom.fom.fem_utils.compute_basis_regions) | Make basis functions limited to mesh regions. |
+| [element2location](#skrom.fom.fem_utils.element2location) | Get coordinates (locations) for elements in your mesh. |
+| [load_domain](#skrom.fom.fem_utils.load_domain) | Load all info from `domain()` into your object. |
+| [load_mesh_and_basis](#skrom.fom.fem_utils.load_mesh_and_basis) | Load just mesh and basis from domain info. |
+| [newton_solver](#skrom.fom.fem_utils.newton_solver) | Newton nonlinear solver; uses PETSc if available. |
+| [petsc_solve_csr](#skrom.fom.fem_utils.petsc_solve_csr) | Solve `A x = b` with PETSc KSP, using sparse (CSR) matrices. |
+| [unwrap_attr](#skrom.fom.fem_utils.unwrap_attr) | Turn a 0-d object numpy array into its plain value. |
+
+---
 
 ### build_pc_amgsa { #skrom.fom.fem_utils.build_pc_amgsa }
 
@@ -38,23 +32,22 @@ Suparno Bhattacharyya
 fom.fem_utils.build_pc_amgsa(A, **kwargs)
 ```
 
-Build an algebraic multigrid smoothed aggregation preconditioner.
+Makes an algebraic multigrid (AMG) preconditioner—this helps large iterative solves (like CG) run much faster.
 
-**TL;DR**: Creates an AMG preconditioner from a system matrix for efficient 
-iterative solving of large sparse linear systems.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name     | Type                              | Description                                   | Default    |
+|----------|-----------------------------------|-----------------------------------------------|------------|
+| A        | scipy.sparse matrix or array_like | System matrix you want to precondition.       | _required_ |
+| **kwargs | dict                              | Extra options for AMG solver.                 | `{}`       |
 
-| Name     | Type                              | Description                                                              | Default    |
-|----------|-----------------------------------|--------------------------------------------------------------------------|------------|
-| A        | scipy.sparse matrix or array_like | The system matrix for which the preconditioner is constructed            | _required_ |
-| **kwargs | dict                              | Additional keyword arguments passed to pyamg.smoothed_aggregation_solver | `{}`       |
+#### Returns
 
-#### Returns {.doc-section .doc-section-returns}
+| Name   | Type                               | Description                                                               |
+|--------|------------------------------------|---------------------------------------------------------------------------|
+| M      | scipy.sparse.linalg.LinearOperator | The AMG preconditioner (as a linear operator for iterative solvers).      |
 
-| Name   | Type                               | Description                                                                                            |
-|--------|------------------------------------|--------------------------------------------------------------------------------------------------------|
-| M      | scipy.sparse.linalg.LinearOperator | The preconditioner as a linear operator suitable for use in iterative  solvers like conjugate gradient |
+---
 
 ### compute_basis_regions { #skrom.fom.fem_utils.compute_basis_regions }
 
@@ -62,23 +55,22 @@ iterative solving of large sparse linear systems.
 fom.fem_utils.compute_basis_regions(basis, masks)
 ```
 
-Create reduced basis functions for specified mesh regions.
+Splits your basis functions into regions defined by boolean masks (True/False arrays showing which elements belong to which region).
 
-**TL;DR**: Given boolean masks defining mesh regions, returns basis functions
-restricted to each region for efficient regional computations.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name   | Type                           | Description                                                         | Default    |
+|--------|--------------------------------|---------------------------------------------------------------------|------------|
+| basis  | object                         | A basis object (has `nelems` and `with_elements` method).           | _required_ |
+| masks  | dict of str to ndarray of bool | Maps region names to Boolean arrays for element selection.           | _required_ |
 
-| Name   | Type                           | Description                                                                                                                               | Default    |
-|--------|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| basis  | object                         | Finite element basis object with `nelems` attribute and `with_elements` method                                                            | _required_ |
-| masks  | dict of str to ndarray of bool | Dictionary mapping region names to boolean element masks of shape  (basis.nelems,). True values indicate elements belonging to the region | _required_ |
+#### Returns
 
-#### Returns {.doc-section .doc-section-returns}
+| Name         | Type                  | Description                                       |
+|--------------|-----------------------|---------------------------------------------------|
+| region_bases | dict of str to object | Maps region names to basis objects for each region.|
 
-| Name         | Type                  | Description                                                                                                            |
-|--------------|-----------------------|------------------------------------------------------------------------------------------------------------------------|
-| region_bases | dict of str to object | Dictionary mapping region names to reduced basis objects containing only  elements specified by the corresponding mask |
+---
 
 ### element2location { #skrom.fom.fem_utils.element2location }
 
@@ -86,22 +78,21 @@ restricted to each region for efficient regional computations.
 fom.fem_utils.element2location(mesh)
 ```
 
-Map mesh elements to their spatial coordinates.
+Gives the spatial coordinates for every element of the mesh (based on mesh connectivity).
 
-**TL;DR**: Extracts element-wise coordinate information from mesh connectivity,
-useful for element-based computations in finite element methods.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name   | Type   | Description                                                                                      | Default    |
+|--------|--------|--------------------------------------------------------------------------------------------------|------------|
+| mesh   | object | Has `p` (coords, shape [spatial_dim, n_nodes]) and `t` (connectivity, shape [n_nodes_elem, n_elems]) | _required_ |
 
-| Name   | Type   | Description                                                                                                                                                                                        | Default    |
-|--------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| mesh   | object | Mesh object with attributes `p` (node coordinates) and `t` (element  connectivity). Expected to have `p` as shape (spatial_dim, n_nodes)  and `t` as shape (n_local_nodes_per_element, n_elements) | _required_ |
+#### Returns
 
-#### Returns {.doc-section .doc-section-returns}
+| Name           | Type                                         | Description                                                                      |
+|----------------|----------------------------------------------|----------------------------------------------------------------------------------|
+| element_coords | ndarray of shape (n_elements, n_local_nodes) | Each row: element coordinates (one coord per node, for each element).            |
 
-| Name           | Type                                         | Description                                                                                                                                                                                         |
-|----------------|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| element_coords | ndarray of shape (n_elements, n_local_nodes) | Array of element coordinates, where each row corresponds to an element  and each column corresponds to a local node within the element. For 1D  meshes, this gives coordinates of element endpoints |
+---
 
 ### load_domain { #skrom.fom.fem_utils.load_domain }
 
@@ -109,21 +100,20 @@ useful for element-based computations in finite element methods.
 fom.fem_utils.load_domain(instance)
 ```
 
-Load domain information and assign attributes to instance.
+Calls your object’s `domain()` method and assigns all its outputs as attributes on the object.
 
-**TL;DR**: Calls instance.domain() and assigns all returned attributes 
-to the instance object for convenient access.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name     | Type   | Description                                                          | Default    |
+|----------|--------|----------------------------------------------------------------------|------------|
+| instance | object | Any object with a `domain()` method returning a dict of attributes.  | _required_ |
 
-| Name     | Type   | Description                                                                     | Default    |
-|----------|--------|---------------------------------------------------------------------------------|------------|
-| instance | object | Object with a `domain()` method that returns a dictionary of domain  attributes | _required_ |
+#### Notes
 
-#### Notes {.doc-section .doc-section-notes}
+Sets fields on your instance in-place.  
+Now you can use `instance.attr` to access domain attributes directly.
 
-This function modifies the instance in-place by setting attributes based 
-on the domain dictionary keys and values.
+---
 
 ### load_mesh_and_basis { #skrom.fom.fem_utils.load_mesh_and_basis }
 
@@ -131,21 +121,20 @@ on the domain dictionary keys and values.
 fom.fem_utils.load_mesh_and_basis(instance)
 ```
 
-Load only mesh and basis from domain and assign to instance.
+Loads just `mesh` and `basis` fields from your object’s `domain()` output to the object’s attributes.
 
-**TL;DR**: Extracts just mesh and basis from instance.domain() for cases 
-where only these two components are needed.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name     | Type   | Description                                                             | Default    |
+|----------|--------|-------------------------------------------------------------------------|------------|
+| instance | object | Object whose `domain()` returns at least 'mesh' and 'basis' keys.       | _required_ |
 
-| Name     | Type   | Description                                                                                         | Default    |
-|----------|--------|-----------------------------------------------------------------------------------------------------|------------|
-| instance | object | Object with a `domain()` method returning a dictionary containing  at least 'mesh' and 'basis' keys | _required_ |
+#### Notes
 
-#### Notes {.doc-section .doc-section-notes}
+Only `mesh` and `basis` are loaded (rest are ignored).  
+Instance is modified in-place.
 
-This function modifies the instance in-place by setting only `mesh` and 
-`basis` attributes, ignoring other domain components.
+---
 
 ### newton_solver { #skrom.fom.fem_utils.newton_solver }
 
@@ -173,8 +162,11 @@ fom.fem_utils.newton_solver(
 )
 ```
 
-If PETSc is available (and not forced off), uses PETSc KSP for the *linear solves only*.
-Otherwise, falls back to your existing SciPy-based Newton implementation.
+Newton’s method nonlinear solver for systems of equations.  
+Uses PETSc KSP for linear solves if PETSc is installed (unless you turn it off).  
+Otherwise uses NumPy/Scipy solvers.
+
+---
 
 ### petsc_solve_csr { #skrom.fom.fem_utils.petsc_solve_csr }
 
@@ -193,8 +185,10 @@ fom.fem_utils.petsc_solve_csr(
 )
 ```
 
-Solve A x = b using PETSc KSP, where A_csr is SciPy CSR (CPU).
-Uses a small cache to reuse PETSc Mat/KSP objects across calls.
+Solves `A x = b` using PETSc and Krylov solvers (good for large problems, uses cache for speed).  
+Input matrix must be CSR format (from SciPy).
+
+---
 
 ### unwrap_attr { #skrom.fom.fem_utils.unwrap_attr }
 
@@ -202,19 +196,17 @@ Uses a small cache to reuse PETSc Mat/KSP objects across calls.
 fom.fem_utils.unwrap_attr(instance, attr_name)
 ```
 
-Unwrap 0-dimensional object arrays to their scalar values.
+If the named attribute is a 0-dimensional `numpy` object array, unwrap (flatten) it to the contained value.
 
-**TL;DR**: Converts 0-d numpy object arrays to their contained scalar value
-using .item(), useful for cleaning up attributes after certain operations.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name      | Type   | Description                         | Default    |
+|-----------|--------|-------------------------------------|------------|
+| instance  | object | The object holding the attribute.   | _required_ |
+| attr_name | str    | Attribute name (string).            | _required_ |
 
-| Name      | Type   | Description                               | Default    |
-|-----------|--------|-------------------------------------------|------------|
-| instance  | object | Object containing the attribute to unwrap | _required_ |
-| attr_name | str    | Name of the attribute to unwrap           | _required_ |
+#### Notes
 
-#### Notes {.doc-section .doc-section-notes}
+Only works if attribute is a 0-dim numpy array with object dtype.  
+Instance is modified in-place—afterwards, the attribute is a plain value.
 
-Only applies unwrapping if the attribute is a 0-dimensional numpy array 
-with object dtype. The instance is modified in-place.
