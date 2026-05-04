@@ -1,80 +1,82 @@
-# rom.rom_error_est { #skrom.rom.rom_error_est }
+# rom.rom_error_est
 
 `rom.rom_error_est`
 
-Compute and visualize ROM error metrics for flat data reconstructions.
+**Compute and visualize error metrics for Reduced-Order Model (ROM) reconstructions (for flat, non-time-dependent data).**
 
-This module provides:
-  - `compute_rom_error_metrics_flat`: calculates time-dependent and global error measures
-    (L2, L∞, RMSE, MAE, R², explained variance, quantiles, and optional energy norm).
-  - `plot_rom_error_diagnostics_flat`: diagnostic plots including true vs. ROM scatter,
-    spatial snapshots for selected snapshots, and raincloud plots of error and speed-up.
-  - `generate_rom_error_report`: prints a structured summary of global and time-dependent
-    ROM error statistics to the console.
+**What does this module provide?**
 
-The `rom` folder contains core tools for reduced-order modeling, including:
-  - Assembly abstractions for reduced bilinear and linear forms
-  - Error evaluation and reporting utilities (this module)
-  - Hyper-reduction and cubature integration tools
+- Automated calculation of a wide range of error metrics to compare full-order and ROM results (including L2, L∞, RMSE, MAE, R², explained variance, and more).
+- Quick, publication-ready diagnostic plots: true-vs-ROM scatter, spatial plots, and error/speedup “raincloud” visualizations.
+- Easy summary reports you can print for a fast ROM error overview.
 
-  [Author: Suparno Bhattacharyya]
+**Note:** This module focuses on flat (non-time-dependent) data, e.g., `(n_snapshots, n_space_reference_points)`.
+
+**Author:** Suparno Bhattacharyya
+
+---
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [compute_rom_error_metrics_flat](#skrom.rom.rom_error_est.compute_rom_error_metrics_flat) | compute_rom_error_metrics_flat |
-| [generate_rom_error_report](#skrom.rom.rom_error_est.generate_rom_error_report) | generate_rom_error_report |
-| [plot_rom_error_diagnostics_flat](#skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat) | plot_rom_error_diagnostics_flat |
+| [compute_rom_error_metrics_flat](#skrom.rom.rom_error_est.compute_rom_error_metrics_flat) | Computes standard error metrics between FOM and ROM arrays. |
+| [generate_rom_error_report](#skrom.rom.rom_error_est.generate_rom_error_report) | Prints a nice summary of computed errors and accuracy scores. |
+| [plot_rom_error_diagnostics_flat](#skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat) | Plots scatter, spatial maps, and error/speedup distributions for your ROM results. |
 
-### compute_rom_error_metrics_flat { #skrom.rom.rom_error_est.compute_rom_error_metrics_flat }
+---
+
+### compute_rom_error_metrics_flat
 
 ```python
 rom.rom_error_est.compute_rom_error_metrics_flat(u, u_rom, K=None)
 ```
 
-compute_rom_error_metrics_flat
+**Purpose:**  
+Calculate a variety of error metrics between your *full-order solutions* (`u`) and your *ROM reconstructions* (`u_rom`).  
+Especially useful for validation, tuning, and reporting.
 
-Compute various error metrics between full-order and ROM reconstructions for flat data.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name   | Type                                      | Description                                                             | Default    |
+|--------|-------------------------------------------|-------------------------------------------------------------------------|------------|
+| u      | (array_like, shape(n_snapshots, n_space)) | Full-model field; each row is a parameter/realization (“snapshot”).     | _required_ |
+| u_rom  | (array_like, shape(n_snapshots, n_space)) | ROM field of the same shape as `u`.                                     | _required_ |
+| K      | (array_like, shape(n_space, n_space))     | (Optional) Stiffness matrix for calculating energy-norm error.           | `None`     |
 
-| Name   | Type                                      | Description                                              | Default    |
-|--------|-------------------------------------------|----------------------------------------------------------|------------|
-| u      | (array_like, shape(n_snapshots, n_space)) | Full-order field, with each row representing a snapshot. | _required_ |
-| u_rom  | (array_like, shape(n_snapshots, n_space)) | ROM reconstruction matching the shape of `u`.            | _required_ |
-| K      | (array_like, shape(n_space, n_space))     | Stiffness matrix for computing the energy-norm error.    | `None`     |
+#### Returns
 
-#### Returns {.doc-section .doc-section-returns}
+| Name    | Type   | Description                                                                                                                                                                                                                                                                                                                                                                 |
+|---------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| metrics | dict   | Dictionary with all computed errors:<br><br>**Per-snapshot (arrays of length n_snapshots):**<br> L2_error_time: absolute error (L2 norm) per snapshot<br> relative_L2_error_time: relative L2 error per snapshot<br> RMSE_time: root mean square error per snapshot<br> MAE_time: mean absolute error per snapshot<br><br>**Global (scalars):**<br> L2_error: global L2 norm<br> relative_L2_error: overall relative L2 error<br> Linf_error: max absolute error<br> relative_Linf_error: max relative error<br> RMSE: overall RMSE<br> MAE: overall MAE<br> R2: R² coefficient of determination<br> explained_variance: fraction of variance your ROM captures<br> quantiles: dict with `median_error` and `p95_error`<br> (Optional) energy_norm_error: energy norm (if `K` provided) |
 
-| Name    | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|---------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| metrics | dict   | Dictionary containing error metrics:  time-dependent --------------- L2_error_time : ndarray, shape (n_snapshots,)     L2 norm of error per snapshot. relative_L2_error_time : ndarray, shape (n_snapshots,)     Relative L2 error per snapshot. RMSE_time : ndarray, shape (n_snapshots,)     Root mean square error per snapshot. MAE_time : ndarray, shape (n_snapshots,)     Mean absolute error per snapshot. time_avg_rel_L2_error : float     Average relative L2 error over all snapshots.  global ------ L2_error : float     Global L2 norm of the error. relative_L2_error : float     Global relative L2 error. Linf_error : float     Maximum absolute error. relative_Linf_error : float     Maximum relative error. RMSE : float     Global root mean square error. MAE : float     Global mean absolute error. R2 : float     Coefficient of determination. explained_variance : float     Variance explained by the ROM. quantiles : dict     median_error : float         Median absolute error.     p95_error : float         95th percentile of absolute errors.  optional -------- energy_norm_error : float     Energy-norm error computed if `K` is provided. |
+---
 
-### generate_rom_error_report { #skrom.rom.rom_error_est.generate_rom_error_report }
+### generate_rom_error_report
 
 ```python
 rom.rom_error_est.generate_rom_error_report(metrics, name='ROM Accuracy Report')
 ```
 
-generate_rom_error_report
+**Purpose:**  
+Prints a structured, readable summary of your ROM error metrics—for fast reporting on model accuracy.
 
-Print a structured summary of ROM error metrics.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name    | Type   | Description                                        | Default                 |
+|---------|--------|----------------------------------------------------|-------------------------|
+| metrics | dict   | Metrics dict from `compute_rom_error_metrics_flat` | _required_              |
+| name    | str    | Report title                                       | `'ROM Accuracy Report'` |
 
-| Name    | Type   | Description                                                   | Default                 |
-|---------|--------|---------------------------------------------------------------|-------------------------|
-| metrics | dict   | Error metrics dictionary from compute_rom_error_metrics_flat. | _required_              |
-| name    | str    | Title of the report. Defaults to "ROM Accuracy Report".       | `'ROM Accuracy Report'` |
-
-#### Returns {.doc-section .doc-section-returns}
+#### Returns
 
 | Name   | Type   | Description   |
 |--------|--------|---------------|
 |        | None   |               |
 
-### plot_rom_error_diagnostics_flat { #skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat }
+---
+
+### plot_rom_error_diagnostics_flat
 
 ```python
 rom.rom_error_est.plot_rom_error_diagnostics_flat(
@@ -88,24 +90,36 @@ rom.rom_error_est.plot_rom_error_diagnostics_flat(
 )
 ```
 
-plot_rom_error_diagnostics_flat
+**Purpose:**
 
-Visualize ROM error diagnostics including scatter, spatial snapshots, and raincloud plots.
+Quickly creates summary plots:
 
-#### Parameters {.doc-section .doc-section-parameters}
+- **Scatter plot**: “True” vs. ROM predictions.
+- **Spatial snapshots**: Compare fields (original and ROM), optionally reshaped for 2D coloring.
+- **Raincloud/box/scatter plots**: Show the distribution and variation of errors and speed-ups across all snapshots.
 
-| Name               | Type                                      | Description                                                      | Default    |
-|--------------------|-------------------------------------------|------------------------------------------------------------------|------------|
-| u                  | (array_like, shape(n_snapshots, n_space)) | Full-order field for diagnostics.                                | _required_ |
-| u_rom              | (array_like, shape(n_snapshots, n_space)) | ROM reconstruction matching shape of `u`.                        | _required_ |
-| rom_relative_error | (array_like, shape(n_snapshots))          | Relative error per snapshot.                                     | _required_ |
-| rom_speed_up       | (array_like, shape(n_snapshots))          | Speed-up factors per snapshot.                                   | _required_ |
-| sim_axis           | tuple of str                              | Axis labels for true vs ROM scatter (xlabel, ylabel).            | _required_ |
-| metrics            | dict                                      | Dictionary of error metrics from compute_rom_error_metrics_flat. | _required_ |
-| spatial_shape      | tuple of int                              | Shape (nx, ny) to reshape spatial data for pcolormesh plots.     | `None`     |
+#### Parameters
 
-#### Returns {.doc-section .doc-section-returns}
+| Name               | Type                                      | Description                                               | Default    |
+|--------------------|-------------------------------------------|-----------------------------------------------------------|------------|
+| u                  | (array_like, shape(n_snapshots, n_space)) | Full-order solutions (used as ground truth).              | _required_ |
+| u_rom              | (array_like, shape(n_snapshots, n_space)) | Your ROM outputs, matching `u` in shape.                  | _required_ |
+| rom_relative_error | (array_like, shape(n_snapshots))          | Relative error, one per snapshot.                         | _required_ |
+| rom_speed_up       | (array_like, shape(n_snapshots))          | Speed-up factor, one per snapshot (ROM time/FOM time).    | _required_ |
+| sim_axis           | tuple of str                              | ("True label", "ROM label") for scatter plot axes.        | _required_ |
+| metrics            | dict                                      | All metrics from `compute_rom_error_metrics_flat`.        | _required_ |
+| spatial_shape      | tuple of int                              | (Optional) Shape to reshape your data for 2D spatial pics (e.g. `(nx, ny)` for 2D color plots). | `None`     |
+
+#### Returns
 
 | Name   | Type   | Description   |
 |--------|--------|---------------|
 |        | None   |               |
+
+---
+
+**In summary:**
+
+- Use these functions to **quantify and visualize** how well your ROM matches the full model, at a single-glance and in statistical detail.
+- Handles all standard metrics and produces visualizations publication-ready and diagnostic-friendly.
+- Supports additional “energy-norm” assessment if the stiffness matrix is available.

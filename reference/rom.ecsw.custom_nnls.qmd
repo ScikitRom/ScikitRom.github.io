@@ -7,6 +7,7 @@
 This module lets you solve problems where you need to find **non-negative weights** (x ≥ 0), usually for building hyperreduced cubature rules. It uses a powerful “active set” algorithm, works with per-entry (element-by-element) bounds, and gives you detailed control over solver convergence and diagnostics.
 
 **Features:**
+
 - A flexible, robust NNLS solver you can configure for accuracy, speed, and verbosity
 - Two main ways to check if the solver has converged (`L2` or maximum violation)
 - Prune/select important cubature points using sequential/active-set methods
@@ -43,10 +44,12 @@ rom.ecsw.custom_nnls.NNLSSolver(
 ```
 
 **What is this?**  
+
 - A solver for the problem: *find `x` such that* **A x ≈ b**, with constraints **x ≥ 0** (and possibly per-entry bounds on `b`)  
 - Used for selecting positive weights that make a linear equation fit as closely as possible, with deep control over tolerances, iteration limits, and termination
 
 **Algorithm highlights:**  
+
 - Active-set approach: adapts which variables are “active” as it searches for a solution
 - Supports per-entry lower/upper bounds on `b`, not just on `x`
 - Lets you specify when to stop: based on sum of squares (`L2`) **or** largest single violation (`L∞`)
@@ -170,6 +173,7 @@ rom.ecsw.custom_nnls.NNLS_termination()
 ---
 
 **In practice:**  
+
 - Use `NNLSSolver` to compute guaranteed-positive cubature (ECSW) weights, with full control over nonzeros, bounds, and convergence diagnostics.
 - Choose L2 or L∞ for termination—L∞ (default) is stricter (no big violations left), L2 is usual least-squares.
 

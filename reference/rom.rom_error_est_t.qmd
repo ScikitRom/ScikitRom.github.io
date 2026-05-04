@@ -6,6 +6,7 @@
 Compute and plot ROM error metrics for comparing full-order and reduced-order (ROM) solutions, especially when your data is stored in straightforward “flat” (vectorized) NumPy arrays.
 
 **What’s included?**
+
 - Automated calculation of many standard error metrics (L2, L∞, RMSE, MAE, R²/score, explained variance, quantiles, and optionally energy norm)
 - Useful visualizations: scatter plots, snapshot overlays, and “raincloud” plots of error/speedup
 - A function to print error summaries in a clean, human-readable report
@@ -126,11 +127,13 @@ rom.rom_error_est_t.plot_rom_param_diagnostics_t(
     - Speed-up values (if provided)
 
 These visualizations help you see:
+
 - How errors stack up across parameters or over time
 - Whether any cases are particularly good or poor
 - The distribution and “spread” of errors and speed-ups
 
 **Options:**
+
 - `eps`: Small value to avoid divide-by-zero in plotting errors (default: `1e-16`)
 - `log_error`: Use log-scale for error axes (default: `True`)
 - `use_raincloud`: Turns on/off the “raincloud” plots for error/speedup distributions
@@ -138,6 +141,7 @@ These visualizations help you see:
 ---
 
 **Summary:**  
+
 - Use this module for fast, reliable error checking and visual reporting when comparing your full-order and ROM results.
 - Handles both steady-state and time-dependent data shapes.
 - Metric output and plots are suitable for publication, debug, or iterative ROM improvement.

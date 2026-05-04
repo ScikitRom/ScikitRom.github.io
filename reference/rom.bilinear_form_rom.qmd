@@ -6,11 +6,13 @@
 This module helps turn *full-size* element stiffness matrices into *reduced* (ROM) versions, handling all the index mapping and memory tricks so you get efficient reduced-order stiffness matrices, even for big problems.
 
 **Features:**  
+
 - `BilinearFormROM`: Class for projecting and assembling reduced matrices
 - Groups elements by how they hit Dirichlet boundaries (for efficient handling)
 - Builds the global reduced stiffness matrix from reduced element contributions—optionally in chunks for better memory use
 
 The `rom` folder also includes:
+
 - Classes for handling reduced assembly and projection (both bilinear and linear forms)
 - Helper utilities for Dirichlet BCs in ROMs
 - Tricks for chunked and group-wise matrix assembly (so huge problems fit in memory)
@@ -142,6 +144,7 @@ For a given (full) bilinear form, returns the stiffness matrix for *each element
 ---
 
 **In Summary:**
+
 - Use `BilinearFormROM` in your ROM code to efficiently build reduced stiffness matrices, even for huge models with Dirichlet BCs.
 - Takes care of all index mapping, boundary condition issues, and can avoid big memory spikes using grouping/chunking.
 - Assembly is super-efficient, and works directly with your reduced bases.

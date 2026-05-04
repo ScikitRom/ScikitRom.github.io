@@ -630,7 +630,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>rom.ecsw.custom_nnls</code></p>
 <p><strong>Bounded Non-Negative Least Squares (NNLS) for ECSW Hyperreduction</strong></p>
 <p>This module lets you solve problems where you need to find <strong>non-negative weights</strong> (x ≥ 0), usually for building hyperreduced cubature rules. It uses a powerful “active set” algorithm, works with per-entry (element-by-element) bounds, and gives you detailed control over solver convergence and diagnostics.</p>
-<p><strong>Features:</strong> - A flexible, robust NNLS solver you can configure for accuracy, speed, and verbosity - Two main ways to check if the solver has converged (<code>L2</code> or maximum violation) - Prune/select important cubature points using sequential/active-set methods - All tools needed to integrate within an ECSW (“Empirical Cubature Subset Weighting”) pipeline</p>
+<p><strong>Features:</strong></p>
+<ul>
+<li>A flexible, robust NNLS solver you can configure for accuracy, speed, and verbosity</li>
+<li>Two main ways to check if the solver has converged (<code>L2</code> or maximum violation)</li>
+<li>Prune/select important cubature points using sequential/active-set methods</li>
+<li>All tools needed to integrate within an ECSW (“Empirical Cubature Subset Weighting”) pipeline</li>
+</ul>
 <p><strong>Original C++ reference: libROM team at LLNL<br>
 Python adaptation: Suparno Bhattacharyya</strong></p>
 <hr>
@@ -668,11 +674,21 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n_inner<span class="op">=</span><span class="dv">400</span>,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    criterion<span class="op">=</span>NNLS_termination.LINF,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What is this?</strong><br>
-- A solver for the problem: <em>find <code>x</code> such that</em> <strong>A x ≈ b</strong>, with constraints <strong>x ≥ 0</strong> (and possibly per-entry bounds on <code>b</code>)<br>
-- Used for selecting positive weights that make a linear equation fit as closely as possible, with deep control over tolerances, iteration limits, and termination</p>
-<p><strong>Algorithm highlights:</strong><br>
-- Active-set approach: adapts which variables are “active” as it searches for a solution - Supports per-entry lower/upper bounds on <code>b</code>, not just on <code>x</code> - Lets you specify when to stop: based on sum of squares (<code>L2</code>) <strong>or</strong> largest single violation (<code>L∞</code>) - Detects “stalling” (when solution doesn’t improve anymore) - Can limit number of nonzero weights or require a minimum (for sparse solutions) - Easy to choose how much diagnostic output you want</p>
+<p><strong>What is this?</strong></p>
+<ul>
+<li>A solver for the problem: <em>find <code>x</code> such that</em> <strong>A x ≈ b</strong>, with constraints <strong>x ≥ 0</strong> (and possibly per-entry bounds on <code>b</code>)<br>
+</li>
+<li>Used for selecting positive weights that make a linear equation fit as closely as possible, with deep control over tolerances, iteration limits, and termination</li>
+</ul>
+<p><strong>Algorithm highlights:</strong></p>
+<ul>
+<li>Active-set approach: adapts which variables are “active” as it searches for a solution</li>
+<li>Supports per-entry lower/upper bounds on <code>b</code>, not just on <code>x</code></li>
+<li>Lets you specify when to stop: based on sum of squares (<code>L2</code>) <strong>or</strong> largest single violation (<code>L∞</code>)</li>
+<li>Detects “stalling” (when solution doesn’t improve anymore)</li>
+<li>Can limit number of nonzero weights or require a minimum (for sparse solutions)</li>
+<li>Easy to choose how much diagnostic output you want</li>
+</ul>
 <hr>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
@@ -989,8 +1005,11 @@ Find x ≥ 0 so that <strong>A x ≈ b</strong>, where b ∈ [rhs_lb, rhs_ub] (e
 </tbody>
 </table>
 <hr>
-<p><strong>In practice:</strong><br>
-- Use <code>NNLSSolver</code> to compute guaranteed-positive cubature (ECSW) weights, with full control over nonzeros, bounds, and convergence diagnostics. - Choose L2 or L∞ for termination—L∞ (default) is stricter (no big violations left), L2 is usual least-squares.</p>
+<p><strong>In practice:</strong></p>
+<ul>
+<li>Use <code>NNLSSolver</code> to compute guaranteed-positive cubature (ECSW) weights, with full control over nonzeros, bounds, and convergence diagnostics.</li>
+<li>Choose L2 or L∞ for termination—L∞ (default) is stricter (no big violations left), L2 is usual least-squares.</li>
+</ul>
 
 
 </section>

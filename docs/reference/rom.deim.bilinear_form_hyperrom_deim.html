@@ -668,8 +668,11 @@ Implements DEIM-based hyperreduction for finite element bilinear forms (like sti
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>In short:</strong><br>
-- This class gives you a super-fast way to assemble stiffness (or other bilinear) matrices in a reduced basis. - It combines DEIM (Discrete Empirical Interpolation Method) with element selection: assemble <em>just a small, critical subset of elements</em> and then reconstruct the full reduced matrix from those.</p>
+<p><strong>In short:</strong></p>
+<ul>
+<li>This class gives you a super-fast way to assemble stiffness (or other bilinear) matrices in a reduced basis.</li>
+<li>It combines DEIM (Discrete Empirical Interpolation Method) with element selection: assemble <em>just a small, critical subset of elements</em> and then reconstruct the full reduced matrix from those.</li>
+</ul>
 <section id="how-does-it-work" class="level4">
 <h4 class="anchored" data-anchor-id="how-does-it-work">How does it work?</h4>
 <p><strong>1. Element Selection:</strong><br>
@@ -680,8 +683,12 @@ It uses sparse matrix tricks to assemble only these selected elements—saving l
 Uses a special interpolation (DEIM) matrix to <em>reconstruct</em> the full reduced system from the small set of samples.</p>
 <p><strong>4. Basis Projection:</strong><br>
 The system is projected onto the reduced basis (the same way as normal reduction) to produce the final, small matrix.</p>
-<p><strong>When to use:</strong><br>
-- When most of your computation is wasted on “boring”/unchanging regions - Real-time ROM or large-scale nonlinear ROM needed - Operators (matrices) look nearly low-rank with respect to parameters</p>
+<p><strong>When to use:</strong></p>
+<ul>
+<li>When most of your computation is wasted on “boring”/unchanging regions</li>
+<li>Real-time ROM or large-scale nonlinear ROM needed</li>
+<li>Operators (matrices) look nearly low-rank with respect to parameters</li>
+</ul>
 <p>Assembly cost drops by orders of magnitude—from “all elements” to just “a few”! (For n_selected ≪ n_elements.)</p>
 <hr>
 </section>
@@ -1132,8 +1139,12 @@ For each selected element: &gt; K_e[i,j] = ∫ (phi_i * form * phi_j) dx</p>
 </tbody>
 </table>
 <hr>
-<p><strong>In summary:</strong><br>
-- Use this to speed up reduced matrix assembly massively in your ROMs. - Only evaluates a small, crucial set of elements, and reconstructs the rest using DEIM math. - Great for real-time and large, nonlinear parametric ROMs.</p>
+<p><strong>In summary:</strong></p>
+<ul>
+<li>Use this to speed up reduced matrix assembly massively in your ROMs.</li>
+<li>Only evaluates a small, crucial set of elements, and reconstructs the rest using DEIM math.</li>
+<li>Great for real-time and large, nonlinear parametric ROMs.</li>
+</ul>
 
 
 </section>

@@ -5,11 +5,13 @@ Framework for static reduced-order modeling (ROM).
 ## TL;DR
 
 This module helps you:
+
 - Run offline full-model (FEM) solves to get data (“snapshots”)
 - Run online reduced-order (ROM) solves for fast prediction
 - Optionally use hyper-reduction (DEIM, ECSW, ECM) for quicker online solves, with error tracking
 
 Main features:
+
 - A standard problem interface (base class) for consistency
 - A registry and factory to create various problem classes
 - Offline workflow for generating training data (snapshots) with the big/full model
@@ -38,9 +40,11 @@ Main features:
 problem_classes.masterclass.Problem()
 ```
 
-**Summary:**  
+**Summary:** 
+
 Defines what every parameterized FEM/ROM problem must have.  
 You make your own class from this, and supply the required methods, such as:
+
 - Mesh and basis setup
 - Bilinear and linear forms in affine terms (for easy ROM)
 - How parameters control coefficients in your problem
@@ -149,6 +153,7 @@ problem_classes.masterclass.fom_simulation(num_snapshots=32)
 ```
 
 **Offline workflow** for collecting snapshot data:
+
 - Takes parameter samples
 - Solves the full (FEM) model for each sample
 - Saves the solutions and timings
@@ -174,6 +179,7 @@ problem_classes.masterclass.fom_simulation.run_simulation()
 ```
 
 Runs all full-order solves and saves each result:
+
 - Each snapshot checkpoint is written to `.npz` (safe/atomic)
 - If a checkpoint already exists, it skips and loads instead (resume on crash)
 - Uses hash for long filenames (handles Windows path limits)
@@ -197,6 +203,7 @@ problem_classes.masterclass.rom_simulation(
 ```
 
 **Online evaluation workflow** for ROMs:
+
 - Loads data from disk
 - Picks test samples and (optional) reference full solutions
 - Runs your ROM and reconstructs the “full” fields if needed
@@ -239,6 +246,7 @@ problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_deim(
 ```
 
 Runs the DEIM version of your ROM for all parameters:
+
 - For each parameter, runs the hyper-reduced solver
 - If needed, reconstructs the full solution for error comparison or just returns the reduced coordinates
 - Calculates relative error (%) and speed-up unless custom parameters (`new_params`) are provided
@@ -274,6 +282,7 @@ problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecm(
 ```
 
 Runs ECM-type hyper-ROM for parameters:
+
 - For each parameter, runs the hyper-reduced solver
 - Optionally reconstructs solution (“full_order”)
 - Calculates errors and speed-up if `new_params` is not given
@@ -307,6 +316,7 @@ problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecsw(
 ```
 
 Runs the ECSW hyper-ROM:
+
 - Each parameter, runs ECSW solver
 - Reconstructs full field if needed
 - Gives errors, speed-up, and/or solutions as above
@@ -339,6 +349,7 @@ problem_classes.masterclass.rom_simulation.run_rom_simulation(
 ```
 
 Runs the basic reduced-order model (no hyper-reduction):
+
 - Each parameter, solves the ROM, reconstructs full field if needed
 - Calculates error (%) and speed-up (if `new_params` not provided)
 

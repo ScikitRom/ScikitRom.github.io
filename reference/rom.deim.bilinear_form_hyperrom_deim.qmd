@@ -40,6 +40,7 @@ rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim(
 ```
 
 **In short:**  
+
 - This class gives you a super-fast way to assemble stiffness (or other bilinear) matrices in a reduced basis.
 - It combines DEIM (Discrete Empirical Interpolation Method) with element selection: assemble *just a small, critical subset of elements* and then reconstruct the full reduced matrix from those.
 
@@ -57,7 +58,8 @@ rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim(
 **4. Basis Projection:**  
   The system is projected onto the reduced basis (the same way as normal reduction) to produce the final, small matrix.
 
-**When to use:**  
+**When to use:** 
+
 - When most of your computation is wasted on “boring”/unchanging regions
 - Real-time ROM or large-scale nonlinear ROM needed
 - Operators (matrices) look nearly low-rank with respect to parameters
@@ -231,6 +233,7 @@ where phi’s are basis functions and “form” is your bilinear form.
 ---
 
 **In summary:**  
+
 - Use this to speed up reduced matrix assembly massively in your ROMs.
 - Only evaluates a small, crucial set of elements, and reconstructs the rest using DEIM math.
 - Great for real-time and large, nonlinear parametric ROMs.

@@ -638,8 +638,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Framework for static reduced-order modeling (ROM).</p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">TL;DR</h2>
-<p>This module helps you: - Run offline full-model (FEM) solves to get data (“snapshots”) - Run online reduced-order (ROM) solves for fast prediction - Optionally use hyper-reduction (DEIM, ECSW, ECM) for quicker online solves, with error tracking</p>
-<p>Main features: - A standard problem interface (base class) for consistency - A registry and factory to create various problem classes - Offline workflow for generating training data (snapshots) with the big/full model - Online workflow for using ROMs, with error and speed tracking - Ready-to-use hooks for hyper-reduction methods</p>
+<p>This module helps you:</p>
+<ul>
+<li>Run offline full-model (FEM) solves to get data (“snapshots”)</li>
+<li>Run online reduced-order (ROM) solves for fast prediction</li>
+<li>Optionally use hyper-reduction (DEIM, ECSW, ECM) for quicker online solves, with error tracking</li>
+</ul>
+<p>Main features:</p>
+<ul>
+<li>A standard problem interface (base class) for consistency</li>
+<li>A registry and factory to create various problem classes</li>
+<li>Offline workflow for generating training data (snapshots) with the big/full model</li>
+<li>Online workflow for using ROMs, with error and speed tracking</li>
+<li>Ready-to-use hooks for hyper-reduction methods</li>
+</ul>
 <hr>
 <p><strong>Authors:</strong> Suparno Bhattacharyya, Ali Hamza Abidi Syed</p>
 <hr>
@@ -672,9 +684,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="problem" class="level3">
 <h3 class="anchored" data-anchor-id="problem">Problem</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>problem_classes.masterclass.Problem()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Summary:</strong><br>
-Defines what every parameterized FEM/ROM problem must have.<br>
-You make your own class from this, and supply the required methods, such as: - Mesh and basis setup - Bilinear and linear forms in affine terms (for easy ROM) - How parameters control coefficients in your problem - How to sample from your parameter space - How to solve full and reduced systems - Optional support for hyper-reduced solves (DEIM, ECSW, ECM)</p>
+<p><strong>Summary:</strong></p>
+<p>Defines what every parameterized FEM/ROM problem must have.<br>
+You make your own class from this, and supply the required methods, such as:</p>
+<ul>
+<li>Mesh and basis setup</li>
+<li>Bilinear and linear forms in affine terms (for easy ROM)</li>
+<li>How parameters control coefficients in your problem</li>
+<li>How to sample from your parameter space</li>
+<li>How to solve full and reduced systems</li>
+<li>Optional support for hyper-reduced solves (DEIM, ECSW, ECM)</li>
+</ul>
 <p><strong>Key methods you should provide</strong> (all listed below in the same format):</p>
 <hr>
 <section id="bilinear_forms" class="level5">
@@ -741,7 +761,14 @@ You make your own class from this, and supply the required methods, such as: - M
 <section id="fom_simulation" class="level3">
 <h3 class="anchored" data-anchor-id="fom_simulation">fom_simulation</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>problem_classes.masterclass.fom_simulation(num_snapshots<span class="op">=</span><span class="dv">32</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Offline workflow</strong> for collecting snapshot data: - Takes parameter samples - Solves the full (FEM) model for each sample - Saves the solutions and timings - Computes a mean/reference solution for centering - Stores all data for later ROM use</p>
+<p><strong>Offline workflow</strong> for collecting snapshot data:</p>
+<ul>
+<li>Takes parameter samples</li>
+<li>Solves the full (FEM) model for each sample</li>
+<li>Saves the solutions and timings</li>
+<li>Computes a mean/reference solution for centering</li>
+<li>Stores all data for later ROM use</li>
+</ul>
 <section id="attributes" class="level4">
 <h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
@@ -789,7 +816,13 @@ You make your own class from this, and supply the required methods, such as: - M
 <section id="run_simulation" class="level5">
 <h5 class="anchored" data-anchor-id="run_simulation">run_simulation</h5>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>problem_classes.masterclass.fom_simulation.run_simulation()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Runs all full-order solves and saves each result: - Each snapshot checkpoint is written to <code>.npz</code> (safe/atomic) - If a checkpoint already exists, it skips and loads instead (resume on crash) - Uses hash for long filenames (handles Windows path limits) - If a checkpoint is corrupt, it recomputes and overwrites</p>
+<p>Runs all full-order solves and saves each result:</p>
+<ul>
+<li>Each snapshot checkpoint is written to <code>.npz</code> (safe/atomic)</li>
+<li>If a checkpoint already exists, it skips and loads instead (resume on crash)</li>
+<li>Uses hash for long filenames (handles Windows path limits)</li>
+<li>If a checkpoint is corrupt, it recomputes and overwrites</li>
+</ul>
 <hr>
 </section>
 </section>
@@ -806,7 +839,14 @@ You make your own class from this, and supply the required methods, such as: - M
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    n_sel<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    N_rom_snap<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Online evaluation workflow</strong> for ROMs: - Loads data from disk - Picks test samples and (optional) reference full solutions - Runs your ROM and reconstructs the “full” fields if needed - Calculates error and speedup factors - Supports DEIM, ECSW, ECM solvers for hyper-reduced runs</p>
+<p><strong>Online evaluation workflow</strong> for ROMs:</p>
+<ul>
+<li>Loads data from disk</li>
+<li>Picks test samples and (optional) reference full solutions</li>
+<li>Runs your ROM and reconstructs the “full” fields if needed</li>
+<li>Calculates error and speedup factors</li>
+<li>Supports DEIM, ECSW, ECM solvers for hyper-reduced runs</li>
+</ul>
 <section id="attributes-1" class="level4">
 <h4 class="anchored" data-anchor-id="attributes-1">Attributes</h4>
 <table class="caption-top table">
@@ -890,7 +930,12 @@ You make your own class from this, and supply the required methods, such as: - M
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    full_order<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    new_params<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Runs the DEIM version of your ROM for all parameters: - For each parameter, runs the hyper-reduced solver - If needed, reconstructs the full solution for error comparison or just returns the reduced coordinates - Calculates relative error (%) and speed-up unless custom parameters (<code>new_params</code>) are provided</p>
+<p>Runs the DEIM version of your ROM for all parameters:</p>
+<ul>
+<li>For each parameter, runs the hyper-reduced solver</li>
+<li>If needed, reconstructs the full solution for error comparison or just returns the reduced coordinates</li>
+<li>Calculates relative error (%) and speed-up unless custom parameters (<code>new_params</code>) are provided</li>
+</ul>
 <section id="parameters-1" class="level6">
 <h6 class="anchored" data-anchor-id="parameters-1">Parameters</h6>
 <table class="caption-top table">
@@ -985,7 +1030,12 @@ You make your own class from this, and supply the required methods, such as: - M
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    full_order<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    new_params<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Runs ECM-type hyper-ROM for parameters: - For each parameter, runs the hyper-reduced solver - Optionally reconstructs solution (“full_order”) - Calculates errors and speed-up if <code>new_params</code> is not given</p>
+<p>Runs ECM-type hyper-ROM for parameters:</p>
+<ul>
+<li>For each parameter, runs the hyper-reduced solver</li>
+<li>Optionally reconstructs solution (“full_order”)</li>
+<li>Calculates errors and speed-up if <code>new_params</code> is not given</li>
+</ul>
 <section id="parameters-2" class="level6">
 <h6 class="anchored" data-anchor-id="parameters-2">Parameters</h6>
 <table class="caption-top table">
@@ -1068,7 +1118,12 @@ You make your own class from this, and supply the required methods, such as: - M
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    full_order<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    new_params<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Runs the ECSW hyper-ROM: - Each parameter, runs ECSW solver - Reconstructs full field if needed - Gives errors, speed-up, and/or solutions as above</p>
+<p>Runs the ECSW hyper-ROM:</p>
+<ul>
+<li>Each parameter, runs ECSW solver</li>
+<li>Reconstructs full field if needed</li>
+<li>Gives errors, speed-up, and/or solutions as above</li>
+</ul>
 <section id="parameters-3" class="level6">
 <h6 class="anchored" data-anchor-id="parameters-3">Parameters</h6>
 <table class="caption-top table">
@@ -1150,7 +1205,11 @@ You make your own class from this, and supply the required methods, such as: - M
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    full_order<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    new_params<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Runs the basic reduced-order model (no hyper-reduction): - Each parameter, solves the ROM, reconstructs full field if needed - Calculates error (%) and speed-up (if <code>new_params</code> not provided)</p>
+<p>Runs the basic reduced-order model (no hyper-reduction):</p>
+<ul>
+<li>Each parameter, solves the ROM, reconstructs full field if needed</li>
+<li>Calculates error (%) and speed-up (if <code>new_params</code> not provided)</li>
+</ul>
 <section id="parameters-4" class="level6">
 <h6 class="anchored" data-anchor-id="parameters-4">Parameters</h6>
 <table class="caption-top table">

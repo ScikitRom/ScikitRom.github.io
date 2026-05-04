@@ -632,7 +632,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>rom.rom_error_est_t</code></p>
 <p><strong>Purpose:</strong><br>
 Compute and plot ROM error metrics for comparing full-order and reduced-order (ROM) solutions, especially when your data is stored in straightforward “flat” (vectorized) NumPy arrays.</p>
-<p><strong>What’s included?</strong> - Automated calculation of many standard error metrics (L2, L∞, RMSE, MAE, R²/score, explained variance, quantiles, and optionally energy norm) - Useful visualizations: scatter plots, snapshot overlays, and “raincloud” plots of error/speedup - A function to print error summaries in a clean, human-readable report</p>
+<p><strong>What’s included?</strong></p>
+<ul>
+<li>Automated calculation of many standard error metrics (L2, L∞, RMSE, MAE, R²/score, explained variance, quantiles, and optionally energy norm)</li>
+<li>Useful visualizations: scatter plots, snapshot overlays, and “raincloud” plots of error/speedup</li>
+<li>A function to print error summaries in a clean, human-readable report</li>
+</ul>
 <hr>
 <section id="notes-on-data-shapes" class="level2">
 <h2 class="anchored" data-anchor-id="notes-on-data-shapes">Notes on Data Shapes</h2>
@@ -836,11 +841,25 @@ Prints a clean, well-structured summary of all the ROM error metrics to your scr
 <li>Speed-up values (if provided)</li>
 </ul></li>
 </ol>
-<p>These visualizations help you see: - How errors stack up across parameters or over time - Whether any cases are particularly good or poor - The distribution and “spread” of errors and speed-ups</p>
-<p><strong>Options:</strong> - <code>eps</code>: Small value to avoid divide-by-zero in plotting errors (default: <code>1e-16</code>) - <code>log_error</code>: Use log-scale for error axes (default: <code>True</code>) - <code>use_raincloud</code>: Turns on/off the “raincloud” plots for error/speedup distributions</p>
+<p>These visualizations help you see:</p>
+<ul>
+<li>How errors stack up across parameters or over time</li>
+<li>Whether any cases are particularly good or poor</li>
+<li>The distribution and “spread” of errors and speed-ups</li>
+</ul>
+<p><strong>Options:</strong></p>
+<ul>
+<li><code>eps</code>: Small value to avoid divide-by-zero in plotting errors (default: <code>1e-16</code>)</li>
+<li><code>log_error</code>: Use log-scale for error axes (default: <code>True</code>)</li>
+<li><code>use_raincloud</code>: Turns on/off the “raincloud” plots for error/speedup distributions</li>
+</ul>
 <hr>
-<p><strong>Summary:</strong><br>
-- Use this module for fast, reliable error checking and visual reporting when comparing your full-order and ROM results. - Handles both steady-state and time-dependent data shapes. - Metric output and plots are suitable for publication, debug, or iterative ROM improvement.</p>
+<p><strong>Summary:</strong></p>
+<ul>
+<li>Use this module for fast, reliable error checking and visual reporting when comparing your full-order and ROM results.</li>
+<li>Handles both steady-state and time-dependent data shapes.</li>
+<li>Metric output and plots are suitable for publication, debug, or iterative ROM improvement.</li>
+</ul>
 
 
 </section>

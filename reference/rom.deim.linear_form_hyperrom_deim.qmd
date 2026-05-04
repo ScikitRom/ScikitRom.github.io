@@ -7,6 +7,7 @@ DEIM-based hyperreduction for finite element linear forms.
 This module implements hyperreduction of linear forms using the Discrete 
 Empirical Interpolation Method (DEIM) combined with element sampling for 
 efficient load vector assembly. It provides dramatic computational speedups by:
+
 - Assembling only a subset of finite elements based on DEIM selection
 - Using efficient vector assembly techniques for sparse operations
 - Reconstructing full load vectors via DEIM interpolation matrices
@@ -66,6 +67,7 @@ massive computational savings in linear form assembly. The approach works by:
    reduced test basis to produce the final reduced-order linear form.
 
 This hyperreduction is particularly effective for problems where:
+
 - Load distributions are spatially localized or have low-rank structure
 - Real-time simulation speed is critical for control applications
 - Parameter-dependent forcing terms exhibit smooth variation
