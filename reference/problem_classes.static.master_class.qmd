@@ -7,14 +7,14 @@ Static reduced-order modeling (ROM) framework.
 ## TL;DR {.doc-section .doc-section-tldr}
 
 Runs an offline full-order FEM snapshot stage and an online reduced-order solve stage,
-with optional hyper-reduction (DEIM, ECSW) to lower cost while tracking error and speed.
+with optional hyper-reduction (DEIM, ECSW, ECM) to lower cost while tracking error and speed.
 
 The module defines:
 - a problem interface based on an abstract base class
 - a registry for problem classes and a factory to instantiate them
 - an offline workflow that runs full-order solves to generate snapshots
 - an online workflow that runs ROM and computes error and timing metrics
-- hooks for hyper-reduction workflows based on DEIM and ECSW
+- hooks for hyper-reduction workflows based on DEIM, ECSW, and ECM
 
 ## Notes {.doc-section .doc-section-notes}
 
@@ -42,7 +42,7 @@ The class defines the required methods for:
 - parameter-dependent coefficient evaluation
 - sampling of the parameter space
 - full-order and reduced-order solvers
-- hyper-reduced solvers based on DEIM and ECSW
+- hyper-reduced solvers based on DEIM, ECSW, and ECM
 
 #### Methods
 
@@ -52,6 +52,7 @@ The class defines the required methods for:
 | [domain](#skrom.problem_classes.static.master_class.Problem.domain) | Return geometry and FEM bases. |
 | [fom_solver](#skrom.problem_classes.static.master_class.Problem.fom_solver) | Solve full-order FEM system for given parameters. |
 | [hyper_rom_solver_deim](#skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_deim) | Solve DEIM-based hyper-reduced system for given parameters. |
+| [hyper_rom_solver_ecm](#skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecm) | Solve ECM-based hyper-reduced system for given parameters. |
 | [hyper_rom_solver_ecsw](#skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw) | Solve ECSW-based hyper-reduced system for given parameters. |
 | [linear_forms](#skrom.problem_classes.static.master_class.Problem.linear_forms) | Return affine linear form components. |
 | [parameters](#skrom.problem_classes.static.master_class.Problem.parameters) | Generate sampling of parameter space. |
@@ -89,6 +90,14 @@ problem_classes.static.master_class.Problem.hyper_rom_solver_deim()
 ```
 
 Solve DEIM-based hyper-reduced system for given parameters.
+
+##### hyper_rom_solver_ecm { #skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecm }
+
+```python
+problem_classes.static.master_class.Problem.hyper_rom_solver_ecm()
+```
+
+Solve ECM-based hyper-reduced system for given parameters.
 
 ##### hyper_rom_solver_ecsw { #skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw }
 
@@ -133,7 +142,7 @@ Solve reduced-order model for given parameters.
 ### fom_simulation { #skrom.problem_classes.static.master_class.fom_simulation }
 
 ```python
-problem_classes.static.master_class.fom_simulation(self, num_snapshots=32)
+problem_classes.static.master_class.fom_simulation(num_snapshots=32)
 ```
 
 Offline snapshot generation workflow.
@@ -180,7 +189,6 @@ Adds:
 
 ```python
 problem_classes.static.master_class.rom_simulation(
-    self,
     train_ref=None,
     test_ref=None,
     fos_solutions=None,
@@ -216,6 +224,7 @@ The workflow:
 | Name | Description |
 | --- | --- |
 | [run_hyper_rom_simulation_deim](#skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_deim) | Run DEIM hyper-ROM evaluation on the test set. |
+| [run_hyper_rom_simulation_ecm](#skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm) | Run ECM hyper-ROM evaluation on the test set. |
 | [run_hyper_rom_simulation_ecsw](#skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw) | Run ECSW hyper-ROM evaluation on the test set. |
 | [run_rom_simulation](#skrom.problem_classes.static.master_class.rom_simulation.run_rom_simulation) | Run ROM evaluation on the test set. |
 
@@ -238,6 +247,29 @@ Run DEIM hyper-ROM evaluation on the test set.
 | z            | array_like        | Weight vector stored on the instance.           | _required_ |
 | deim_mat     | ndarray           | Interpolation matrix used by the DEIM workflow. | _required_ |
 | sampled_rows | array_like of int | Indices of sampled degrees of freedom.          | _required_ |
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name            | Type          | Description                       |
+|-----------------|---------------|-----------------------------------|
+| hyper_rom_error | list of float | Relative error values in percent. |
+| hyper_speed_up  | list of float | Time ratios for each test case.   |
+
+##### run_hyper_rom_simulation_ecm { #skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm }
+
+```python
+problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm(
+    z,
+)
+```
+
+Run ECM hyper-ROM evaluation on the test set.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type       | Description                                                     | Default    |
+|--------|------------|-----------------------------------------------------------------|------------|
+| z      | array_like | Dense ECM Gauss-point weights with shape ``(n_elements, n_q)``. | _required_ |
 
 ###### Returns {.doc-section .doc-section-returns}
 
@@ -314,9 +346,9 @@ Collect callable handles from a problem instance.
 
 #### Returns {.doc-section .doc-section-returns}
 
-| Name       | Type   | Description                                                                                                                               |
-|------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| properties | tuple  | Tuple with: (parameters, bilinear_forms, linear_forms, domain, properties, fom_solver, rom_solver, hyper_deim_solver, hyper_ecsw_solver). |
+| Name       | Type   | Description                                                                                                                                                 |
+|------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| properties | tuple  | Tuple with: (parameters, bilinear_forms, linear_forms, domain, properties, fom_solver, rom_solver, hyper_deim_solver, hyper_ecsw_solver, hyper_ecm_solver). |
 
 ### get_problem { #skrom.problem_classes.static.master_class.get_problem }
 

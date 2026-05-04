@@ -22,6 +22,7 @@ Authors: Suparno Bhattacharyya; Ali Hamza Abidi Syed
 | Name | Description |
 | --- | --- |
 | [collect_residuals](#skrom.rom.rom_utils.collect_residuals) | Evaluate and store residual samples used in hyperreduction training. |
+| [collect_residuals_ecm](#skrom.rom.rom_utils.collect_residuals_ecm) | Evaluate and store ECM residual samples at the element–Gauss-point level. |
 | [collect_residuals_t](#skrom.rom.rom_utils.collect_residuals_t) | Evaluate residual samples for a set of snapshot groups. |
 | [compute_nonlinear_snapshots](#skrom.rom.rom_utils.compute_nonlinear_snapshots) | Evaluate a function on each (solution, parameter) pair and stack results. |
 | [generate_gaussian_samples](#skrom.rom.rom_utils.generate_gaussian_samples) | Generate samples from normal draws based on bounds. |
@@ -84,6 +85,37 @@ For each snapshot:
 | Name   | Type    | Description               |
 |--------|---------|---------------------------|
 | q_mus  | ndarray | Stacked residual samples. |
+
+### collect_residuals_ecm { #skrom.rom.rom_utils.collect_residuals_ecm }
+
+```python
+rom.rom_utils.collect_residuals_ecm(
+    NLS_train_ms,
+    NLS_train_mean,
+    V_sel,
+    reconstruct_solution,
+    Residual,
+    training_params,
+    assemble_kwargs,
+    extra_kwargs=None,
+    hyper_basis=None,
+)
+```
+
+Evaluate and store ECM residual samples at the element–Gauss-point level.
+
+For each snapshot this routine:
+- projects the mean-shifted snapshot to reduced coordinates,
+- reconstructs the full field,
+- evaluates ``Residual.hyperreduction_ecm(**kw)``, and
+- stacks the transposed result so each snapshot contributes a block of shape
+  ``(r, n_elements * n_q)``.
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name      | Type                                                | Description                           |
+|-----------|-----------------------------------------------------|---------------------------------------|
+| q_mus_ecm | (ndarray, shape(n_snapshots * r, n_elements * n_q)) | Snapshot matrix used by ECM training. |
 
 ### collect_residuals_t { #skrom.rom.rom_utils.collect_residuals_t }
 

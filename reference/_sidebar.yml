@@ -6,50 +6,60 @@ website:
       - reference/fom.fem_utils.qmd
       section: Full-Order Model (FOM)
     - contents:
+      - reference/rom.bilinear_form_rom.qmd
+      - reference/rom.linear_form_rom.qmd
+      - reference/rom.rom_error_est.qmd
+      - reference/rom.rom_utils.qmd
+      section: Reduced-Order Model (ROM)
+    - contents:
+      - reference/rom.deim.bilinear_form_hyperrom_deim.qmd
+      - reference/rom.deim.linear_form_hyperrom_deim.qmd
+      - reference/rom.deim.deim.qmd
+      - reference/rom.deim.deim_o.qmd
+      section: DEIM Hyper-Reduction
+    - contents:
+      - reference/rom.ecm.bilinear_form_hyperrom_ecm.qmd
+      - reference/rom.ecm.linear_form_hyperrom_ecm.qmd
+      - reference/rom.ecm.empirical_cubature_method.qmd
+      - reference/rom.ecm.helpers.qmd
+      - reference/rom.ecm.train_ecm.qmd
+      section: ECM Hyper-Reduction
+    - contents:
+      - reference/rom.ecsw.bilinear_form_hyperrom_ecsw.qmd
+      - reference/rom.ecsw.linear_form_hyperrom_ecsw.qmd
+      - reference/rom.ecsw.custom_nnls.qmd
+      - reference/rom.ecsw.hyperreduce.qmd
+      section: ECSW Hyper-Reduction
+    - contents:
+      - reference/problem_classes.masterclass.qmd
+      - reference/problem_classes.masterclass_parallel.qmd
       - reference/problem_classes.static.master_class.qmd
       - reference/problem_classes.static.master_class_parallel.qmd
       section: Problem Classes
     - contents:
-      - reference/rom.deim.bilinear_form_hyperrom_deim.qmd
-      - reference/rom.deim.deim.qmd
-      - reference/rom.deim.linear_form_hyperrom_deim.qmd
-      section: ROM
-    - contents:
-      - reference/rom.ecsw.bilinear_form_hyperrom_ecsw.qmd
-      - reference/rom.ecsw.custom_nnls.qmd
-      - reference/rom.ecsw.hyperreduce.qmd
-      - reference/rom.ecsw.linear_form_hyperrom_ecsw.qmd
-      section: ROM
-    - contents:
-      - reference/rom.bilinear_form_rom.qmd
-      - reference/rom.linear_form_rom.qmd
-      - reference/rom.rom_error_est.qmd
-      - reference/rom.rom_error_est_t.qmd
-      - reference/rom.rom_utils.qmd
-      section: ROM
-    - contents:
       - reference/templates.problem_template.bilinear_forms.qmd
-      - reference/templates.problem_template.domain.qmd
       - reference/templates.problem_template.linear_forms.qmd
       - reference/templates.problem_template.params.qmd
+      - reference/templates.problem_template.domain.qmd
       - reference/templates.problem_template.problem_def.qmd
       - reference/templates.problem_template.properties.qmd
       section: Templates
     - contents:
-      - reference/utils.data_io.save_h5.qmd
-      - reference/utils.dynamics.integrators.qmd
+      - reference/utils.imports.qmd
+      - reference/utils.hdf5_store.qmd
+      - reference/utils.save_h5.qmd
       - reference/utils.reduced_basis.svd.qmd
+      - reference/utils.dynamics.integrators.qmd
+      section: Utilities
+    - contents:
       - reference/utils.visualization.color_palette.qmd
       - reference/utils.visualization.generate_vtk.qmd
       - reference/utils.visualization.generate_vtu.qmd
       - reference/utils.visualization.plot_utils.qmd
       - reference/utils.visualization.vtuwriter.qmd
-      - reference/utils.hdf5_store.qmd
-      - reference/utils.imports.qmd
-      - reference/utils.save_h5.qmd
-      section: Utils
+      section: Visualization
     - contents:
       - reference/cli.qmd
-      section: CLI
+      section: Command Line Interface
     id: reference
   - id: dummy-sidebar

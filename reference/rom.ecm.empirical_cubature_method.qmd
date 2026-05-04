@@ -1,0 +1,73 @@
+# rom.ecm.empirical_cubature_method { #skrom.rom.ecm.empirical_cubature_method }
+
+`rom.ecm.empirical_cubature_method`
+
+
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [EmpiricalCubatureMethod](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod) | This class selects a subset of elements and corresponding positive weights necessary for the construction of a hyper-reduced order model |
+
+### EmpiricalCubatureMethod { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod(
+    ECM_tolerance=0,
+    Filter_tolerance=0,
+    Plotting=False,
+    MaximumNumberUnsuccesfulIterations=100,
+)
+```
+
+This class selects a subset of elements and corresponding positive weights necessary for the construction of a hyper-reduced order model
+Reference: Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models." arXiv preprint arXiv:2310.15769 (2023)"
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [Calculate](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate) | Method calculating the elements and weights, after the Initialize method was performed |
+| [Initialize](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize) | Method performing calculations required before launching the Calculate method |
+| [Run](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run) | Method launching the element selection algorithm to find a set of elements: self.z, and weights: self.w |
+| [SetUp](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp) | Method for setting up the element selection |
+
+##### Calculate { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate()
+```
+
+Method calculating the elements and weights, after the Initialize method was performed
+
+##### Initialize { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize()
+```
+
+Method performing calculations required before launching the Calculate method
+
+##### Run { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run()
+```
+
+Method launching the element selection algorithm to find a set of elements: self.z, and weights: self.w
+
+##### SetUp { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(
+    G,
+    Weights,
+    constrain_sum_of_weights=False,
+    InitialCandidatesSet=None,
+    use_L2_weighting=False,
+)
+```
+
+Method for setting up the element selection
+input:  ResidualsBasis: numpy array containing a basis to the residuals projected

@@ -22,7 +22,6 @@ in a single HDF5 file (chunked + compressed).
 
 ```python
 utils.hdf5_store.H5ArrayListSpec(
-    self,
     group='solutions',
     dataset_prefix='sol',
     digits=6,

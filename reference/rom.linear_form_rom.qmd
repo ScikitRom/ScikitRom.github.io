@@ -28,7 +28,6 @@ The `rom` folder contains core tools for reduced-order modeling (ROM), including
 
 ```python
 rom.linear_form_rom.LinearFormROM(
-    self,
     form,
     ubasis,
     lob,
@@ -72,7 +71,9 @@ conditions via mappings from full to free DOFs.
 | --- | --- |
 | [assemble](#skrom.rom.linear_form_rom.LinearFormROM.assemble) | Assemble the global reduced load vector. |
 | [extract_element_vector](#skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector) | Extract local element load vectors for a linear form. |
+| [extract_element_vector_qp](#skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp) | Extract local element load vectors resolved at Gauss points. |
 | [hyperreduction](#skrom.rom.linear_form_rom.LinearFormROM.hyperreduction) | Perform hyperreduction to assemble per-element reduced load contributions. |
+| [hyperreduction_ecm](#skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm) | Assemble per-element, per-Gauss reduced residual contributions for ECM. |
 
 ##### assemble { #skrom.rom.linear_form_rom.LinearFormROM.assemble }
 
@@ -120,6 +121,20 @@ Computes per-element load contributions for each local basis function.
 |-----------------|-------------------------------------|------------------------------------------------------------------------------------------|
 | element_vectors | (ndarray, shape(n_elements, Nbfun)) | Local load vectors for each element, where Nbfun is the number of local basis functions. |
 
+##### extract_element_vector_qp { #skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp }
+
+```python
+rom.linear_form_rom.LinearFormROM.extract_element_vector_qp(basis, **kwargs)
+```
+
+Extract local element load vectors resolved at Gauss points.
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name              | Type                                            | Description                                                                                      |
+|-------------------|-------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| element_vectors_q | (ndarray, shape(n_elements, n_local_dofs, n_q)) | Local load contributions already multiplied by ``dx`` but not yet summed over quadrature points. |
+
 ##### hyperreduction { #skrom.rom.linear_form_rom.LinearFormROM.hyperreduction }
 
 ```python
@@ -139,3 +154,17 @@ Perform hyperreduction to assemble per-element reduced load contributions.
 | Name      | Type                            | Description                                                 |
 |-----------|---------------------------------|-------------------------------------------------------------|
 | f_reduced | (ndarray, shape(n_contribs, r)) | Concatenated reduced load contributions for hyperreduction. |
+
+##### hyperreduction_ecm { #skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm }
+
+```python
+rom.linear_form_rom.LinearFormROM.hyperreduction_ecm(**kwargs)
+```
+
+Assemble per-element, per-Gauss reduced residual contributions for ECM.
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name        | Type                                  | Description                                                    |
+|-------------|---------------------------------------|----------------------------------------------------------------|
+| f_reduced_q | (ndarray, shape(n_elements * n_q, r)) | Reduced contributions ordered with flat index ``e * n_q + q``. |

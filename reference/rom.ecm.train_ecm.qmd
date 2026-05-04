@@ -1,0 +1,84 @@
+# rom.ecm.train_ecm { #skrom.rom.ecm.train_ecm }
+
+`rom.ecm.train_ecm`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [ECM](#skrom.rom.ecm.train_ecm.ECM) | ECM adapted to scikit-rom. |
+| [ECM_from_skrom](#skrom.rom.ecm.train_ecm.ECM_from_skrom) | End-to-end ECM wrapper for the scikit-rom notebook structure. |
+
+### ECM { #skrom.rom.ecm.train_ecm.ECM }
+
+```python
+rom.ecm.train_ecm.ECM(
+    q_mus_ecm,
+    n_elements,
+    n_gauss_points,
+    tol=1e-05,
+    n_components=None,
+    plot=False,
+    constrain_sum_of_weights=False,
+    dtype=np.float64,
+    svd_rank=None,
+)
+```
+
+ECM adapted to scikit-rom.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name                     | Type                                                           | Description                                                                                                     | Default      |
+|--------------------------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|--------------|
+| q_mus_ecm                | (ndarray, shape(n_snapshots * r, n_elements * n_gauss_points)) | Matrix returned by collect_residuals_ecm(...). Each column corresponds to one element-Gauss-point contribution. | _required_   |
+| n_elements               | int                                                            | Number of elements in the mesh.                                                                                 | _required_   |
+| n_gauss_points           | int                                                            | Number of Gauss points per element.                                                                             | _required_   |
+| tol                      | float                                                          | Singular-value cutoff used to choose the ECM basis size.                                                        | `1e-05`      |
+| n_components             | int                                                            | If given, overrides tol and uses exactly this many left singular vectors.                                       | `None`       |
+| plot                     | bool                                                           | If True, plots the singular values.                                                                             | `False`      |
+| constrain_sum_of_weights | bool                                                           | Passed to EmpiricalCubatureMethod.SetUp(...).                                                                   | `False`      |
+| dtype                    | dtype                                                          | Floating-point dtype.                                                                                           | `np.float64` |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name             | Type                                         | Description                                                   |
+|------------------|----------------------------------------------|---------------------------------------------------------------|
+| W                | (ndarray, shape(n_selected))                 | ECM weights for the selected flat indices.                    |
+| Z                | (ndarray, shape(n_selected))                 | Selected flat indices in [0, n_elements * n_gauss_points).    |
+| S                | ndarray                                      | Singular values of q_mus_ecm.T.                               |
+| gauss_weight_ecm | (ndarray, shape(n_elements, n_gauss_points)) | Dense ECM multiplier array for online assembly in scikit-rom. |
+
+### ECM_from_skrom { #skrom.rom.ecm.train_ecm.ECM_from_skrom }
+
+```python
+rom.ecm.train_ecm.ECM_from_skrom(
+    NLS_train_ms,
+    NLS_train_mean,
+    V_sel,
+    reconstruct_solution,
+    Residual,
+    training_params,
+    assemble_kwargs,
+    basis,
+    *,
+    extra_kwargs=None,
+    hyper_basis=None,
+    tol=1e-05,
+    n_components=None,
+    plot=False,
+    constrain_sum_of_weights=False,
+    dtype=np.float64,
+    svd_rank=None,
+)
+```
+
+End-to-end ECM wrapper for the scikit-rom notebook structure.
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description                                      |
+|--------|--------|--------------------------------------------------|
+| result | dict   | Keys: - q_mus_ecm - W - Z - S - gauss_weight_ecm |

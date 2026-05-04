@@ -1,6 +1,6 @@
-# rom.deim.deim { #skrom.rom.deim.deim }
+# rom.deim.deim_o { #skrom.rom.deim.deim_o }
 
-`rom.deim.deim`
+`rom.deim.deim_o`
 
 Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.
 
@@ -22,12 +22,12 @@ Author: Suparno Bhattacharyya
 
 | Name | Description |
 | --- | --- |
-| [deim](#skrom.rom.deim.deim.deim) | Discrete Empirical Interpolation Method for nonlinear ROM acceleration. |
+| [deim](#skrom.rom.deim.deim_o.deim) | Discrete Empirical Interpolation Method for nonlinear ROM acceleration. |
 
-### deim { #skrom.rom.deim.deim.deim }
+### deim { #skrom.rom.deim.deim_o.deim }
 
 ```python
-rom.deim.deim.deim(mesh, F_nl, V_sel, tol_f=0.01, extra_modes=0)
+rom.deim.deim_o.deim(mesh, F_nl, V_sel, tol_f=0.01, extra_modes=0)
 ```
 
 Discrete Empirical Interpolation Method for nonlinear ROM acceleration.
@@ -108,14 +108,14 @@ representation, which is typically valid for many physical systems.
 
 | Name | Description |
 | --- | --- |
-| [deim_red](#skrom.rom.deim.deim.deim.deim_red) | Execute greedy DEIM algorithm for optimal interpolation point selection. |
-| [select_elems](#skrom.rom.deim.deim.deim.select_elems) | Select interpolation points and construct DEIM projection matrix. |
-| [sopt_red](#skrom.rom.deim.deim.deim.sopt_red) | S-OPT sampling: selects rows maximising the S-optimality measure |
+| [deim_red](#skrom.rom.deim.deim_o.deim.deim_red) | Execute greedy DEIM algorithm for optimal interpolation point selection. |
+| [select_elems](#skrom.rom.deim.deim_o.deim.select_elems) | Select interpolation points and construct DEIM projection matrix. |
+| [sopt_red](#skrom.rom.deim.deim_o.deim.sopt_red) | Perform an S-optimal sampling reduction on the given basis. This method uses a QR |
 
-##### deim_red { #skrom.rom.deim.deim.deim.deim_red }
+##### deim_red { #skrom.rom.deim.deim_o.deim.deim_red }
 
 ```python
-rom.deim.deim.deim.deim_red(f_basis, num_f_basis_vectors_used)
+rom.deim.deim_o.deim.deim_red(f_basis, num_f_basis_vectors_used)
 ```
 
 Execute greedy DEIM algorithm for optimal interpolation point selection.
@@ -176,10 +176,10 @@ making it efficient even for moderately large empirical subspaces.
 >>> print(f"Condition number: {np.linalg.cond(sampled_basis):.2e}")
 ```
 
-##### select_elems { #skrom.rom.deim.deim.deim.select_elems }
+##### select_elems { #skrom.rom.deim.deim_o.deim.select_elems }
 
 ```python
-rom.deim.deim.deim.select_elems(sopt=False)
+rom.deim.deim_o.deim.select_elems(sopt=False)
 ```
 
 Select interpolation points and construct DEIM projection matrix.
@@ -230,38 +230,28 @@ matrix operations during online evaluation.
 >>> print(f"Reduction ratio: {F_snapshots.shape[0]/len(points):.1f}x")
 ```
 
-##### sopt_red { #skrom.rom.deim.deim.deim.sopt_red }
+##### sopt_red { #skrom.rom.deim.deim_o.deim.sopt_red }
 
 ```python
-rom.deim.deim.deim.sopt_red(f_basis, num_f_basis_vectors_used)
+rom.deim.deim_o.deim.sopt_red(f_basis, num_f_basis_vectors_used)
 ```
 
-S-OPT sampling: selects rows maximising the S-optimality measure
-S(Z^T Q) which jointly maximises column orthogonality and determinant
-of the information matrix (Z^T Q)^T (Z^T Q).
+Perform an S-optimal sampling reduction on the given basis. This method uses a QR
+factorization to extract an orthogonal basis and then iteratively selects the most
+representative rows (sampling points) based on a defined objective.
 
-Uses efficient Sherman-Morrison rank-1 updates to avoid recomputing
-determinants at every candidate evaluation.
+###### Parameters: {.doc-section .doc-section-parameters}
 
-Phase 1 (j < n_f): row + column expansion   — Slide 12/14 formula
-Phase 2 (j >= n_f): row-only append (oversampling) — Slide 13/15 formula
+f_basis : ndarray
+    The original basis matrix (from the nonlinear force snapshots).
+num_f_basis_vectors_used : int
+    The number of basis vectors (modes) to consider.
 
-###### Parameters {.doc-section .doc-section-parameters}
+###### Returns: {.doc-section .doc-section-returns}
 
-| Name                     | Type                      | Description                                           | Default    |
-|--------------------------|---------------------------|-------------------------------------------------------|------------|
-| f_basis                  | ndarray(N, n_modes_total) | Full empirical basis from SVD of nonlinear snapshots. | _required_ |
-| num_f_basis_vectors_used | int                       | Number of basis vectors (modes) to use.               | _required_ |
-
-###### Returns {.doc-section .doc-section-returns}
-
-| Name          | Type            | Description                              |
-|---------------|-----------------|------------------------------------------|
-| f_sampled_row | ndarray         | Rows of f_basis at the selected indices. |
-| Z_indices     | list of int     | Selected row indices.                    |
-| Z_boolean     | ndarray of bool | Boolean mask of selected rows.           |
-
-###### References {.doc-section .doc-section-references}
-
-Shin & Xiu, SIAM J. Sci. Comput. 38 (2016), pp. A385-A411.
-Lauzon et al., SIAM J. Sci. Comput. 46 (2024), arXiv:2203.16494.
+f_sampled_row : ndarray
+    The rows of the basis matrix corresponding to the selected sampling points.
+Z_indices : list
+    List of indices (row numbers) that were selected.
+Z_boolean : ndarray
+    Boolean vector indicating which rows have been selected.

@@ -28,7 +28,6 @@ The `rom` folder contains core tools for reduced-order modeling (ROM), including
 
 ```python
 rom.bilinear_form_rom.BilinearFormROM(
-    self,
     form,
     ubasis,
     lob,

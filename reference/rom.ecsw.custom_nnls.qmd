@@ -28,7 +28,6 @@ The `ecsw` folder contains utilities for Empirical Cubature Subset Weighting, in
 
 ```python
 rom.ecsw.custom_nnls.NNLSSolver(
-    self,
     const_tol=1e-06,
     min_nnz=1,
     max_nnz=0,

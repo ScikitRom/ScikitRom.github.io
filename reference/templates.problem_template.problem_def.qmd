@@ -30,6 +30,7 @@ Template for an affine or non-linear reduced-order-model (ROM) problem.
 | [hyper_rom_operators_deim](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_deim) | Compute operators (interpolation indices, projection matrices, …) |
 | [hyper_rom_operators_ecsw](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_operators_ecsw) | Compute operators (sampling matrices, weights, …) for the ECSW method. |
 | [hyper_rom_solver_deim](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim) | Solve the DEIM hyper-reduced model. |
+| [hyper_rom_solver_ecm](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecm) | Solve the ECM hyper-reduced model. |
 | [hyper_rom_solver_ecsw](#skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecsw) | Solve the ECSW hyper-reduced model. |
 | [linear_forms](#skrom.templates.problem_template.problem_def.ProblemTemplate.linear_forms) | Import element-level linear / residual forms from **linear_forms.py**. |
 | [parameters](#skrom.templates.problem_template.problem_def.ProblemTemplate.parameters) | Import a sampling-design generator from **params.py**.  The helper |
@@ -172,6 +173,27 @@ templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_deim(
 Solve the DEIM hyper-reduced model.
 
 Called automatically by the master class when a DEIM-based simulation
+is executed.
+
+###### Parameters {.doc-section .doc-section-parameters}
+
+| Name   | Type                                           | Description   | Default    |
+|--------|------------------------------------------------|---------------|------------|
+| cls    | master_class object   – simulation context     |               | _required_ |
+| param  | ndarray or scalar   – parameter vector/value μ |               | _required_ |
+
+##### hyper_rom_solver_ecm { #skrom.templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecm }
+
+```python
+templates.problem_template.problem_def.ProblemTemplate.hyper_rom_solver_ecm(
+    cls,
+    param,
+)
+```
+
+Solve the ECM hyper-reduced model.
+
+Called automatically by the master class when an ECM-based simulation
 is executed.
 
 ###### Parameters {.doc-section .doc-section-parameters}

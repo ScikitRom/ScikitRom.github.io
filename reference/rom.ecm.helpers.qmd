@@ -1,0 +1,94 @@
+# rom.ecm.helpers { #skrom.rom.ecm.helpers }
+
+`rom.ecm.helpers`
+
+Helper utilities for ECM-based hyperreduction.
+
+This module converts ECM-selected Gauss-point data into dense per-element,
+per-Gauss-point arrays suitable for ROM assembly.
+
+## Notes {.doc-section .doc-section-notes}
+
+The bilinear and linear ECM assemblers in this folder assume that the stored
+ECM weights act as multiplicative factors on scikit-fem's native quadrature
+contributions, i.e. on quantities that already include ``basis.dx``.
+
+If an external ECM implementation returns *absolute* cubature weights for the
+reference quadrature rule, pass the reference Gauss weights through
+``base_quadrature_weights`` so that the helper divides by them and produces the
+multipliers expected by the assemblers.
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [active_ecm_elements](#skrom.rom.ecm.helpers.active_ecm_elements) | Return element indices whose ECM weight row has at least one active Gauss point. |
+| [dense_ecm_weights](#skrom.rom.ecm.helpers.dense_ecm_weights) | Build a dense ECM-weight array of shape ``(n_elements, n_gauss_points)``. |
+| [flat_to_element_gauss_weights](#skrom.rom.ecm.helpers.flat_to_element_gauss_weights) | Convert flat ECM-selected Gauss-point data to a dense element/Gauss array. |
+| [with_elements](#skrom.rom.ecm.helpers.with_elements) | Return a similar ``FacetBasis`` restricted to a subset of elements. |
+
+### active_ecm_elements { #skrom.rom.ecm.helpers.active_ecm_elements }
+
+```python
+rom.ecm.helpers.active_ecm_elements(weight_array, *, atol=0.0)
+```
+
+Return element indices whose ECM weight row has at least one active Gauss point.
+
+### dense_ecm_weights { #skrom.rom.ecm.helpers.dense_ecm_weights }
+
+```python
+rom.ecm.helpers.dense_ecm_weights(
+    weight_data,
+    n_elements,
+    n_gauss_points,
+    *,
+    dtype=np.float64,
+)
+```
+
+Build a dense ECM-weight array of shape ``(n_elements, n_gauss_points)``.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name           | Type                                           | Description                                                                                                                                                                                         | Default      |
+|----------------|------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| weight_data    | Mapping\[int, Sequence\[float\]\] \| ArrayLike | Either: - a mapping ``element_id -> sequence_of_length_n_gauss_points``; or - a dense array of shape ``(n_elements, n_gauss_points)``; or - a flat array of length ``n_elements * n_gauss_points``. | _required_   |
+| n_elements     | int                                            | Number of elements in the full mesh.                                                                                                                                                                | _required_   |
+| n_gauss_points | int                                            | Number of Gauss points per element.                                                                                                                                                                 | _required_   |
+| dtype          | DTypeLike                                      | Numeric dtype of the returned array.                                                                                                                                                                | `np.float64` |
+
+### flat_to_element_gauss_weights { #skrom.rom.ecm.helpers.flat_to_element_gauss_weights }
+
+```python
+rom.ecm.helpers.flat_to_element_gauss_weights(
+    n_elements,
+    n_gauss_points,
+    selected_indices,
+    selected_weights,
+    *,
+    base_quadrature_weights=None,
+    dtype=np.float64,
+)
+```
+
+Convert flat ECM-selected Gauss-point data to a dense element/Gauss array.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name                    | Type              | Description                                                                                                                                                                                                                          | Default      |
+|-------------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| n_elements              | int               | Number of elements in the full mesh.                                                                                                                                                                                                 | _required_   |
+| n_gauss_points          | int               | Number of Gauss points per element.                                                                                                                                                                                                  | _required_   |
+| selected_indices        | ArrayLike         | Flat Gauss-point indices as returned by an ECM solve.                                                                                                                                                                                | _required_   |
+| selected_weights        | ArrayLike         | ECM weights aligned with ``selected_indices``.                                                                                                                                                                                       | _required_   |
+| base_quadrature_weights | ArrayLike \| None | Optional base quadrature weights of length ``n_gauss_points``. When supplied, the returned values are divided by these weights so that the result acts as a multiplicative factor on scikit-fem's native ``basis.dx`` contributions. | `None`       |
+| dtype                   | DTypeLike         | Numeric dtype of the returned array.                                                                                                                                                                                                 | `np.float64` |
+
+### with_elements { #skrom.rom.ecm.helpers.with_elements }
+
+```python
+rom.ecm.helpers.with_elements(self, elements=None)
+```
+
+Return a similar ``FacetBasis`` restricted to a subset of elements.

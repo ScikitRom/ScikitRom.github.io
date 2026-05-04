@@ -31,7 +31,6 @@ Suparno Bhattacharyya
 
 ```python
 rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw(
-    self,
     form,
     elem_weight,
     ubasis,

@@ -21,12 +21,7 @@ in a single HDF5 file (chunked + compressed).
 ### H5ArrayListSpec { #skrom.utils.save_h5.H5ArrayListSpec }
 
 ```python
-utils.save_h5.H5ArrayListSpec(
-    self,
-    group='solutions',
-    dataset_prefix='sol',
-    digits=6,
-)
+utils.save_h5.H5ArrayListSpec(group='solutions', dataset_prefix='sol', digits=6)
 ```
 
 Naming spec for datasets in the group.

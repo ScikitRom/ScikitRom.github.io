@@ -1,0 +1,83 @@
+# rom.ecm.bilinear_form_hyperrom_ecm { #skrom.rom.ecm.bilinear_form_hyperrom_ecm }
+
+`rom.ecm.bilinear_form_hyperrom_ecm`
+
+ECM-based hyperreduction for finite element bilinear forms.
+
+This module in a way mirrors the ECSW implementation already present in the repository,
+but promotes the weights from the element level to the element–Gauss-point
+level. The assembly path stays the same at a high level:
+
+1. restrict to active elements,
+2. cluster elements by the number of free local DOFs,
+3. extract local contributions,
+4. project onto the reduced basis, and
+5. accumulate the reduced operator.
+
+## Assumption {.doc-section .doc-section-assumption}
+
+The stored ECM weights are treated as multiplicative factors applied to
+scikit-fem's native per-Gauss contributions ``form(...) * dx``. If an external
+ECM code returns *absolute* cubature weights, convert them first using the
+helper in ``skrom.rom.ecm.helpers``.
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [BilinearFormHYPERROM_ecm](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm) | Hyperreduced bilinear form assembled from ECM-selected Gauss points. |
+
+### BilinearFormHYPERROM_ecm { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm }
+
+```python
+rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm(
+    form,
+    gauss_weight,
+    ubasis,
+    lob,
+    rob,
+    vbasis=None,
+    free_dofs=None,
+    mean=None,
+    nthreads=0,
+    dtype=np.float64,
+)
+```
+
+Hyperreduced bilinear form assembled from ECM-selected Gauss points.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [assemble_weighted_ecm](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm) | Assemble the reduced bilinear form using ECM Gauss-point weights. |
+| [extract_element_matrices_qp_rom](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom) | Extract per-Gauss local element matrices. |
+
+##### assemble_weighted_ecm { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm }
+
+```python
+rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm(
+    **kwargs,
+)
+```
+
+Assemble the reduced bilinear form using ECM Gauss-point weights.
+
+##### extract_element_matrices_qp_rom { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom }
+
+```python
+rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom(
+    ubasis,
+    vbasis=None,
+    elem_indices=None,
+    **kwargs,
+)
+```
+
+Extract per-Gauss local element matrices.
+
+###### Returns {.doc-section .doc-section-returns}
+
+| Name               | Type                                                   | Description                                                                                                                   |
+|--------------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| element_matrices_q | (ndarray, shape(n_elem, n_loc_test, n_loc_trial, n_q)) | Per-element local matrices resolved at Gauss points, already multiplied by ``basis.dx`` but not yet summed over Gauss points. |

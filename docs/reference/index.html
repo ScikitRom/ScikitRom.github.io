@@ -417,7 +417,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../P3_tutorial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
+ <span class="menu-text">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -540,13 +540,15 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#function-reference" id="toc-function-reference" class="nav-link active" data-scroll-target="#function-reference">Function reference</a>
   <ul class="collapse">
   <li><a href="#full-order-model-fom" id="toc-full-order-model-fom" class="nav-link" data-scroll-target="#full-order-model-fom">Full-Order Model (FOM)</a></li>
+  <li><a href="#reduced-order-model-rom" id="toc-reduced-order-model-rom" class="nav-link" data-scroll-target="#reduced-order-model-rom">Reduced-Order Model (ROM)</a></li>
+  <li><a href="#deim-hyper-reduction" id="toc-deim-hyper-reduction" class="nav-link" data-scroll-target="#deim-hyper-reduction">DEIM Hyper-Reduction</a></li>
+  <li><a href="#ecm-hyper-reduction" id="toc-ecm-hyper-reduction" class="nav-link" data-scroll-target="#ecm-hyper-reduction">ECM Hyper-Reduction</a></li>
+  <li><a href="#ecsw-hyper-reduction" id="toc-ecsw-hyper-reduction" class="nav-link" data-scroll-target="#ecsw-hyper-reduction">ECSW Hyper-Reduction</a></li>
   <li><a href="#problem-classes" id="toc-problem-classes" class="nav-link" data-scroll-target="#problem-classes">Problem Classes</a></li>
-  <li><a href="#rom" id="toc-rom" class="nav-link" data-scroll-target="#rom">ROM</a></li>
-  <li><a href="#rom-1" id="toc-rom-1" class="nav-link" data-scroll-target="#rom-1">ROM</a></li>
-  <li><a href="#rom-2" id="toc-rom-2" class="nav-link" data-scroll-target="#rom-2">ROM</a></li>
   <li><a href="#templates" id="toc-templates" class="nav-link" data-scroll-target="#templates">Templates</a></li>
-  <li><a href="#utils" id="toc-utils" class="nav-link" data-scroll-target="#utils">Utils</a></li>
-  <li><a href="#cli" id="toc-cli" class="nav-link" data-scroll-target="#cli">CLI</a></li>
+  <li><a href="#utilities" id="toc-utilities" class="nav-link" data-scroll-target="#utilities">Utilities</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
+  <li><a href="#command-line-interface" id="toc-command-line-interface" class="nav-link" data-scroll-target="#command-line-interface">Command Line Interface</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -570,65 +572,8 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
-<section id="problem-classes" class="level2">
-<h2 class="anchored" data-anchor-id="problem-classes">Problem Classes</h2>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../reference/problem_classes.static.master_class.html#skrom.problem_classes.static.master_class">problem_classes.static.master_class</a></td>
-<td>Static reduced-order modeling (ROM) framework.</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/problem_classes.static.master_class_parallel.html#skrom.problem_classes.static.master_class_parallel">problem_classes.static.master_class_parallel</a></td>
-<td>Parallel implementation of master_class using multithreading for snapshot generation and ROM evaluation.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="rom" class="level2">
-<h2 class="anchored" data-anchor-id="rom">ROM</h2>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html#skrom.rom.deim.bilinear_form_hyperrom_deim">rom.deim.bilinear_form_hyperrom_deim</a></td>
-<td>DEIM-based hyperreduction for finite element bilinear forms.</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/rom.deim.deim.html#skrom.rom.deim.deim">rom.deim.deim</a></td>
-<td>Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.</td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/rom.deim.linear_form_hyperrom_deim.html#skrom.rom.deim.linear_form_hyperrom_deim">rom.deim.linear_form_hyperrom_deim</a></td>
-<td>DEIM-based hyperreduction for finite element linear forms.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="rom-1" class="level2">
-<h2 class="anchored" data-anchor-id="rom-1">ROM</h2>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw">rom.ecsw.bilinear_form_hyperrom_ecsw</a></td>
-<td>ECSW-based hyperreduction for finite element bilinear forms with element clustering.</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/rom.ecsw.custom_nnls.html#skrom.rom.ecsw.custom_nnls">rom.ecsw.custom_nnls</a></td>
-<td>Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW).</td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/rom.ecsw.hyperreduce.html#skrom.rom.ecsw.hyperreduce">rom.ecsw.hyperreduce</a></td>
-<td>Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS.</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html#skrom.rom.ecsw.linear_form_hyperrom_ecsw">rom.ecsw.linear_form_hyperrom_ecsw</a></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="rom-2" class="level2">
-<h2 class="anchored" data-anchor-id="rom-2">ROM</h2>
+<section id="reduced-order-model-rom" class="level2">
+<h2 class="anchored" data-anchor-id="reduced-order-model-rom">Reduced-Order Model (ROM)</h2>
 <table class="caption-top table">
 <tbody>
 <tr class="odd">
@@ -644,12 +589,104 @@ ul.task-list li input[type="checkbox"] {
 <td>Compute and visualize ROM error metrics for flat data reconstructions.</td>
 </tr>
 <tr class="even">
-<td><a href="../reference/rom.rom_error_est_t.html#skrom.rom.rom_error_est_t">rom.rom_error_est_t</a></td>
-<td>Compute and visualize ROM error metrics for flat (vectorized) data reconstructions.</td>
-</tr>
-<tr class="odd">
 <td><a href="../reference/rom.rom_utils.html#skrom.rom.rom_utils">rom.rom_utils</a></td>
 <td>Utilities for ROM workflows.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="deim-hyper-reduction" class="level2">
+<h2 class="anchored" data-anchor-id="deim-hyper-reduction">DEIM Hyper-Reduction</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html#skrom.rom.deim.bilinear_form_hyperrom_deim">rom.deim.bilinear_form_hyperrom_deim</a></td>
+<td>DEIM-based hyperreduction for finite element bilinear forms.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/rom.deim.linear_form_hyperrom_deim.html#skrom.rom.deim.linear_form_hyperrom_deim">rom.deim.linear_form_hyperrom_deim</a></td>
+<td>DEIM-based hyperreduction for finite element linear forms.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/rom.deim.deim.html#skrom.rom.deim.deim">rom.deim.deim</a></td>
+<td>Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/rom.deim.deim_o.html#skrom.rom.deim.deim_o">rom.deim.deim_o</a></td>
+<td>Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ecm-hyper-reduction" class="level2">
+<h2 class="anchored" data-anchor-id="ecm-hyper-reduction">ECM Hyper-Reduction</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><a href="../reference/rom.ecm.bilinear_form_hyperrom_ecm.html#skrom.rom.ecm.bilinear_form_hyperrom_ecm">rom.ecm.bilinear_form_hyperrom_ecm</a></td>
+<td>ECM-based hyperreduction for finite element bilinear forms.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/rom.ecm.linear_form_hyperrom_ecm.html#skrom.rom.ecm.linear_form_hyperrom_ecm">rom.ecm.linear_form_hyperrom_ecm</a></td>
+<td>ECM-based hyperreduction for finite element linear forms.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/rom.ecm.empirical_cubature_method.html#skrom.rom.ecm.empirical_cubature_method">rom.ecm.empirical_cubature_method</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><a href="../reference/rom.ecm.helpers.html#skrom.rom.ecm.helpers">rom.ecm.helpers</a></td>
+<td>Helper utilities for ECM-based hyperreduction.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/rom.ecm.train_ecm.html#skrom.rom.ecm.train_ecm">rom.ecm.train_ecm</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ecsw-hyper-reduction" class="level2">
+<h2 class="anchored" data-anchor-id="ecsw-hyper-reduction">ECSW Hyper-Reduction</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw">rom.ecsw.bilinear_form_hyperrom_ecsw</a></td>
+<td>ECSW-based hyperreduction for finite element bilinear forms with element clustering.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/rom.ecsw.linear_form_hyperrom_ecsw.html#skrom.rom.ecsw.linear_form_hyperrom_ecsw">rom.ecsw.linear_form_hyperrom_ecsw</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/rom.ecsw.custom_nnls.html#skrom.rom.ecsw.custom_nnls">rom.ecsw.custom_nnls</a></td>
+<td>Implements bounded non-negative least squares (NNLS) for Empirical Cubature Subset Weighting (ECSW).</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/rom.ecsw.hyperreduce.html#skrom.rom.ecsw.hyperreduce">rom.ecsw.hyperreduce</a></td>
+<td>Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="problem-classes" class="level2">
+<h2 class="anchored" data-anchor-id="problem-classes">Problem Classes</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><a href="../reference/problem_classes.masterclass.html#skrom.problem_classes.masterclass">problem_classes.masterclass</a></td>
+<td>Static reduced-order modeling (ROM) framework.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/problem_classes.masterclass_parallel.html#skrom.problem_classes.masterclass_parallel">problem_classes.masterclass_parallel</a></td>
+<td>Parallel implementation of master_class using multithreading for snapshot generation and ROM evaluation.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/problem_classes.static.master_class.html#skrom.problem_classes.static.master_class">problem_classes.static.master_class</a></td>
+<td>Static reduced-order modeling (ROM) framework.</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/problem_classes.static.master_class_parallel.html#skrom.problem_classes.static.master_class_parallel">problem_classes.static.master_class_parallel</a></td>
+<td>Parallel implementation of master_class using multithreading for snapshot generation and ROM evaluation.</td>
 </tr>
 </tbody>
 </table>
@@ -663,15 +700,15 @@ ul.task-list li input[type="checkbox"] {
 <td></td>
 </tr>
 <tr class="even">
-<td><a href="../reference/templates.problem_template.domain.html#skrom.templates.problem_template.domain">templates.problem_template.domain</a></td>
-<td></td>
-</tr>
-<tr class="odd">
 <td><a href="../reference/templates.problem_template.linear_forms.html#skrom.templates.problem_template.linear_forms">templates.problem_template.linear_forms</a></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="../reference/templates.problem_template.params.html#skrom.templates.problem_template.params">templates.problem_template.params</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><a href="../reference/templates.problem_template.domain.html#skrom.templates.problem_template.domain">templates.problem_template.domain</a></td>
 <td></td>
 </tr>
 <tr class="odd">
@@ -685,59 +722,62 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 </section>
-<section id="utils" class="level2">
-<h2 class="anchored" data-anchor-id="utils">Utils</h2>
+<section id="utilities" class="level2">
+<h2 class="anchored" data-anchor-id="utilities">Utilities</h2>
 <table class="caption-top table">
 <tbody>
 <tr class="odd">
-<td><a href="../reference/utils.data_io.save_h5.html#skrom.utils.data_io.save_h5">utils.data_io.save_h5</a></td>
-<td>hdf5_arraylist.py</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/utils.dynamics.integrators.html#skrom.utils.dynamics.integrators">utils.dynamics.integrators</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/utils.reduced_basis.svd.html#skrom.utils.reduced_basis.svd">utils.reduced_basis.svd</a></td>
-<td></td>
-</tr>
-<tr class="even">
-<td><a href="../reference/utils.visualization.color_palette.html#skrom.utils.visualization.color_palette">utils.visualization.color_palette</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/utils.visualization.generate_vtk.html#skrom.utils.visualization.generate_vtk">utils.visualization.generate_vtk</a></td>
-<td>VTK export utilities.</td>
-</tr>
-<tr class="even">
-<td><a href="../reference/utils.visualization.generate_vtu.html#skrom.utils.visualization.generate_vtu">utils.visualization.generate_vtu</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/utils.visualization.plot_utils.html#skrom.utils.visualization.plot_utils">utils.visualization.plot_utils</a></td>
-<td></td>
-</tr>
-<tr class="even">
-<td><a href="../reference/utils.visualization.vtuwriter.html#skrom.utils.visualization.vtuwriter">utils.visualization.vtuwriter</a></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td><a href="../reference/utils.hdf5_store.html#skrom.utils.hdf5_store">utils.hdf5_store</a></td>
-<td>hdf5_arraylist.py</td>
-</tr>
-<tr class="even">
 <td><a href="../reference/utils.imports.html#skrom.utils.imports">utils.imports</a></td>
 <td>The <code>utils</code> package aggregates frequently used libraries and helper routines for the pyHyperRom framework:</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/utils.hdf5_store.html#skrom.utils.hdf5_store">utils.hdf5_store</a></td>
+<td>hdf5_arraylist.py</td>
 </tr>
 <tr class="odd">
 <td><a href="../reference/utils.save_h5.html#skrom.utils.save_h5">utils.save_h5</a></td>
 <td>hdf5_arraylist.py</td>
 </tr>
+<tr class="even">
+<td><a href="../reference/utils.reduced_basis.svd.html#skrom.utils.reduced_basis.svd">utils.reduced_basis.svd</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/utils.dynamics.integrators.html#skrom.utils.dynamics.integrators">utils.dynamics.integrators</a></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 </section>
-<section id="cli" class="level2">
-<h2 class="anchored" data-anchor-id="cli">CLI</h2>
+<section id="visualization" class="level2">
+<h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><a href="../reference/utils.visualization.color_palette.html#skrom.utils.visualization.color_palette">utils.visualization.color_palette</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><a href="../reference/utils.visualization.generate_vtk.html#skrom.utils.visualization.generate_vtk">utils.visualization.generate_vtk</a></td>
+<td>VTK export utilities.</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/utils.visualization.generate_vtu.html#skrom.utils.visualization.generate_vtu">utils.visualization.generate_vtu</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><a href="../reference/utils.visualization.plot_utils.html#skrom.utils.visualization.plot_utils">utils.visualization.plot_utils</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/utils.visualization.vtuwriter.html#skrom.utils.visualization.vtuwriter">utils.visualization.vtuwriter</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="command-line-interface" class="level2">
+<h2 class="anchored" data-anchor-id="command-line-interface">Command Line Interface</h2>
 <table class="caption-top table">
 <tbody>
 <tr class="odd">

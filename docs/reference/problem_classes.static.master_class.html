@@ -452,7 +452,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../P3_tutorial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tutorial: Building a Reduced-Order Model with scikit-rom</span></a>
+ <span class="menu-text">Tutorial: 3D Static Linear Elasticity with Affine Reduced Order Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -604,8 +604,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Static reduced-order modeling (ROM) framework.</p>
 <section id="tldr" class="level2 doc-section doc-section-tldr">
 <h2 class="doc-section doc-section-tldr anchored" data-anchor-id="tldr">TL;DR</h2>
-<p>Runs an offline full-order FEM snapshot stage and an online reduced-order solve stage, with optional hyper-reduction (DEIM, ECSW) to lower cost while tracking error and speed.</p>
-<p>The module defines: - a problem interface based on an abstract base class - a registry for problem classes and a factory to instantiate them - an offline workflow that runs full-order solves to generate snapshots - an online workflow that runs ROM and computes error and timing metrics - hooks for hyper-reduction workflows based on DEIM and ECSW</p>
+<p>Runs an offline full-order FEM snapshot stage and an online reduced-order solve stage, with optional hyper-reduction (DEIM, ECSW, ECM) to lower cost while tracking error and speed.</p>
+<p>The module defines: - a problem interface based on an abstract base class - a registry for problem classes and a factory to instantiate them - an offline workflow that runs full-order solves to generate snapshots - an online workflow that runs ROM and computes error and timing metrics - hooks for hyper-reduction workflows based on DEIM, ECSW, and ECM</p>
 </section>
 <section id="notes" class="level2 doc-section doc-section-notes">
 <h2 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h2>
@@ -639,7 +639,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem">Problem</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Interface for parameterized problems used by the ROM workflow.</p>
-<p>The class defines the required methods for: - mesh and basis setup - affine components of bilinear and linear forms - parameter-dependent coefficient evaluation - sampling of the parameter space - full-order and reduced-order solvers - hyper-reduced solvers based on DEIM and ECSW</p>
+<p>The class defines the required methods for: - mesh and basis setup - affine components of bilinear and linear forms - parameter-dependent coefficient evaluation - sampling of the parameter space - full-order and reduced-order solvers - hyper-reduced solvers based on DEIM, ECSW, and ECM</p>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
 <table class="caption-top table">
@@ -667,22 +667,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Solve DEIM-based hyper-reduced system for given parameters.</td>
 </tr>
 <tr class="odd">
+<td><a href="#skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecm">hyper_rom_solver_ecm</a></td>
+<td>Solve ECM-based hyper-reduced system for given parameters.</td>
+</tr>
+<tr class="even">
 <td><a href="#skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw">hyper_rom_solver_ecsw</a></td>
 <td>Solve ECSW-based hyper-reduced system for given parameters.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="#skrom.problem_classes.static.master_class.Problem.linear_forms">linear_forms</a></td>
 <td>Return affine linear form components.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a href="#skrom.problem_classes.static.master_class.Problem.parameters">parameters</a></td>
 <td>Generate sampling of parameter space.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="#skrom.problem_classes.static.master_class.Problem.properties">properties</a></td>
 <td>Return function to compute parameter-dependent coefficients.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a href="#skrom.problem_classes.static.master_class.Problem.rom_solver">rom_solver</a></td>
 <td>Solve reduced-order model for given parameters.</td>
 </tr>
@@ -708,36 +712,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.hyper_rom_solver_deim()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Solve DEIM-based hyper-reduced system for given parameters.</p>
 </section>
+<section id="skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecm" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecm">hyper_rom_solver_ecm</h5>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.hyper_rom_solver_ecm()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Solve ECM-based hyper-reduced system for given parameters.</p>
+</section>
 <section id="skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw">hyper_rom_solver_ecsw</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.hyper_rom_solver_ecsw()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Solve ECSW-based hyper-reduced system for given parameters.</p>
 </section>
 <section id="skrom.problem_classes.static.master_class.Problem.linear_forms" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem.linear_forms">linear_forms</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.linear_forms()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.linear_forms()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Return affine linear form components.</p>
 </section>
 <section id="skrom.problem_classes.static.master_class.Problem.parameters" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem.parameters">parameters</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.parameters()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.parameters()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Generate sampling of parameter space.</p>
 </section>
 <section id="skrom.problem_classes.static.master_class.Problem.properties" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem.properties">properties</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.properties()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.properties()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Return function to compute parameter-dependent coefficients.</p>
 </section>
 <section id="skrom.problem_classes.static.master_class.Problem.rom_solver" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.Problem.rom_solver">rom_solver</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.rom_solver()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.Problem.rom_solver()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Solve reduced-order model for given parameters.</p>
 </section>
 </section>
 </section>
 <section id="skrom.problem_classes.static.master_class.fom_simulation" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.fom_simulation">fom_simulation</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.fom_simulation(<span class="va">self</span>, num_snapshots<span class="op">=</span><span class="dv">32</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.fom_simulation(num_snapshots<span class="op">=</span><span class="dv">32</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Offline snapshot generation workflow.</p>
 <p>The workflow: - draws parameter samples - runs full-order solves - stores solutions and solve times - computes a reference field for centering - saves outputs to a ROM_data directory</p>
 <section id="attributes" class="level4 doc-section doc-section-attributes">
@@ -802,7 +811,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.problem_classes.static.master_class.fom_simulation.run_simulation" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.fom_simulation.run_simulation">run_simulation</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.fom_simulation.run_simulation()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.fom_simulation.run_simulation()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Run full-order solves and save offline outputs.</p>
 <p>Adds: - per-sample checkpointing to .npz - resume: if checkpoint exists, load it and skip the solve - long-path-safe filenames (Windows): hash-first + fallback to hash-only - crash-safe writes (atomic replace) - corrupt checkpoint handling (recompute + overwrite)</p>
 </section>
@@ -810,17 +819,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="skrom.problem_classes.static.master_class.rom_simulation" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation">rom_simulation</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation(</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    train_ref<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    test_ref<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    fos_solutions<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    train_mask<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    test_mask<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    V_sel<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    n_sel<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    N_rom_snap<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    train_ref<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    test_ref<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    fos_solutions<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    train_mask<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    test_mask<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    V_sel<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    n_sel<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    N_rom_snap<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Online ROM evaluation workflow.</p>
 <p>The workflow: - loads ROM_data outputs from disk - selects test parameters and reference full-order solutions - runs ROM solvers and reconstructs full fields - computes relative error and time ratio metrics - supports hyper-reduced solvers based on DEIM and ECSW</p>
 <section id="attributes-1" class="level4 doc-section doc-section-attributes">
@@ -882,10 +890,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Run DEIM hyper-ROM evaluation on the test set.</td>
 </tr>
 <tr class="even">
+<td><a href="#skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm">run_hyper_rom_simulation_ecm</a></td>
+<td>Run ECM hyper-ROM evaluation on the test set.</td>
+</tr>
+<tr class="odd">
 <td><a href="#skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw">run_hyper_rom_simulation_ecsw</a></td>
 <td>Run ECSW hyper-ROM evaluation on the test set.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><a href="#skrom.problem_classes.static.master_class.rom_simulation.run_rom_simulation">run_rom_simulation</a></td>
 <td>Run ROM evaluation on the test set.</td>
 </tr>
@@ -893,11 +905,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_deim" class="level5">
 <h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_deim">run_hyper_rom_simulation_deim</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_deim(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    z,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    deim_mat,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    sampled_rows,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_deim(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    z,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    deim_mat,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    sampled_rows,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Run DEIM hyper-ROM evaluation on the test set.</p>
 <section id="parameters" class="level6 doc-section doc-section-parameters">
 <h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h6>
@@ -963,20 +975,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </section>
 </section>
-<section id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw">run_hyper_rom_simulation_ecsw</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    z,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Run ECSW hyper-ROM evaluation on the test set.</p>
+<section id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm">run_hyper_rom_simulation_ecm</h5>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecm(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    z,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run ECM hyper-ROM evaluation on the test set.</p>
 <section id="parameters-1" class="level6 doc-section doc-section-parameters">
 <h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 15%">
-<col style="width: 60%">
-<col style="width: 15%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 67%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -990,7 +1002,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>z</td>
 <td>array_like</td>
-<td>Element weight vector used by the ECSW solver.</td>
+<td>Dense ECM Gauss-point weights with shape <code>(n_elements, n_q)</code>.</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
@@ -1021,13 +1033,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </section>
 </section>
-<section id="skrom.problem_classes.static.master_class.rom_simulation.run_rom_simulation" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation.run_rom_simulation">run_rom_simulation</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_rom_simulation()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Run ROM evaluation on the test set.</p>
-<p>The method: - runs the reduced solver for each test parameter - reconstructs a full field from reduced coordinates - computes relative error in percent - computes time ratio (full-order time) / (ROM time)</p>
+<section id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw">run_hyper_rom_simulation_ecsw</h5>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_hyper_rom_simulation_ecsw(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    z,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run ECSW hyper-ROM evaluation on the test set.</p>
+<section id="parameters-2" class="level6 doc-section doc-section-parameters">
+<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 60%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>z</td>
+<td>array_like</td>
+<td>Element weight vector used by the ECSW solver.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="returns-2" class="level6 doc-section doc-section-returns">
 <h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h6>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>hyper_rom_error</td>
+<td>list of float</td>
+<td>Relative error values in percent.</td>
+</tr>
+<tr class="even">
+<td>hyper_speed_up</td>
+<td>list of float</td>
+<td>Time ratios for each test case.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="skrom.problem_classes.static.master_class.rom_simulation.run_rom_simulation" class="level5">
+<h5 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.rom_simulation.run_rom_simulation">run_rom_simulation</h5>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.rom_simulation.run_rom_simulation()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run ROM evaluation on the test set.</p>
+<p>The method: - runs the reduced solver for each test parameter - reconstructs a full field from reduced coordinates - computes relative error in percent - computes time ratio (full-order time) / (ROM time)</p>
+<section id="returns-3" class="level6 doc-section doc-section-returns">
+<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h6>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1080,10 +1150,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="skrom.problem_classes.static.master_class.assign_properties" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.assign_properties">assign_properties</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.assign_properties(prob)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.assign_properties(prob)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Collect callable handles from a problem instance.</p>
-<section id="parameters-2" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h4>
+<section id="parameters-3" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1103,13 +1173,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="returns-3" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h4>
+<section id="returns-4" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-4">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 5%">
-<col style="width: 87%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 88%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1122,7 +1192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>properties</td>
 <td>tuple</td>
-<td>Tuple with: (parameters, bilinear_forms, linear_forms, domain, properties, fom_solver, rom_solver, hyper_deim_solver, hyper_ecsw_solver).</td>
+<td>Tuple with: (parameters, bilinear_forms, linear_forms, domain, properties, fom_solver, rom_solver, hyper_deim_solver, hyper_ecsw_solver, hyper_ecm_solver).</td>
 </tr>
 </tbody>
 </table>
@@ -1130,10 +1200,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="skrom.problem_classes.static.master_class.get_problem" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.get_problem">get_problem</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.get_problem(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.get_problem(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Instantiate a registered problem class.</p>
-<section id="parameters-3" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
+<section id="parameters-4" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 11%">
@@ -1159,8 +1229,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="returns-4" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-4">Returns</h4>
+<section id="returns-5" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-5">Returns</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1200,10 +1270,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="skrom.problem_classes.static.master_class.register_problem" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.problem_classes.static.master_class.register_problem">register_problem</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.register_problem(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>problem_classes.static.master_class.register_problem(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Register a problem class under a string key.</p>
-<section id="parameters-4" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-4">Parameters</h4>
+<section id="parameters-5" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-5">Parameters</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1223,8 +1293,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="returns-5" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-5">Returns</h4>
+<section id="returns-6" class="level4 doc-section doc-section-returns">
+<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-6">Returns</h4>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 8%">

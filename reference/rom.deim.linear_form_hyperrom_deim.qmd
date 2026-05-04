@@ -28,7 +28,6 @@ Author: Suparno Bhattacharyya
 
 ```python
 rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim(
-    self,
     form,
     elem_weight,
     ubasis,

@@ -32,7 +32,6 @@ The `hyperreduce` folder contains all tools to perform hyper-reduction, includin
 
 ```python
 rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw(
-    self,
     form,
     elem_weight,
     ubasis,

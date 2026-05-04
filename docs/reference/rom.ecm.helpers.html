@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>rom.ecsw.bilinear_form_hyperrom_ecsw – SCIKIT-ROM</title>
+<title>rom.ecm.helpers – SCIKIT-ROM</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -147,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html">ROM</a></li><li class="breadcrumb-item"><a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html">rom.ecsw.bilinear_form_hyperrom_ecsw</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -216,13 +216,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
  <span class="menu-text">ROM</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html" class="sidebar-item-text sidebar-link">
@@ -243,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link active">
+  <a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">rom.ecsw.bilinear_form_hyperrom_ecsw</span></a>
   </div>
 </li>
@@ -572,489 +572,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw" id="toc-skrom.rom.ecsw.bilinear_form_hyperrom_ecsw" class="nav-link active" data-scroll-target="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw">rom.ecsw.bilinear_form_hyperrom_ecsw</a>
+  <li><a href="#skrom.rom.ecm.helpers" id="toc-skrom.rom.ecm.helpers" class="nav-link active" data-scroll-target="#skrom.rom.ecm.helpers">rom.ecm.helpers</a>
   <ul class="collapse">
-  <li><a href="#tldr" id="toc-tldr" class="nav-link" data-scroll-target="#tldr">TL;DR</a></li>
-  <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
-  <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
-  <ul class="collapse">
-  <li><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw" id="toc-skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw" class="nav-link" data-scroll-target="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw">BilinearFormHYPERROM_ecsw</a></li>
-  </ul></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements" id="toc-skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements" class="nav-link" data-scroll-target="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements">with_elements</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.active_ecm_elements" id="toc-skrom.rom.ecm.helpers.active_ecm_elements" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.active_ecm_elements">active_ecm_elements</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.dense_ecm_weights" id="toc-skrom.rom.ecm.helpers.dense_ecm_weights" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.dense_ecm_weights">dense_ecm_weights</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.flat_to_element_gauss_weights" id="toc-skrom.rom.ecm.helpers.flat_to_element_gauss_weights" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.flat_to_element_gauss_weights">flat_to_element_gauss_weights</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.with_elements" id="toc-skrom.rom.ecm.helpers.with_elements" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.with_elements">with_elements</a></li>
   </ul></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../reference/index.html"><strong>Documentation</strong></a></li><li class="breadcrumb-item"><a href="../reference/rom.deim.bilinear_form_hyperrom_deim.html">ROM</a></li><li class="breadcrumb-item"><a href="../reference/rom.ecsw.bilinear_form_hyperrom_ecsw.html">rom.ecsw.bilinear_form_hyperrom_ecsw</a></li></ol></nav></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
 
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw" class="level1">
-<h1>rom.ecsw.bilinear_form_hyperrom_ecsw</h1>
-<p><code>rom.ecsw.bilinear_form_hyperrom_ecsw</code></p>
-<p>ECSW-based hyperreduction for finite element bilinear forms with element clustering.</p>
-<p>This module provides hyperreduction of bilinear forms using Energy-Conserving Sampling and Weighting (ECSW) combined with intelligent element clustering for efficient reduced-order stiffness assembly. It achieves dramatic computational speedups by clustering elements by number of free DOFs for vectorized operations, extracting and projecting element stiffness blocks onto reduced bases with weights, and assembling global reduced matrices via vectorized Einstein summation.</p>
-<section id="tldr" class="level2 doc-section doc-section-tldr">
-<h2 class="doc-section doc-section-tldr anchored" data-anchor-id="tldr">TL;DR</h2>
-<p>Enables substantial speedup in bilinear form assembly for ROMs while preserving stability and energy conservation through intelligent element clustering and weighted assembly strategies.</p>
-</section>
-<section id="author" class="level2 doc-section doc-section-author">
-<h2 class="doc-section doc-section-author anchored" data-anchor-id="author">Author</h2>
-<p>Suparno Bhattacharyya</p>
-</section>
-<section id="classes" class="level2">
-<h2 class="anchored" data-anchor-id="classes">Classes</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw">BilinearFormHYPERROM_ecsw</a></td>
-<td>ECSW-based hyperreduced bilinear form with element clustering for efficient assembly.</td>
-</tr>
-</tbody>
-</table>
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw">BilinearFormHYPERROM_ecsw</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    form,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    elem_weight,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    lob,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    rob,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    free_dofs<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    mean<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>ECSW-based hyperreduced bilinear form with element clustering for efficient assembly.</p>
-<p><strong>TL;DR</strong>: Dramatically accelerates bilinear form assembly substantially through energy-conserving element clustering and weighted sampling, providing both computational efficiency and numerical stability for real-time ROM applications.</p>
-<p>This class implements a sophisticated hyperreduction strategy that combines Energy-Conserving Sampling and Weighting (ECSW) with intelligent element clustering to achieve massive computational savings while preserving crucial physical properties. The approach works through several key innovations:</p>
-<ul>
-<li>Element clustering by free DOF count for vectorized operations</li>
-<li>Energy-conserving weighted assembly preserving physical properties</li>
-<li>Efficient submatrix extraction using advanced NumPy indexing</li>
-<li>Vectorized Einstein summation for parallel element contributions</li>
-</ul>
-<p>The hyperreduction is particularly effective for problems where:</p>
-<ul>
-<li>Energy conservation is critical (structural dynamics, wave propagation)</li>
-<li>Element distributions are relatively uniform (similar local DOF counts)</li>
-<li>Computational stability is paramount for long-time integration</li>
-<li>Real-time performance is required for control or optimization</li>
-</ul>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 4%">
-<col style="width: 16%">
-<col style="width: 73%">
-<col style="width: 5%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>form</td>
-<td>callable</td>
-<td>The original bilinear form function to be hyperreduced. Should accept test and trial basis functions and return element-wise stiffness contributions</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td>elem_weight</td>
-<td>scalar or array_like of shape (n_elements,)</td>
-<td>Element-wise ECSW weights determining the contribution of each element to the reduced assembly. Can be a single scalar applied to all elements or individual weights per element from ECSW analysis</td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td>ubasis</td>
-<td>Basis</td>
-<td>Trial-space finite element basis containing full DOF count, element connectivity, and quadrature information for the original mesh</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td>lob</td>
-<td>ndarray of shape (n_free, r) or (n_full, r)</td>
-<td>Left (test) reduced basis matrix. Shape depends on whether free_dofs is provided - if so, basis is defined only on free DOFs</td>
-<td><em>required</em></td>
-</tr>
-<tr class="odd">
-<td>rob</td>
-<td>ndarray of shape (n_free, r) or (n_full, r)</td>
-<td>Right (trial) reduced basis matrix with same shape requirements as lob. Projects full-order solutions to the r-dimensional reduced space</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td>vbasis</td>
-<td>Basis</td>
-<td>Test-space finite element basis. If None, defaults to ubasis for standard Galerkin formulations</td>
-<td><code>None</code></td>
-</tr>
-<tr class="odd">
-<td>free_dofs</td>
-<td>ndarray of int</td>
-<td>Indices of global DOFs that are free (non-Dirichlet). If provided, all reduced bases and operations are performed only on these DOFs</td>
-<td><code>None</code></td>
-</tr>
-<tr class="even">
-<td>mean</td>
-<td>ndarray</td>
-<td>Mean snapshot vector for solution centering. Required if snapshot data was mean-subtracted during reduced basis construction</td>
-<td><code>None</code></td>
-</tr>
-<tr class="odd">
-<td>nthreads</td>
-<td>int</td>
-<td>Number of threads for parallel element matrix extraction. Zero means serial execution, positive values enable multi-threaded assembly</td>
-<td><code>0</code></td>
-</tr>
-<tr class="even">
-<td>dtype</td>
-<td>numpy.dtype</td>
-<td>Numerical precision for all computations and storage arrays</td>
-<td><code>np.float64</code></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="attributes" class="level4 doc-section doc-section-attributes">
-<h4 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 78%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>lob</td>
-<td>ndarray</td>
-<td>Left reduced basis matrix, possibly restricted to free DOFs</td>
-</tr>
-<tr class="even">
-<td>rob</td>
-<td>ndarray</td>
-<td>Right reduced basis matrix, possibly restricted to free DOFs</td>
-</tr>
-<tr class="odd">
-<td>free_dofs</td>
-<td>ndarray or None</td>
-<td>Indices of free DOFs if Dirichlet boundary conditions are present</td>
-</tr>
-<tr class="even">
-<td>mean</td>
-<td>ndarray or None</td>
-<td>Mean snapshot vector for solution centering and reconstruction</td>
-</tr>
-<tr class="odd">
-<td>r</td>
-<td>int</td>
-<td>Reduced dimension (number of reduced basis vectors)</td>
-</tr>
-<tr class="even">
-<td>mapping</td>
-<td>ndarray of int</td>
-<td>Mapping from full DOF indices to reduced free-DOF indices, with Dirichlet DOFs mapped to -1</td>
-</tr>
-<tr class="odd">
-<td>cluster_idx</td>
-<td>list of ndarray</td>
-<td>Element indices grouped by number of free DOFs per element. Each entry contains indices of elements with the same free DOF count</td>
-</tr>
-<tr class="even">
-<td>order_cluster</td>
-<td>list of ndarray</td>
-<td>Local DOF ordering within each cluster for efficient submatrix extraction. Shape: (cluster_size, n_free_dofs_in_cluster)</td>
-</tr>
-<tr class="odd">
-<td>w_cluster</td>
-<td>list of ndarray</td>
-<td>ECSW weights corresponding to elements in each cluster</td>
-</tr>
-<tr class="even">
-<td>R_test_free</td>
-<td>list of ndarray</td>
-<td>Test basis matrices restricted to free DOFs for each cluster. Shape: (cluster_size, n_free_dofs, r)</td>
-</tr>
-<tr class="odd">
-<td>R_trial_free</td>
-<td>list of ndarray</td>
-<td>Trial basis matrices restricted to free DOFs for each cluster. Shape: (cluster_size, n_free_dofs, r)</td>
-</tr>
-<tr class="even">
-<td>unique_freedom</td>
-<td>ndarray of int</td>
-<td>Unique counts of free DOFs per element, determining the number of clusters</td>
-</tr>
-<tr class="odd">
-<td>weight</td>
-<td>ndarray</td>
-<td>Array of ECSW weights</td>
-</tr>
-<tr class="even">
-<td>nonzero_elements</td>
-<td>ndarray</td>
-<td>Indices of elements with non-zero weights</td>
-</tr>
-<tr class="odd">
-<td>ubasis_rom</td>
-<td>Basis</td>
-<td>Trial basis restricted to non-zero weight elements</td>
-</tr>
-<tr class="even">
-<td>vbasis_rom</td>
-<td>Basis</td>
-<td>Test basis restricted to non-zero weight elements</td>
-</tr>
-<tr class="odd">
-<td>element_dofs</td>
-<td>ndarray</td>
-<td>Element-to-DOF connectivity for restricted mesh</td>
-</tr>
-<tr class="even">
-<td>free_indices</td>
-<td>ndarray</td>
-<td>Free DOF indices for each element</td>
-</tr>
-<tr class="odd">
-<td>mask</td>
-<td>ndarray of bool</td>
-<td>Boolean mask indicating which DOFs are free in each element</td>
-</tr>
-<tr class="even">
-<td>n_freedom</td>
-<td>ndarray of int</td>
-<td>Number of free DOFs per element</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="methods" class="level4">
-<h4 class="anchored" data-anchor-id="methods">Methods</h4>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw">assemble_weighted_ecsw</a></td>
-<td>Assemble the globally weighted reduced stiffness matrix using ECSW.</td>
-</tr>
-<tr class="even">
-<td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom">extract_element_matrices_rom</a></td>
-<td>Extract element stiffness matrices for hyperreduced mesh assembly.</td>
-</tr>
-</tbody>
-</table>
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw">assemble_weighted_ecsw</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble the globally weighted reduced stiffness matrix using ECSW.</p>
-<p><strong>TL;DR</strong>: Main assembly method that orchestrates element clustering, vectorized stiffness extraction, ECSW weighting, and reduced basis projection to produce the final r×r reduced-order stiffness matrix.</p>
-<p>This method performs the complete ECSW hyperreduction assembly process through a sophisticated multi-stage algorithm:</p>
-<ol type="1">
-<li><p><strong>Element Matrix Extraction</strong>: Calls element extraction routines to compute local stiffness matrices for all active elements, leveraging parallel processing when available.</p></li>
-<li><p><strong>Cluster-Based Processing</strong>: Processes elements in clusters based on their free DOF count, enabling highly efficient vectorized operations and eliminating expensive Python loops.</p></li>
-<li><p><strong>Submatrix Extraction</strong>: For each cluster, extracts the free DOF submatrices from local element matrices using advanced NumPy indexing for maximum efficiency.</p></li>
-<li><p><strong>ECSW Weighting</strong>: Applies energy-conserving weights to preserve physical properties while enabling computational reduction.</p></li>
-<li><p><strong>Vectorized Contraction</strong>: Uses Einstein summation to perform parallel contractions over entire clusters: A_reduced += Σ_e R_test[e]^T @ (w[e] * K_local[e]) @ R_trial[e]</p></li>
-</ol>
-<p>The final result preserves the mathematical structure of the full-order operator while achieving dramatic computational savings through intelligent clustering and vectorization strategies.</p>
-<section id="parameters-1" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 5%">
-<col style="width: 4%">
-<col style="width: 84%">
-<col style="width: 5%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>**kwargs</td>
-<td>dict</td>
-<td>Additional keyword arguments passed to element extraction routines for controlling assembly behavior, such as material parameters or quadrature settings</td>
-<td><code>{}</code></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="returns" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 4%">
-<col style="width: 10%">
-<col style="width: 84%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>K_reduced</td>
-<td>ndarray of shape (r, r)</td>
-<td>Assembled reduced-order stiffness matrix ready for use in ROM systems. This matrix preserves the energy conservation properties of the full-order operator while enabling real-time evaluation</td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom">extract_element_matrices_rom</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Extract element stiffness matrices for hyperreduced mesh assembly.</p>
-<p><strong>TL;DR</strong>: Computes local element stiffness matrices for the reduced element set using either serial or parallel execution, providing the fundamental building blocks for ECSW-weighted global assembly.</p>
-<p>This method performs the core finite element integration to compute element-level contributions to the global bilinear form. The integration is performed only over elements selected by the hyperreduction strategy, dramatically reducing computational cost while maintaining accuracy through ECSW weighting.</p>
-<p>The method supports both execution modes:</p>
-<ul>
-<li><strong>Serial Mode</strong> (nthreads=0): Sequential element-by-element computation</li>
-<li><strong>Parallel Mode</strong> (nthreads&gt;0): Multi-threaded parallel element processing</li>
-</ul>
-<p>For each element, the method evaluates the bilinear form: K_e[i,j] = ∫_Ω_e φ_i(x) * form * φ_j(x) dx</p>
-<p>where φ_i, φ_j are basis functions and integration uses the quadrature rules embedded in the finite element basis.</p>
-<section id="parameters-2" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 8%">
-<col style="width: 10%">
-<col style="width: 74%">
-<col style="width: 6%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>ubasis</td>
-<td>Basis</td>
-<td>Trial-space finite element basis containing mesh connectivity, quadrature points, and basis function evaluations</td>
-<td><em>required</em></td>
-</tr>
-<tr class="even">
-<td>vbasis</td>
-<td>Basis</td>
-<td>Test-space finite element basis. If None, defaults to ubasis for standard Galerkin formulations</td>
-<td><code>None</code></td>
-</tr>
-<tr class="odd">
-<td>elem_indices</td>
-<td>array_like of int</td>
-<td>Specific element indices to include in extraction. If None, processes all elements in the hyperreduced mesh</td>
-<td><code>None</code></td>
-</tr>
-<tr class="even">
-<td>**kwargs</td>
-<td>dict</td>
-<td>Additional keyword arguments passed to the bilinear form evaluation, such as material parameters or other problem-specific data</td>
-<td><code>{}</code></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="returns-1" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 8%">
-<col style="width: 26%">
-<col style="width: 64%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>element_matrices</td>
-<td>ndarray of shape (n_elements, n_local_dofs, n_local_dofs)</td>
-<td>Array of local element stiffness matrices. Each element_matrices[e] contains the n_local_dofs × n_local_dofs stiffness matrix for element e</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="raises" class="level6 doc-section doc-section-raises">
-<h6 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h6>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 6%">
-<col style="width: 9%">
-<col style="width: 84%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td></td>
-<td>ValueError</td>
-<td>If trial and test bases have incompatible quadrature point counts, indicating a mismatch in integration rules</td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-</section>
-</section>
+<section id="skrom.rom.ecm.helpers" class="level1">
+<h1>rom.ecm.helpers</h1>
+<p><code>rom.ecm.helpers</code></p>
+<p>Helper utilities for ECM-based hyperreduction.</p>
+<p>This module converts ECM-selected Gauss-point data into dense per-element, per-Gauss-point arrays suitable for ROM assembly.</p>
+<section id="notes" class="level2 doc-section doc-section-notes">
+<h2 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h2>
+<p>The bilinear and linear ECM assemblers in this folder assume that the stored ECM weights act as multiplicative factors on scikit-fem’s native quadrature contributions, i.e.&nbsp;on quantities that already include <code>basis.dx</code>.</p>
+<p>If an external ECM implementation returns <em>absolute</em> cubature weights for the reference quadrature rule, pass the reference Gauss weights through <code>base_quadrature_weights</code> so that the helper divides by them and produces the multipliers expected by the assemblers.</p>
 </section>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
@@ -1067,24 +613,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements">with_elements</a></td>
-<td>Return a similar basis on a subset of element indices.</td>
+<td><a href="#skrom.rom.ecm.helpers.active_ecm_elements">active_ecm_elements</a></td>
+<td>Return element indices whose ECM weight row has at least one active Gauss point.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.rom.ecm.helpers.dense_ecm_weights">dense_ecm_weights</a></td>
+<td>Build a dense ECM-weight array of shape <code>(n_elements, n_gauss_points)</code>.</td>
+</tr>
+<tr class="odd">
+<td><a href="#skrom.rom.ecm.helpers.flat_to_element_gauss_weights">flat_to_element_gauss_weights</a></td>
+<td>Convert flat ECM-selected Gauss-point data to a dense element/Gauss array.</td>
+</tr>
+<tr class="even">
+<td><a href="#skrom.rom.ecm.helpers.with_elements">with_elements</a></td>
+<td>Return a similar <code>FacetBasis</code> restricted to a subset of elements.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements" class="level3">
-<h3 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements">with_elements</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements(<span class="va">self</span>, elements<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Return a similar basis on a subset of element indices.</p>
-<p><strong>TL;DR</strong>: Creates a restricted FacetBasis containing only specified elements.</p>
-<section id="parameters-3" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
+<section id="skrom.rom.ecm.helpers.active_ecm_elements" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.active_ecm_elements">active_ecm_elements</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.active_ecm_elements(weight_array, <span class="op">*</span>, atol<span class="op">=</span><span class="fl">0.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Return element indices whose ECM weight row has at least one active Gauss point.</p>
+</section>
+<section id="skrom.rom.ecm.helpers.dense_ecm_weights" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.dense_ecm_weights">dense_ecm_weights</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.dense_ecm_weights(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    weight_data,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    n_elements,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    n_gauss_points,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Build a dense ECM-weight array of shape <code>(n_elements, n_gauss_points)</code>.</p>
+<section id="parameters" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 18%">
-<col style="width: 57%">
-<col style="width: 12%">
+<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 71%">
+<col style="width: 5%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1096,40 +664,109 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>elements</td>
-<td>Optional[Any]</td>
-<td>Subset of element indices to restrict the basis to</td>
-<td><code>None</code></td>
+<td>weight_data</td>
+<td>Mapping[int, Sequence[float]] | ArrayLike</td>
+<td>Either: - a mapping <code>element_id -&gt; sequence_of_length_n_gauss_points</code>; or - a dense array of shape <code>(n_elements, n_gauss_points)</code>; or - a flat array of length <code>n_elements * n_gauss_points</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>n_elements</td>
+<td>int</td>
+<td>Number of elements in the full mesh.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>n_gauss_points</td>
+<td>int</td>
+<td>Number of Gauss points per element.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>dtype</td>
+<td>DTypeLike</td>
+<td>Numeric dtype of the returned array.</td>
+<td><code>np.float64</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-2" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
+</section>
+<section id="skrom.rom.ecm.helpers.flat_to_element_gauss_weights" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.flat_to_element_gauss_weights">flat_to_element_gauss_weights</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.flat_to_element_gauss_weights(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    n_elements,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    n_gauss_points,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    selected_indices,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    selected_weights,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    base_quadrature_weights<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Convert flat ECM-selected Gauss-point data to a dense element/Gauss array.</p>
+<section id="parameters-1" class="level4 doc-section doc-section-parameters">
+<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 15%">
-<col style="width: 74%">
+<col style="width: 8%">
+<col style="width: 6%">
+<col style="width: 79%">
+<col style="width: 4%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
 <th>Type</th>
 <th>Description</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
-<td>FacetBasis</td>
-<td>New FacetBasis instance restricted to specified elements</td>
+<td>n_elements</td>
+<td>int</td>
+<td>Number of elements in the full mesh.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>n_gauss_points</td>
+<td>int</td>
+<td>Number of Gauss points per element.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>selected_indices</td>
+<td>ArrayLike</td>
+<td>Flat Gauss-point indices as returned by an ECM solve.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>selected_weights</td>
+<td>ArrayLike</td>
+<td>ECM weights aligned with <code>selected_indices</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>base_quadrature_weights</td>
+<td>ArrayLike | None</td>
+<td>Optional base quadrature weights of length <code>n_gauss_points</code>. When supplied, the returned values are divided by these weights so that the result acts as a multiplicative factor on scikit-fem’s native <code>basis.dx</code> contributions.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="even">
+<td>dtype</td>
+<td>DTypeLike</td>
+<td>Numeric dtype of the returned array.</td>
+<td><code>np.float64</code></td>
 </tr>
 </tbody>
 </table>
-
-
 </section>
+</section>
+<section id="skrom.rom.ecm.helpers.with_elements" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.with_elements">with_elements</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.with_elements(<span class="va">self</span>, elements<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Return a similar <code>FacetBasis</code> restricted to a subset of elements.</p>
+
+
 </section>
 </section>
 </section>
