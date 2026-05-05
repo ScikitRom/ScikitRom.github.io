@@ -606,7 +606,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
-  <li><a href="#bilinearformrom" id="toc-bilinearformrom" class="nav-link" data-scroll-target="#bilinearformrom">BilinearFormROM</a></li>
+  <li><a href="#skrom.rom.bilinear_form_rom.BilinearFormROM" id="toc-skrom.rom.bilinear_form_rom.BilinearFormROM" class="nav-link" data-scroll-target="#skrom.rom.bilinear_form_rom.BilinearFormROM">BilinearFormROM</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -620,23 +620,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.bilinear_form_rom" class="level1">
 <h1>rom.bilinear_form_rom</h1>
-<p><code>rom.bilinear_form_rom</code></p>
-<p><strong>Purpose:</strong><br>
-This module helps turn <em>full-size</em> element stiffness matrices into <em>reduced</em> (ROM) versions, handling all the index mapping and memory tricks so you get efficient reduced-order stiffness matrices, even for big problems.</p>
-<p><strong>Features:</strong></p>
+<p><strong>Purpose:</strong> Transforms full-order element stiffness matrices into their reduced-order counterparts by handling all index mapping, Dirichlet boundary classification, and memory-efficient assembly. Designed to produce accurate reduced stiffness matrices for large-scale ROM problems without excessive memory overhead.</p>
+<p><strong>Summary:</strong> Provides the <code>BilinearFormROM</code> class for projecting and assembling reduced bilinear forms. Elements are grouped by their Dirichlet boundary interactions to streamline assembly, and chunked processing is available for problems where memory is a constraint. The broader <code>rom</code> package also includes:</p>
 <ul>
-<li><code>BilinearFormROM</code>: Class for projecting and assembling reduced matrices</li>
-<li>Groups elements by how they hit Dirichlet boundaries (for efficient handling)</li>
-<li>Builds the global reduced stiffness matrix from reduced element contributions—optionally in chunks for better memory use</li>
+<li>Classes for reduced assembly and projection of both bilinear and linear forms</li>
+<li>Dirichlet boundary condition handling utilities tailored for ROM workflows</li>
+<li>Chunked and group-wise matrix assembly strategies for large-scale problems</li>
+<li>Index and DOF mapping tools between full-order and reduced-order representations</li>
 </ul>
-<p>The <code>rom</code> folder also includes:</p>
-<ul>
-<li>Classes for handling reduced assembly and projection (both bilinear and linear forms)</li>
-<li>Helper utilities for Dirichlet BCs in ROMs</li>
-<li>Tricks for chunked and group-wise matrix assembly (so huge problems fit in memory)</li>
-<li>Index/dof mapping tools between full and reduced problems</li>
-</ul>
-<p><strong>[Author: Suparno Bhattacharyya]</strong></p>
+<p><strong>Author:</strong> Suparno Bhattacharyya</p>
 <hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
@@ -650,13 +642,13 @@ This module helps turn <em>full-size</em> element stiffness matrices into <em>re
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.bilinear_form_rom.BilinearFormROM">BilinearFormROM</a></td>
-<td>Main class for assembling reduced-order bilinear forms (ROM stiffness matrices)</td>
+<td>Assembles reduced-order bilinear forms (ROM stiffness matrices) via element-wise projection.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="bilinearformrom" class="level3">
-<h3 class="anchored" data-anchor-id="bilinearformrom">BilinearFormROM</h3>
+<section id="skrom.rom.bilinear_form_rom.BilinearFormROM" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.bilinear_form_rom.BilinearFormROM">BilinearFormROM</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.bilinear_form_rom.BilinearFormROM(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    form,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
@@ -668,23 +660,15 @@ This module helps turn <em>full-size</em> element stiffness matrices into <em>re
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="what-does-this-class-do" class="level4">
-<h4 class="anchored" data-anchor-id="what-does-this-class-do">What does this class do?</h4>
-<ul>
-<li>Projects element-wise full stiffness matrices onto your reduced bases, then adds them up—for a fast global reduced stiffness matrix</li>
-<li>Handles mapping from “full” degrees of freedom (DOFs) to “free” DOFs (skipping Dirichlet ones)</li>
-<li>Smartly groups elements: some are all-Dirichlet-free, others are mixed—grouping helps make assembly much faster and use less memory</li>
-<li>For huge problems, can assemble in “chunks”—avoiding running out of memory</li>
-</ul>
+<p><strong>Summary:</strong> Projects element-wise full-order stiffness matrices onto user-supplied reduced bases and accumulates them into a global reduced stiffness matrix. Handles the complete mapping from full DOFs to free (non-Dirichlet) DOFs, classifies elements into all-free and mixed-boundary groups for efficient processing, and supports chunked assembly to manage memory usage on large meshes.</p>
 <hr>
-</section>
 <section id="attributes" class="level4">
 <h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 12%">
-<col style="width: 32%">
-<col style="width: 55%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -696,93 +680,93 @@ This module helps turn <em>full-size</em> element stiffness matrices into <em>re
 <tbody>
 <tr class="odd">
 <td>lob</td>
-<td>(ndarray, shape(N_free, r) or (N, r))</td>
-<td>Left (test) reduced basis</td>
+<td>ndarray, shape (N_free, r) or (N, r)</td>
+<td>Left (test) reduced basis vectors.</td>
 </tr>
 <tr class="even">
 <td>rob</td>
-<td>(ndarray, shape(N_free, r) or (N, r))</td>
-<td>Right (trial) reduced basis</td>
+<td>ndarray, shape (N_free, r) or (N, r)</td>
+<td>Right (trial) reduced basis vectors.</td>
 </tr>
 <tr class="odd">
 <td>free_dofs</td>
 <td>ndarray or None</td>
-<td>Indices of “free” (non-Dirichlet) DOFs</td>
+<td>Indices of free (non-Dirichlet) DOFs in the global system.</td>
 </tr>
 <tr class="even">
 <td>mean</td>
 <td>ndarray or None</td>
-<td>Mean field (subtracted from the snapshots before SVD)</td>
+<td>Mean field subtracted from snapshots prior to SVD-based basis construction.</td>
 </tr>
 <tr class="odd">
 <td>nthreads</td>
 <td>int</td>
-<td>How many threads to use for parallel computation</td>
+<td>Number of threads used for parallel assembly operations.</td>
 </tr>
 <tr class="even">
 <td>dtype</td>
-<td>data - type</td>
-<td>Which numeric type (e.g.&nbsp;float64)</td>
+<td>data-type</td>
+<td>Numeric precision for assembly (e.g., <code>np.float64</code>).</td>
 </tr>
 <tr class="odd">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Full FE basis (trial functions)</td>
+<td>Full finite element basis for trial functions.</td>
 </tr>
 <tr class="even">
 <td>vbasis</td>
 <td>Basis</td>
-<td>Full FE basis (test functions)</td>
+<td>Full finite element basis for test functions.</td>
 </tr>
 <tr class="odd">
 <td>mapping</td>
-<td>(ndarray, shape(N_full))</td>
-<td>Maps global DOFs to reduced ones, -1 for Dirichlet ones</td>
+<td>ndarray, shape (N_full,)</td>
+<td>Maps each global DOF to its reduced index; entries are <code>-1</code> for Dirichlet-constrained DOFs.</td>
 </tr>
 <tr class="even">
 <td>element_dofs</td>
 <td>ndarray</td>
-<td>Local-to-global DOF mapping for each element</td>
+<td>Local-to-global DOF mapping for each element in the mesh.</td>
 </tr>
 <tr class="odd">
 <td>free_indices</td>
 <td>ndarray</td>
-<td>Which reduced DOF each element maps to</td>
+<td>Reduced DOF index each element node maps to, after Dirichlet filtering.</td>
 </tr>
 <tr class="even">
 <td>mask</td>
 <td>ndarray of bool</td>
-<td>Which DOFs per element are free</td>
+<td>Boolean mask identifying free DOFs within each element’s local DOF set.</td>
 </tr>
 <tr class="odd">
 <td>r</td>
 <td>int</td>
-<td>How many reduced basis vectors</td>
+<td>Number of reduced basis vectors retained.</td>
 </tr>
 <tr class="even">
 <td>groupA</td>
 <td>ndarray</td>
-<td>Indexes of elements with <strong>all free</strong> (easy case)</td>
+<td>Element indices for elements whose DOFs are entirely free (fast assembly path).</td>
 </tr>
 <tr class="odd">
 <td>groupB</td>
 <td>ndarray</td>
-<td>Indexes of elements with at least one Dirichlet (mixed case)</td>
+<td>Element indices for elements with at least one Dirichlet-constrained DOF (mixed case).</td>
 </tr>
 <tr class="even">
 <td>chunk_size</td>
 <td>int</td>
-<td>How many elements per chunk for groupA assembly</td>
+<td>Number of elements processed per chunk during groupA assembly.</td>
 </tr>
 <tr class="odd">
 <td>n_full_chunks</td>
 <td>int</td>
-<td>Number of full-sized element chunks</td>
+<td>Number of complete chunks in the groupA assembly pass.</td>
 </tr>
 <tr class="even">
 <td>remainder</td>
 <td>int</td>
-<td>Number of leftover (not full chunk) elements</td>
+<td>Number of leftover elements in the final (incomplete) chunk.</td>
 </tr>
 </tbody>
 </table>
@@ -800,28 +784,28 @@ This module helps turn <em>full-size</em> element stiffness matrices into <em>re
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.bilinear_form_rom.BilinearFormROM.assemble">assemble</a></td>
-<td>Build the global reduced stiffness matrix from all projected element matrices.</td>
+<td>Project all element stiffness matrices onto the reduced basis and accumulate into the global reduced stiffness matrix.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices">extract_element_matrices</a></td>
-<td>Get all local full stiffness matrices (per element), ready to be projected.</td>
+<td>Extract per-element full-order stiffness matrices, ready for projection onto the reduced basis.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="assemble" class="level5">
-<h5 class="anchored" data-anchor-id="assemble">assemble</h5>
+</section>
+<section id="skrom.rom.bilinear_form_rom.BilinearFormROM.assemble" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.bilinear_form_rom.BilinearFormROM.assemble">assemble</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.bilinear_form_rom.BilinearFormROM.assemble(vbasis<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-Projects every local element stiffness matrix onto the reduced basis, and adds them all up to give the reduced global stiffness matrix, only using “free” DOFs (ignores Dirichlet as needed).</p>
-<section id="parameters" class="level6">
-<h6 class="anchored" data-anchor-id="parameters">Parameters</h6>
+<p><strong>Summary:</strong> Iterates over all mesh elements, projects each local full-order stiffness matrix onto the left and right reduced bases, and accumulates contributions into the global reduced stiffness matrix ( K_r ^{r r} ). Only free (non-Dirichlet) DOFs participate in the projection. GroupA elements (all-free DOFs) are processed in chunks for memory efficiency; GroupB elements (mixed boundary) are handled separately.</p>
+<section id="parameters" class="level5">
+<h5 class="anchored" data-anchor-id="parameters">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 9%">
-<col style="width: 66%">
-<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -834,26 +818,26 @@ Projects every local element stiffness matrix onto the reduced basis, and adds t
 <tbody>
 <tr class="odd">
 <td>vbasis</td>
-<td>Basis</td>
-<td>FE basis for test functions (default: uses <code>ubasis</code>)</td>
+<td>Basis or None</td>
+<td>FE basis for test functions; falls back to <code>ubasis</code> if not provided.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>**kwargs</td>
-<td></td>
-<td>Any extra parameters for the form/assembly process.</td>
+<td>dict</td>
+<td>Additional keyword arguments forwarded to the underlying form assembly.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level6">
-<h6 class="anchored" data-anchor-id="returns">Returns</h6>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 15%">
-<col style="width: 33%">
-<col style="width: 50%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -865,31 +849,30 @@ Projects every local element stiffness matrix onto the reduced basis, and adds t
 <tbody>
 <tr class="odd">
 <td>K_reduced</td>
-<td>(ndarray, shape(r, r))</td>
-<td>The assembled reduced stiffness matrix</td>
+<td>ndarray, shape (r, r)</td>
+<td>Assembled global reduced stiffness matrix.</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
 </section>
-<section id="extract_element_matrices" class="level5">
-<h5 class="anchored" data-anchor-id="extract_element_matrices">extract_element_matrices</h5>
+<section id="skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices">extract_element_matrices</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-For a given (full) bilinear form, returns the stiffness matrix for <em>each element</em> in the mesh—a key step before reducing.</p>
-<section id="parameters-1" class="level6">
-<h6 class="anchored" data-anchor-id="parameters-1">Parameters</h6>
+<p><strong>Summary:</strong> Evaluates the full-order bilinear form element by element and returns the resulting local stiffness matrices as a single array. This is the preparatory step before projection—each element matrix will subsequently be projected onto the reduced basis during assembly.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 13%">
-<col style="width: 67%">
-<col style="width: 11%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -903,37 +886,37 @@ For a given (full) bilinear form, returns the stiffness matrix for <em>each elem
 <tr class="odd">
 <td>form</td>
 <td>BilinearForm</td>
-<td>The full-order bilinear form</td>
+<td>Full-order bilinear form to evaluate element-wise.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>ubasis</td>
 <td>Basis</td>
-<td>FE basis for the trial function</td>
+<td>FE basis for trial functions.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>vbasis</td>
-<td>Basis</td>
-<td>FE basis for the test function (if missing, uses <code>ubasis</code>)</td>
+<td>Basis or None</td>
+<td>FE basis for test functions; defaults to <code>ubasis</code> if not provided.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
-<td>kwargs</td>
+<td>**kwargs</td>
 <td>dict</td>
-<td>Extra arguments for assembly</td>
+<td>Additional arguments forwarded to the form assembly routine.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level6">
-<h6 class="anchored" data-anchor-id="returns-1">Returns</h6>
+<section id="returns-1" class="level5">
+<h5 class="anchored" data-anchor-id="returns-1">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 12%">
-<col style="width: 6%">
-<col style="width: 80%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -945,22 +928,19 @@ For a given (full) bilinear form, returns the stiffness matrix for <em>each elem
 <tbody>
 <tr class="odd">
 <td>element_matrices</td>
-<td>ndarray</td>
-<td>Array, shape (n_elements, Nbfun, Nbfun): local stiffness matrix for each element (Nbfun = number of basis funcs)</td>
+<td>ndarray, shape (n_elements, Nbfun, Nbfun)</td>
+<td>Stack of local stiffness matrices, one per element. <code>Nbfun</code> denotes the number of local basis functions per element.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<p><strong>In Summary:</strong></p>
-<ul>
-<li>Use <code>BilinearFormROM</code> in your ROM code to efficiently build reduced stiffness matrices, even for huge models with Dirichlet BCs.</li>
-<li>Takes care of all index mapping, boundary condition issues, and can avoid big memory spikes using grouping/chunking.</li>
-<li>Assembly is super-efficient, and works directly with your reduced bases.</li>
-</ul>
-
-
 </section>
 </section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p><code>BilinearFormROM</code> is the recommended entry point for constructing reduced stiffness matrices in projection-based ROM workflows. It handles all index mapping between full and free DOFs, classifies elements for optimized assembly paths, and avoids memory spikes through chunked processing—making it suitable for large-scale FEM problems with non-trivial Dirichlet boundary conditions.</p>
+
+
 </section>
 </section>
 </section>

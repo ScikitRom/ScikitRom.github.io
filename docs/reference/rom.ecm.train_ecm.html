@@ -602,7 +602,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.ecm.train_ecm" id="toc-skrom.rom.ecm.train_ecm" class="nav-link active" data-scroll-target="#skrom.rom.ecm.train_ecm">rom.ecm.train_ecm</a>
+  <li><a href="#rom.ecm.train_ecm" id="toc-rom.ecm.train_ecm" class="nav-link active" data-scroll-target="#rom.ecm.train_ecm">rom.ecm.train_ecm</a>
   <ul class="collapse">
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
@@ -619,9 +619,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.ecm.train_ecm" class="level1">
+<section id="rom.ecm.train_ecm" class="level1">
 <h1>rom.ecm.train_ecm</h1>
-<p><code>rom.ecm.train_ecm</code></p>
+<p><strong>Purpose:</strong> Provides high-level training routines for the Empirical Cubature Method (ECM) within the scikit-rom framework. These functions wrap the lower-level <code>EmpiricalCubatureMethod</code> class into streamlined workflows for constructing the Gauss-point selection and weight arrays needed for online ECM-based hyperreduced assembly.</p>
+<p><strong>Summary:</strong> Contains two functions: <code>ECM</code>, which performs the core ECM training given a preassembled residual snapshot matrix, and <code>ECM_from_skrom</code>, which provides a fully end-to-end wrapper integrating residual collection, ECM training, and output packaging into a single call compatible with the scikit-rom notebook structure.</p>
+<hr>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
@@ -634,14 +636,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecm.train_ecm.ECM">ECM</a></td>
-<td>ECM adapted to scikit-rom.</td>
+<td>Core ECM training routine adapted to the scikit-rom data layout.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecm.train_ecm.ECM_from_skrom">ECM_from_skrom</a></td>
-<td>End-to-end ECM wrapper for the scikit-rom notebook structure.</td>
+<td>End-to-end ECM training wrapper for the scikit-rom notebook structure.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.ecm.train_ecm.ECM" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecm.train_ecm.ECM">ECM</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.train_ecm.ECM(</span>
@@ -655,15 +658,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    svd_rank<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>ECM adapted to scikit-rom.</p>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p><strong>Summary:</strong> Performs ECM training adapted to the scikit-rom data layout. Takes the residual snapshot matrix <code>q_mus_ecm</code> returned by <code>collect_residuals_ecm</code>, computes its SVD to determine the empirical basis, runs the <code>EmpiricalCubatureMethod</code> selection algorithm to identify the optimal Gauss-point subset and weights, and returns the results in both raw index-weight form and as a dense per-element, per-Gauss-point multiplier array ready for online assembly.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 29%">
-<col style="width: 52%">
-<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -676,8 +679,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>q_mus_ecm</td>
-<td>(ndarray, shape(n_snapshots * r, n_elements * n_gauss_points))</td>
-<td>Matrix returned by collect_residuals_ecm(…). Each column corresponds to one element-Gauss-point contribution.</td>
+<td>ndarray, shape (n_snapshots × r, n_elements × n_gauss_points)</td>
+<td>Residual snapshot matrix returned by <code>collect_residuals_ecm</code>; each column corresponds to one element–Gauss-point contribution.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
@@ -695,43 +698,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td>tol</td>
 <td>float</td>
-<td>Singular-value cutoff used to choose the ECM basis size.</td>
+<td>Singular value cutoff used to determine the ECM empirical basis size; smaller values retain more modes.</td>
 <td><code>1e-05</code></td>
 </tr>
 <tr class="odd">
 <td>n_components</td>
-<td>int</td>
-<td>If given, overrides tol and uses exactly this many left singular vectors.</td>
+<td>int or None</td>
+<td>If provided, overrides <code>tol</code> and uses exactly this many left singular vectors for the ECM basis.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>plot</td>
 <td>bool</td>
-<td>If True, plots the singular values.</td>
+<td>If <code>True</code>, plots the singular value spectrum for diagnostic inspection.</td>
 <td><code>False</code></td>
 </tr>
 <tr class="odd">
 <td>constrain_sum_of_weights</td>
 <td>bool</td>
-<td>Passed to EmpiricalCubatureMethod.SetUp(…).</td>
+<td>Passed directly to <code>EmpiricalCubatureMethod.SetUp</code>; if <code>True</code>, constrains the sum of selected weights to match the original integration sum.</td>
 <td><code>False</code></td>
 </tr>
 <tr class="even">
 <td>dtype</td>
-<td>dtype</td>
-<td>Floating-point dtype.</td>
+<td>numpy.dtype</td>
+<td>Floating-point data type for all computations and output arrays.</td>
 <td><code>np.float64</code></td>
+</tr>
+<tr class="odd">
+<td>svd_rank</td>
+<td>int or None</td>
+<td>If provided, truncates the SVD to this rank before ECM basis selection.</td>
+<td><code>None</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 14%">
-<col style="width: 36%">
-<col style="width: 49%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -743,26 +752,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>W</td>
-<td>(ndarray, shape(n_selected))</td>
-<td>ECM weights for the selected flat indices.</td>
+<td>ndarray, shape (n_selected,)</td>
+<td>ECM weights for the selected flat Gauss-point indices.</td>
 </tr>
 <tr class="even">
 <td>Z</td>
-<td>(ndarray, shape(n_selected))</td>
-<td>Selected flat indices in [0, n_elements * n_gauss_points).</td>
+<td>ndarray, shape (n_selected,)</td>
+<td>Selected flat indices in the range <code>[0, n_elements × n_gauss_points)</code> identifying the chosen Gauss points.</td>
 </tr>
 <tr class="odd">
 <td>S</td>
 <td>ndarray</td>
-<td>Singular values of q_mus_ecm.T.</td>
+<td>Singular values of <code>q_mus_ecm.T</code>, useful for inspecting the decay rate and validating the basis size choice.</td>
 </tr>
 <tr class="even">
 <td>gauss_weight_ecm</td>
-<td>(ndarray, shape(n_elements, n_gauss_points))</td>
-<td>Dense ECM multiplier array for online assembly in scikit-rom.</td>
+<td>ndarray, shape (n_elements, n_gauss_points)</td>
+<td>Dense ECM multiplier array in per-element, per-Gauss-point layout, ready for direct use in online scikit-rom assembly routines.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
 <section id="skrom.rom.ecm.train_ecm.ECM_from_skrom" class="level3">
@@ -786,10 +796,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    svd_rank<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>End-to-end ECM wrapper for the scikit-rom notebook structure.</p>
-<section id="returns-1" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h4>
+<p><strong>Summary:</strong> Provides a fully end-to-end ECM training workflow designed for the scikit-rom notebook structure. Handles residual collection over the training parameter set, constructs the snapshot matrix <code>q_mus_ecm</code>, invokes the <code>ECM</code> training routine, and packages all outputs into a single result dictionary. This wrapper eliminates manual intermediate steps between snapshot collection and ECM weight production, making it the recommended entry point for ECM offline training in scikit-rom workflows.</p>
+<section id="returns-1" class="level4">
+<h4 class="anchored" data-anchor-id="returns-1">Returns</h4>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -801,7 +816,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>result</td>
 <td>dict</td>
-<td>Keys: - q_mus_ecm - W - Z - S - gauss_weight_ecm</td>
+<td>Dictionary containing all ECM training outputs with the following keys: <code>q_mus_ecm</code> (residual snapshot matrix), <code>W</code> (selected ECM weights), <code>Z</code> (selected flat Gauss-point indices), <code>S</code> (singular values), and <code>gauss_weight_ecm</code> (dense per-element, per-Gauss-point multiplier array).</td>
 </tr>
 </tbody>
 </table>

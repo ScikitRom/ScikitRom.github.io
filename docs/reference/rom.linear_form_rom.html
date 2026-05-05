@@ -602,7 +602,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.linear_form_rom" id="toc-skrom.rom.linear_form_rom" class="nav-link active" data-scroll-target="#skrom.rom.linear_form_rom">rom.linear_form_rom</a>
+  <li><a href="#rom.linear_form_rom" id="toc-rom.linear_form_rom" class="nav-link active" data-scroll-target="#rom.linear_form_rom">rom.linear_form_rom</a>
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
@@ -618,22 +618,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.linear_form_rom" class="level1">
+<section id="rom.linear_form_rom" class="level1">
 <h1>rom.linear_form_rom</h1>
-<p><code>rom.linear_form_rom</code></p>
-<p>Implements reduced-order linear form assembly for full-order to reduced-order transformations.</p>
-<p>This module provides:</p>
-<ul>
-<li><code>LinearFormROM</code>: a subclass of <code>skfem.assembly.form.linear_form.LinearForm</code> that projects full-order element load vectors onto reduced bases, groups elements by Dirichlet-free and mixed-Dirichlet sets for memory-efficient handling, and assembles the global reduced load vector with optional chunked computation.</li>
-</ul>
-<p>The <code>rom</code> folder contains core tools for reduced-order modeling (ROM), including:</p>
+<p><strong>Purpose:</strong> Implements reduced-order linear form assembly for transforming full-order element load vectors into their reduced-order counterparts. Handles Dirichlet boundary conditions through full-to-free DOF mapping, groups elements for memory-efficient chunked processing, and provides specialized assembly routines for both standard projection and hyperreduction workflows (ECSW and ECM).</p>
+<p><strong>Summary:</strong> Provides the <code>LinearFormROM</code> class, which projects full-order element load vectors onto a reduced test basis and assembles the global reduced load vector of dimension ( r ). Elements are classified into all-free (GroupA) and mixed-Dirichlet (GroupB) sets, with GroupA processed in memory-efficient chunks. Additional methods support per-element hyperreduction (ECSW) and per-element, per-Gauss-point ECM residual assembly. The broader <code>rom</code> package also includes:</p>
 <ul>
 <li>Classes for projecting and assembling reduced-order bilinear and linear forms</li>
-<li>Utilities for handling Dirichlet boundary conditions in reduced spaces</li>
-<li>Chunked and clustered assembly routines to manage large-scale stiffness/load data</li>
+<li>Utilities for Dirichlet boundary condition handling in reduced spaces</li>
+<li>Chunked and clustered assembly routines for large-scale stiffness and load data</li>
 <li>Mapping utilities between full-order and reduced-order degrees of freedom</li>
 </ul>
-<p>[Author: Suparno Bhattacharyya]</p>
+<p><strong>Author:</strong> Suparno Bhattacharyya</p>
+<hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
 <table class="caption-top table">
@@ -646,10 +642,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.linear_form_rom.LinearFormROM">LinearFormROM</a></td>
-<td>LinearFormROM</td>
+<td>Reduced-order linear form projecting element load vectors onto a reduced basis with Dirichlet-aware assembly.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.linear_form_rom.LinearFormROM" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM">LinearFormROM</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.linear_form_rom.LinearFormROM(</span>
@@ -661,15 +658,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>LinearFormROM</p>
-<p>Linear form that projects element load vectors onto reduced bases and assembles the global reduced load vector, handling Dirichlet boundary conditions via mappings from full to free DOFs.</p>
-<section id="attributes" class="level4 doc-section doc-section-attributes">
-<h4 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h4>
+<p><strong>Summary:</strong> Projects element-wise load vectors onto the reduced test basis and assembles the global reduced load vector, restricting all operations to free (non-Dirichlet) DOFs via a full-to-free index mapping. Elements are partitioned into two groups: GroupA (all DOFs free, processed in vectorized chunks) and GroupB (at least one Dirichlet DOF, handled with masked indexing). Chunked processing of GroupA ensures memory efficiency for large meshes. Additional methods expose per-element and per-Gauss-point contributions for use in ECSW and ECM hyperreduction offline training pipelines.</p>
+<hr>
+<section id="attributes" class="level4">
+<h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 30%">
-<col style="width: 57%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -681,8 +678,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>r_basis</td>
-<td>(ndarray, shape(N_free, r) or (N, r))</td>
-<td>Reduced basis for load vectors.</td>
+<td>ndarray, shape (N_free, r) or (N, r)</td>
+<td>Reduced test basis for load vector projection.</td>
 </tr>
 <tr class="even">
 <td>free_dofs</td>
@@ -692,27 +689,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>mean</td>
 <td>ndarray or None</td>
-<td>Mean snapshot vector subtracted before basis computation.</td>
+<td>Mean snapshot vector subtracted before basis computation; reinserted during full-order reconstruction.</td>
 </tr>
 <tr class="even">
 <td>nthreads</td>
 <td>int</td>
-<td>Number of threads for parallel computation.</td>
+<td>Number of threads for parallel element-wise computation.</td>
 </tr>
 <tr class="odd">
 <td>dtype</td>
-<td>data - type</td>
-<td>Numeric type for computations.</td>
+<td>data-type</td>
+<td>Numeric precision for computations and intermediate arrays.</td>
 </tr>
 <tr class="even">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Full-order finite element basis for test functions.</td>
+<td>Full-order FE basis for test functions.</td>
 </tr>
 <tr class="odd">
 <td>mapping</td>
-<td>(ndarray, shape(N_full))</td>
-<td>Maps global DOF indices to reduced DOF indices or -1 for Dirichlet DOFs.</td>
+<td>ndarray, shape (N_full,)</td>
+<td>Maps each global DOF index to its reduced free-DOF index; Dirichlet-constrained DOFs are mapped to <code>-1</code>.</td>
 </tr>
 <tr class="even">
 <td>element_dofs</td>
@@ -722,12 +719,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>free_indices</td>
 <td>ndarray</td>
-<td>Reduced DOF indices for each element and basis function.</td>
+<td>Reduced DOF indices for each element and local basis function, after Dirichlet filtering.</td>
 </tr>
 <tr class="even">
 <td>mask</td>
 <td>ndarray of bool</td>
-<td>Indicates free DOFs per element.</td>
+<td>Boolean mask identifying free DOFs within each element’s local DOF set.</td>
 </tr>
 <tr class="odd">
 <td>r</td>
@@ -737,30 +734,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td>groupA</td>
 <td>ndarray</td>
-<td>Indices of elements with all free DOFs.</td>
+<td>Indices of elements whose DOFs are entirely free (fast assembly path).</td>
 </tr>
 <tr class="odd">
 <td>groupB</td>
 <td>ndarray</td>
-<td>Indices of elements with some Dirichlet DOFs.</td>
+<td>Indices of elements with at least one Dirichlet-constrained DOF (masked assembly path).</td>
 </tr>
 <tr class="even">
 <td>chunk_size</td>
 <td>int</td>
-<td>Number of elements per chunk in groupA.</td>
+<td>Number of elements processed per chunk in the GroupA assembly pass.</td>
 </tr>
 <tr class="odd">
 <td>n_full_chunks</td>
 <td>int</td>
-<td>Number of full-sized chunks in groupA.</td>
+<td>Number of complete chunks in the GroupA assembly pass.</td>
 </tr>
 <tr class="even">
 <td>remainder</td>
 <td>int</td>
-<td>Number of leftover elements in groupA.</td>
+<td>Number of leftover elements in the final (incomplete) GroupA chunk.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
@@ -774,39 +772,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.linear_form_rom.LinearFormROM.assemble">assemble</a></td>
-<td>Assemble the global reduced load vector.</td>
+<td>Assemble the global reduced load vector from projected element contributions.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector">extract_element_vector</a></td>
-<td>Extract local element load vectors for a linear form.</td>
+<td>Extract per-element local load vectors summed over quadrature points.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp">extract_element_vector_qp</a></td>
-<td>Extract local element load vectors resolved at Gauss points.</td>
+<td>Extract per-element local load vectors resolved at individual Gauss points.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.linear_form_rom.LinearFormROM.hyperreduction">hyperreduction</a></td>
-<td>Perform hyperreduction to assemble per-element reduced load contributions.</td>
+<td>Assemble per-element reduced load contributions for ECSW hyperreduction.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm">hyperreduction_ecm</a></td>
-<td>Assemble per-element, per-Gauss reduced residual contributions for ECM.</td>
+<td>Assemble per-element, per-Gauss-point reduced residual contributions for ECM.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.rom.linear_form_rom.LinearFormROM.assemble" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.assemble">assemble</h5>
+<hr>
+</section>
+<section id="skrom.rom.linear_form_rom.LinearFormROM.assemble" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.assemble">assemble</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.linear_form_rom.LinearFormROM.assemble(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble the global reduced load vector.</p>
-<p>Projects element load vectors onto reduced bases and sums contributions over free DOFs only.</p>
-<section id="parameters" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h6>
+<p><strong>Summary:</strong> Assembles the global reduced load vector by projecting element load vectors onto the reduced test basis and summing contributions over free DOFs only. GroupA elements (all DOFs free) are processed in vectorized chunks for efficiency; GroupB elements (mixed Dirichlet) are handled with masked indexing. The result is a single vector of length ( r ) representing the reduced-order load.</p>
+<section id="parameters" class="level5">
+<h5 class="anchored" data-anchor-id="parameters">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 9%">
-<col style="width: 67%">
-<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -819,16 +818,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>**kwargs</td>
-<td></td>
-<td>Additional parameters passed to the form during assembly.</td>
+<td>dict</td>
+<td>Additional keyword arguments forwarded to the form during assembly.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -839,26 +843,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f_reduced</td>
-<td>(ndarray, shape(r))</td>
-<td>Reduced load vector.</td>
+<td>ndarray, shape (r,)</td>
+<td>Assembled global reduced load vector.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector">extract_element_vector</h5>
+<section id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector">extract_element_vector</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.linear_form_rom.LinearFormROM.extract_element_vector(basis, <span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Extract local element load vectors for a linear form.</p>
-<p>Computes per-element load contributions for each local basis function.</p>
-<section id="parameters-1" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
+<p><strong>Summary:</strong> Evaluates the linear form over all elements and returns the local load vector for each element, summed over quadrature points. Each entry in the returned array corresponds to the load contribution of one element across all its local basis functions. This is the standard extraction step preceding reduced-basis projection in the <code>assemble</code> workflow.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 15%">
-<col style="width: 60%">
-<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -872,25 +876,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>basis</td>
 <td>AbstractBasis</td>
-<td>Finite element basis associated with the test function.</td>
+<td>FE basis for test functions associated with the linear form evaluation.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>**kwargs</td>
-<td></td>
-<td>Additional keyword arguments passed to the form.</td>
+<td>dict</td>
+<td>Additional keyword arguments forwarded to the form.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<section id="returns-1" class="level5">
+<h5 class="anchored" data-anchor-id="returns-1">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 25%">
-<col style="width: 62%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -902,24 +906,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>element_vectors</td>
-<td>(ndarray, shape(n_elements, Nbfun))</td>
-<td>Local load vectors for each element, where Nbfun is the number of local basis functions.</td>
+<td>ndarray, shape (n_elements, Nbfun)</td>
+<td>Local load vectors for each element; <code>Nbfun</code> is the number of local basis functions per element.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp">extract_element_vector_qp</h5>
+<section id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.extract_element_vector_qp">extract_element_vector_qp</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.linear_form_rom.LinearFormROM.extract_element_vector_qp(basis, <span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Extract local element load vectors resolved at Gauss points.</p>
-<section id="returns-2" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h6>
+<p><strong>Summary:</strong> Evaluates the linear form element by element and returns contributions resolved at individual Gauss points, without summing across quadrature points. This Gauss-point-level granularity is required for ECM-weighted assembly, where per-point weights must be applied before the quadrature summation step. Each returned entry is already multiplied by <code>basis.dx</code> but not yet summed over ( q ).</p>
+<section id="returns-2" class="level5">
+<h5 class="anchored" data-anchor-id="returns-2">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 29%">
-<col style="width: 59%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -931,25 +936,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>element_vectors_q</td>
-<td>(ndarray, shape(n_elements, n_local_dofs, n_q))</td>
-<td>Local load contributions already multiplied by <code>dx</code> but not yet summed over quadrature points.</td>
+<td>ndarray, shape (n_elements, n_local_dofs, n_q)</td>
+<td>Per-Gauss-point local load contributions; axis ordering is (element, local DOF, quadrature point). Multiply ECM weights along the <code>n_q</code> axis before summing.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction">hyperreduction</h5>
+<section id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction">hyperreduction</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rom.linear_form_rom.LinearFormROM.hyperreduction(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Perform hyperreduction to assemble per-element reduced load contributions.</p>
-<section id="parameters-2" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<p><strong>Summary:</strong> Assembles per-element reduced load contributions for use in ECSW hyperreduction offline training. Rather than summing element contributions into a single global reduced vector, this method returns the individual projected load vector for each active element, concatenated into a matrix of shape <code>(n_contribs, r)</code>. These per-element contributions are used to construct the ECSW snapshot matrix for weight optimization.</p>
+<section id="parameters-2" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-2">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 8%">
-<col style="width: 69%">
-<col style="width: 11%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -962,20 +968,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>**kwargs</td>
-<td></td>
-<td>Additional parameters passed to the form during hyperreduction.</td>
+<td>dict</td>
+<td>Additional keyword arguments forwarded to the form during hyperreduction.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-3" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-3">Returns</h6>
+<section id="returns-3" class="level5">
+<h5 class="anchored" data-anchor-id="returns-3">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 31%">
-<col style="width: 58%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -987,24 +993,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f_reduced</td>
-<td>(ndarray, shape(n_contribs, r))</td>
-<td>Concatenated reduced load contributions for hyperreduction.</td>
+<td>ndarray, shape (n_contribs, r)</td>
+<td>Concatenated per-element reduced load contributions for ECSW offline training.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm">hyperreduction_ecm</h5>
+<section id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.linear_form_rom.LinearFormROM.hyperreduction_ecm">hyperreduction_ecm</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rom.linear_form_rom.LinearFormROM.hyperreduction_ecm(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble per-element, per-Gauss reduced residual contributions for ECM.</p>
-<section id="returns-4" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-4">Returns</h6>
+<p><strong>Summary:</strong> Assembles per-element, per-Gauss-point reduced residual contributions for ECM offline training. Returns a matrix in which each row corresponds to one (element, Gauss-point) pair, ordered by the flat index ( e n_q + q ). This layout matches the column structure expected by the ECM snapshot matrix construction in <code>collect_residuals_ecm</code> and <code>ECM</code>.</p>
+<section id="returns-4" class="level5">
+<h5 class="anchored" data-anchor-id="returns-4">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 33%">
-<col style="width: 55%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1016,14 +1023,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f_reduced_q</td>
-<td>(ndarray, shape(n_elements * n_q, r))</td>
-<td>Reduced contributions ordered with flat index <code>e * n_q + q</code>.</td>
+<td>ndarray, shape (n_elements × n_q, r)</td>
+<td>Per-element, per-Gauss-point reduced residual contributions; row ( e n_q + q ) corresponds to Gauss point ( q ) of element ( e ).</td>
 </tr>
 </tbody>
 </table>
 
 
-</section>
 </section>
 </section>
 </section>

@@ -604,11 +604,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#problem_classes.masterclass_parallel" id="toc-problem_classes.masterclass_parallel" class="nav-link active" data-scroll-target="#problem_classes.masterclass_parallel">problem_classes.masterclass_parallel</a>
   <ul class="collapse">
-  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#ensure_problem_registered" id="toc-ensure_problem_registered" class="nav-link" data-scroll-target="#ensure_problem_registered">ensure_problem_registered</a></li>
-  <li><a href="#register_problem" id="toc-register_problem" class="nav-link" data-scroll-target="#register_problem">register_problem</a></li>
+  <li><a href="#skrom.problem_classes.masterclass_parallel.ensure_problem_registered" id="toc-skrom.problem_classes.masterclass_parallel.ensure_problem_registered" class="nav-link" data-scroll-target="#skrom.problem_classes.masterclass_parallel.ensure_problem_registered">ensure_problem_registered</a></li>
+  <li><a href="#skrom.problem_classes.masterclass_parallel.register_problem" id="toc-skrom.problem_classes.masterclass_parallel.register_problem" class="nav-link" data-scroll-target="#skrom.problem_classes.masterclass_parallel.register_problem">register_problem</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -622,13 +621,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="problem_classes.masterclass_parallel" class="level1">
 <h1>problem_classes.masterclass_parallel</h1>
-<p>Parallel version of the ROM master class—runs snapshot generation and ROM evaluation with <strong>multithreading</strong> for faster performance.</p>
-<hr>
-<section id="notes" class="level2">
-<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<p>Parallel version of the ROM master class—runs snapshot generation and ROM evaluation using <strong>multithreading</strong> for improved performance on multi-core systems.</p>
+<p><strong>Summary:</strong> Provides the infrastructure for registering and resolving problem classes in a shared registry, enabling parallel ROM workflows to locate and instantiate problem definitions dynamically and efficiently.</p>
+<p><strong>Purpose:</strong> To decouple problem class definitions from the parallel execution engine by maintaining a central <code>PROBLEM_REGISTRY</code>. This allows snapshot generation and ROM evaluation routines to discover user-defined problem classes at runtime without hardcoded imports—making parallel workflows modular and extensible.</p>
 <p><strong>Author:</strong> Suparno Bhattacharyya</p>
 <hr>
-</section>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
@@ -641,33 +638,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.problem_classes.masterclass_parallel.ensure_problem_registered">ensure_problem_registered</a></td>
-<td>Makes sure the problem you want is in the <code>PROBLEM_REGISTRY</code>.</td>
+<td>Verify that a problem class is present in the <code>PROBLEM_REGISTRY</code>, and register it automatically if not.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.problem_classes.masterclass_parallel.register_problem">register_problem</a></td>
-<td>Lets you register your problem class under a custom string key.</td>
+<td>Register a problem class under a user-defined string key in the <code>PROBLEM_REGISTRY</code>.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="ensure_problem_registered" class="level3">
-<h3 class="anchored" data-anchor-id="ensure_problem_registered">ensure_problem_registered</h3>
+<section id="skrom.problem_classes.masterclass_parallel.ensure_problem_registered" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.masterclass_parallel.ensure_problem_registered">ensure_problem_registered</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>problem_classes.masterclass_parallel.ensure_problem_registered(problem_name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Checks that the problem class (<code>problem_name</code>) is already in the registry.</p>
-<ul>
-<li>If it’s <strong>not yet registered</strong> (for example, if it’s in your <code>problem_def.py</code> but hasn’t been imported), this function will handle that for you.</li>
-</ul>
+<p>Checks whether the specified problem class is present in the <code>PROBLEM_REGISTRY</code>. If the class has not yet been registered—for instance, because its defining module (e.g., <code>problem_def.py</code>) has not been imported in the current execution context—this function resolves the gap automatically, ensuring the problem is available before any parallel tasks attempt to use it.</p>
+<p>This guard is particularly important in parallel workflows where worker threads or processes may not share the same import state as the main process.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>problem_name</td>
+<td>str</td>
+<td>String key identifying the problem class to verify in the registry.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
-<section id="register_problem" class="level3">
-<h3 class="anchored" data-anchor-id="register_problem">register_problem</h3>
+</section>
+<section id="skrom.problem_classes.masterclass_parallel.register_problem" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.problem_classes.masterclass_parallel.register_problem">register_problem</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>problem_classes.masterclass_parallel.register_problem(name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Registers a problem class in the <code>PROBLEM_REGISTRY</code> with the given string key.</p>
-<ul>
-<li>Use this so your problem class can be found and used easily, especially in parallel workflows.</li>
-</ul>
+<p>Registers a problem class in the <code>PROBLEM_REGISTRY</code> under the given string key. Once registered, the class can be looked up and instantiated by name throughout the parallel workflow—without requiring direct imports at the point of use.</p>
+<p>This is the recommended way to expose custom problem definitions to the parallel master class, keeping problem logic self-contained and easy to swap.</p>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>name</td>
+<td>str</td>
+<td>String key under which the problem class will be stored in the registry.</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p>Register your problem class before launching any parallel snapshot or ROM evaluation tasks. Failure to do so may cause worker threads to raise lookup errors when attempting to resolve the problem by name.</p>
 
 
+</section>
 </section>
 </section>
 </section>

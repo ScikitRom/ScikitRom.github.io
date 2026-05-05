@@ -1,43 +1,62 @@
 # problem_classes.masterclass_parallel
 
-Parallel version of the ROM master class—runs snapshot generation and ROM evaluation with **multithreading** for faster performance.
+Parallel version of the ROM master class—runs snapshot generation and ROM evaluation using **multithreading** for improved performance on multi-core systems.
 
----
+**Summary:**
+Provides the infrastructure for registering and resolving problem classes in a shared registry, enabling parallel ROM workflows to locate and instantiate problem definitions dynamically and efficiently.
 
-## Notes
+**Purpose:**
+To decouple problem class definitions from the parallel execution engine by maintaining a central `PROBLEM_REGISTRY`. This allows snapshot generation and ROM evaluation routines to discover user-defined problem classes at runtime without hardcoded imports—making parallel workflows modular and extensible.
 
-**Author:** Suparno Bhattacharyya
+**Author:**
+Suparno Bhattacharyya
 
----
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [ensure_problem_registered](#skrom.problem_classes.masterclass_parallel.ensure_problem_registered) | Makes sure the problem you want is in the `PROBLEM_REGISTRY`. |
-| [register_problem](#skrom.problem_classes.masterclass_parallel.register_problem) | Lets you register your problem class under a custom string key. |
+| [ensure_problem_registered](#skrom.problem_classes.masterclass_parallel.ensure_problem_registered) | Verify that a problem class is present in the `PROBLEM_REGISTRY`, and register it automatically if not. |
+| [register_problem](#skrom.problem_classes.masterclass_parallel.register_problem) | Register a problem class under a user-defined string key in the `PROBLEM_REGISTRY`. |
 
----
+***
 
-### ensure_problem_registered
+### ensure_problem_registered { #skrom.problem_classes.masterclass_parallel.ensure_problem_registered }
 
 ```python
 problem_classes.masterclass_parallel.ensure_problem_registered(problem_name)
 ```
 
-Checks that the problem class (`problem_name`) is already in the registry.
+Checks whether the specified problem class is present in the `PROBLEM_REGISTRY`. If the class has not yet been registered—for instance, because its defining module (e.g., `problem_def.py`) has not been imported in the current execution context—this function resolves the gap automatically, ensuring the problem is available before any parallel tasks attempt to use it.
 
-- If it’s **not yet registered** (for example, if it’s in your `problem_def.py` but hasn’t been imported), this function will handle that for you.
+This guard is particularly important in parallel workflows where worker threads or processes may not share the same import state as the main process.
 
----
+#### Parameters
 
-### register_problem
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| problem_name | str | String key identifying the problem class to verify in the registry. | _required_ |
+
+***
+
+### register_problem { #skrom.problem_classes.masterclass_parallel.register_problem }
 
 ```python
 problem_classes.masterclass_parallel.register_problem(name)
 ```
 
-Registers a problem class in the `PROBLEM_REGISTRY` with the given string key.
+Registers a problem class in the `PROBLEM_REGISTRY` under the given string key. Once registered, the class can be looked up and instantiated by name throughout the parallel workflow—without requiring direct imports at the point of use.
 
-- Use this so your problem class can be found and used easily, especially in parallel workflows.
+This is the recommended way to expose custom problem definitions to the parallel master class, keeping problem logic self-contained and easy to swap.
+
+#### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| name | str | String key under which the problem class will be stored in the registry. | _required_ |
+
+#### Notes
+
+Register your problem class before launching any parallel snapshot or ROM evaluation tasks. Failure to do so may cause worker threads to raise lookup errors when attempting to resolve the problem by name.
 

@@ -602,7 +602,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.deim.linear_form_hyperrom_deim" id="toc-skrom.rom.deim.linear_form_hyperrom_deim" class="nav-link active" data-scroll-target="#skrom.rom.deim.linear_form_hyperrom_deim">rom.deim.linear_form_hyperrom_deim</a>
+  <li><a href="#rom.deim.linear_form_hyperrom_deim" id="toc-rom.deim.linear_form_hyperrom_deim" class="nav-link active" data-scroll-target="#rom.deim.linear_form_hyperrom_deim">rom.deim.linear_form_hyperrom_deim</a>
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
@@ -618,19 +618,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.deim.linear_form_hyperrom_deim" class="level1">
+<section id="rom.deim.linear_form_hyperrom_deim" class="level1">
 <h1>rom.deim.linear_form_hyperrom_deim</h1>
-<p><code>rom.deim.linear_form_hyperrom_deim</code></p>
-<p>DEIM-based hyperreduction for finite element linear forms.</p>
-<p>This module implements hyperreduction of linear forms using the Discrete Empirical Interpolation Method (DEIM) combined with element sampling for efficient load vector assembly. It provides dramatic computational speedups by:</p>
-<ul>
-<li>Assembling only a subset of finite elements based on DEIM selection</li>
-<li>Using efficient vector assembly techniques for sparse operations</li>
-<li>Reconstructing full load vectors via DEIM interpolation matrices</li>
-<li>Supporting parallel element vector extraction when available</li>
-</ul>
-<p><strong>TL;DR</strong>: Enables speedup in linear form assembly for ROMs by evaluating only essential elements and reconstructing the full load vector through intelligent interpolation.</p>
-<p>Author: Suparno Bhattacharyya</p>
+<p><strong>Purpose:</strong> Implements DEIM-based hyperreduction for finite element linear forms, enabling fast load vector assembly for reduced-order models by restricting element integration to a small, strategically selected subset and reconstructing the full reduced load vector via DEIM interpolation. Delivers dramatic assembly speedups while preserving accuracy for parameter-dependent forcing terms.</p>
+<p><strong>Summary:</strong> Provides the <code>LinearFormHYPERROM_deim</code> class, which combines DEIM element sampling with sparse vector assembly and reduced-basis projection. Assembly complexity is reduced from ((N_{})) to ((N_{})) where (N_{} N_{}), making it particularly effective for real-time ROM applications with spatially localized or low-rank load distributions.</p>
+<p><strong>Author:</strong> Suparno Bhattacharyya</p>
+<hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
 <table class="caption-top table">
@@ -647,6 +640,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim">LinearFormHYPERROM_deim</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim(</span>
@@ -661,31 +655,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>DEIM-based hyperreduced linear form for efficient ROM load vector assembly.</p>
-<p><strong>TL;DR</strong>: Dramatically accelerates linear form assembly by ~1000x through strategic element sampling and DEIM interpolation, essential for real-time ROM applications with parameter-dependent forcing terms.</p>
-<p>This class implements a hyperreduction strategy that combines element sampling with the Discrete Empirical Interpolation Method (DEIM) to achieve massive computational savings in linear form assembly. The approach works by:</p>
+<p><strong>Summary:</strong> Implements a hyperreduction strategy that combines DEIM element sampling with sparse vector assembly to achieve substantial computational savings in linear form evaluation. The assembly pipeline proceeds through four stages:</p>
 <ol type="1">
-<li><p><strong>Element Selection</strong>: Uses DEIM-selected degrees of freedom to identify which finite elements must be assembled for load vector construction, dramatically reducing the active element count.</p></li>
-<li><p><strong>Sparse Assembly</strong>: Assembles only the selected elements using efficient vector assembly techniques, avoiding computation over the entire domain.</p></li>
-<li><p><strong>DEIM Reconstruction</strong>: Reconstructs the full reduced-order load vector using the DEIM interpolation matrix, enabling accurate approximation from limited assembly data.</p></li>
-<li><p><strong>Basis Projection</strong>: Projects the sampled full-order load vector onto the reduced test basis to produce the final reduced-order linear form.</p></li>
+<li><strong>Element Selection:</strong> Uses DEIM-selected DOFs to identify the finite elements that must be assembled for load vector construction, dramatically reducing the active element count relative to the full mesh.</li>
+<li><strong>Sparse Assembly:</strong> Integrates only the selected elements using efficient scatter-add operations, avoiding computation over the entire domain.</li>
+<li><strong>DEIM Reconstruction:</strong> Applies the DEIM interpolation matrix to values sampled at the selected DOF rows to reconstruct the full reduced-order load vector.</li>
+<li><strong>Basis Projection:</strong> Projects the reconstructed load vector onto the left reduced test basis to produce the final ROM-ready vector.</li>
 </ol>
-<p>This hyperreduction is particularly effective for problems where:</p>
-<ul>
-<li>Load distributions are spatially localized or have low-rank structure</li>
-<li>Real-time simulation speed is critical for control applications</li>
-<li>Parameter-dependent forcing terms exhibit smooth variation</li>
-<li>Computational resources are severely constrained</li>
-</ul>
-<p>The method transforms assembly complexity from O(n_elements) to O(n_selected) where n_selected &lt;&lt; n_elements, enabling real-time ROM evaluation with parameter-dependent loads.</p>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p>This approach is most effective when load distributions are spatially localized or exhibit low-rank parametric variation, and is essential for real-time ROM applications where parameter-dependent forcing terms must be re-evaluated at every online query.</p>
+<hr>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
 <col style="width: 17%">
-<col style="width: 69%">
-<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -699,73 +685,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>form</td>
 <td>callable</td>
-<td>The original linear form function to be hyperreduced. Should accept test basis functions and return element-wise load contributions.</td>
+<td>Full-order linear form function to be hyperreduced; should accept test basis functions and return element-wise load contributions.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>elem_weight</td>
-<td>array_like of shape (n_elements,)</td>
-<td>Element weight vector where 1 indicates selected elements and 0 indicates elements to skip. Typically derived from DEIM DOF selection analysis.</td>
+<td>array_like, shape (n_elements,)</td>
+<td>Element selection vector derived from DEIM DOF analysis; entries are <code>1</code> for selected elements and <code>0</code> for elements to skip.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Test basis functions for the full-order finite element space. Contains mesh connectivity and quadrature information.</td>
+<td>Test basis for the full-order FE space, containing mesh connectivity and quadrature information.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>lob</td>
-<td>ndarray of shape (n_free, r)</td>
-<td>Left (test) reduced basis matrix that projects full-order load vectors to the r-dimensional reduced test space.</td>
+<td>ndarray, shape (n_free, r)</td>
+<td>Left (test) reduced basis matrix projecting full-order load vectors onto the (r)-dimensional reduced test space.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>sampled_rows</td>
 <td>array_like of int, shape (n_samp,)</td>
-<td>Global DOF indices selected by DEIM for interpolation. These are the only rows where full assembly information is retained.</td>
+<td>Global DOF indices selected by DEIM for interpolation; only these rows are retained from the sparse assembled vector.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>deim_mat</td>
-<td>ndarray of shape (r, n_samp)</td>
-<td>DEIM interpolation matrix that reconstructs full reduced-order load vectors from sampled values: F_reduced = deim_mat @ F_sampled[sampled_rows]</td>
+<td>ndarray, shape (r, n_samp)</td>
+<td>DEIM interpolation matrix reconstructing the reduced-order load vector from sampled values: ( <em>{} = D </em>{}[] ).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>free_dofs</td>
-<td>ndarray of int</td>
-<td>Indices of unconstrained degrees of freedom. Used for boundary condition handling in the full-order system.</td>
+<td>ndarray of int or None</td>
+<td>Indices of unconstrained DOFs for boundary condition handling in the full-order system.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>mean</td>
-<td>ndarray</td>
-<td>Mean load vector for centering. Required if load data was mean-subtracted during DEIM basis construction.</td>
+<td>ndarray or None</td>
+<td>Mean load vector for centering; required if load data was mean-subtracted during DEIM basis construction.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>nthreads</td>
 <td>int</td>
-<td>Number of threads for parallel element vector extraction. Zero means serial execution, positive values enable parallel assembly.</td>
+<td>Number of threads for parallel element vector extraction; <code>0</code> uses serial execution.</td>
 <td><code>0</code></td>
 </tr>
 <tr class="even">
 <td>dtype</td>
 <td>numpy.dtype</td>
-<td>Numerical precision for all computations and storage.</td>
+<td>Numeric precision for all computations and storage.</td>
 <td><code>np.float64</code></td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
-<section id="attributes" class="level4 doc-section doc-section-attributes">
-<h4 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h4>
+<section id="attributes" class="level4">
+<h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 32%">
-<col style="width: 56%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -777,47 +764,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>r_basis</td>
-<td>ndarray of shape (n_free, r)</td>
-<td>Copy of the left (test) reduced basis matrix for load vector projection.</td>
+<td>ndarray, shape (n_free, r)</td>
+<td>Copy of the left (test) reduced basis matrix used for load vector projection.</td>
 </tr>
 <tr class="even">
 <td>weight</td>
-<td>ndarray of shape (n_elements,)</td>
-<td>Copy of element weight vector indicating active elements for assembly.</td>
+<td>ndarray, shape (n_elements,)</td>
+<td>Copy of the element selection weight vector identifying active elements.</td>
 </tr>
 <tr class="odd">
 <td>nonzero_elements</td>
 <td>ndarray of int</td>
-<td>Indices of elements with nonzero weights (selected for assembly).</td>
+<td>Indices of elements with nonzero weights selected for assembly.</td>
 </tr>
 <tr class="even">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Original full-order finite element basis reference.</td>
+<td>Reference to the original full-order finite element basis.</td>
 </tr>
 <tr class="odd">
 <td>ubasis_rom</td>
 <td>Basis</td>
-<td>Finite element basis restricted to the hyperreduced mesh containing only selected elements.</td>
+<td>FE basis restricted to the hyperreduced mesh containing only selected elements.</td>
 </tr>
 <tr class="even">
 <td>sampled_rows</td>
 <td>ndarray of int, shape (n_samp,)</td>
-<td>Global DOF indices where DEIM interpolation is performed.</td>
+<td>Global DOF indices at which DEIM interpolation is performed.</td>
 </tr>
 <tr class="odd">
 <td>n_samp</td>
 <td>int</td>
-<td>Number of DEIM sampling points (length of sampled_rows).</td>
+<td>Number of DEIM sampling points (length of <code>sampled_rows</code>).</td>
 </tr>
 <tr class="even">
 <td>deim_mat</td>
-<td>ndarray of shape (r, n_samp)</td>
+<td>ndarray, shape (r, n_samp)</td>
 <td>DEIM projection matrix for load vector reconstruction.</td>
 </tr>
 <tr class="odd">
 <td>edofs</td>
-<td>ndarray of shape (n_active_elements, n_local_dofs)</td>
+<td>ndarray, shape (n_active_elements, n_local_dofs)</td>
 <td>Element-to-DOF connectivity mapping for the reduced mesh.</td>
 </tr>
 <tr class="even">
@@ -827,11 +814,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td>rows</td>
-<td>ndarray of shape (n_active_elements * n_local_dofs,)</td>
-<td>Flattened element-DOF indices for efficient vector assembly operations.</td>
+<td>ndarray, shape (n_active_elements × n_local_dofs,)</td>
+<td>Flattened element-DOF indices used in scatter-add vector assembly operations.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
@@ -849,38 +837,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly">deim_elem_assembly</a></td>
-<td>Assemble sparse load vector over hyperreduced element set.</td>
+<td>Assemble the sparse global load vector over the hyperreduced element set.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom">extract_element_vector_rom</a></td>
-<td>Extract element load vectors for hyperreduced mesh assembly.</td>
+<td>Extract local element load vectors for the hyperreduced mesh.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim">assemble_deim</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble the hyperreduced load vector using DEIM reconstruction.</p>
-<p><strong>TL;DR</strong>: Main assembly method that combines sparse element assembly with DEIM interpolation to produce the reduced-order load vector.</p>
-<p>This method orchestrates the complete hyperreduction assembly process:</p>
+<hr>
+</section>
+<section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim">assemble_deim</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.assemble_deim(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Orchestrates the complete hyperreduction assembly pipeline to produce the final reduced-order load vector. Executes the following steps in sequence:</p>
 <ol type="1">
-<li><p><strong>Parameter Setup</strong>: Combines default finite element parameters with user-provided kwargs for element-level load evaluation.</p></li>
-<li><p><strong>Sparse Assembly</strong>: Calls <code>deim_elem_assembly()</code> to build the sparse full-order load vector using only selected elements, dramatically reducing computational cost.</p></li>
-<li><p><strong>DEIM Sampling</strong>: Extracts values at DEIM-selected rows from the sparse vector, providing the minimal information needed for reconstruction.</p></li>
-<li><p><strong>Vector Reconstruction</strong>: Uses the DEIM interpolation matrix to reconstruct the full reduced-order load vector from the sampled values.</p></li>
+<li><strong>Parameter Setup:</strong> Merges default finite element parameters with user-provided keyword arguments for element-level load evaluation.</li>
+<li><strong>Sparse Assembly:</strong> Calls <code>deim_elem_assembly()</code> to build the sparse full-order load vector using only the selected elements.</li>
+<li><strong>DEIM Sampling:</strong> Extracts values at DEIM-selected DOF rows from the sparse vector, providing the minimal information needed for accurate reconstruction.</li>
+<li><strong>Vector Reconstruction:</strong> Applies the DEIM interpolation matrix to the sampled values to produce the reduced-order load vector:</li>
 </ol>
-<p>The mathematical operation performed is: F_reduced = deim_mat @ F_sampled[sampled_rows]</p>
-<p>where F_sampled is the sparse load vector assembled over selected elements only.</p>
-<section id="parameters-1" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
+<p>[ <em>{} = D </em>{}[] ]</p>
+<p>where ( D ) is <code>deim_mat</code> and ( _{} ) is assembled over selected elements only.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 4%">
-<col style="width: 84%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -894,19 +880,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Keyword arguments passed through to <code>deim_elem_assembly</code> for element-level assembly control, such as material parameters or time-dependent loading conditions.</td>
+<td>Keyword arguments forwarded to <code>deim_elem_assembly</code> for element-level assembly control, such as material parameters or time-dependent loading conditions.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 11%">
-<col style="width: 82%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -918,35 +904,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>F_reduced</td>
-<td>ndarray of shape (r,)</td>
-<td>Reduced-order load vector ready for use in ROM systems. This is the hyperreduced approximation of the full-order load projected onto the reduced test basis.</td>
+<td>ndarray, shape (r,)</td>
+<td>Reduced-order load vector ready for use in the ROM linear system; the hyperreduced approximation of the full-order load projected onto the reduced test basis.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly">deim_elem_assembly</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble sparse load vector over hyperreduced element set.</p>
-<p><strong>TL;DR</strong>: Performs efficient sparse assembly by extracting element load vectors only from selected elements and building the global sparse load vector using optimized scatter-add operations.</p>
-<p>This method handles the computationally intensive element-level assembly phase of hyperreduction for load vectors:</p>
+<section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly">deim_elem_assembly</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.deim_elem_assembly(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Performs the element-level sparse assembly phase of the hyperreduction pipeline, accumulating local load vector contributions from only the DEIM-selected elements into a global sparse vector. Proceeds through three steps:</p>
 <ol type="1">
-<li><p><strong>Element Vector Extraction</strong>: Calls <code>extract_element_vector_rom()</code> to compute local load contributions for selected elements only, avoiding expensive integration over the entire domain.</p></li>
-<li><p><strong>Data Preparation</strong>: Flattens the element load vectors into a 1D array matching the connectivity pattern for efficient assembly.</p></li>
-<li><p><strong>Scatter-Add Assembly</strong>: Uses NumPy’s <code>add.at</code> function to efficiently accumulate element contributions at their global DOF locations, handling overlapping contributions correctly.</p></li>
+<li><strong>Element Vector Extraction:</strong> Calls <code>extract_element_vector_rom()</code> to compute local load contributions for selected elements, avoiding integration over the full domain.</li>
+<li><strong>Data Preparation:</strong> Flattens the local element load vectors into a 1D array aligned with the connectivity pattern for efficient global assembly.</li>
+<li><strong>Scatter-Add Assembly:</strong> Uses NumPy’s <code>add.at</code> to accumulate element contributions at their global DOF locations, correctly handling overlapping nodal contributions.</li>
 </ol>
-<p>The assembly process preserves the mathematical structure of the full-order load vector while dramatically reducing computational cost by focusing only on elements containing DEIM-selected degrees of freedom.</p>
-<section id="parameters-2" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<p>The resulting vector is equivalent to what would be obtained from a full-domain assembly if only the active elements were present, preserving the mathematical structure of the full-order load vector.</p>
+<section id="parameters-2" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-2">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 4%">
-<col style="width: 3%">
-<col style="width: 86%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -960,19 +943,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Additional keyword arguments passed to <code>extract_element_vector_rom</code> for controlling element-level assembly behavior, such as load magnitude parameters or spatial distribution functions.</td>
+<td>Additional keyword arguments forwarded to <code>extract_element_vector_rom</code> for controlling element-level assembly behavior, such as load magnitude parameters or spatial distribution functions.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<section id="returns-1" class="level5">
+<h5 class="anchored" data-anchor-id="returns-1">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 3%">
-<col style="width: 12%">
-<col style="width: 84%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -984,34 +967,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f</td>
-<td>ndarray of shape (n_dofs,)</td>
-<td>Sparse global load vector assembled over the hyperreduced element set. Only selected elements contribute to this vector, making it much cheaper to construct than the full-order equivalent.</td>
+<td>ndarray, shape (n_dofs,)</td>
+<td>Sparse global load vector assembled over the hyperreduced element set; only selected elements contribute, making it substantially cheaper to construct than the full-order equivalent.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom">extract_element_vector_rom</h5>
+<section id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom">extract_element_vector_rom</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.deim.linear_form_hyperrom_deim.LinearFormHYPERROM_deim.extract_element_vector_rom(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    basis,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Extract element load vectors for hyperreduced mesh assembly.</p>
-<p><strong>TL;DR</strong>: Computes local element load vectors for the reduced element set using either serial or parallel execution, providing the fundamental building blocks for sparse global load vector assembly.</p>
-<p>This method performs the core finite element integration to compute element-level contributions to the global linear form. The integration is performed only over elements selected by the hyperreduction strategy, dramatically reducing computational cost.</p>
-<p>The method supports both serial and parallel execution modes: - <strong>Serial Mode</strong> (nthreads=0): Sequential element-by-element computation - <strong>Parallel Mode</strong> (nthreads&gt;0): Multi-threaded parallel element processing</p>
-<p>For each element, the method evaluates the linear form: F_e[i] = ∫_Ω_e φ_i(x) * form(x) dx</p>
-<p>where φ_i are test basis functions and the integration is performed using the quadrature rules embedded in the finite element basis.</p>
-<section id="parameters-3" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h6>
+<p><strong>Summary:</strong> Evaluates the linear form element by element over the hyperreduced element set and returns the resulting local load vectors. Integration is performed only over elements identified by <code>elem_indices</code> (defaulting to all active elements), using the quadrature rules embedded in the provided basis. For each selected element ( e ), the local load vector entry is:</p>
+<p>[ F_e[i] = _{_e} _i() f() , d ]</p>
+<p>where ( _i ) are local test basis functions and ( f ) is the linear form integrand. Supports both serial (nthreads=0) and multi-threaded parallel (nthreads&gt;0) execution modes.</p>
+<section id="parameters-3" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-3">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 9%">
-<col style="width: 78%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1025,31 +1006,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>basis</td>
 <td>Basis</td>
-<td>Finite element basis for test functions containing mesh connectivity, quadrature points, and basis function evaluations.</td>
+<td>FE basis for test functions containing mesh connectivity, quadrature points, and basis function evaluations.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>elem_indices</td>
-<td>array_like of int</td>
-<td>Specific element indices to include in the extraction. If None, processes all elements in the hyperreduced mesh.</td>
+<td>array_like of int or None</td>
+<td>Specific element indices to process; defaults to all elements in the hyperreduced mesh if not provided.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Additional keyword arguments passed to the linear form evaluation, such as load magnitude parameters, time-dependent coefficients, or other problem-specific data.</td>
+<td>Additional keyword arguments forwarded to the linear form evaluation, such as load magnitudes, time-dependent coefficients, or other problem-specific data.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-2" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h6>
+<section id="returns-2" class="level5">
+<h5 class="anchored" data-anchor-id="returns-2">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
 <col style="width: 24%">
-<col style="width: 66%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1061,38 +1042,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>element_vectors</td>
-<td>ndarray of shape (n_elements, n_local_dofs)</td>
-<td>Array of local element load vectors. Each element_vectors[e] contains the n_local_dofs-length load vector for element e.</td>
+<td>ndarray, shape (n_elements, n_local_dofs)</td>
+<td>Stack of local element load vectors; <code>element_vectors[e]</code> contains the <code>n_local_dofs</code>-length load vector for element ( e ).</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="raises" class="level6 doc-section doc-section-raises">
-<h6 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h6>
+<section id="raises" class="level5">
+<h5 class="anchored" data-anchor-id="raises">Raises</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 14%">
-<col style="width: 75%">
+<col style="width: 35%">
+<col style="width: 64%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Name</th>
 <th>Type</th>
-<th>Description</th>
+<th>Condition</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
 <td>ValueError</td>
-<td>If no valid basis is provided for the load vector extraction.</td>
+<td>Raised if no valid basis is provided for load vector extraction.</td>
 </tr>
 </tbody>
 </table>
 
 
-</section>
 </section>
 </section>
 </section>

@@ -1,44 +1,28 @@
-# rom.ecsw.hyperreduce { #skrom.rom.ecsw.hyperreduce }
+# rom.ecsw.hyperreduce
 
-`rom.ecsw.hyperreduce`
+**Purpose:**
+Implements the end-to-end hyper-reduction pipeline for ECSW-based reduced-order modeling, combining optional randomized SVD preprocessing with a bounded Non-Negative Least Squares (NNLS) solve to compute positive cubature weights from a quantity-of-interest (QoI) matrix. Serves as the primary high-level entry point for deriving ECSW element weights from snapshot data.
 
-Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS.
+**Summary:**
+Provides the `hyperreduce` function, which accepts a QoI matrix, optionally compresses it via randomized SVD, constructs per-entry bounded constraints around the projected right-hand side, solves the resulting bounded NNLS problem using `NNLSSolver`, and returns the hyperreduction weight vector alongside a solver convergence flag. Optional diagnostic plots of singular value decay and NNLS coefficient distributions are available for result inspection.
 
-This module provides:
+The broader `ecsw.hyperreduce` package includes:
 
-  - `hyperreduce`: function to perform hyper-reduction on a QoI matrix by:
-  
-    1. Optionally applying randomized SVD for dimensionality reduction
-    2. Constructing bounded constraints for NNLS from projected data
-    3. Solving a bounded NNLS problem via `NNLSSolver`
-    4. Optionally visualizing singular value decay and NNLS coefficients
+- Randomized SVD preprocessing routines for fast dimensionality reduction
+- Bounded NNLS solve integration via `custom_nnls`
+- Plotting helpers for diagnostic visualization of reduction errors and singular value spectra
 
-The `hyperreduce` folder contains utilities to reduce full-order models, including:
+**Author:** Suparno Bhattacharyya
 
-  - Randomized SVD preprocessing routines
-  - Bounded NNLS solve integrations (`custom_nnls`)
-  - Plotting helpers for diagnostic visualization of reduction errors
-
-Dependencies:
-
-  - NumPy for array operations
-  - scikit-learn's `randomized_svd` for fast SVD
-  - Matplotlib for plotting diagnostics
-  - Custom `NNLSSolver` implementation in `custom_nnls`
-
-Usage example:
-```python
-from hyperreduce.hyperreduce import hyperreduce
-x, flag = hyperreduce(qoi_data, n_components=100, svd=True)
-```
-
-[Code: Suparno Bhattacharyya]
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
 | [hyperreduce](#skrom.rom.ecsw.hyperreduce.hyperreduce) | Perform hyper-reduction via randomized SVD followed by a bounded NNLS solve. |
+
+***
 
 ### hyperreduce { #skrom.rom.ecsw.hyperreduce.hyperreduce }
 
@@ -54,68 +38,61 @@ rom.ecsw.hyperreduce.hyperreduce(
 )
 ```
 
-Perform hyper-reduction via randomized SVD followed by a bounded NNLS solve.
+**Summary:**
+Executes the complete hyper-reduction pipeline on a quantity-of-interest matrix. The pipeline proceeds through four stages:
 
-The hyper-reduction pipeline includes:
+1. **(Optional) Randomized SVD:** If `svd=True`, applies scikit-learn's `randomized_svd` with oversampling and power iterations to compress `qoi` to `n_components` dimensions, reducing the problem size before the NNLS solve.
+2. **Constraint Construction:** Builds per-entry lower and upper bounds around the projected right-hand side vector \( \mathbf{d}_q \):
 
-1. (Optional) Randomized SVD of the quantity of interest (QoI) matrix to reduce its dimensionality.
+\[
+b_{\text{lower}} = \mathbf{d}_q - \text{const\_tol}, \qquad b_{\text{upper}} = \mathbf{d}_q + \text{const\_tol}
+\]
 
-2. Construction of lower and upper bound constraints around the projected right-hand side vector.
+where \( \mathbf{d}_q = V_q^{\text{eff}} \mathbf{1} \) is the projected right-hand side vector.
 
-3. Bounded Non-Negative Least Squares (NNLS) solve using the `NNLSSolver`.
+3. **Bounded NNLS Solve:** Calls `NNLSSolver` to find the non-negative weight vector \( \mathbf{x} \geq 0 \) satisfying the bounded constraints within the specified tolerances.
+4. **(Optional) Diagnostics:** If `plot=True`, displays plots of the singular value decay spectrum and the NNLS solution coefficient distribution for result inspection.
 
-4. (Optional) Visualization of singular value decay and NNLS solution coefficients.
+The hyper-reduced approximation error is computed internally as:
 
-#### Parameters {.doc-section .doc-section-parameters}
+\[
+\varepsilon = \frac{\| \text{qoi} \cdot \mathbf{1} - \text{qoi} \cdot \mathbf{x} \|_2}{\| \text{qoi} \cdot \mathbf{1} \|_2}
+\]
 
-| Name         | Type                                       | Description                                                                                                                                             | Default    |
-|--------------|--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| qoi          | (array_like, shape(n_samples, n_features)) | Quantity of interest matrix on which hyper-reduction is performed.                                                                                      | _required_ |
-| n_components | int                                        | Number of singular value decomposition components to retain when `svd=True`. Must be less than or equal to \min(n_samples, n_features). Default is 500. | `500`      |
-| verbosity    | int                                        | Verbosity level for the NNLS solver. Higher values yield more diagnostic output. Default is 2.                                                          | `2`        |
-| plot         | bool                                       | Whether to display plots for singular value decay and the NNLS solution vector. Default is True.                                                        | `True`     |
-| const_tol    | float                                      | Tolerance used to define the half-gap around the average right-hand side vector for bounded constraints. Default is 1e-10.                              | `1e-10`    |
-| zero_tol     | float                                      | Threshold below which NNLS solution coefficients are considered zero. Default is 1e-14.                                                                 | `1e-14`    |
-| svd          | bool                                       | If True, apply randomized SVD preprocessing to `qoi`, otherwise solve NNLS directly on the original data. Default is False.                             | `False`    |
+and printed to console for diagnostic purposes.
 
-#### Returns {.doc-section .doc-section-returns}
+#### Parameters
 
-| Name   | Type                                           | Description                                                                              |
-|--------|------------------------------------------------|------------------------------------------------------------------------------------------|
-| x      | (ndarray, shape(n_features) or (n_components)) | Coefficients from the bounded NNLS solve representing the hyper-reduction weights.       |
-| flag   | int                                            | Exit status flag returned by the NNLS solver (e.g., 0 indicates successful convergence). |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| qoi | array_like, shape (n_samples, n_features) | Quantity-of-interest matrix on which hyper-reduction is performed; rows correspond to samples and columns to features (e.g., element contributions). | _required_ |
+| n_components | int | Number of SVD components to retain when `svd=True`; must not exceed \(\min(\text{n\_samples},\, \text{n\_features})\). | `500` |
+| verbosity | int | Verbosity level forwarded to `NNLSSolver`; higher values yield more detailed per-iteration diagnostic output. | `2` |
+| plot | bool | If `True`, displays plots of singular value decay and NNLS solution coefficients for diagnostic inspection. | `True` |
+| const_tol | float | Half-gap tolerance defining the bounded constraints around the projected right-hand side vector; smaller values enforce tighter constraint satisfaction. | `1e-10` |
+| zero_tol | float | Threshold below which NNLS solution coefficients are treated as zero and excluded from the active weight set. | `1e-14` |
+| svd | bool | If `True`, applies randomized SVD preprocessing to `qoi` before the NNLS solve; if `False`, solves directly on the original data. | `False` |
 
-#### Raises {.doc-section .doc-section-raises}
+#### Returns
 
-| Name   | Type       | Description                                                                       |
-|--------|------------|-----------------------------------------------------------------------------------|
-|        | ValueError | If `n_components` is greater than the minimum dimension of `qoi` when `svd=True`. |
+| Name | Type | Description |
+|------|------|-------------|
+| x | ndarray, shape (n_features,) or (n_components,) | Non-negative hyperreduction weight coefficients from the bounded NNLS solve; shape depends on whether SVD preprocessing was applied. |
+| flag | int | Exit status from `NNLSSolver`: `0` = converged successfully; `1` = reached maximum iterations; `2` = stalled; `3` = failed. |
 
-#### Notes {.doc-section .doc-section-notes}
+#### Raises
 
-- The `randomized_svd` step (when enabled) uses oversampling and power iterations
-  for stability and accuracy.
-- Bounds for the NNLS solve are constructed as:
+| Type | Condition |
+|------|-----------|
+| ValueError | Raised if `n_components` exceeds \(\min(\text{n\_samples},\, \text{n\_features})\) when `svd=True`. |
 
-  .. math::
-     b_{\mathrm{lower}} = d_q - \mathrm{const\_tol},
-     \quad
-     b_{\mathrm{upper}} = d_q + \mathrm{const\_tol},
+#### Notes
 
-  where
+- The randomized SVD step (when enabled) uses oversampling and power iterations for improved numerical stability and accuracy on large matrices.
+- Bounds are constructed symmetrically around the projected right-hand side; `const_tol` directly controls the feasibility tolerance of the NNLS solution.
+- The diagnostic error printed to console reflects how well the selected weights reproduce the full integration across all QoI samples.
 
-  .. math::
-     d_q = V_q^{\mathrm{eff}} \mathbf{1}
-
-  is the projected right-hand side vector.
-- The final hyper-reduced error is computed internally as
-
-  .. math::
-     \frac{\|qoi\mathbf{1} - qoi\,x\|_2}{\|qoi\mathbf{1}\|_2}
-
-  and printed for diagnostic purposes.
-
-#### Examples {.doc-section .doc-section-examples}
+#### Example
 
 ```python
 >>> import numpy as np

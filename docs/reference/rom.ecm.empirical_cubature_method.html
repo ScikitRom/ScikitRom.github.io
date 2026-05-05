@@ -606,7 +606,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
-  <li><a href="#empiricalcubaturemethod" id="toc-empiricalcubaturemethod" class="nav-link" data-scroll-target="#empiricalcubaturemethod">EmpiricalCubatureMethod</a></li>
+  <li><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod" id="toc-skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod" class="nav-link" data-scroll-target="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod">EmpiricalCubatureMethod</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -620,7 +620,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.ecm.empirical_cubature_method" class="level1">
 <h1>rom.ecm.empirical_cubature_method</h1>
-<p><code>rom.ecm.empirical_cubature_method</code></p>
+<p><strong>Purpose:</strong> Automates the selection of a minimal, optimally weighted subset of integration points (or mesh elements) for constructing hyper-reduced order models. By replacing full-domain integration with a compact cubature rule composed of only the most informative points, ECM makes large-scale nonlinear model reduction both computationally tractable and memory-efficient. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6432970/">pmc.ncbi.nlm.nih</a></p>
+<p><strong>Summary:</strong> Provides the <code>EmpiricalCubatureMethod</code> class, which solves an optimization problem to identify the smallest possible set of elements and their associated positive weights such that the reduced integration accurately reproduces the snapshot data within a prescribed tolerance. The class follows a structured three-step workflow—<code>SetUp</code> → <code>Initialize</code> → <code>Run</code> (or <code>Calculate</code>)—and supports optional L2 weighting, constrained weight sums, and warm-starting from an initial candidate set for greater flexibility in practice. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6432970/">pmc.ncbi.nlm.nih</a></p>
 <hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
@@ -634,26 +635,100 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod">EmpiricalCubatureMethod</a></td>
-<td>Class for selecting important elements and positive weights for hyper-reduced order modeling.</td>
+<td>Selects a minimal set of integration points and positive weights for hyper-reduced order modeling.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="empiricalcubaturemethod" class="level3">
-<h3 class="anchored" data-anchor-id="empiricalcubaturemethod">EmpiricalCubatureMethod</h3>
+<section id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod">EmpiricalCubatureMethod</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    ECM_tolerance<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    Filter_tolerance<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    Plotting<span class="op">=</span><span class="va">False</span>,</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    MaximumNumberUnsuccesfulIterations<span class="op">=</span><span class="dv">100</span>,</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does this class do?</strong><br>
-It finds a small, optimal set of elements (e.g., mesh cells or quadrature points) and their positive weights so you can accurately and efficiently build a hyper-reduced order model (HROM). This makes large-scale model reduction practical by evaluating only these crucial points.</p>
-<p><strong>Reference:</strong><br>
-<em>Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models.</em><br>
-arXiv preprint arXiv:2310.15769 (2023)</p>
-<p><strong>Key Parameters:</strong> - <code>ECM_tolerance</code>: Sets tolerance for how close the reduced approximation needs to be. - <code>Filter_tolerance</code>: Sets the threshold for filtering effects. - <code>Plotting</code>: If <code>True</code>, enables plotting for diagnostics or visualization. - <code>MaximumNumberUnsuccesfulIterations</code>: How many bad iterations before the algorithm stops.</p>
+<p><strong>Summary:</strong> Identifies a small, optimal subset of mesh elements (or quadrature points) together with their associated positive weights, enabling accurate and efficient hyper-reduced order model (HROM) construction. Rather than evaluating the full mesh during online ROM queries, the HROM evaluates only the ECM-selected points—achieving dramatic reductions in assembly cost while maintaining approximation accuracy controlled by <code>ECM_tolerance</code>. <a href="https://onlinelibrary.wiley.com/doi/10.1002/nme.70192">onlinelibrary.wiley</a></p>
+<p>The standard usage pattern is sequential: call <code>SetUp</code> to configure the problem, <code>Initialize</code> to prepare internal data structures, then <code>Run</code> (or <code>Calculate</code>) to execute the selection algorithm and obtain the output indices and weights.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ECM_tolerance</td>
+<td>float</td>
+<td>Convergence tolerance controlling how closely the reduced cubature rule must approximate the full integration; smaller values enforce higher accuracy at the cost of selecting more points.</td>
+<td><code>0</code></td>
+</tr>
+<tr class="even">
+<td>Filter_tolerance</td>
+<td>float</td>
+<td>Threshold for filtering out negligible contributions during the selection process.</td>
+<td><code>0</code></td>
+</tr>
+<tr class="odd">
+<td>Plotting</td>
+<td>bool</td>
+<td>If <code>True</code>, enables diagnostic plotting during the selection algorithm for visualization and debugging.</td>
+<td><code>False</code></td>
+</tr>
+<tr class="even">
+<td>MaximumNumberUnsuccesfulIterations</td>
+<td>int</td>
+<td>Maximum number of consecutive unsuccessful iterations before the selection algorithm terminates early.</td>
+<td><code>100</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="key-attributes-set-after-run" class="level4">
+<h4 class="anchored" data-anchor-id="key-attributes-set-after-run">Key Attributes Set After <code>Run</code></h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>z</td>
+<td>ndarray of int</td>
+<td>Indices of the selected (important) elements or quadrature points in the reduced cubature rule.</td>
+</tr>
+<tr class="even">
+<td>w</td>
+<td>ndarray of float</td>
+<td>Positive weights associated with each selected point, defining the reduced integration rule.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reference" class="level4">
+<h4 class="anchored" data-anchor-id="reference">Reference</h4>
+<p>Hernández, J.A. et al., 2023. Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models. arXiv preprint arXiv:2310.15769.</p>
 <hr>
+</section>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
 <table class="caption-top table">
@@ -665,65 +740,123 @@ arXiv preprint arXiv:2310.15769 (2023)</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate">Calculate</a></td>
-<td>Computes the final selected elements and their weights (run after <code>Initialize</code>).</td>
+<td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp">SetUp</a></td>
+<td>Configure the element selection problem using snapshot data and assembly options.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize">Initialize</a></td>
-<td>Prepares the calculation by setting up necessary data and variables.</td>
+<td>Prepare internal data structures before running the selection algorithm.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run">Run</a></td>
-<td>Runs the full ECM selection algorithm to find which elements and weights to use.</td>
+<td>Execute the core ECM selection loop to identify optimal elements and weights.</td>
 </tr>
 <tr class="even">
-<td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp">SetUp</a></td>
-<td>Configures the selection problem using your snapshot data and options.</td>
+<td><a href="#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate">Calculate</a></td>
+<td>Compute the final selected element indices and positive weights after <code>Initialize</code>.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="calculate" class="level5">
-<h5 class="anchored" data-anchor-id="calculate">Calculate</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What it does:</strong><br>
-After calling <code>Initialize</code>, this method performs the computation to <strong>identify</strong> the final subset of elements and calculate their <strong>positive weights</strong> required for hyper-reduction.</p>
+</section>
+<section id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp">SetUp</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    G,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Weights,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    constrain_sum_of_weights<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    InitialCandidatesSet<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    use_L2_weighting<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Configures the ECM element selection problem by specifying the snapshot or basis data to be approximated, the element-level integration weights, and optional settings that control the selection behavior. This must be called before <code>Initialize</code> or <code>Run</code>. The matrix <code>G</code> typically contains projected residual snapshots or a reduced basis whose column space defines the space over which the cubature rule must be accurate.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>G</td>
+<td>ndarray</td>
+<td>Snapshot data matrix or projected residual basis to approximate; each column typically represents one snapshot or basis vector evaluated over the full integration domain.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>Weights</td>
+<td>ndarray</td>
+<td>Integration weights associated with each element or quadrature point in the full-order mesh; used for weighted norm computations during selection.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>constrain_sum_of_weights</td>
+<td>bool</td>
+<td>If <code>True</code>, enforces that the sum of the selected ECM weights equals the sum of the original full-domain weights, preserving integral consistency.</td>
+<td><code>False</code></td>
+</tr>
+<tr class="even">
+<td>InitialCandidatesSet</td>
+<td>array_like of int or None</td>
+<td>Optional initial set of element indices from which the selection algorithm begins; useful for warm-starting or restricting the candidate pool.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="odd">
+<td>use_L2_weighting</td>
+<td>bool</td>
+<td>If <code>True</code>, applies L2-norm weighting during the selection process, which can improve robustness for problems with non-uniform solution energy distributions.</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
-<section id="initialize" class="level5">
-<h5 class="anchored" data-anchor-id="initialize">Initialize</h5>
+</section>
+<section id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize">Initialize</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What it does:</strong><br>
-Sets up the internal structures and data needed before running the main selection algorithm.<br>
-<em>Call this before you use <code>Calculate</code> or <code>Run</code>.</em></p>
+<p><strong>Summary:</strong> Prepares the internal data structures, index sets, and intermediate variables required by the ECM selection algorithm. Must be called after <code>SetUp</code> and before invoking <code>Calculate</code> or <code>Run</code>. This step ensures all problem dimensions and internal state are correctly initialized prior to the iterative selection procedure.</p>
 <hr>
 </section>
-<section id="run" class="level5">
-<h5 class="anchored" data-anchor-id="run">Run</h5>
+<section id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run">Run</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What it does:</strong><br>
-Runs the <strong>core ECM selection loop</strong> to determine: - <code>self.z</code>: Indices of selected (important) elements - <code>self.w</code>: The corresponding positive weights</p>
-<p>This is the main entry point for actually producing your hyper-reduced model’s selection.</p>
+<p><strong>Summary:</strong> Executes the complete ECM selection loop, combining <code>Initialize</code> and <code>Calculate</code> into a single top-level call. Iteratively identifies which elements or quadrature points to include and computes their associated positive weights. Upon completion, the results are stored as:</p>
+<ul>
+<li><code>self.z</code>: Indices of selected (important) elements or quadrature points.</li>
+<li><code>self.w</code>: Positive weights for each selected point forming the reduced cubature rule.</li>
+</ul>
+<p>This is the primary entry point for producing the hyperreduction point set and weights in a standard ECM workflow.</p>
 <hr>
 </section>
-<section id="setup" class="level5">
-<h5 class="anchored" data-anchor-id="setup">SetUp</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    G,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    Weights,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    constrain_sum_of_weights<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    InitialCandidatesSet<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    use_L2_weighting<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What it does:</strong><br>
-Configures the element selection problem by specifying the snapshots or basis you want to approximate, any starting weights/candidates, and several optional settings.</p>
-<p><strong>Inputs:</strong> - <code>G</code>: (Typically) a numpy array with <strong>snapshot data</strong> or a basis of projected residuals you want to approximate. - <code>Weights</code>: A numpy array of weights associated with the elements (for weighted norms or integration). - <code>constrain_sum_of_weights</code>: If <code>True</code>, forces the sum of selected weights to equal that of the original. - <code>InitialCandidatesSet</code>: (Optional) Start the selection with these element indices. - <code>use_L2_weighting</code>: Use L2-norm weighting in the selection process (can make selection more robust).</p>
+<section id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate">Calculate</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Performs the core computational step of the ECM algorithm after <code>Initialize</code> has been called. Identifies the final subset of elements and computes their positive weights such that the reduced cubature rule approximates the full integration to within the specified <code>ECM_tolerance</code>. Use this method when you need direct control over the initialization and calculation phases separately, rather than through the combined <code>Run</code> entry point.</p>
 <hr>
-<p><strong>In simple terms:</strong><br>
-- <strong>EmpiricalCubatureMethod</strong> automates the selection of the smallest possible set of elements and positive weights you need to build an accurate hyper-reduced-order model. - Run <code>SetUp</code> → <code>Initialize</code> → <code>Run</code> (or <code>Calculate</code>) in sequence for a typical workflow. - This saves you time and memory—your reduced model will run much faster, just using the “important” pieces of the original problem!</p>
-
-
 </section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p>The recommended workflow for a standard ECM setup is:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ecm <span class="op">=</span> EmpiricalCubatureMethod(ECM_tolerance<span class="op">=</span><span class="fl">1e-3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ecm.SetUp(G, Weights)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ecm.Run()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Access results</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>selected_indices <span class="op">=</span> ecm.z</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>selected_weights <span class="op">=</span> ecm.w</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For finer control over the initialization and computation phases, <code>Initialize</code> followed by <code>Calculate</code> can be used in place of <code>Run</code>.</p>
+
+
 </section>
 </section>
 </section>

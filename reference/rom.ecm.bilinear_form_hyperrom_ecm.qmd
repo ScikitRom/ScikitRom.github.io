@@ -1,32 +1,22 @@
 # rom.ecm.bilinear_form_hyperrom_ecm
 
-`rom.ecm.bilinear_form_hyperrom_ecm`
+**Purpose:**
+Implements ECM-based hyperreduction for finite element bilinear forms, enabling reduced-order stiffness matrix assembly at a fraction of the cost of full-domain integration. Unlike element-wise hyperreduction strategies such as ECSW, ECM operates at the **Gauss-point level** within each element, providing finer-grained control over the quadrature approximation and enabling higher efficiency and accuracy.
 
-**ECM-based hyperreduction for finite element bilinear forms.**
+**Summary:**
+Provides the `BilinearFormHYPERROM_ecm` class, which assembles the hyperreduced bilinear form by restricting integration to ECM-selected Gauss points with their associated weights. The assembly pipeline restricts the active mesh to elements with nonzero ECM weights, groups elements by free local DOF count for memory-efficient processing, extracts per-Gauss-point contributions, projects onto the reduced basis, and accumulates into the final reduced-order operator matrix.
 
----
+### Assumption
 
-This module brings hyperreduction to your finite element bilinear forms using the **Empirical Cubature Method (ECM)**.  
-Unlike classic element-wise hyperreduction (as in ECSW), **ECM works at the Gauss-point level** inside each element, providing higher efficiency and accuracy.
+ECM weights stored in `gauss_weight` are expected to **multiply** the raw per-Gauss-point contributions produced by scikit-fem:
 
-**How does it work?**
-- Instead of weighting entire elements, ECM allows you to pick (and weight) specific **quadrature (Gauss) points** inside elements.
-- The assembly process follows these main steps:
-  1. **Restrict**: Only use elements that have nonzero (active) ECM weights.
-  2. **Cluster**: Group elements by the number of free local DOFs; this optimizes memory usage and assembly.
-  3. **Extract**: Pull out the local contributions from each relevant Gauss point.
-  4. **Project**: Project these contributions onto your reduced basis.
-  5. **Accumulate**: Sum these into the final reduced-order operator (stiffness) matrix.
+\[
+\text{form}(\ldots) \times dx
+\]
 
----
+If weights were obtained from an external source and represent absolute cubature values rather than multiplicative scaling factors, they must be converted first using the helper utility in `skrom.rom.ecm.helpers` before being passed to this class.
 
-## Assumption
-
-The ECM weights that you store should **multiply** scikit-fem's per-Gauss-point “raw” contributions:**  
-`form(...) * dx`  
-If you got your weights from outside and they are not simple multipliers (but rather absolute cubature values), you must convert them first using the helper function in `skrom.rom.ecm.helpers`.
-
----
+***
 
 ## Classes
 
@@ -34,7 +24,7 @@ If you got your weights from outside and they are not simple multipliers (but ra
 | --- | --- |
 | [BilinearFormHYPERROM_ecm](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm) | Hyperreduced bilinear form assembled from ECM-selected Gauss points. |
 
----
+***
 
 ### BilinearFormHYPERROM_ecm { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm }
 
@@ -53,38 +43,60 @@ rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm(
 )
 ```
 
-**What does this class do?**  
-It assembles a reduced (hyperreduced) bilinear form (like a stiffness matrix) for ROMs, using only those Gauss points and weights picked by ECM.  
-You get all the computational savings of hyperreduction—potentially orders of magnitude faster assembly—while maintaining high accuracy.
+**Summary:**
+Assembles the hyperreduced bilinear form for ROM use by integrating only over those Gauss points and elements selected by the ECM procedure. The assembly proceeds through five stages:
 
----
+1. **Restrict:** Identify elements with nonzero ECM weights and construct the active hyperreduced mesh.
+2. **Cluster:** Group active elements by their number of free local DOFs to optimize memory layout and vectorized processing.
+3. **Extract:** Retrieve local element matrix contributions at each relevant Gauss point without pre-summing across quadrature points, preserving the ability to apply ECM weights individually.
+4. **Project:** Project each weighted Gauss-point contribution onto the left and right reduced bases.
+5. **Accumulate:** Sum all projected contributions into the final reduced-order operator matrix \( K_r \in \mathbb{R}^{r \times r} \).
+
+This Gauss-point-level approach provides more precise hyperreduction than element-wise methods, particularly when the parametric variation is concentrated in specific regions or quadrature points of the mesh.
+
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [assemble_weighted_ecm](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm) | Build the reduced bilinear form using ECM Gauss-point weights. |
-| [extract_element_matrices_qp_rom](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom) | Extract all local element matrices, but separated out for each Gauss point. |
+| [assemble_weighted_ecm](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm) | Assemble the reduced bilinear form matrix using ECM Gauss-point weights. |
+| [extract_element_matrices_qp_rom](#skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom) | Extract per-Gauss-point local element matrices for ECM-weighted assembly. |
 
----
+***
 
-##### assemble_weighted_ecm { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm }
+#### assemble_weighted_ecm { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm }
 
 ```python
-rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm(
-    **kwargs,
-)
+rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.assemble_weighted_ecm(**kwargs)
 ```
 
-Builds the ROM's reduced stiffness (bilinear) matrix using **ECM weights for the Gauss points**.
+**Summary:**
+Constructs the ROM's reduced stiffness matrix by applying ECM weights at the individual Gauss-point level. Each active Gauss-point contribution is scaled by its corresponding ECM weight prior to basis projection. Because contributions are **not pre-summed** across quadrature points, ECM weights can be applied directly to the raw per-point integrands—preserving the correctness of the hyperreduced quadrature rule. The weighted contributions are then projected onto the reduced bases and accumulated into the final reduced operator.
 
-- Each relevant Gauss-point contribution is multiplied by its ECM weight.
-- These contributions are **not pre-summed** over Gauss points, so the ECM weights can be used directly.
-- The method projects the results onto the reduced basis and sums for the final operator.
+The mathematical operation performed for the assembled reduced matrix is:
 
----
+\[
+K_r = \sum_{e \in \mathcal{E}_{\text{active}}} \sum_{q} w_{e,q}^{\text{ECM}} \cdot V_L^\top \cdot K_{e,q} \cdot V_R
+\]
 
-##### extract_element_matrices_qp_rom { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom }
+where \( w_{e,q}^{\text{ECM}} \) is the ECM weight for Gauss point \( q \) in element \( e \), \( K_{e,q} \) is the raw per-point contribution, and \( V_L, V_R \) are the left and right reduced bases.
+
+##### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| **kwargs | dict | Additional keyword arguments forwarded to element-level assembly. | `{}` |
+
+##### Returns
+
+| Name | Type | Description |
+|------|------|-------------|
+| K_reduced | ndarray, shape (r, r) | Assembled hyperreduced bilinear form matrix ready for use in ROM linear solves. |
+
+***
+
+#### extract_element_matrices_qp_rom { #skrom.rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom }
 
 ```python
 rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matrices_qp_rom(
@@ -95,21 +107,28 @@ rom.ecm.bilinear_form_hyperrom_ecm.BilinearFormHYPERROM_ecm.extract_element_matr
 )
 ```
 
-Extracts the **full set of local stiffness matrices for all relevant elements**, but, **instead of summing over Gauss points**, it returns the contributions per Gauss point.  
-This allows you to apply ECM weights individually at each quadrature point before summing, for precise hyperreduction.
+**Summary:**
+Evaluates the bilinear form over the active elements and returns the local stiffness contributions **resolved per Gauss point**, without summing across quadrature points. This is the key distinction from standard element matrix extraction: by retaining the per-point granularity, ECM weights can be applied individually at each quadrature point before the summation step, enabling precise control over the reduced quadrature rule.
 
-###### Returns {.doc-section .doc-section-returns}
+Each returned entry `element_matrices_q[e, :, :, q]` represents the contribution of the \( q \)-th Gauss point in element \( e \) to the local (test × trial) matrix, already multiplied by `basis.dx` but not yet summed over \( q \). ECM weights should be applied to this axis before accumulation.
 
-| Name               | Type                                                   | Description                                                                                                                   |
-|--------------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| element_matrices_q | (ndarray, shape(n_elem, n_loc_test, n_loc_trial, n_q)) | Each entry is a local element matrix for one element and one Gauss point, already multiplied by `basis.dx` but not yet summed |
+##### Parameters
 
-**In plain language:**  
-- `element_matrices_q[e, :, :, q]` is the contribution of the `q`-th Gauss point in element `e` to the local (test, trial) matrix.
-- You can safely multiply by ECM weights **before summing over Gauss points**.
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| ubasis | Basis | Trial FE basis containing mesh, quadrature rule, and element connectivity for the active hyperreduced mesh. | _required_ |
+| vbasis | Basis or None | Test FE basis; defaults to `ubasis` if not provided. | `None` |
+| elem_indices | array_like of int or None | Specific element indices to process; defaults to all active elements in the hyperreduced mesh. | `None` |
+| **kwargs | dict | Additional keyword arguments forwarded to the bilinear form evaluation. | `{}` |
 
----
+##### Returns
 
-**Quick Guide:**  
-- Use this approach if you want more precise and efficient control over your hyperreduction, especially when certain regions or Gauss points in your mesh matter much more than others.
-- Always ensure your ECM weights multiply the *raw* per-Gauss contributions — not fully-integrated values — so your reduced assembly is both correct and fast.
+| Name | Type | Description |
+|------|------|-------------|
+| element_matrices_q | ndarray, shape (n_elem, n_loc_test, n_loc_trial, n_q) | Per-Gauss-point local element matrices. The axis ordering is (element, test DOF, trial DOF, quadrature point). Multiply ECM weights along the `n_q` axis before summing to obtain ECM-weighted element matrices. |
+
+***
+
+#### Notes
+
+Use `BilinearFormHYPERROM_ecm` when Gauss-point-level precision in hyperreduction is required—particularly when the parametric variation in your bilinear form is concentrated in specific spatial regions or quadrature points. Always verify that your ECM weights are compatible with the raw per-Gauss-point convention expected by this class; weights representing fully integrated element contributions must be converted using `skrom.rom.ecm.helpers` before use.

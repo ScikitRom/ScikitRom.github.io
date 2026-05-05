@@ -1,33 +1,27 @@
 # rom.ecsw.custom_nnls
 
-`rom.ecsw.custom_nnls`
+**Purpose:**
+Provides a flexible, robust bounded Non-Negative Least Squares (NNLS) solver for computing positive cubature weights in ECSW-based hyperreduction pipelines. Designed to find non-negative weight vectors that satisfy a linear system within per-entry bounds, with precise control over sparsity, convergence criteria, and solver diagnostics.
 
-**Bounded Non-Negative Least Squares (NNLS) for ECSW Hyperreduction**
+**Summary:**
+Implements an active-set NNLS algorithm supporting per-entry lower and upper bounds on the right-hand side, configurable sparsity constraints (minimum and maximum nonzeros), stall detection, and two convergence criteria (L2 norm or L∞ norm). The `NNLSSolver` class is the primary entry point for ECSW weight computation, and the `NNLS_termination` enum selects the stopping condition. This module is a Python adaptation of the libROM NNLS implementation from the LLNL team.
 
-This module lets you solve problems where you need to find **non-negative weights** (x ≥ 0), usually for building hyperreduced cubature rules. It uses a powerful “active set” algorithm, works with per-entry (element-by-element) bounds, and gives you detailed control over solver convergence and diagnostics.
+**Original C++ Reference:** libROM team, LLNL
 
-**Features:**
+**Python Adaptation:** Suparno Bhattacharyya
 
-- A flexible, robust NNLS solver you can configure for accuracy, speed, and verbosity
-- Two main ways to check if the solver has converged (`L2` or maximum violation)
-- Prune/select important cubature points using sequential/active-set methods
-- All tools needed to integrate within an ECSW (“Empirical Cubature Subset Weighting”) pipeline
-
-**Original C++ reference: libROM team at LLNL  
-Python adaptation: Suparno Bhattacharyya**
-
----
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
-| [NNLSSolver](#skrom.rom.ecsw.custom_nnls.NNLSSolver) | Main class: sequential NNLS solver with custom bounds and stopping rules |
-| [NNLS_termination](#skrom.rom.ecsw.custom_nnls.NNLS_termination) | Enum for picking termination condition (L2 or L∞) |
+| [NNLSSolver](#skrom.rom.ecsw.custom_nnls.NNLSSolver) | Active-set NNLS solver with configurable bounds, sparsity constraints, and convergence criteria. |
+| [NNLS_termination](#skrom.rom.ecsw.custom_nnls.NNLS_termination) | Enumeration for selecting the solver termination criterion (L2 or L∞). |
 
----
+***
 
-### NNLSSolver
+### NNLSSolver { #skrom.rom.ecsw.custom_nnls.NNLSSolver }
 
 ```python
 rom.ecsw.custom_nnls.NNLSSolver(
@@ -43,55 +37,50 @@ rom.ecsw.custom_nnls.NNLSSolver(
 )
 ```
 
-**What is this?**  
+**Summary:**
+Solves the bounded non-negative least squares problem: find \( \mathbf{x} \geq 0 \) such that \( A\mathbf{x} \approx \mathbf{b} \), where each entry of \( \mathbf{b} \) may be constrained to a range \([\mathbf{b}_{\text{lb}},\, \mathbf{b}_{\text{ub}}]\). The active-set algorithm iteratively adapts the set of active (nonzero) variables while enforcing non-negativity, per-entry bounds, sparsity constraints, and stall detection. Key algorithmic properties include:
 
-- A solver for the problem: *find `x` such that* **A x ≈ b**, with constraints **x ≥ 0** (and possibly per-entry bounds on `b`)  
-- Used for selecting positive weights that make a linear equation fit as closely as possible, with deep control over tolerances, iteration limits, and termination
+- **Active-set method:** Dynamically maintains the set of nonzero variables, updating it at each outer iteration to maximize constraint satisfaction.
+- **Per-entry bound support:** Each right-hand side entry can independently have a lower and upper bound, providing flexible constraint specification beyond simple non-negativity.
+- **Dual termination criteria:** Convergence can be assessed via the L2 norm (sum-of-squares residual) or the L∞ norm (maximum single constraint violation), selectable via `criterion`.
+- **Stall detection:** If the mean residual change over 50 consecutive steps falls below `res_change_termination_tol`, the solver exits early with a stall flag.
+- **Sparsity control:** `min_nnz` and `max_nnz` allow enforcement of sparse solutions, which is critical for ECSW cubature rules where a minimal element subset is desired.
 
-**Algorithm highlights:**  
-
-- Active-set approach: adapts which variables are “active” as it searches for a solution
-- Supports per-entry lower/upper bounds on `b`, not just on `x`
-- Lets you specify when to stop: based on sum of squares (`L2`) **or** largest single violation (`L∞`)
-- Detects “stalling” (when solution doesn’t improve anymore)
-- Can limit number of nonzero weights or require a minimum (for sparse solutions)
-- Easy to choose how much diagnostic output you want
-
----
+***
 
 #### Parameters
 
-| Name                       | Type                                         | What it means                                                                                | Default         |
-|----------------------------|----------------------------------------------|----------------------------------------------------------------------------------------------|-----------------|
-| const_tol                  | float                                        | Tolerance for constraint violations (infinity norm criterion)                                | `1e-06`         |
-| min_nnz                    | int                                          | Stop only if at least this many non-zero entries in x                                        | `1`             |
-| max_nnz                    | int                                          | Don’t allow more than this many non-zero entries (0 means no limit)                          | `0`             |
-| verbosity                  | int                                          | Level of console output (0: silent, 1: summary, ≥2: detailed)                                | `1`             |
-| res_change_termination_tol | float                                        | If the mean residual changes less than this across 50 steps, stop as “stalled”               | `1e-10`         |
-| zero_tol                   | float                                        | Values smaller than this are treated as zero (numerical noise filter)                        | `1e-15`         |
-| n_outer                    | int                                          | Maximum number of **active-set** iterations                                                  | `1000`          |
-| n_inner                    | int                                          | Maximum number of “inner” iterations for each set                                            | `400`           |
-| criterion                  | (NNLS_termination.L2, NNLS_termination.LINF) | Stopping condition: L2 (least squares norm) or L∞ (max violation must fall below `const_tol`) | `LINF` by default|
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| const_tol | float | Tolerance for constraint violations evaluated under the infinity norm criterion. | `1e-06` |
+| min_nnz | int | Minimum number of nonzero entries required in the solution before the solver may terminate. | `1` |
+| max_nnz | int | Maximum number of nonzero entries permitted in the solution; `0` imposes no upper limit. | `0` |
+| verbosity | int | Console output level: `0` for silent, `1` for summary only, `≥2` for detailed per-iteration diagnostics. | `1` |
+| res_change_termination_tol | float | Stall detection threshold; if the mean residual change over 50 steps falls below this value, the solver exits with a stall exit code. | `1e-10` |
+| zero_tol | float | Numerical zero threshold; values with absolute magnitude below this are treated as zero to suppress numerical noise. | `1e-15` |
+| n_outer | int | Maximum number of active-set (outer) iterations before termination. | `1000` |
+| n_inner | int | Maximum number of inner iterations per active-set update step. | `400` |
+| criterion | NNLS_termination | Stopping condition: `L2` (residual sum-of-squares below threshold) or `LINF` (maximum constraint violation below `const_tol`). | `LINF` |
 
----
+***
 
 #### Attributes
 
-| Name                        | Type             | Description                                  |
-|-----------------------------|------------------|----------------------------------------------|
-| const_tol_                  | float            | Copied from `const_tol` (above)              |
-| min_nnz_                    | int              | Minimum # of nonzeros                        |
-| max_nnz_                    | int              | Maximum # of nonzeros                        |
-| verbosity_                  | int              | Chosen level of output detail                |
-| res_change_termination_tol_ | float            | For stall check                              |
-| zero_tol_                   | float            | Numerical zero threshold                     |
-| n_outer_                    | int              | Max outer iterations                         |
-| n_inner_                    | int              | Max inner iterations                         |
-| d_criterion                 | NNLS_termination | Convergence rule                             |
+| Name | Type | Description |
+|------|------|-------------|
+| const_tol_ | float | Active constraint violation tolerance. |
+| min_nnz_ | int | Minimum required number of nonzero solution entries. |
+| max_nnz_ | int | Maximum permitted number of nonzero solution entries. |
+| verbosity_ | int | Current output verbosity level. |
+| res_change_termination_tol_ | float | Stall detection threshold for residual change monitoring. |
+| zero_tol_ | float | Numerical zero threshold for noise suppression. |
+| n_outer_ | int | Maximum outer (active-set) iteration count. |
+| n_inner_ | int | Maximum inner iteration count per active-set step. |
+| d_criterion | NNLS_termination | Active convergence criterion. |
 
----
+***
 
-#### Example Usage
+#### Example
 
 ```python
 >>> from nnls_solver import NNLSSolver, NNLS_termination
@@ -104,76 +93,75 @@ rom.ecsw.custom_nnls.NNLSSolver(
 >>> x, flag = solver.solve(A, lb, ub)
 >>> print("Exit flag:", flag)
 ```
-- See how you can set verbosity, control bounds, and get out an exit flag for status
 
----
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [set_verbosity](#skrom.rom.ecsw.custom_nnls.NNLSSolver.set_verbosity) | Change the amount of output printed during solve. |
-| [solve](#skrom.rom.ecsw.custom_nnls.NNLSSolver.solve) | Solve the non-negative least squares problem A x ≈ b, with bounds, using the active-set method. |
+| [set_verbosity](#skrom.rom.ecsw.custom_nnls.NNLSSolver.set_verbosity) | Update the output verbosity level for subsequent solver runs. |
+| [solve](#skrom.rom.ecsw.custom_nnls.NNLSSolver.solve) | Solve the bounded non-negative least squares problem using the active-set method. |
 
----
+***
 
-##### set_verbosity
+#### set_verbosity { #skrom.rom.ecsw.custom_nnls.NNLSSolver.set_verbosity }
 
 ```python
 rom.ecsw.custom_nnls.NNLSSolver.set_verbosity(verbosity_in)
 ```
-**Change how much is printed during solver runs.**
 
-| Name         | Type   | Description                            | Default    |
-|--------------|--------|----------------------------------------|------------|
-| verbosity_in | int    | New output level (0 = silent, higher = more detail) | _required_ |
+**Summary:**
+Updates the solver's verbosity level, controlling the volume of diagnostic output printed during subsequent calls to `solve`. Setting `0` suppresses all output; higher values progressively enable more detailed per-iteration reporting.
 
----
+##### Parameters
 
-##### solve
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| verbosity_in | int | New output verbosity level; `0` for silent, `1` for summary, `≥2` for detailed diagnostics. | _required_ |
+
+***
+
+#### solve { #skrom.rom.ecsw.custom_nnls.NNLSSolver.solve }
 
 ```python
 rom.ecsw.custom_nnls.NNLSSolver.solve(mat, rhs_lb, rhs_ub)
 ```
-**Solves:**  
-Find x ≥ 0 so that **A x ≈ b**, where b ∈ [rhs_lb, rhs_ub] (each entry can be a range).
 
-- Uses active-set NNLS, fast and reliable for (often sparse) hyperreduction weights
+**Summary:**
+Solves the bounded non-negative least squares problem: find \( \mathbf{x} \geq 0 \) such that \( A\mathbf{x} \approx \mathbf{b} \) with \( \mathbf{b} \in [\mathbf{b}_{\text{lb}},\, \mathbf{b}_{\text{ub}}] \) entry-wise. The active-set algorithm iterates over candidate nonzero sets, updating the active variables to progressively reduce constraint violations until the selected termination criterion (`L2` or `LINF`) is satisfied, sparsity limits are met, or a maximum iteration count or stall condition is reached.
 
-**Parameters:**
+##### Parameters
 
-| Name   | Type                      | Description                                          | Default    |
-|--------|---------------------------|------------------------------------------------------|------------|
-| mat    | (array_like, shape(m, n)) | Matrix A of the system                               | _required_ |
-| rhs_lb | (array_like, shape(m))    | Lower bound for each right-hand side entry           | _required_ |
-| rhs_ub | (array_like, shape(m))    | Upper bound for each right-hand side entry           | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| mat | array_like, shape (m, n) | System matrix \( A \) for the least squares problem. | _required_ |
+| rhs_lb | array_like, shape (m,) | Per-entry lower bounds on the right-hand side \( \mathbf{b} \). | _required_ |
+| rhs_ub | array_like, shape (m,) | Per-entry upper bounds on the right-hand side \( \mathbf{b} \). | _required_ |
 
-**Returns:**
+##### Returns
 
-| Name       | Type                | Description                                                                                     |
-|------------|---------------------|-------------------------------------------------------------------------------------------------|
-| final_soln | (ndarray, shape(n)) | Non-negative solution x                                                                         |
-| exit_flag  | int                 | Status code: <br>0: succeeded <br>1: hit max iterations <br>2: stalled <br>3: failed (see notes)|
+| Name | Type | Description |
+|------|------|-------------|
+| final_soln | ndarray, shape (n,) | Non-negative solution vector \( \mathbf{x} \geq 0 \). |
+| exit_flag | int | Solver status code: `0` = converged successfully; `1` = reached maximum iterations; `2` = stalled (residual change below `res_change_termination_tol`); `3` = failed. |
 
----
+***
 
-### NNLS_termination
+### NNLS_termination { #skrom.rom.ecsw.custom_nnls.NNLS_termination }
 
 ```python
 rom.ecsw.custom_nnls.NNLS_termination()
 ```
 
-**Enum for how solver decides when to stop (convergence criteria):**
+**Summary:**
+Enumeration for selecting the convergence criterion used by `NNLSSolver`. Determines how the solver assesses whether the current solution satisfies the constraint tolerance.
 
-| Name   | Type   | Description                                                                      |
-|--------|--------|----------------------------------------------------------------------------------|
-| L2     | int    | Stop when the L2 norm (sum of squares) of the residual is small enough           |
-| LINF   | int    | Stop when the largest single violation (“infinity norm”) is under `const_tol`     |
+| Name | Type | Description |
+|------|------|-------------|
+| L2 | int | Terminate when the L2 norm (sum of squared residuals) falls below the constraint tolerance. Corresponds to standard least-squares convergence. |
+| LINF | int | Terminate when the L∞ norm (largest single constraint violation) falls below `const_tol`. Stricter than L2—ensures no individual constraint is significantly violated. Default criterion. |
 
----
+#### Notes
 
-**In practice:**  
-
-- Use `NNLSSolver` to compute guaranteed-positive cubature (ECSW) weights, with full control over nonzeros, bounds, and convergence diagnostics.
-- Choose L2 or L∞ for termination—L∞ (default) is stricter (no big violations left), L2 is usual least-squares.
-
+`LINF` (default) is the more conservative criterion and is recommended for ECSW weight computation where individual constraint violations can produce physically inconsistent cubature rules. `L2` may be preferred when a globally small residual is sufficient and isolated violations are acceptable.

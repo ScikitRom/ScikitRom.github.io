@@ -1,34 +1,27 @@
-# rom.ecsw.linear_form_hyperrom_ecsw { #skrom.rom.ecsw.linear_form_hyperrom_ecsw }
+# rom.ecsw.linear_form_hyperrom_ecsw
 
-`rom.ecsw.linear_form_hyperrom_ecsw`
+**Purpose:**
+Implements ECSW-based hyperreduction for finite element linear forms, enabling fast reduced-order load vector assembly by projecting element-wise load contributions onto a reduced basis, clustering elements by free-DOF count after Dirichlet condensation, and assembling the global reduced load vector via vectorized weighted projections.
 
-## hyperreduce/linear_form_hyperrom.py {.doc-section .doc-section-hyperreducelinearformhyperrompy}
+**Summary:**
+Provides the `LinearFormHYPERROM_ecsw` class, a reduced-order linear form that handles Dirichlet boundary conditions through full-to-free DOF mapping, applies element-wise ECSW weights during projection, and produces the final \( r \)-dimensional reduced load vector. All operations are restricted to free DOFs, with Dirichlet and mean-field contributions reinserted during reconstruction. The broader `ecsw` package also includes:
 
-Implements Hyper-Reduction (HYPERROM) for reduced-order load vector assembly.
+- Reduced-order bilinear forms (`BilinearFormHYPERROM_ecsw`) and linear forms (`LinearFormHYPERROM_ecsw`)
+- Routines for extracting element stiffness matrices and load vectors in a reduced basis
+- Utilities for efficient Dirichlet condition handling and element clustering
+- Support for weights, parallelization, and full-order data reconstruction
 
-This module provides:
+**Author:** Suparno Bhattacharyya
 
-  - `LinearFormHYPERROM`: a subclass of `skfem.assembly.form.linear_form.LinearForm`
-    that projects element-wise load contributions onto a reduced basis, clusters
-    elements by free-DOF count after Dirichlet condensation, and assembles the
-    global reduced load vector via vectorized weighted projections.
-
-The `hyperreduce` folder contains all tools to perform hyper-reduction, including:
-
-  - Reduced-order bilinear forms (`BilinearFormHYPERROM`) and linear forms
-    (`LinearFormHYPERROM`)
-  - Routines for extracting element stiffness matrices and load vectors in a
-    reduced basis
-  - Utilities for efficient handling of Dirichlet conditions and element clustering
-  - Support for weights, parallelization, and reconstruction of full-order data
-
-  [Author: Suparno Bhattacharyya]
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
-| [LinearFormHYPERROM_ecsw](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw) | Reduced-order linear form for hyper-reduction of load vectors. |
+| [LinearFormHYPERROM_ecsw](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw) | Reduced-order linear form for ECSW hyperreduction of load vectors. |
+
+***
 
 ### LinearFormHYPERROM_ecsw { #skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw }
 
@@ -45,61 +38,67 @@ rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw(
 )
 ```
 
-Reduced-order linear form for hyper-reduction of load vectors.
+**Summary:**
+Assembles the hyperreduced load vector for ROM use by projecting element-level load contributions onto the reduced test basis and accumulating them with their corresponding ECSW weights. Dirichlet boundary conditions are handled via a mapping from global DOFs to free (non-Dirichlet) DOFs—all assembly operations are performed exclusively on free DOFs. Elements are clustered by their free-DOF count to enable vectorized batch projections, following the same clustering strategy as `BilinearFormHYPERROM_ecsw`. The mean field, if provided, is subtracted during basis construction and reinserted during full-order reconstruction.
 
-Projects element-level load vectors onto a reduced basis and assembles the
-global reduced load vector. Handles Dirichlet boundary conditions via mapping
-from full degrees of freedom (DOFs) to free (non-Dirichlet) DOFs. All operations
-occur only on free DOFs, with Dirichlet and mean field contributions reinserted
-during reconstruction.
+The assembly operation performed is:
 
-#### Parameters {.doc-section .doc-section-parameters}
+\[
+\mathbf{f}_r = \sum_{e \in \mathcal{E}_{\text{active}}} w_e \cdot V_L^\top\big|_{\text{free}} \cdot \mathbf{f}_e\big|_{\text{free}}
+\]
 
-| Name        | Type              | Description                                                                                                                                | Default      |
-|-------------|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| form        | callable          | The original linear form function evaluating local load contributions.                                                                     | _required_   |
-| elem_weight | scalar or ndarray | Element-wise weights (e.g., quadrature or sampling weights). Can be a single scalar or an array of length equal to the number of elements. | _required_   |
-| ubasis      | Basis             | Finite element basis object with full DOF count and element connectivity.                                                                  | _required_   |
-| lob         | ndarray           | Reduced basis matrix of shape (N_free, r) if `free_dofs` is provided, or (N, r) otherwise, where r is the reduced dimension.               | _required_   |
-| free_dofs   | ndarray of int    | Indices of global DOFs that are free (non-Dirichlet). If provided, basis is defined only on these DOFs.                                    | `None`       |
-| mean        | ndarray           | Mean snapshot vector of length N_full DOFs, subtracted during basis computation and reinserted during reconstruction.                      | `None`       |
-| nthreads    | int               | Number of threads for parallel element-wise evaluation. Default is 0 (serial).                                                             | `0`          |
-| dtype       | data - type       | NumPy data type for assembled vectors and intermediate arrays.                                                                             | `np.float64` |
+where \( w_e \) is the ECSW weight for element \( e \), \( V_L \) is the left reduced test basis `lob`, and \( \mathbf{f}_e \) is the local load vector restricted to free DOFs.
+
+***
+
+#### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| form | callable | Full-order linear form function evaluating local load contributions for each element. | _required_ |
+| elem_weight | scalar or ndarray | Element-wise ECSW weights; either a scalar applied uniformly to all elements or an array of length equal to the number of elements. | _required_ |
+| ubasis | Basis | FE basis object containing the full DOF count and element connectivity for the original mesh. | _required_ |
+| lob | ndarray, shape (N_free, r) or (N, r) | Left (test) reduced basis matrix; shape `(N_free, r)` when `free_dofs` is provided, or `(N, r)` otherwise, where \( r \) is the reduced dimension. | _required_ |
+| free_dofs | ndarray of int or None | Indices of global DOFs that are free (non-Dirichlet); if provided, all assembly operations are restricted to these DOFs. | `None` |
+| mean | ndarray or None | Mean snapshot vector of length `N_full`; subtracted during basis construction and reinserted during full-order reconstruction. | `None` |
+| nthreads | int | Number of threads for parallel element-wise load evaluation; `0` uses serial execution. | `0` |
+| dtype | numpy.dtype | NumPy data type for assembled vectors and intermediate arrays. | `np.float64` |
+
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [assemble_weighted_ecsw](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.assemble_weighted_ecsw) | Assemble the weighted reduced load vector. |
-| [extract_element_vector_rom](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.extract_element_vector_rom) | Extract local element load vectors in the reduced setting. |
+| [assemble_weighted_ecsw](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.assemble_weighted_ecsw) | Assemble the ECSW-weighted reduced load vector. |
+| [extract_element_vector_rom](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.extract_element_vector_rom) | Extract local element load vectors over the hyperreduced element set. |
 
-##### assemble_weighted_ecsw { #skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.assemble_weighted_ecsw }
+***
+
+#### assemble_weighted_ecsw { #skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.assemble_weighted_ecsw }
 
 ```python
-rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.assemble_weighted_ecsw(
-    **kwargs,
-)
+rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.assemble_weighted_ecsw(**kwargs)
 ```
 
-Assemble the weighted reduced load vector.
+**Summary:**
+Assembles the global reduced load vector by iterating over active elements, scaling each element load vector by its ECSW weight, projecting the result onto the left reduced test basis restricted to free DOFs, and summing all contributions into the final vector of length \( r \). The method forwards additional keyword arguments (such as previous solution states or material parameters) to the underlying element extraction routine.
 
-Each element load vector is multiplied by its weight and projected onto
-the reduced basis (restricted to free DOFs), then summed into a single
-vector of length r.
+##### Parameters
 
-###### Parameters {.doc-section .doc-section-parameters}
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| **kwargs | dict | Additional keyword arguments forwarded to `extract_element_vector_rom`, such as previous solution states or material parameters. | `{}` |
 
-| Name     | Type   | Description                                                                                                      | Default   |
-|----------|--------|------------------------------------------------------------------------------------------------------------------|-----------|
-| **kwargs |        | Additional parameters forwarded to `extract_element_vector_rom`, such as previous states or material parameters. | `{}`      |
+##### Returns
 
-###### Returns {.doc-section .doc-section-returns}
+| Name | Type | Description |
+|------|------|-------------|
+| f_reduced | ndarray, shape (r,) | Assembled ECSW-weighted reduced load vector, ready for use in ROM linear solves. |
 
-| Name      | Type                | Description                    |
-|-----------|---------------------|--------------------------------|
-| f_reduced | (ndarray, shape(r)) | Assembled reduced load vector. |
+***
 
-##### extract_element_vector_rom { #skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.extract_element_vector_rom }
+#### extract_element_vector_rom { #skrom.rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.extract_element_vector_rom }
 
 ```python
 rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.extract_element_vector_rom(
@@ -109,37 +108,38 @@ rom.ecsw.linear_form_hyperrom_ecsw.LinearFormHYPERROM_ecsw.extract_element_vecto
 )
 ```
 
-Extract local element load vectors in the reduced setting.
+**Summary:**
+Evaluates the full-order linear form over the specified elements and returns the resulting local load vectors as an array of shape `(n_elem, Nbfun)`, where `Nbfun` is the number of local basis functions per element. The basis is restricted to the specified element subset via `with_elements` before evaluation. Supports both serial and parallel execution depending on `nthreads`.
 
-Evaluates the original linear form on each specified element and returns
-an array of shape (n_elem, Nbfun), where Nbfun is the number of local
-basis functions per element.
+##### Parameters
 
-###### Parameters {.doc-section .doc-section-parameters}
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| basis | Basis | Basis object restricted via `with_elements` for the active element subset. | _required_ |
+| elem_indices | ndarray of int or None | Subset of element indices to include in the extraction; forwarded to `with_elements`. Defaults to all active elements. | `None` |
+| **kwargs | dict | Additional keyword arguments forwarded to the low-level form evaluation. | `{}` |
 
-| Name         | Type           | Description                                                     | Default    |
-|--------------|----------------|-----------------------------------------------------------------|------------|
-| basis        | Basis          | Basis restricted via `with_elements` for trial functions.       | _required_ |
-| elem_indices | ndarray of int | Subset of elements to include; passed to `with_elements`.       | `None`     |
-| **kwargs     |                | Extra keyword arguments forwarded to low-level form evaluation. | `{}`       |
+##### Returns
 
-###### Returns {.doc-section .doc-section-returns}
+| Name | Type | Description |
+|------|------|-------------|
+| element_vectors | ndarray, shape (n_elem, Nbfun) | Local load vectors for each element in the restricted element set; `Nbfun` is the number of local basis functions per element. |
 
-| Name            | Type                            | Description                                       |
-|-----------------|---------------------------------|---------------------------------------------------|
-| element_vectors | (ndarray, shape(n_elem, Nbfun)) | Local load vectors for each (restricted) element. |
+##### Raises
 
-###### Raises {.doc-section .doc-section-raises}
+| Type | Condition |
+|------|-----------|
+| ValueError | Raised if `basis` is `None` or improperly configured. |
 
-| Name   | Type       | Description                                  |
-|--------|------------|----------------------------------------------|
-|        | ValueError | If `basis` is None or improperly configured. |
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [with_elements](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements) | Return a similar basis on a subset of element indices. |
+| [with_elements](#skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements) | Return a restricted basis on a specified subset of element indices. |
+
+***
 
 ### with_elements { #skrom.rom.ecsw.linear_form_hyperrom_ecsw.with_elements }
 
@@ -147,4 +147,17 @@ basis functions per element.
 rom.ecsw.linear_form_hyperrom_ecsw.with_elements(self, elements=None)
 ```
 
-Return a similar basis on a subset of element indices.
+**Summary:**
+Returns a new basis instance restricted to the specified subset of element indices. Used internally to construct element-restricted basis objects before load vector extraction, and is also available for direct use when restricting any compatible basis to an arbitrary element subset.
+
+#### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| elements | array_like of int or None | Indices of elements to retain in the restricted basis; if `None`, the full basis is returned unchanged. | `None` |
+
+#### Returns
+
+| Name | Type | Description |
+|------|------|-------------|
+| restricted_basis | Basis | New basis instance covering only the specified elements, with mesh connectivity adjusted accordingly. |

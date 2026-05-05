@@ -1,36 +1,29 @@
 # rom.bilinear_form_rom
 
-`rom.bilinear_form_rom`
+**Purpose:**
+Transforms full-order element stiffness matrices into their reduced-order counterparts by handling all index mapping, Dirichlet boundary classification, and memory-efficient assembly. Designed to produce accurate reduced stiffness matrices for large-scale ROM problems without excessive memory overhead.
 
-**Purpose:**  
-This module helps turn *full-size* element stiffness matrices into *reduced* (ROM) versions, handling all the index mapping and memory tricks so you get efficient reduced-order stiffness matrices, even for big problems.
+**Summary:**
+Provides the `BilinearFormROM` class for projecting and assembling reduced bilinear forms. Elements are grouped by their Dirichlet boundary interactions to streamline assembly, and chunked processing is available for problems where memory is a constraint. The broader `rom` package also includes:
 
-**Features:**  
+- Classes for reduced assembly and projection of both bilinear and linear forms
+- Dirichlet boundary condition handling utilities tailored for ROM workflows
+- Chunked and group-wise matrix assembly strategies for large-scale problems
+- Index and DOF mapping tools between full-order and reduced-order representations
 
-- `BilinearFormROM`: Class for projecting and assembling reduced matrices
-- Groups elements by how they hit Dirichlet boundaries (for efficient handling)
-- Builds the global reduced stiffness matrix from reduced element contributions—optionally in chunks for better memory use
+**Author:** Suparno Bhattacharyya
 
-The `rom` folder also includes:
-
-- Classes for handling reduced assembly and projection (both bilinear and linear forms)
-- Helper utilities for Dirichlet BCs in ROMs
-- Tricks for chunked and group-wise matrix assembly (so huge problems fit in memory)
-- Index/dof mapping tools between full and reduced problems
-
-**[Author: Suparno Bhattacharyya]**
-
----
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
-| [BilinearFormROM](#skrom.rom.bilinear_form_rom.BilinearFormROM) | Main class for assembling reduced-order bilinear forms (ROM stiffness matrices) |
+| [BilinearFormROM](#skrom.rom.bilinear_form_rom.BilinearFormROM) | Assembles reduced-order bilinear forms (ROM stiffness matrices) via element-wise projection. |
 
----
+***
 
-### BilinearFormROM
+### BilinearFormROM { #skrom.rom.bilinear_form_rom.BilinearFormROM }
 
 ```python
 rom.bilinear_form_rom.BilinearFormROM(
@@ -46,74 +39,70 @@ rom.bilinear_form_rom.BilinearFormROM(
 )
 ```
 
-#### What does this class do?
+**Summary:**
+Projects element-wise full-order stiffness matrices onto user-supplied reduced bases and accumulates them into a global reduced stiffness matrix. Handles the complete mapping from full DOFs to free (non-Dirichlet) DOFs, classifies elements into all-free and mixed-boundary groups for efficient processing, and supports chunked assembly to manage memory usage on large meshes.
 
-- Projects element-wise full stiffness matrices onto your reduced bases, then adds them up—for a fast global reduced stiffness matrix
-- Handles mapping from “full” degrees of freedom (DOFs) to “free” DOFs (skipping Dirichlet ones)
-- Smartly groups elements: some are all-Dirichlet-free, others are mixed—grouping helps make assembly much faster and use less memory
-- For huge problems, can assemble in “chunks”—avoiding running out of memory
-
----
+***
 
 #### Attributes
 
-| Name          | Type                                  | Description                                                       |
-|---------------|---------------------------------------|-------------------------------------------------------------------|
-| lob           | (ndarray, shape(N_free, r) or (N, r)) | Left (test) reduced basis                                         |
-| rob           | (ndarray, shape(N_free, r) or (N, r)) | Right (trial) reduced basis                                       |
-| free_dofs     | ndarray or None                       | Indices of "free" (non-Dirichlet) DOFs                            |
-| mean          | ndarray or None                       | Mean field (subtracted from the snapshots before SVD)             |
-| nthreads      | int                                   | How many threads to use for parallel computation                  |
-| dtype         | data - type                           | Which numeric type (e.g. float64)                                 |
-| ubasis        | Basis                                 | Full FE basis (trial functions)                                   |
-| vbasis        | Basis                                 | Full FE basis (test functions)                                    |
-| mapping       | (ndarray, shape(N_full))              | Maps global DOFs to reduced ones, -1 for Dirichlet ones           |
-| element_dofs  | ndarray                               | Local-to-global DOF mapping for each element                      |
-| free_indices  | ndarray                               | Which reduced DOF each element maps to                            |
-| mask          | ndarray of bool                       | Which DOFs per element are free                                   |
-| r             | int                                   | How many reduced basis vectors                                    |
-| groupA        | ndarray                               | Indexes of elements with **all free** (easy case)                 |
-| groupB        | ndarray                               | Indexes of elements with at least one Dirichlet (mixed case)      |
-| chunk_size    | int                                   | How many elements per chunk for groupA assembly                   |
-| n_full_chunks | int                                   | Number of full-sized element chunks                               |
-| remainder     | int                                   | Number of leftover (not full chunk) elements                      |
+| Name | Type | Description |
+|------|------|-------------|
+| lob | ndarray, shape (N_free, r) or (N, r) | Left (test) reduced basis vectors. |
+| rob | ndarray, shape (N_free, r) or (N, r) | Right (trial) reduced basis vectors. |
+| free_dofs | ndarray or None | Indices of free (non-Dirichlet) DOFs in the global system. |
+| mean | ndarray or None | Mean field subtracted from snapshots prior to SVD-based basis construction. |
+| nthreads | int | Number of threads used for parallel assembly operations. |
+| dtype | data-type | Numeric precision for assembly (e.g., `np.float64`). |
+| ubasis | Basis | Full finite element basis for trial functions. |
+| vbasis | Basis | Full finite element basis for test functions. |
+| mapping | ndarray, shape (N_full,) | Maps each global DOF to its reduced index; entries are `-1` for Dirichlet-constrained DOFs. |
+| element_dofs | ndarray | Local-to-global DOF mapping for each element in the mesh. |
+| free_indices | ndarray | Reduced DOF index each element node maps to, after Dirichlet filtering. |
+| mask | ndarray of bool | Boolean mask identifying free DOFs within each element's local DOF set. |
+| r | int | Number of reduced basis vectors retained. |
+| groupA | ndarray | Element indices for elements whose DOFs are entirely free (fast assembly path). |
+| groupB | ndarray | Element indices for elements with at least one Dirichlet-constrained DOF (mixed case). |
+| chunk_size | int | Number of elements processed per chunk during groupA assembly. |
+| n_full_chunks | int | Number of complete chunks in the groupA assembly pass. |
+| remainder | int | Number of leftover elements in the final (incomplete) chunk. |
 
----
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [assemble](#skrom.rom.bilinear_form_rom.BilinearFormROM.assemble) | Build the global reduced stiffness matrix from all projected element matrices. |
-| [extract_element_matrices](#skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices) | Get all local full stiffness matrices (per element), ready to be projected.   |
+| [assemble](#skrom.rom.bilinear_form_rom.BilinearFormROM.assemble) | Project all element stiffness matrices onto the reduced basis and accumulate into the global reduced stiffness matrix. |
+| [extract_element_matrices](#skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices) | Extract per-element full-order stiffness matrices, ready for projection onto the reduced basis. |
 
----
+***
 
-##### assemble
+#### assemble { #skrom.rom.bilinear_form_rom.BilinearFormROM.assemble }
 
 ```python
 rom.bilinear_form_rom.BilinearFormROM.assemble(vbasis=None, **kwargs)
 ```
 
-**What does it do?**  
-Projects every local element stiffness matrix onto the reduced basis, and adds them all up to give the reduced global stiffness matrix, only using “free” DOFs (ignores Dirichlet as needed).
+**Summary:**
+Iterates over all mesh elements, projects each local full-order stiffness matrix onto the left and right reduced bases, and accumulates contributions into the global reduced stiffness matrix \( K_r \in \mathbb{R}^{r \times r} \). Only free (non-Dirichlet) DOFs participate in the projection. GroupA elements (all-free DOFs) are processed in chunks for memory efficiency; GroupB elements (mixed boundary) are handled separately.
 
-###### Parameters
+##### Parameters
 
-| Name     | Type   | Description                                              | Default   |
-|----------|--------|----------------------------------------------------------|-----------|
-| vbasis   | Basis  | FE basis for test functions (default: uses `ubasis`)     | `None`    |
-| **kwargs |        | Any extra parameters for the form/assembly process.      | `{}`      |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| vbasis | Basis or None | FE basis for test functions; falls back to `ubasis` if not provided. | `None` |
+| **kwargs | dict | Additional keyword arguments forwarded to the underlying form assembly. | `{}` |
 
-###### Returns
+##### Returns
 
-| Name      | Type                   | Description                        |
-|-----------|------------------------|------------------------------------|
-| K_reduced | (ndarray, shape(r, r)) | The assembled reduced stiffness matrix |
+| Name | Type | Description |
+|------|------|-------------|
+| K_reduced | ndarray, shape (r, r) | Assembled global reduced stiffness matrix. |
 
----
+***
 
-##### extract_element_matrices
+#### extract_element_matrices { #skrom.rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices }
 
 ```python
 rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices(
@@ -123,29 +112,26 @@ rom.bilinear_form_rom.BilinearFormROM.extract_element_matrices(
 )
 ```
 
-**What does it do?**  
-For a given (full) bilinear form, returns the stiffness matrix for *each element* in the mesh—a key step before reducing.
+**Summary:**
+Evaluates the full-order bilinear form element by element and returns the resulting local stiffness matrices as a single array. This is the preparatory step before projection—each element matrix will subsequently be projected onto the reduced basis during assembly.
 
-###### Parameters
+##### Parameters
 
-| Name   | Type         | Description                                                          | Default    |
-|--------|--------------|----------------------------------------------------------------------|------------|
-| form   | BilinearForm | The full-order bilinear form                                         | _required_ |
-| ubasis | Basis        | FE basis for the trial function                                      | _required_ |
-| vbasis | Basis        | FE basis for the test function (if missing, uses `ubasis`)           | `None`     |
-| kwargs | dict         | Extra arguments for assembly                                         | `{}`       |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| form | BilinearForm | Full-order bilinear form to evaluate element-wise. | _required_ |
+| ubasis | Basis | FE basis for trial functions. | _required_ |
+| vbasis | Basis or None | FE basis for test functions; defaults to `ubasis` if not provided. | `None` |
+| **kwargs | dict | Additional arguments forwarded to the form assembly routine. | `{}` |
 
-###### Returns
+##### Returns
 
-| Name             | Type    | Description                                                                                                    |
-|------------------|---------|----------------------------------------------------------------------------------------------------------------|
-| element_matrices | ndarray | Array, shape (n_elements, Nbfun, Nbfun): local stiffness matrix for each element (Nbfun = number of basis funcs)|
+| Name | Type | Description |
+|------|------|-------------|
+| element_matrices | ndarray, shape (n_elements, Nbfun, Nbfun) | Stack of local stiffness matrices, one per element. `Nbfun` denotes the number of local basis functions per element. |
 
----
+***
 
-**In Summary:**
+#### Notes
 
-- Use `BilinearFormROM` in your ROM code to efficiently build reduced stiffness matrices, even for huge models with Dirichlet BCs.
-- Takes care of all index mapping, boundary condition issues, and can avoid big memory spikes using grouping/chunking.
-- Assembly is super-efficient, and works directly with your reduced bases.
-
+`BilinearFormROM` is the recommended entry point for constructing reduced stiffness matrices in projection-based ROM workflows. It handles all index mapping between full and free DOFs, classifies elements for optimized assembly paths, and avoids memory spikes through chunked processing—making it suitable for large-scale FEM problems with non-trivial Dirichlet boundary conditions.

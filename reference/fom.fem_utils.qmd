@@ -1,30 +1,32 @@
 # fom.fem_utils
 
-Utilities for finite element (FE) work—especially handy for preconditioners, mesh, and nonlinear solvers.
+Utilities for finite element (FE) workflows—designed to simplify mesh handling, accelerate solvers, and streamline nonlinear problem setups.
 
-**Summary:**  
-Provides functions for mesh/basis handling, fast solvers, region splitting, domain helpers, and attribute cleanup.  
-Perfect for making FE codes faster, cleaner, and easier to use.
+**Summary:**
+A collection of helper functions covering mesh and basis manipulation, fast linear and nonlinear solvers, domain loading, and attribute cleanup. These utilities reduce boilerplate and improve performance across FEM pipelines.
 
-**Author:**  
+**Purpose:**
+To provide reusable, composable building blocks that enhance efficiency and code clarity in finite element simulations—particularly when working with iterative solvers, region-partitioned computations, and domain abstractions.
+
+**Author:**
 Suparno Bhattacharyya
 
----
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
 | [build_pc_amgsa](#skrom.fom.fem_utils.build_pc_amgsa) | Build a fast algebraic multigrid (AMG) preconditioner. |
-| [compute_basis_regions](#skrom.fom.fem_utils.compute_basis_regions) | Make basis functions limited to mesh regions. |
-| [element2location](#skrom.fom.fem_utils.element2location) | Get coordinates (locations) for elements in your mesh. |
-| [load_domain](#skrom.fom.fem_utils.load_domain) | Load all info from `domain()` into your object. |
-| [load_mesh_and_basis](#skrom.fom.fem_utils.load_mesh_and_basis) | Load just mesh and basis from domain info. |
-| [newton_solver](#skrom.fom.fem_utils.newton_solver) | Newton nonlinear solver; uses PETSc if available. |
-| [petsc_solve_csr](#skrom.fom.fem_utils.petsc_solve_csr) | Solve `A x = b` with PETSc KSP, using sparse (CSR) matrices. |
-| [unwrap_attr](#skrom.fom.fem_utils.unwrap_attr) | Turn a 0-d object numpy array into its plain value. |
+| [compute_basis_regions](#skrom.fom.fem_utils.compute_basis_regions) | Restrict basis functions to specific mesh regions using element masks. |
+| [element2location](#skrom.fom.fem_utils.element2location) | Retrieve spatial coordinates for each element in a mesh. |
+| [load_domain](#skrom.fom.fem_utils.load_domain) | Load all outputs from `domain()` as attributes on an object. |
+| [load_mesh_and_basis](#skrom.fom.fem_utils.load_mesh_and_basis) | Load only mesh and basis from a domain definition. |
+| [newton_solver](#skrom.fom.fem_utils.newton_solver) | Newton nonlinear solver with optional PETSc acceleration. |
+| [petsc_solve_csr](#skrom.fom.fem_utils.petsc_solve_csr) | Solve `A x = b` using PETSc KSP with CSR sparse matrix input. |
+| [unwrap_attr](#skrom.fom.fem_utils.unwrap_attr) | Unwrap a 0-dimensional NumPy object array attribute to its plain value. |
 
----
+***
 
 ### build_pc_amgsa { #skrom.fom.fem_utils.build_pc_amgsa }
 
@@ -32,22 +34,22 @@ Suparno Bhattacharyya
 fom.fem_utils.build_pc_amgsa(A, **kwargs)
 ```
 
-Makes an algebraic multigrid (AMG) preconditioner—this helps large iterative solves (like CG) run much faster.
+Constructs an algebraic multigrid (AMG) preconditioner to accelerate convergence of large-scale iterative solvers, such as Conjugate Gradient (CG). AMG preconditioners are especially effective for elliptic PDE systems arising in structural and thermal FEM problems.
 
 #### Parameters
 
-| Name     | Type                              | Description                                   | Default    |
-|----------|-----------------------------------|-----------------------------------------------|------------|
-| A        | scipy.sparse matrix or array_like | System matrix you want to precondition.       | _required_ |
-| **kwargs | dict                              | Extra options for AMG solver.                 | `{}`       |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| A | scipy.sparse matrix or array_like | System matrix to precondition. | _required_ |
+| **kwargs | dict | Additional options forwarded to the AMG solver. | `{}` |
 
 #### Returns
 
-| Name   | Type                               | Description                                                               |
-|--------|------------------------------------|---------------------------------------------------------------------------|
-| M      | scipy.sparse.linalg.LinearOperator | The AMG preconditioner (as a linear operator for iterative solvers).      |
+| Name | Type | Description |
+|------|------|-------------|
+| M | scipy.sparse.linalg.LinearOperator | AMG preconditioner compatible with iterative solvers. |
 
----
+***
 
 ### compute_basis_regions { #skrom.fom.fem_utils.compute_basis_regions }
 
@@ -55,22 +57,22 @@ Makes an algebraic multigrid (AMG) preconditioner—this helps large iterative s
 fom.fem_utils.compute_basis_regions(basis, masks)
 ```
 
-Splits your basis functions into regions defined by boolean masks (True/False arrays showing which elements belong to which region).
+Partitions a global basis into multiple region-specific bases using boolean masks. Each mask identifies which elements belong to a given region, enabling localized assembly or region-wise computations.
 
 #### Parameters
 
-| Name   | Type                           | Description                                                         | Default    |
-|--------|--------------------------------|---------------------------------------------------------------------|------------|
-| basis  | object                         | A basis object (has `nelems` and `with_elements` method).           | _required_ |
-| masks  | dict of str to ndarray of bool | Maps region names to Boolean arrays for element selection.           | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| basis | object | Basis object exposing `nelems` and a `with_elements` method. | _required_ |
+| masks | dict of str to ndarray of bool | Maps region names to boolean arrays selecting the corresponding elements. | _required_ |
 
 #### Returns
 
-| Name         | Type                  | Description                                       |
-|--------------|-----------------------|---------------------------------------------------|
-| region_bases | dict of str to object | Maps region names to basis objects for each region.|
+| Name | Type | Description |
+|------|------|-------------|
+| region_bases | dict of str to object | Maps each region name to its corresponding restricted basis object. |
 
----
+***
 
 ### element2location { #skrom.fom.fem_utils.element2location }
 
@@ -78,21 +80,21 @@ Splits your basis functions into regions defined by boolean masks (True/False ar
 fom.fem_utils.element2location(mesh)
 ```
 
-Gives the spatial coordinates for every element of the mesh (based on mesh connectivity).
+Computes the spatial coordinates associated with each element by indexing mesh node positions through the connectivity array. Useful for element-level geometric computations such as quadrature point mapping or centroid evaluation.
 
 #### Parameters
 
-| Name   | Type   | Description                                                                                      | Default    |
-|--------|--------|--------------------------------------------------------------------------------------------------|------------|
-| mesh   | object | Has `p` (coords, shape [spatial_dim, n_nodes]) and `t` (connectivity, shape [n_nodes_elem, n_elems]) | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| mesh | object | Mesh object with `p` (node coordinates, shape `[spatial_dim, n_nodes]`) and `t` (connectivity, shape `[n_nodes_per_element, n_elements]`). | _required_ |
 
 #### Returns
 
-| Name           | Type                                         | Description                                                                      |
-|----------------|----------------------------------------------|----------------------------------------------------------------------------------|
-| element_coords | ndarray of shape (n_elements, n_local_nodes) | Each row: element coordinates (one coord per node, for each element).            |
+| Name | Type | Description |
+|------|------|-------------|
+| element_coords | ndarray of shape (n_elements, n_local_nodes) | Per-element node coordinates; each row corresponds to one element. |
 
----
+***
 
 ### load_domain { #skrom.fom.fem_utils.load_domain }
 
@@ -100,20 +102,19 @@ Gives the spatial coordinates for every element of the mesh (based on mesh conne
 fom.fem_utils.load_domain(instance)
 ```
 
-Calls your object’s `domain()` method and assigns all its outputs as attributes on the object.
+Calls the `domain()` method on the given object and assigns all key-value pairs in the returned dictionary as attributes directly on the object.
 
 #### Parameters
 
-| Name     | Type   | Description                                                          | Default    |
-|----------|--------|----------------------------------------------------------------------|------------|
-| instance | object | Any object with a `domain()` method returning a dict of attributes.  | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| instance | object | Any object implementing a `domain()` method that returns a dictionary of attributes. | _required_ |
 
 #### Notes
 
-Sets fields on your instance in-place.  
-Now you can use `instance.attr` to access domain attributes directly.
+Modifies the instance in-place. After calling this function, all domain fields are accessible directly as `instance.attr`—eliminating manual unpacking.
 
----
+***
 
 ### load_mesh_and_basis { #skrom.fom.fem_utils.load_mesh_and_basis }
 
@@ -121,20 +122,19 @@ Now you can use `instance.attr` to access domain attributes directly.
 fom.fem_utils.load_mesh_and_basis(instance)
 ```
 
-Loads just `mesh` and `basis` fields from your object’s `domain()` output to the object’s attributes.
+A focused variant of `load_domain` that loads only the `mesh` and `basis` fields from a `domain()` output, ignoring all other returned data.
 
 #### Parameters
 
-| Name     | Type   | Description                                                             | Default    |
-|----------|--------|-------------------------------------------------------------------------|------------|
-| instance | object | Object whose `domain()` returns at least 'mesh' and 'basis' keys.       | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| instance | object | Object whose `domain()` method returns at least `mesh` and `basis` keys. | _required_ |
 
 #### Notes
 
-Only `mesh` and `basis` are loaded (rest are ignored).  
-Instance is modified in-place.
+Only `mesh` and `basis` are attached to the instance; all other fields are discarded. Instance is modified in-place.
 
----
+***
 
 ### newton_solver { #skrom.fom.fem_utils.newton_solver }
 
@@ -162,11 +162,31 @@ fom.fem_utils.newton_solver(
 )
 ```
 
-Newton’s method nonlinear solver for systems of equations.  
-Uses PETSc KSP for linear solves if PETSc is installed (unless you turn it off).  
-Otherwise uses NumPy/Scipy solvers.
+Solves nonlinear systems of equations using Newton's method. At each iteration, the Jacobian is assembled and the resulting linear system is solved using PETSc KSP (if available) or a NumPy/SciPy fallback. Supports Dirichlet boundary condition enforcement, damped Newton updates via `alpha`, and optional reuse of the Krylov solver across iterations.
 
----
+#### Key Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| assemble_fn | callable | Assembles the Jacobian (tangent stiffness matrix). | _required_ |
+| rhs_fn | callable | Assembles the residual (right-hand side) vector. | _required_ |
+| u0 | ndarray | Initial guess for the solution. | _required_ |
+| dirichlet_dofs | array-like or None | Indices of Dirichlet-constrained degrees of freedom. | `None` |
+| dirichlet_vals | array-like or None | Prescribed values at Dirichlet DOFs. | `None` |
+| tol | float | Convergence tolerance on the residual norm. | `0.01` |
+| maxit | int | Maximum number of Newton iterations. | `50` |
+| alpha | float | Damping factor for Newton update step. | `1.0` |
+| jac_conditioner | bool | Apply conditioning to the Jacobian before solving. | `False` |
+| ksp_type | str | Krylov solver type (e.g., `'cg'`, `'gmres'`). | `'cg'` |
+| pc_type | str | Preconditioner type (e.g., `'ilu'`, `'jacobi'`). | `'ilu'` |
+| ksp_rtol | float | Relative tolerance for the Krylov solver. | `1e-08` |
+| ksp_atol | float | Absolute tolerance for the Krylov solver. | `0.0` |
+| ksp_max_it | int | Maximum Krylov iterations per Newton step. | `2000` |
+| petsc_options | dict or None | Additional PETSc runtime options. | `None` |
+| reuse_ksp | bool | Reuse the KSP object across iterations for efficiency. | `True` |
+| force_backend | str | Force solver backend: `'auto'`, `'petsc'`, or `'scipy'`. | `'auto'` |
+
+***
 
 ### petsc_solve_csr { #skrom.fom.fem_utils.petsc_solve_csr }
 
@@ -185,10 +205,23 @@ fom.fem_utils.petsc_solve_csr(
 )
 ```
 
-Solves `A x = b` using PETSc and Krylov solvers (good for large problems, uses cache for speed).  
-Input matrix must be CSR format (from SciPy).
+Solves the linear system \( Ax = b \) using PETSc's Krylov subspace solvers. Accepts a SciPy CSR matrix and converts it internally to PETSc format. An optional solver cache allows reuse of KSP objects, significantly reducing overhead in repeated solves (e.g., inside a Newton loop).
 
----
+#### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| A_csr | scipy.sparse.csr_matrix | System matrix in CSR format. | _required_ |
+| b | ndarray | Right-hand side vector. | _required_ |
+| ksp_type | str | Krylov method (e.g., `'cg'`, `'gmres'`, `'bicg'`). | `'cg'` |
+| pc_type | str | Preconditioner (e.g., `'ilu'`, `'jacobi'`, `'none'`). | `'ilu'` |
+| rtol | float | Relative convergence tolerance. | `1e-08` |
+| atol | float | Absolute convergence tolerance. | `0.0` |
+| max_it | int | Maximum number of solver iterations. | `2000` |
+| petsc_options | dict or None | Additional PETSc runtime configuration. | `None` |
+| cache | dict or None | Solver cache for KSP reuse across calls. | `None` |
+
+***
 
 ### unwrap_attr { #skrom.fom.fem_utils.unwrap_attr }
 
@@ -196,17 +229,16 @@ Input matrix must be CSR format (from SciPy).
 fom.fem_utils.unwrap_attr(instance, attr_name)
 ```
 
-If the named attribute is a 0-dimensional `numpy` object array, unwrap (flatten) it to the contained value.
+Inspects a named attribute on an object and, if it is a 0-dimensional NumPy array with object dtype, replaces it with the underlying scalar or Python object it wraps. This commonly arises when loading data from `.mat` files or NumPy archives where scalars are inadvertently boxed into 0-d arrays.
 
 #### Parameters
 
-| Name      | Type   | Description                         | Default    |
-|-----------|--------|-------------------------------------|------------|
-| instance  | object | The object holding the attribute.   | _required_ |
-| attr_name | str    | Attribute name (string).            | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| instance | object | Object holding the attribute to unwrap. | _required_ |
+| attr_name | str | Name of the attribute to inspect and unwrap. | _required_ |
 
 #### Notes
 
-Only works if attribute is a 0-dim numpy array with object dtype.  
-Instance is modified in-place—afterwards, the attribute is a plain value.
+Only takes effect when the attribute is a 0-dimensional NumPy array with `dtype=object`. The instance is modified in-place; after the call, the attribute holds a plain Python value rather than a NumPy wrapper.
 

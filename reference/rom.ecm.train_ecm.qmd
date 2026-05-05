@@ -1,15 +1,21 @@
-# rom.ecm.train_ecm { #skrom.rom.ecm.train_ecm }
+# rom.ecm.train_ecm
 
-`rom.ecm.train_ecm`
+**Purpose:**
+Provides high-level training routines for the Empirical Cubature Method (ECM) within the scikit-rom framework. These functions wrap the lower-level `EmpiricalCubatureMethod` class into streamlined workflows for constructing the Gauss-point selection and weight arrays needed for online ECM-based hyperreduced assembly.
 
+**Summary:**
+Contains two functions: `ECM`, which performs the core ECM training given a preassembled residual snapshot matrix, and `ECM_from_skrom`, which provides a fully end-to-end wrapper integrating residual collection, ECM training, and output packaging into a single call compatible with the scikit-rom notebook structure.
 
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [ECM](#skrom.rom.ecm.train_ecm.ECM) | ECM adapted to scikit-rom. |
-| [ECM_from_skrom](#skrom.rom.ecm.train_ecm.ECM_from_skrom) | End-to-end ECM wrapper for the scikit-rom notebook structure. |
+| [ECM](#skrom.rom.ecm.train_ecm.ECM) | Core ECM training routine adapted to the scikit-rom data layout. |
+| [ECM_from_skrom](#skrom.rom.ecm.train_ecm.ECM_from_skrom) | End-to-end ECM training wrapper for the scikit-rom notebook structure. |
+
+***
 
 ### ECM { #skrom.rom.ecm.train_ecm.ECM }
 
@@ -27,29 +33,33 @@ rom.ecm.train_ecm.ECM(
 )
 ```
 
-ECM adapted to scikit-rom.
+**Summary:**
+Performs ECM training adapted to the scikit-rom data layout. Takes the residual snapshot matrix `q_mus_ecm` returned by `collect_residuals_ecm`, computes its SVD to determine the empirical basis, runs the `EmpiricalCubatureMethod` selection algorithm to identify the optimal Gauss-point subset and weights, and returns the results in both raw index-weight form and as a dense per-element, per-Gauss-point multiplier array ready for online assembly.
 
-#### Parameters {.doc-section .doc-section-parameters}
+#### Parameters
 
-| Name                     | Type                                                           | Description                                                                                                     | Default      |
-|--------------------------|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|--------------|
-| q_mus_ecm                | (ndarray, shape(n_snapshots * r, n_elements * n_gauss_points)) | Matrix returned by collect_residuals_ecm(...). Each column corresponds to one element-Gauss-point contribution. | _required_   |
-| n_elements               | int                                                            | Number of elements in the mesh.                                                                                 | _required_   |
-| n_gauss_points           | int                                                            | Number of Gauss points per element.                                                                             | _required_   |
-| tol                      | float                                                          | Singular-value cutoff used to choose the ECM basis size.                                                        | `1e-05`      |
-| n_components             | int                                                            | If given, overrides tol and uses exactly this many left singular vectors.                                       | `None`       |
-| plot                     | bool                                                           | If True, plots the singular values.                                                                             | `False`      |
-| constrain_sum_of_weights | bool                                                           | Passed to EmpiricalCubatureMethod.SetUp(...).                                                                   | `False`      |
-| dtype                    | dtype                                                          | Floating-point dtype.                                                                                           | `np.float64` |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| q_mus_ecm | ndarray, shape (n_snapshots × r, n_elements × n_gauss_points) | Residual snapshot matrix returned by `collect_residuals_ecm`; each column corresponds to one element–Gauss-point contribution. | _required_ |
+| n_elements | int | Number of elements in the mesh. | _required_ |
+| n_gauss_points | int | Number of Gauss points per element. | _required_ |
+| tol | float | Singular value cutoff used to determine the ECM empirical basis size; smaller values retain more modes. | `1e-05` |
+| n_components | int or None | If provided, overrides `tol` and uses exactly this many left singular vectors for the ECM basis. | `None` |
+| plot | bool | If `True`, plots the singular value spectrum for diagnostic inspection. | `False` |
+| constrain_sum_of_weights | bool | Passed directly to `EmpiricalCubatureMethod.SetUp`; if `True`, constrains the sum of selected weights to match the original integration sum. | `False` |
+| dtype | numpy.dtype | Floating-point data type for all computations and output arrays. | `np.float64` |
+| svd_rank | int or None | If provided, truncates the SVD to this rank before ECM basis selection. | `None` |
 
-#### Returns {.doc-section .doc-section-returns}
+#### Returns
 
-| Name             | Type                                         | Description                                                   |
-|------------------|----------------------------------------------|---------------------------------------------------------------|
-| W                | (ndarray, shape(n_selected))                 | ECM weights for the selected flat indices.                    |
-| Z                | (ndarray, shape(n_selected))                 | Selected flat indices in [0, n_elements * n_gauss_points).    |
-| S                | ndarray                                      | Singular values of q_mus_ecm.T.                               |
-| gauss_weight_ecm | (ndarray, shape(n_elements, n_gauss_points)) | Dense ECM multiplier array for online assembly in scikit-rom. |
+| Name | Type | Description |
+|------|------|-------------|
+| W | ndarray, shape (n_selected,) | ECM weights for the selected flat Gauss-point indices. |
+| Z | ndarray, shape (n_selected,) | Selected flat indices in the range `[0, n_elements × n_gauss_points)` identifying the chosen Gauss points. |
+| S | ndarray | Singular values of `q_mus_ecm.T`, useful for inspecting the decay rate and validating the basis size choice. |
+| gauss_weight_ecm | ndarray, shape (n_elements, n_gauss_points) | Dense ECM multiplier array in per-element, per-Gauss-point layout, ready for direct use in online scikit-rom assembly routines. |
+
+***
 
 ### ECM_from_skrom { #skrom.rom.ecm.train_ecm.ECM_from_skrom }
 
@@ -75,10 +85,11 @@ rom.ecm.train_ecm.ECM_from_skrom(
 )
 ```
 
-End-to-end ECM wrapper for the scikit-rom notebook structure.
+**Summary:**
+Provides a fully end-to-end ECM training workflow designed for the scikit-rom notebook structure. Handles residual collection over the training parameter set, constructs the snapshot matrix `q_mus_ecm`, invokes the `ECM` training routine, and packages all outputs into a single result dictionary. This wrapper eliminates manual intermediate steps between snapshot collection and ECM weight production, making it the recommended entry point for ECM offline training in scikit-rom workflows.
 
-#### Returns {.doc-section .doc-section-returns}
+#### Returns
 
-| Name   | Type   | Description                                      |
-|--------|--------|--------------------------------------------------|
-| result | dict   | Keys: - q_mus_ecm - W - Z - S - gauss_weight_ecm |
+| Name | Type | Description |
+|------|------|-------------|
+| result | dict | Dictionary containing all ECM training outputs with the following keys: `q_mus_ecm` (residual snapshot matrix), `W` (selected ECM weights), `Z` (selected flat Gauss-point indices), `S` (singular values), and `gauss_weight_ecm` (dense per-element, per-Gauss-point multiplier array). |

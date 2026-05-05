@@ -604,13 +604,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#rom.ecm.helpers" id="toc-rom.ecm.helpers" class="nav-link active" data-scroll-target="#rom.ecm.helpers">rom.ecm.helpers</a>
   <ul class="collapse">
-  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
+  <li><a href="#conventions" id="toc-conventions" class="nav-link" data-scroll-target="#conventions">Conventions</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#active_ecm_elements" id="toc-active_ecm_elements" class="nav-link" data-scroll-target="#active_ecm_elements">active_ecm_elements</a></li>
-  <li><a href="#dense_ecm_weights" id="toc-dense_ecm_weights" class="nav-link" data-scroll-target="#dense_ecm_weights">dense_ecm_weights</a></li>
-  <li><a href="#flat_to_element_gauss_weights" id="toc-flat_to_element_gauss_weights" class="nav-link" data-scroll-target="#flat_to_element_gauss_weights">flat_to_element_gauss_weights</a></li>
-  <li><a href="#with_elements" id="toc-with_elements" class="nav-link" data-scroll-target="#with_elements">with_elements</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.active_ecm_elements" id="toc-skrom.rom.ecm.helpers.active_ecm_elements" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.active_ecm_elements">active_ecm_elements</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.dense_ecm_weights" id="toc-skrom.rom.ecm.helpers.dense_ecm_weights" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.dense_ecm_weights">dense_ecm_weights</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.flat_to_element_gauss_weights" id="toc-skrom.rom.ecm.helpers.flat_to_element_gauss_weights" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.flat_to_element_gauss_weights">flat_to_element_gauss_weights</a></li>
+  <li><a href="#skrom.rom.ecm.helpers.with_elements" id="toc-skrom.rom.ecm.helpers.with_elements" class="nav-link" data-scroll-target="#skrom.rom.ecm.helpers.with_elements">with_elements</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -624,17 +624,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.ecm.helpers" class="level1">
 <h1>rom.ecm.helpers</h1>
-<p><code>rom.ecm.helpers</code></p>
-<p><strong>Helper utilities for ECM-based hyperreduction.</strong></p>
-<p>This module supplies routines to prepare, convert, and work with ECM (Empirical Cubature Method) weights for reduced-order modeling.<br>
-It helps you turn selected (and possibly sparse or flat) ECM data into the <strong>dense per-element, per-Gauss-point arrays</strong> you need for fast, correct ROM assembly.</p>
+<p><strong>Purpose:</strong> Supplies utility routines for preparing, converting, and managing ECM (Empirical Cubature Method) weights so they are compatible with the ROM assembly classes in this package. Handles the conversion from various weight formats—sparse mappings, flat index-weight pairs, or dense arrays—into the standardized dense per-element, per-Gauss-point arrays expected by the ECM bilinear and linear form assemblers.</p>
+<p><strong>Summary:</strong> Provides four focused helper functions covering active element identification, dense weight array construction, flat-to-dense weight conversion with optional quadrature rescaling, and basis restriction to element subsets. These utilities form the bridge between ECM solver output (which may use absolute cubature weights or sparse representations) and the multiplicative-weight convention required by the ROM assemblers in this folder.</p>
 <hr>
-<section id="notes" class="level2">
-<h2 class="anchored" data-anchor-id="notes">Notes</h2>
-<ul>
-<li>The ECM bilinear and linear assemblers in this folder <strong>expect ECM weights as multipliers</strong> on scikit-fem’s native quadrature-based contributions (that is, on values already including <code>basis.dx</code>).</li>
-<li>If your ECM implementation gives <strong>absolute cubature weights</strong> (instead of multipliers for quadrature), use <code>base_quadrature_weights</code> (see below) so that the helper rescale them. This makes sure your weights are consistent and can be used as multiplicative factors during ROM assembly.</li>
-</ul>
+<section id="conventions" class="level2">
+<h2 class="anchored" data-anchor-id="conventions">Conventions</h2>
+<p>The ECM bilinear and linear form assemblers in this package expect ECM weights as <strong>multiplicative factors</strong> applied to scikit-fem’s native per-Gauss-point contributions—that is, values that already incorporate <code>basis.dx</code>. If your ECM implementation or external software returns <strong>absolute cubature weights</strong> (i.e., weights representing stand-alone integration values rather than multipliers), use <code>flat_to_element_gauss_weights</code> with the <code>base_quadrature_weights</code> argument to rescale them into the correct multiplicative form before passing to any ROM assembler.</p>
 <hr>
 </section>
 <section id="functions" class="level2">
@@ -649,32 +644,88 @@ It helps you turn selected (and possibly sparse or flat) ECM data into the <stro
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecm.helpers.active_ecm_elements">active_ecm_elements</a></td>
-<td>Returns the indices of elements that have at least one “active” Gauss point according to their ECM weight row.</td>
+<td>Return indices of elements with at least one active (nonzero) Gauss-point weight.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecm.helpers.dense_ecm_weights">dense_ecm_weights</a></td>
-<td>Builds a (dense) ECM weight array with shape <code>(n_elements, n_gauss_points)</code> for use in ROM.</td>
+<td>Construct a dense ECM weight array of shape <code>(n_elements, n_gauss_points)</code> from various input formats.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.ecm.helpers.flat_to_element_gauss_weights">flat_to_element_gauss_weights</a></td>
-<td>Converts a list of selected (flat) Gauss points and weights into a dense element × Gauss weight array. Optionally rescales with quadrature weights.</td>
+<td>Convert flat ECM index-weight pairs to a dense element × Gauss-point weight array, with optional quadrature rescaling.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecm.helpers.with_elements">with_elements</a></td>
-<td>Returns a version of a FacetBasis (or similar) limited to a chosen subset of elements.</td>
+<td>Restrict a FacetBasis or similar basis object to a specified subset of elements.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="active_ecm_elements" class="level3">
-<h3 class="anchored" data-anchor-id="active_ecm_elements">active_ecm_elements</h3>
+<section id="skrom.rom.ecm.helpers.active_ecm_elements" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.active_ecm_elements">active_ecm_elements</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.active_ecm_elements(weight_array, <span class="op">*</span>, atol<span class="op">=</span><span class="fl">0.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Returns the indices of all elements whose weights array has <strong>at least one</strong> active (non-zero, up to <code>atol</code> tolerance) Gauss point.<br>
-Useful for quickly identifying which elements in your mesh are used by ECM-based hyperreduction.</p>
+<p><strong>Summary:</strong> Scans the ECM weight array and returns the indices of all elements that have at least one Gauss-point weight whose absolute value exceeds <code>atol</code>. This provides a fast way to identify the active element subset used by ECM-based hyperreduction, enabling downstream assembly routines to restrict computation to only the contributing elements.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>weight_array</td>
+<td>ndarray, shape (n_elements, n_gauss_points)</td>
+<td>Dense ECM weight array to scan for active entries.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>atol</td>
+<td>float</td>
+<td>Absolute tolerance below which a weight is considered zero and the corresponding Gauss point inactive.</td>
+<td><code>0.0</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>active_indices</td>
+<td>ndarray of int</td>
+<td>Indices of elements containing at least one Gauss-point weight with absolute value greater than <code>atol</code>.</td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
-<section id="dense_ecm_weights" class="level3">
-<h3 class="anchored" data-anchor-id="dense_ecm_weights">dense_ecm_weights</h3>
+</section>
+<section id="skrom.rom.ecm.helpers.dense_ecm_weights" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.dense_ecm_weights">dense_ecm_weights</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.dense_ecm_weights(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    weight_data,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    n_elements,</span>
@@ -682,14 +733,20 @@ Useful for quickly identifying which elements in your mesh are used by ECM-based
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>,</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Creates a <strong>dense weight array</strong> of shape <code>(n_elements, n_gauss_points)</code>, ready for ROM assembly.</p>
-<p><strong>Parameters:</strong></p>
+<p><strong>Summary:</strong> Constructs a dense weight array of shape <code>(n_elements, n_gauss_points)</code> suitable for direct use in ROM assembly routines. Accepts three input formats for <code>weight_data</code>, allowing seamless integration with different ECM solver output conventions:</p>
+<ul>
+<li>A <strong>mapping</strong> from element index to a sequence of per-Gauss-point weights (sparse dictionary format).</li>
+<li>A <strong>dense array</strong> of shape <code>(n_elements, n_gauss_points)</code> passed through directly.</li>
+<li>A <strong>flat array</strong> of length <code>n_elements × n_gauss_points</code> reshaped into the required 2D layout.</li>
+</ul>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 21%">
-<col style="width: 64%">
-<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -702,34 +759,59 @@ Useful for quickly identifying which elements in your mesh are used by ECM-based
 <tbody>
 <tr class="odd">
 <td>weight_data</td>
-<td>Mapping[int, Sequence[float]] | ArrayLike</td>
-<td>One of: (a) mapping from <code>element_id</code> → array of per-Gauss weights; or (b) a dense array <code>(n_elements, n_gauss_points)</code> already; or (c) a flat array of length <code>n_elements * n_gauss_points</code>.</td>
+<td>Mapping[int, Sequence[float]] or array_like</td>
+<td>ECM weight data in one of the three supported formats described above.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>n_elements</td>
 <td>int</td>
-<td>Number of elements in your mesh</td>
+<td>Total number of elements in the mesh.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>n_gauss_points</td>
 <td>int</td>
-<td>Number of Gauss points per element</td>
+<td>Number of Gauss points per element.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>dtype</td>
 <td>DTypeLike</td>
-<td>Data type for the returned array</td>
+<td>Numeric data type for the returned array.</td>
 <td><code>np.float64</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-1" class="level4">
+<h4 class="anchored" data-anchor-id="returns-1">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>weights</td>
+<td>ndarray, shape (n_elements, n_gauss_points)</td>
+<td>Dense ECM weight array ready for use in ROM assembly.</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="flat_to_element_gauss_weights" class="level3">
-<h3 class="anchored" data-anchor-id="flat_to_element_gauss_weights">flat_to_element_gauss_weights</h3>
+</section>
+<section id="skrom.rom.ecm.helpers.flat_to_element_gauss_weights" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.flat_to_element_gauss_weights">flat_to_element_gauss_weights</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.flat_to_element_gauss_weights(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    n_elements,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    n_gauss_points,</span>
@@ -739,14 +821,17 @@ Useful for quickly identifying which elements in your mesh are used by ECM-based
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    base_quadrature_weights<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Converts</strong> a flat list of selected Gauss-point indices and weights into the dense <code>(n_elements, n_gauss_points)</code> ECM weights array.</p>
-<p><strong>Parameters:</strong></p>
+<p><strong>Summary:</strong> Converts the flat index-weight pairs produced by an ECM solver into a dense <code>(n_elements, n_gauss_points)</code> weight array. The flat <code>selected_indices</code> array contains Gauss-point indices in the linearized element × quadrature-point space (as typically output by ECM algorithms), and <code>selected_weights</code> holds their corresponding ECM weights.</p>
+<p>When <code>base_quadrature_weights</code> is provided, each ECM weight is divided by the corresponding reference quadrature weight at that Gauss point. This rescaling is required when the ECM solver returns <strong>absolute cubature weights</strong> rather than multipliers for <code>basis.dx</code>-scaled contributions. After rescaling, the resulting weights are consistent with the multiplicative convention expected by the ROM assemblers in this package:</p>
+<p>[ w_{e,q}^{} = ]</p>
+<section id="parameters-2" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 13%">
-<col style="width: 10%">
-<col style="width: 68%">
-<col style="width: 7%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -760,59 +845,142 @@ Useful for quickly identifying which elements in your mesh are used by ECM-based
 <tr class="odd">
 <td>n_elements</td>
 <td>int</td>
-<td>Number of mesh elements</td>
+<td>Total number of elements in the mesh.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>n_gauss_points</td>
 <td>int</td>
-<td>Number of Gauss points per element</td>
+<td>Number of Gauss points per element.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>selected_indices</td>
-<td>ArrayLike</td>
-<td>Flat indices for the selected Gauss points (as from ECM)</td>
+<td>array_like</td>
+<td>Flat indices of the ECM-selected Gauss points in the linearized (element × quadrature point) space.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>selected_weights</td>
-<td>ArrayLike</td>
-<td>ECM weights for the corresponding Gauss points</td>
+<td>array_like</td>
+<td>ECM weights corresponding to each selected Gauss point.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>base_quadrature_weights</td>
-<td>ArrayLike or None</td>
-<td>(optional) Reference quadrature weights (length <code>n_gauss_points</code>). Used for scaling to match scikit-fem’s expectations.</td>
+<td>array_like or None</td>
+<td>Reference quadrature weights of length <code>n_gauss_points</code>; when provided, ECM weights are divided by these to convert from absolute cubature to multiplicative form.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>dtype</td>
 <td>DTypeLike</td>
-<td>Data type for the returned array</td>
+<td>Numeric data type for the returned array.</td>
 <td><code>np.float64</code></td>
 </tr>
 </tbody>
 </table>
-<p>If <code>base_quadrature_weights</code> is given, each ECM weight is <strong>divided by the corresponding quadrature weight</strong>.<br>
-This is needed if your weights are <em>absolute cubature</em> weights—not pure multipliers.</p>
+</section>
+<section id="returns-2" class="level4">
+<h4 class="anchored" data-anchor-id="returns-2">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>weight_array</td>
+<td>ndarray, shape (n_elements, n_gauss_points)</td>
+<td>Dense ECM weight array in multiplicative form, ready for ROM assembly. Unselected Gauss points receive a weight of zero.</td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
-<section id="with_elements" class="level3">
-<h3 class="anchored" data-anchor-id="with_elements">with_elements</h3>
+</section>
+<section id="skrom.rom.ecm.helpers.with_elements" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecm.helpers.with_elements">with_elements</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecm.helpers.with_elements(<span class="va">self</span>, elements<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Returns a modified <code>FacetBasis</code> (or similar basis object) restricted to a subset of elements in the mesh.</p>
-<ul>
-<li><code>elements</code> is a list or array of element indices you want included.</li>
-<li>Useful to run computations only on active ECM elements or any smaller region.</li>
-</ul>
+<p><strong>Summary:</strong> Returns a modified version of a <code>FacetBasis</code> (or compatible basis object) that is restricted to a specified subset of mesh elements. This is particularly useful for constructing the hyperreduced basis object used during ECM assembly, where only the active elements contribute and full-mesh basis operations would be wasteful.</p>
+<section id="parameters-3" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-3">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>self</td>
+<td>Basis</td>
+<td>The basis object to restrict (FacetBasis or compatible type).</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>elements</td>
+<td>array_like of int or None</td>
+<td>Indices of the elements to retain; if <code>None</code>, the full basis is returned unchanged.</td>
+<td><code>None</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="returns-3" class="level4">
+<h4 class="anchored" data-anchor-id="returns-3">Returns</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>restricted_basis</td>
+<td>Basis</td>
+<td>A basis object covering only the specified element subset, with mesh connectivity and quadrature data adjusted accordingly.</td>
+</tr>
+</tbody>
+</table>
 <hr>
-<p><strong>Summary:</strong><br>
-- Use these helpers to convert and prepare your ECM weights into the format needed for fast, correct ROM and hyperreduced assembly. - Especially helpful if your ECM solver or external software returns weights in a different format from what your ROM assemblers need!<br>
-- Remember: ECM weights for ROM assembly usually <strong>multiply</strong> each <code>(element, Gauss-point)</code> contribution, not replace them.</p>
+</section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p>Use these helpers in the following order for a typical ECM weight preparation workflow:</p>
+<ol type="1">
+<li>Run your ECM solver to obtain flat <code>selected_indices</code> and <code>selected_weights</code>.</li>
+<li>Call <code>flat_to_element_gauss_weights</code> (with <code>base_quadrature_weights</code> if using absolute cubature weights) to produce the dense weight array.</li>
+<li>Pass the result to <code>active_ecm_elements</code> to identify the contributing elements.</li>
+<li>Use <code>with_elements</code> to restrict your FE basis to those active elements before passing to <code>BilinearFormHYPERROM_ecm</code> or the linear form equivalent.</li>
+</ol>
 
 
+</section>
 </section>
 </section>
 </section>

@@ -1,23 +1,14 @@
-# rom.deim.deim { #skrom.rom.deim.deim }
+# rom.deim.deim
 
-`rom.deim.deim`
+**Purpose:**
+Implements the Discrete Empirical Interpolation Method (DEIM) for accelerating nonlinear term evaluation in reduced-order models within finite element frameworks. By restricting nonlinear force evaluations to a small set of strategically selected degrees of freedom and reconstructing the full term via interpolation, DEIM reduces the computational cost of nonlinear ROM evaluation by orders of magnitude while preserving accuracy.
 
-Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.
+**Summary:**
+Provides the `deim` class, which constructs an efficient approximation of nonlinear force terms by computing empirical modes from snapshot data, selecting optimal interpolation points via a greedy algorithm, and building the DEIM projection matrix for fast online reconstruction. Selected DOFs are mapped to finite element indicators to enable sparse assembly during online evaluation. The method transforms nonlinear term evaluation from \(\mathcal{O}(n)\) to \(\mathcal{O}(m)\) where \(m \ll n\), making real-time and large-scale nonlinear ROM simulation tractable.
 
-This module implements DEIM for reducing the dimension of nonlinear force terms in 
-reduced-order models within finite element frameworks. DEIM enables efficient 
-evaluation of nonlinear terms by:
+**Author:** Suparno Bhattacharyya
 
-- Computing empirical modes from nonlinear force snapshots via SVD
-- Selecting optimal interpolation points using greedy algorithms
-- Constructing projection matrices for fast nonlinear term approximation
-- Mapping selected DOFs to element indicators for efficient assembly
-
-**TL;DR**: Dramatically reduces computational cost of nonlinear ROM evaluation 
-by approximating nonlinear terms using interpolation at carefully selected points,
-achieving significant speedups while maintaining accuracy.
-
-Author: Suparno Bhattacharyya
+***
 
 ## Classes
 
@@ -25,77 +16,59 @@ Author: Suparno Bhattacharyya
 | --- | --- |
 | [deim](#skrom.rom.deim.deim.deim) | Discrete Empirical Interpolation Method for nonlinear ROM acceleration. |
 
+***
+
 ### deim { #skrom.rom.deim.deim.deim }
 
 ```python
 rom.deim.deim.deim(mesh, F_nl, V_sel, tol_f=0.01, extra_modes=0)
 ```
 
-Discrete Empirical Interpolation Method for nonlinear ROM acceleration.
+**Summary:**
+Addresses the computational bottleneck in nonlinear reduced-order models where nonlinear terms must otherwise be evaluated at all degrees of freedom regardless of basis size. The DEIM procedure proceeds through four stages:
 
-**TL;DR**: Reduces computational cost of nonlinear terms in ROMs by ~1000x 
-through strategic sampling and interpolation, enabling real-time nonlinear 
-PDE solutions.
+1. **Empirical Mode Analysis:** Computes dominant modes of the nonlinear force snapshot matrix via SVD to capture the essential nonlinear behavior patterns in a compact basis.
+2. **Optimal Point Selection:** Applies a greedy algorithm to select interpolation points that maximize information content and minimize approximation error in the empirical subspace.
+3. **Projection Matrix Construction:** Builds the DEIM projection matrix enabling fast reconstruction of the full nonlinear term from values sampled at the selected points only.
+4. **Element Mapping:** Maps selected DOFs to finite element indicators for efficient sparse matrix assembly during online ROM evaluation.
 
-The Discrete Empirical Interpolation Method (DEIM) addresses the computational 
-bottleneck in nonlinear reduced-order models where nonlinear terms must still 
-be evaluated at all degrees of freedom. DEIM constructs an efficient 
-approximation by:
+This approach is most effective for nonlinear PDEs with smooth or localized nonlinear behavior, real-time control applications, and systems where nonlinear term evaluation dominates the online computational cost.
 
-1. **Empirical Mode Analysis**: Computes dominant modes of nonlinear force 
-   snapshots using SVD to capture the essential nonlinear behavior patterns.
+#### Parameters
 
-2. **Optimal Point Selection**: Uses a greedy algorithm to select interpolation 
-   points that maximize information content while minimizing approximation error.
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| mesh | object | Finite element mesh containing connectivity information and node data. | _required_ |
+| F_nl | ndarray, shape (n_dofs, n_snapshots) | Snapshot matrix of nonlinear force evaluations; each column is the nonlinear force vector for one parameter instance. | _required_ |
+| V_sel | ndarray, shape (n_dofs, n_modes) | Reduced basis matrix from POD, used for solution space projection. | _required_ |
+| tol_f | float | Tolerance for SVD mode selection based on singular value decay; smaller values retain more modes for higher accuracy. | `1e-2` |
+| extra_modes | int | Additional empirical modes to retain beyond those selected by the tolerance criterion, useful for capturing marginal nonlinear effects. | `0` |
 
-3. **Projection Matrix Construction**: Builds a projection matrix that enables 
-   fast reconstruction of full nonlinear terms from interpolated values.
+#### Attributes
 
-4. **Element Mapping**: Maps selected degrees of freedom to finite element 
-   indicators for efficient sparse assembly operations.
+| Name | Type | Description |
+|------|------|-------------|
+| U_fs | ndarray | Truncated empirical basis matrix containing the selected nonlinear modes. |
+| deim_mat | ndarray | DEIM projection matrix enabling fast nonlinear term reconstruction: \( \mathbf{F}_{\text{approx}} = V^\top U_{fs} \cdot D \cdot \mathbf{F}_{\text{sampled}} \), where \(D\) is `deim_mat`. |
+| xi | ndarray of int | Binary element indicator vector marking which elements contain at least one selected DOF. |
+| n_f_sel | int | Number of empirical modes selected for DEIM approximation. |
 
-The method transforms the nonlinear term evaluation from O(n) to O(m) where 
-m << n, achieving dramatic computational savings essential for real-time 
-applications.
-
-#### Parameters {.doc-section .doc-section-parameters}
-
-| Name        | Type                                   | Description                                                                                                                                               | Default    |
-|-------------|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| mesh        | object                                 | Finite element mesh containing connectivity information and node data.                                                                                    | _required_ |
-| F_nl        | ndarray of shape (n_dofs, n_snapshots) | Snapshot matrix of nonlinear force evaluations at various parameter values. Each column represents the nonlinear force vector for one parameter instance. | _required_ |
-| V_sel       | ndarray of shape (n_dofs, n_modes)     | Reduced basis matrix from POD, used for solution space projection.                                                                                        | _required_ |
-| tol_f       | float                                  | Tolerance for SVD mode selection based on singular value decay. Smaller  values retain more modes for higher accuracy.                                    | `1e-2`     |
-| extra_modes | int                                    | Additional empirical modes to retain beyond those selected by tolerance criterion, useful for capturing marginal nonlinear effects.                       | `0`        |
-
-#### Attributes {.doc-section .doc-section-attributes}
-
-| Name     | Type           | Description                                                                                                            |
-|----------|----------------|------------------------------------------------------------------------------------------------------------------------|
-| U_fs     | ndarray        | Truncated empirical basis matrix containing selected nonlinear modes.                                                  |
-| deim_mat | ndarray        | DEIM projection matrix enabling fast nonlinear term reconstruction: F_nl_approx = V.T @ U_fs @ deim_mat @ F_nl_sampled |
-| xi       | ndarray of int | Binary element indicator vector marking which elements contain selected DOFs.                                          |
-| n_f_sel  | int            | Number of empirical modes selected for DEIM approximation.                                                             |
-
-#### Notes {.doc-section .doc-section-notes}
+#### Notes
 
 DEIM is particularly effective for:
 
 - Nonlinear PDEs with localized nonlinear effects
-- Real-time control applications requiring fast ROM evaluation  
+- Real-time control applications requiring fast online ROM evaluation
 - Problems where nonlinear term evaluation dominates computational cost
 - Systems with smooth nonlinear behavior amenable to low-rank approximation
 
-The method assumes the nonlinear terms can be well-approximated by a low-rank 
-representation, which is typically valid for many physical systems.
+The method assumes nonlinear terms can be well-approximated by a low-rank representation, which holds for a broad class of physical systems.
 
-#### References {.doc-section .doc-section-references}
+#### References
 
-.. [1] Chaturantabut, S. and Sorensen, D.C., 2010. Nonlinear model reduction 
-       via discrete empirical interpolation method. SIAM journal on scientific 
-       computing, 32(5), pp.2737-2764.
+ Chaturantabut, S. and Sorensen, D.C., 2010. Nonlinear model reduction via discrete empirical interpolation method. *SIAM Journal on Scientific Computing*, 32(5), pp. 2737–2764.
 
-#### Examples {.doc-section .doc-section-examples}
+#### Examples
 
 ```python
 >>> # Generate nonlinear force snapshots
@@ -106,124 +79,92 @@ representation, which is typically valid for many physical systems.
 >>> # Use in ROM: F_approx = V.T @ U @ deim_matrix @ F_sampled
 ```
 
+***
+
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [deim_red](#skrom.rom.deim.deim.deim.deim_red) | Execute greedy DEIM algorithm for optimal interpolation point selection. |
-| [select_elems](#skrom.rom.deim.deim.deim.select_elems) | Select interpolation points and construct DEIM projection matrix. |
-| [sopt_red](#skrom.rom.deim.deim.deim.sopt_red) | S-OPT sampling: selects rows maximising the S-optimality measure |
+| [deim_red](#skrom.rom.deim.deim.deim.deim_red) | Execute the greedy DEIM algorithm for optimal interpolation point selection. |
+| [select_elems](#skrom.rom.deim.deim.deim.select_elems) | Select interpolation points and construct the DEIM projection matrix. |
+| [sopt_red](#skrom.rom.deim.deim.deim.sopt_red) | S-OPT sampling: select rows maximizing the S-optimality measure. |
 
-##### deim_red { #skrom.rom.deim.deim.deim.deim_red }
+***
+
+#### deim_red { #skrom.rom.deim.deim.deim.deim_red }
 
 ```python
 rom.deim.deim.deim.deim_red(f_basis, num_f_basis_vectors_used)
 ```
 
-Execute greedy DEIM algorithm for optimal interpolation point selection.
+**Summary:**
+Implements the core greedy DEIM algorithm that iteratively selects interpolation points to minimize approximation error in the empirical subspace. The procedure operates as follows:
 
-**TL;DR**: Implements the core greedy algorithm that iteratively selects 
-interpolation points to minimize approximation error in the empirical subspace.
+1. **Initial Selection:** Chooses the DOF with the largest absolute value in the first empirical mode as the starting interpolation point.
+2. **Iterative Refinement:** For each subsequent mode, solves for optimal interpolation coefficients using the previously selected points, then selects the DOF with the maximum residual as the next point.
+3. **Residual Minimization:** Each new point is chosen to minimize the reconstruction error for the current empirical mode given all previously selected points.
 
-The DEIM greedy algorithm works by:
+This greedy strategy ensures that selected points capture maximum information content while maintaining numerical stability through well-conditioned interpolation matrices. The computational complexity is \(\mathcal{O}(m^3)\) where \(m\) is the number of modes, making it efficient even for moderately large empirical subspaces.
 
-1. **Initial Selection**: Chooses the DOF with maximum absolute value in 
-   the first empirical mode as the starting interpolation point.
+##### Parameters
 
-2. **Iterative Refinement**: For each subsequent mode, solves for optimal 
-   interpolation coefficients using previously selected points, then 
-   selects the DOF with maximum residual as the next point.
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| f_basis | ndarray, shape (n_dofs, n_modes) | Empirical basis matrix from SVD of nonlinear force snapshots; each column represents one empirical mode. | _required_ |
+| num_f_basis_vectors_used | int | Number of empirical modes to use for interpolation point selection; cannot exceed the total number of available modes. | _required_ |
 
-3. **Residual Minimization**: Each new point is chosen to minimize the 
-   approximation error when reconstructing the current empirical mode 
-   from previously selected points.
+##### Returns
 
-This greedy strategy ensures that interpolation points capture maximum 
-information content while maintaining numerical stability through 
-well-conditioned interpolation matrices.
+| Name | Type | Description |
+|------|------|-------------|
+| f_basis_sampled | ndarray, shape (num_modes, num_modes) | Square matrix containing the rows of the empirical basis corresponding to selected interpolation points; used to construct the DEIM projection matrix. |
+| sampled_rows | list of int | Ordered list of DOF indices selected as interpolation points; the ordering reflects the greedy selection sequence. |
 
-###### Parameters {.doc-section .doc-section-parameters}
+##### Notes
 
-| Name                     | Type                               | Description                                                                                                            | Default    |
-|--------------------------|------------------------------------|------------------------------------------------------------------------------------------------------------------------|------------|
-| f_basis                  | ndarray of shape (n_dofs, n_modes) | Empirical basis matrix from SVD of nonlinear force snapshots. Each column represents one empirical mode.               | _required_ |
-| num_f_basis_vectors_used | int                                | Number of empirical modes to use for interpolation point selection. Cannot exceed the total number of available modes. | _required_ |
+The interpolation matrix `f_basis_sampled` remains well-conditioned by construction, as each successive point is chosen to maximize the residual norm. For problems with strongly localized nonlinear effects, DEIM typically selects points near regions of highest nonlinear activity, producing physically intuitive sampling patterns.
 
-###### Returns {.doc-section .doc-section-returns}
-
-| Name            | Type                                    | Description                                                                                                                                    |
-|-----------------|-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| f_basis_sampled | ndarray of shape (num_modes, num_modes) | Square matrix containing rows of the empirical basis corresponding  to selected interpolation points. Used to construct the projection matrix. |
-| sampled_rows    | list of int                             | Ordered list of DOF indices selected as interpolation points. The order reflects the greedy selection sequence.                                |
-
-###### Notes {.doc-section .doc-section-notes}
-
-The algorithm ensures that the interpolation matrix f_basis_sampled 
-remains well-conditioned by construction, as each new point is chosen 
-to maximize the residual norm.
-
-For problems with strong locality in nonlinear effects, DEIM typically 
-selects points near regions of highest nonlinear activity, leading to 
-physically intuitive sampling patterns.
-
-The computational complexity is O(m³) where m is the number of modes, 
-making it efficient even for moderately large empirical subspaces.
-
-###### Examples {.doc-section .doc-section-examples}
+##### Examples
 
 ```python
->>> # Empirical basis from SVD  
 >>> U, s, Vt = np.linalg.svd(F_snapshots, full_matrices=False)
 >>> sampled_basis, indices = deim_obj.deim_red(U, n_modes=10)
 >>> print(f"Condition number: {np.linalg.cond(sampled_basis):.2e}")
 ```
 
-##### select_elems { #skrom.rom.deim.deim.deim.select_elems }
+***
+
+#### select_elems { #skrom.rom.deim.deim.deim.select_elems }
 
 ```python
 rom.deim.deim.deim.select_elems(sopt=False)
 ```
 
-Select interpolation points and construct DEIM projection matrix.
+**Summary:**
+Performs the complete DEIM setup pipeline, from snapshot decomposition through to projection matrix construction. Executes the following steps in sequence:
 
-**TL;DR**: Core DEIM algorithm that identifies optimal sampling points 
-and builds the projection matrix for fast nonlinear term approximation.
+1. **SVD Analysis:** Decomposes the nonlinear snapshot matrix to identify the dominant empirical modes capturing essential nonlinear behavior.
+2. **Mode Selection:** Applies tolerance-based truncation, with optional additional modes (`extra_modes`) to balance accuracy against computational efficiency.
+3. **Point Selection:** Invokes the greedy DEIM algorithm (or S-OPT if `sopt=True`) to select interpolation points that minimize approximation error in the empirical subspace.
+4. **Element Mapping:** Maps selected DOFs to finite element indicators (`self.xi`) to enable efficient sparse assembly during online evaluation.
+5. **Projection Construction:** Builds the DEIM projection matrix using the Moore-Penrose pseudoinverse for numerical stability:
 
-This method performs the complete DEIM setup:
+\[
+\mathbf{F}_{\text{full}} \approx U_{fs} \cdot \left(U_{fs}[\text{selected rows}, :]\right)^{+} \cdot \mathbf{F}_{\text{sampled}}
+\]
 
-1. **SVD Analysis**: Decomposes nonlinear snapshots to identify dominant 
-   empirical modes that capture essential nonlinear behavior patterns.
+##### Returns
 
-2. **Mode Selection**: Applies tolerance-based truncation with optional 
-   extra modes to balance accuracy and computational efficiency.
+| Name | Type | Description |
+|------|------|-------------|
+| deim_mat | ndarray, shape (n_modes, n_selected_points) | DEIM projection matrix for reconstructing full nonlinear terms from sampled values; used as \( \mathbf{F}_{\text{approx}} = V^\top U_{fs} \cdot D \cdot \mathbf{F}_{\text{sampled}} \). |
+| sampled_rows | list of int | DOF indices selected as DEIM interpolation points; these are the only locations where nonlinear terms require evaluation during online ROM solves. |
 
-3. **Point Selection**: Uses greedy DEIM algorithm to select interpolation 
-   points that minimize approximation error in the empirical subspace.
+##### Notes
 
-4. **Element Mapping**: Maps selected DOFs to finite element indicators 
-   for efficient sparse matrix assembly during online evaluation.
+The pseudoinverse-based construction ensures numerical stability even when the empirical basis is not perfectly conditioned. The element mapping (`self.xi`) restricts assembly to only the finite elements containing selected DOFs, enabling sparse matrix operations throughout the online phase.
 
-5. **Projection Construction**: Builds the DEIM projection matrix that 
-   enables reconstruction: F_full ≈ U_fs @ pinv(U_fs[selected_rows, :]) @ F_sampled
-
-###### Returns {.doc-section .doc-section-returns}
-
-| Name         | Type                                          | Description                                                                                                                                |
-|--------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| deim_mat     | ndarray of shape (n_modes, n_selected_points) | DEIM projection matrix for reconstructing full nonlinear terms from  sampled values. Used as: F_approx = V.T @ U_fs @ deim_mat @ F_sampled |
-| sampled_rows | list of int                                   | Indices of degrees of freedom selected as DEIM interpolation points. These are the only DOFs where nonlinear terms need evaluation.        |
-
-###### Notes {.doc-section .doc-section-notes}
-
-The projection matrix construction uses the Moore-Penrose pseudoinverse 
-to ensure numerical stability even when the empirical basis is not 
-perfectly conditioned.
-
-The element mapping (self.xi) enables efficient assembly by identifying 
-which finite elements contribute to the selected DOFs, allowing sparse 
-matrix operations during online evaluation.
-
-###### Examples {.doc-section .doc-section-examples}
+##### Examples
 
 ```python
 >>> deim_obj = deim(mesh, F_snapshots, basis_matrix)
@@ -232,38 +173,39 @@ matrix operations during online evaluation.
 >>> print(f"Reduction ratio: {F_snapshots.shape[0]/len(points):.1f}x")
 ```
 
-##### sopt_red { #skrom.rom.deim.deim.deim.sopt_red }
+***
+
+#### sopt_red { #skrom.rom.deim.deim.deim.sopt_red }
 
 ```python
 rom.deim.deim.deim.sopt_red(f_basis, num_f_basis_vectors_used)
 ```
 
-S-OPT sampling: selects rows maximising the S-optimality measure
-S(Z^T Q) which jointly maximises column orthogonality and determinant
-of the information matrix (Z^T Q)^T (Z^T Q).
+**Summary:**
+Implements S-OPT sampling as an alternative to the greedy DEIM algorithm. Rather than minimizing pointwise residuals, S-OPT selects rows of the empirical basis by maximizing the S-optimality measure \( S(Z^\top Q) \), which jointly maximizes column orthogonality and the determinant of the information matrix \( (Z^\top Q)^\top (Z^\top Q) \). This produces sampling sets with better volumetric coverage of the empirical subspace compared to purely greedy selection.
 
-Uses efficient Sherman-Morrison rank-1 updates to avoid recomputing
-determinants at every candidate evaluation.
+Efficient Sherman–Morrison rank-1 updates are used to avoid recomputing determinants at every candidate evaluation, keeping the procedure tractable for large subspaces. The algorithm operates in two phases:
 
-Phase 1 (j < n_f): row + column expansion   — Slide 12/14 formula
-Phase 2 (j >= n_f): row-only append (oversampling) — Slide 13/15 formula
+- **Phase 1** (\( j < n_f \)): Row and column expansion following the Slide 12/14 formula.
+- **Phase 2** (\( j \geq n_f \)): Row-only append for oversampling, following the Slide 13/15 formula.
 
-###### Parameters {.doc-section .doc-section-parameters}
+##### Parameters
 
-| Name                     | Type                      | Description                                           | Default    |
-|--------------------------|---------------------------|-------------------------------------------------------|------------|
-| f_basis                  | ndarray(N, n_modes_total) | Full empirical basis from SVD of nonlinear snapshots. | _required_ |
-| num_f_basis_vectors_used | int                       | Number of basis vectors (modes) to use.               | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| f_basis | ndarray, shape (N, n_modes_total) | Full empirical basis matrix from SVD of nonlinear snapshots. | _required_ |
+| num_f_basis_vectors_used | int | Number of empirical basis vectors (modes) to use for point selection. | _required_ |
 
-###### Returns {.doc-section .doc-section-returns}
+##### Returns
 
-| Name          | Type            | Description                              |
-|---------------|-----------------|------------------------------------------|
-| f_sampled_row | ndarray         | Rows of f_basis at the selected indices. |
-| Z_indices     | list of int     | Selected row indices.                    |
-| Z_boolean     | ndarray of bool | Boolean mask of selected rows.           |
+| Name | Type | Description |
+|------|------|-------------|
+| f_sampled_row | ndarray | Rows of `f_basis` at the S-OPT selected indices. |
+| Z_indices | list of int | Selected row indices. |
+| Z_boolean | ndarray of bool | Boolean mask of selected rows, usable for direct array indexing. |
 
-###### References {.doc-section .doc-section-references}
+##### References
 
-Shin & Xiu, SIAM J. Sci. Comput. 38 (2016), pp. A385-A411.
-Lauzon et al., SIAM J. Sci. Comput. 46 (2024), arXiv:2203.16494.
+Shin, Y. and Xiu, D., 2016. On a near optimal sampling strategy for least squares polynomial regression. *SIAM Journal on Scientific Computing*, 38(3), pp. A385–A411.
+
+Lauzon, J. et al., 2024. S-OPT: A points selection strategy for hyper-reduction in reduced order models. *SIAM Journal on Scientific Computing*, 46. arXiv:2203.16494.

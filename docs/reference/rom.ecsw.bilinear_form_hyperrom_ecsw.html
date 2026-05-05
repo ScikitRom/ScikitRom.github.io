@@ -602,10 +602,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw" id="toc-skrom.rom.ecsw.bilinear_form_hyperrom_ecsw" class="nav-link active" data-scroll-target="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw">rom.ecsw.bilinear_form_hyperrom_ecsw</a>
+  <li><a href="#rom.ecsw.bilinear_form_hyperrom_ecsw" id="toc-rom.ecsw.bilinear_form_hyperrom_ecsw" class="nav-link active" data-scroll-target="#rom.ecsw.bilinear_form_hyperrom_ecsw">rom.ecsw.bilinear_form_hyperrom_ecsw</a>
   <ul class="collapse">
-  <li><a href="#tldr" id="toc-tldr" class="nav-link" data-scroll-target="#tldr">TL;DR</a></li>
-  <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
   <li><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw" id="toc-skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw" class="nav-link" data-scroll-target="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw">BilinearFormHYPERROM_ecsw</a></li>
@@ -624,19 +622,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw" class="level1">
+<section id="rom.ecsw.bilinear_form_hyperrom_ecsw" class="level1">
 <h1>rom.ecsw.bilinear_form_hyperrom_ecsw</h1>
-<p><code>rom.ecsw.bilinear_form_hyperrom_ecsw</code></p>
-<p>ECSW-based hyperreduction for finite element bilinear forms with element clustering.</p>
-<p>This module provides hyperreduction of bilinear forms using Energy-Conserving Sampling and Weighting (ECSW) combined with intelligent element clustering for efficient reduced-order stiffness assembly. It achieves dramatic computational speedups by clustering elements by number of free DOFs for vectorized operations, extracting and projecting element stiffness blocks onto reduced bases with weights, and assembling global reduced matrices via vectorized Einstein summation.</p>
-<section id="tldr" class="level2 doc-section doc-section-tldr">
-<h2 class="doc-section doc-section-tldr anchored" data-anchor-id="tldr">TL;DR</h2>
-<p>Enables substantial speedup in bilinear form assembly for ROMs while preserving stability and energy conservation through intelligent element clustering and weighted assembly strategies.</p>
-</section>
-<section id="author" class="level2 doc-section doc-section-author">
-<h2 class="doc-section doc-section-author anchored" data-anchor-id="author">Author</h2>
-<p>Suparno Bhattacharyya</p>
-</section>
+<p><strong>Purpose:</strong> Implements ECSW-based hyperreduction for finite element bilinear forms, enabling fast reduced-order stiffness matrix assembly by combining Energy-Conserving Sampling and Weighting (ECSW) with intelligent element clustering. Achieves substantial computational savings while preserving the energy conservation properties of the full-order operator—making it particularly suited for structural dynamics, wave propagation, and long-time integration scenarios.</p>
+<p><strong>Summary:</strong> Provides the <code>BilinearFormHYPERROM_ecsw</code> class, which assembles the hyperreduced bilinear form by clustering active elements by their free DOF count for vectorized processing, extracting local stiffness submatrices using advanced NumPy indexing, applying ECSW weights to preserve physical structure, and accumulating contributions into the final ( r r ) reduced stiffness matrix via vectorized Einstein summation. This approach is especially effective when element distributions are relatively uniform, energy conservation is critical, and real-time ROM evaluation is required.</p>
+<p><strong>Author:</strong> Suparno Bhattacharyya</p>
+<hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
 <table class="caption-top table">
@@ -653,6 +644,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw">BilinearFormHYPERROM_ecsw</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw(</span>
@@ -667,30 +659,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>ECSW-based hyperreduced bilinear form with element clustering for efficient assembly.</p>
-<p><strong>TL;DR</strong>: Dramatically accelerates bilinear form assembly substantially through energy-conserving element clustering and weighted sampling, providing both computational efficiency and numerical stability for real-time ROM applications.</p>
-<p>This class implements a sophisticated hyperreduction strategy that combines Energy-Conserving Sampling and Weighting (ECSW) with intelligent element clustering to achieve massive computational savings while preserving crucial physical properties. The approach works through several key innovations:</p>
+<p><strong>Summary:</strong> Implements a hyperreduction strategy that combines ECSW with element clustering to achieve computationally efficient and physically consistent reduced stiffness matrix assembly. The approach introduces several key innovations:</p>
 <ul>
-<li>Element clustering by free DOF count for vectorized operations</li>
-<li>Energy-conserving weighted assembly preserving physical properties</li>
-<li>Efficient submatrix extraction using advanced NumPy indexing</li>
-<li>Vectorized Einstein summation for parallel element contributions</li>
+<li><strong>Element clustering by free DOF count</strong> for vectorized batch operations, eliminating expensive Python loops over individual elements.</li>
+<li><strong>Energy-conserving weighted assembly</strong> that preserves physical properties such as symmetry and stability throughout the reduction.</li>
+<li><strong>Efficient submatrix extraction</strong> using advanced NumPy indexing to pull free-DOF blocks from local element matrices.</li>
+<li><strong>Vectorized Einstein summation</strong> for parallel contraction of entire element clusters onto the reduced basis.</li>
 </ul>
-<p>The hyperreduction is particularly effective for problems where:</p>
-<ul>
-<li>Energy conservation is critical (structural dynamics, wave propagation)</li>
-<li>Element distributions are relatively uniform (similar local DOF counts)</li>
-<li>Computational stability is paramount for long-time integration</li>
-<li>Real-time performance is required for control or optimization</li>
-</ul>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p>This hyperreduction strategy is most effective for problems where energy conservation is critical, element DOF distributions are relatively uniform, computational stability is paramount for long-time integration, and real-time performance is required for control or optimization workflows.</p>
+<hr>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 4%">
-<col style="width: 16%">
-<col style="width: 73%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -704,73 +689,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>form</td>
 <td>callable</td>
-<td>The original bilinear form function to be hyperreduced. Should accept test and trial basis functions and return element-wise stiffness contributions</td>
+<td>Full-order bilinear form function to be hyperreduced; should accept test and trial basis functions and return element-wise stiffness contributions.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>elem_weight</td>
-<td>scalar or array_like of shape (n_elements,)</td>
-<td>Element-wise ECSW weights determining the contribution of each element to the reduced assembly. Can be a single scalar applied to all elements or individual weights per element from ECSW analysis</td>
+<td>scalar or array_like, shape (n_elements,)</td>
+<td>ECSW weights determining each element’s contribution to the reduced assembly; either a scalar applied uniformly or per-element weights from ECSW analysis.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Trial-space finite element basis containing full DOF count, element connectivity, and quadrature information for the original mesh</td>
+<td>Trial-space FE basis containing full DOF count, element connectivity, and quadrature information for the original mesh.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>lob</td>
-<td>ndarray of shape (n_free, r) or (n_full, r)</td>
-<td>Left (test) reduced basis matrix. Shape depends on whether free_dofs is provided - if so, basis is defined only on free DOFs</td>
+<td>ndarray, shape (n_free, r) or (n_full, r)</td>
+<td>Left (test) reduced basis matrix; shape depends on whether <code>free_dofs</code> is provided—if so, the basis is defined only on free DOFs.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>rob</td>
-<td>ndarray of shape (n_free, r) or (n_full, r)</td>
-<td>Right (trial) reduced basis matrix with same shape requirements as lob. Projects full-order solutions to the r-dimensional reduced space</td>
+<td>ndarray, shape (n_free, r) or (n_full, r)</td>
+<td>Right (trial) reduced basis matrix with the same shape requirements as <code>lob</code>; projects full-order solutions to the (r)-dimensional reduced space.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>vbasis</td>
-<td>Basis</td>
-<td>Test-space finite element basis. If None, defaults to ubasis for standard Galerkin formulations</td>
+<td>Basis or None</td>
+<td>Test-space FE basis; defaults to <code>ubasis</code> for standard Galerkin formulations.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>free_dofs</td>
-<td>ndarray of int</td>
-<td>Indices of global DOFs that are free (non-Dirichlet). If provided, all reduced bases and operations are performed only on these DOFs</td>
+<td>ndarray of int or None</td>
+<td>Indices of global DOFs that are free (non-Dirichlet); if provided, all reduced bases and operations are restricted to these DOFs.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>mean</td>
-<td>ndarray</td>
-<td>Mean snapshot vector for solution centering. Required if snapshot data was mean-subtracted during reduced basis construction</td>
+<td>ndarray or None</td>
+<td>Mean snapshot vector for solution centering; required if snapshot data was mean-subtracted during reduced basis construction.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>nthreads</td>
 <td>int</td>
-<td>Number of threads for parallel element matrix extraction. Zero means serial execution, positive values enable multi-threaded assembly</td>
+<td>Number of threads for parallel element matrix extraction; <code>0</code> uses serial execution.</td>
 <td><code>0</code></td>
 </tr>
 <tr class="even">
 <td>dtype</td>
 <td>numpy.dtype</td>
-<td>Numerical precision for all computations and storage arrays</td>
+<td>Numeric precision for all computations and storage arrays.</td>
 <td><code>np.float64</code></td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
-<section id="attributes" class="level4 doc-section doc-section-attributes">
-<h4 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h4>
+<section id="attributes" class="level4">
+<h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 78%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -783,105 +769,106 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>lob</td>
 <td>ndarray</td>
-<td>Left reduced basis matrix, possibly restricted to free DOFs</td>
+<td>Left reduced basis matrix, possibly restricted to free DOFs.</td>
 </tr>
 <tr class="even">
 <td>rob</td>
 <td>ndarray</td>
-<td>Right reduced basis matrix, possibly restricted to free DOFs</td>
+<td>Right reduced basis matrix, possibly restricted to free DOFs.</td>
 </tr>
 <tr class="odd">
 <td>free_dofs</td>
 <td>ndarray or None</td>
-<td>Indices of free DOFs if Dirichlet boundary conditions are present</td>
+<td>Indices of free DOFs when Dirichlet boundary conditions are present.</td>
 </tr>
 <tr class="even">
 <td>mean</td>
 <td>ndarray or None</td>
-<td>Mean snapshot vector for solution centering and reconstruction</td>
+<td>Mean snapshot vector for solution centering and reconstruction.</td>
 </tr>
 <tr class="odd">
 <td>r</td>
 <td>int</td>
-<td>Reduced dimension (number of reduced basis vectors)</td>
+<td>Reduced dimension (number of reduced basis vectors).</td>
 </tr>
 <tr class="even">
 <td>mapping</td>
 <td>ndarray of int</td>
-<td>Mapping from full DOF indices to reduced free-DOF indices, with Dirichlet DOFs mapped to -1</td>
+<td>Mapping from full DOF indices to reduced free-DOF indices; Dirichlet-constrained DOFs are mapped to <code>-1</code>.</td>
 </tr>
 <tr class="odd">
 <td>cluster_idx</td>
 <td>list of ndarray</td>
-<td>Element indices grouped by number of free DOFs per element. Each entry contains indices of elements with the same free DOF count</td>
+<td>Element indices grouped by number of free DOFs per element; each entry contains indices of elements sharing the same free DOF count.</td>
 </tr>
 <tr class="even">
 <td>order_cluster</td>
 <td>list of ndarray</td>
-<td>Local DOF ordering within each cluster for efficient submatrix extraction. Shape: (cluster_size, n_free_dofs_in_cluster)</td>
+<td>Local DOF ordering within each cluster for efficient submatrix extraction; shape <code>(cluster_size, n_free_dofs_in_cluster)</code>.</td>
 </tr>
 <tr class="odd">
 <td>w_cluster</td>
 <td>list of ndarray</td>
-<td>ECSW weights corresponding to elements in each cluster</td>
+<td>ECSW weights corresponding to elements in each cluster.</td>
 </tr>
 <tr class="even">
 <td>R_test_free</td>
 <td>list of ndarray</td>
-<td>Test basis matrices restricted to free DOFs for each cluster. Shape: (cluster_size, n_free_dofs, r)</td>
+<td>Test basis matrices restricted to free DOFs for each cluster; shape <code>(cluster_size, n_free_dofs, r)</code>.</td>
 </tr>
 <tr class="odd">
 <td>R_trial_free</td>
 <td>list of ndarray</td>
-<td>Trial basis matrices restricted to free DOFs for each cluster. Shape: (cluster_size, n_free_dofs, r)</td>
+<td>Trial basis matrices restricted to free DOFs for each cluster; shape <code>(cluster_size, n_free_dofs, r)</code>.</td>
 </tr>
 <tr class="even">
 <td>unique_freedom</td>
 <td>ndarray of int</td>
-<td>Unique counts of free DOFs per element, determining the number of clusters</td>
+<td>Unique counts of free DOFs per element, determining the number of distinct clusters.</td>
 </tr>
 <tr class="odd">
 <td>weight</td>
 <td>ndarray</td>
-<td>Array of ECSW weights</td>
+<td>Full array of ECSW element weights.</td>
 </tr>
 <tr class="even">
 <td>nonzero_elements</td>
 <td>ndarray</td>
-<td>Indices of elements with non-zero weights</td>
+<td>Indices of elements with nonzero ECSW weights.</td>
 </tr>
 <tr class="odd">
 <td>ubasis_rom</td>
 <td>Basis</td>
-<td>Trial basis restricted to non-zero weight elements</td>
+<td>Trial basis restricted to nonzero-weight elements.</td>
 </tr>
 <tr class="even">
 <td>vbasis_rom</td>
 <td>Basis</td>
-<td>Test basis restricted to non-zero weight elements</td>
+<td>Test basis restricted to nonzero-weight elements.</td>
 </tr>
 <tr class="odd">
 <td>element_dofs</td>
 <td>ndarray</td>
-<td>Element-to-DOF connectivity for restricted mesh</td>
+<td>Element-to-DOF connectivity for the restricted mesh.</td>
 </tr>
 <tr class="even">
 <td>free_indices</td>
 <td>ndarray</td>
-<td>Free DOF indices for each element</td>
+<td>Free DOF indices for each element.</td>
 </tr>
 <tr class="odd">
 <td>mask</td>
 <td>ndarray of bool</td>
-<td>Boolean mask indicating which DOFs are free in each element</td>
+<td>Boolean mask indicating which DOFs are free within each element’s local DOF set.</td>
 </tr>
 <tr class="even">
 <td>n_freedom</td>
 <td>ndarray of int</td>
-<td>Number of free DOFs per element</td>
+<td>Number of free DOFs per element.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
@@ -895,38 +882,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw">assemble_weighted_ecsw</a></td>
-<td>Assemble the globally weighted reduced stiffness matrix using ECSW.</td>
+<td>Assemble the globally weighted reduced stiffness matrix using ECSW element clustering.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom">extract_element_matrices_rom</a></td>
-<td>Extract element stiffness matrices for hyperreduced mesh assembly.</td>
+<td>Extract local element stiffness matrices for the hyperreduced mesh.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw">assemble_weighted_ecsw</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Assemble the globally weighted reduced stiffness matrix using ECSW.</p>
-<p><strong>TL;DR</strong>: Main assembly method that orchestrates element clustering, vectorized stiffness extraction, ECSW weighting, and reduced basis projection to produce the final r×r reduced-order stiffness matrix.</p>
-<p>This method performs the complete ECSW hyperreduction assembly process through a sophisticated multi-stage algorithm:</p>
+<hr>
+</section>
+<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw">assemble_weighted_ecsw</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Orchestrates the complete ECSW hyperreduction assembly to produce the final reduced stiffness matrix ( K_r ^{r r} ). Executes the following five stages:</p>
 <ol type="1">
-<li><p><strong>Element Matrix Extraction</strong>: Calls element extraction routines to compute local stiffness matrices for all active elements, leveraging parallel processing when available.</p></li>
-<li><p><strong>Cluster-Based Processing</strong>: Processes elements in clusters based on their free DOF count, enabling highly efficient vectorized operations and eliminating expensive Python loops.</p></li>
-<li><p><strong>Submatrix Extraction</strong>: For each cluster, extracts the free DOF submatrices from local element matrices using advanced NumPy indexing for maximum efficiency.</p></li>
-<li><p><strong>ECSW Weighting</strong>: Applies energy-conserving weights to preserve physical properties while enabling computational reduction.</p></li>
-<li><p><strong>Vectorized Contraction</strong>: Uses Einstein summation to perform parallel contractions over entire clusters: A_reduced += Σ_e R_test[e]^T @ (w[e] * K_local[e]) @ R_trial[e]</p></li>
+<li><strong>Element Matrix Extraction:</strong> Calls element extraction routines to compute local stiffness matrices for all active elements, leveraging parallel processing when available.</li>
+<li><strong>Cluster-Based Processing:</strong> Processes elements in clusters grouped by their free DOF count, enabling highly efficient vectorized operations over entire element groups.</li>
+<li><strong>Submatrix Extraction:</strong> For each cluster, extracts free-DOF submatrices from local element matrices using advanced NumPy indexing.</li>
+<li><strong>ECSW Weighting:</strong> Applies energy-conserving element weights to preserve physical properties during reduction.</li>
+<li><strong>Vectorized Contraction:</strong> Uses Einstein summation to perform parallel contractions over entire clusters:</li>
 </ol>
-<p>The final result preserves the mathematical structure of the full-order operator while achieving dramatic computational savings through intelligent clustering and vectorization strategies.</p>
-<section id="parameters-1" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
+<p>[ K_r = <em>{e} R</em>{}[e]^(w[e] K_{}[e]) R_{}[e] ]</p>
+<p>The final result preserves the mathematical structure of the full-order operator while achieving substantial computational savings through intelligent clustering and vectorization.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 4%">
-<col style="width: 84%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -940,19 +926,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Additional keyword arguments passed to element extraction routines for controlling assembly behavior, such as material parameters or quadrature settings</td>
+<td>Additional keyword arguments forwarded to element extraction routines, such as material parameters or quadrature settings.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 4%">
-<col style="width: 10%">
-<col style="width: 84%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -964,39 +950,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>K_reduced</td>
-<td>ndarray of shape (r, r)</td>
-<td>Assembled reduced-order stiffness matrix ready for use in ROM systems. This matrix preserves the energy conservation properties of the full-order operator while enabling real-time evaluation</td>
+<td>ndarray, shape (r, r)</td>
+<td>Assembled reduced-order stiffness matrix ready for use in ROM linear solves; preserves the energy conservation properties of the full-order operator.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom">extract_element_matrices_rom</h5>
+<section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom">extract_element_matrices_rom</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Extract element stiffness matrices for hyperreduced mesh assembly.</p>
-<p><strong>TL;DR</strong>: Computes local element stiffness matrices for the reduced element set using either serial or parallel execution, providing the fundamental building blocks for ECSW-weighted global assembly.</p>
-<p>This method performs the core finite element integration to compute element-level contributions to the global bilinear form. The integration is performed only over elements selected by the hyperreduction strategy, dramatically reducing computational cost while maintaining accuracy through ECSW weighting.</p>
-<p>The method supports both execution modes:</p>
-<ul>
-<li><strong>Serial Mode</strong> (nthreads=0): Sequential element-by-element computation</li>
-<li><strong>Parallel Mode</strong> (nthreads&gt;0): Multi-threaded parallel element processing</li>
-</ul>
-<p>For each element, the method evaluates the bilinear form: K_e[i,j] = ∫_Ω_e φ_i(x) * form * φ_j(x) dx</p>
-<p>where φ_i, φ_j are basis functions and integration uses the quadrature rules embedded in the finite element basis.</p>
-<section id="parameters-2" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<p><strong>Summary:</strong> Evaluates the bilinear form element by element over the hyperreduced mesh and returns local stiffness matrices for all active elements. Integration is restricted to the ECSW-selected element subset, dramatically reducing computational cost relative to full-mesh evaluation. Supports both serial and parallel execution modes. For each element ( e ), the local stiffness matrix entry is:</p>
+<p>[ K_e[i,j] = _{_e} _i() (_j()) , d ]</p>
+<p>where ( _i, _j ) are local basis functions and integration uses the quadrature rules embedded in the finite element basis.</p>
+<section id="parameters-2" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-2">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 10%">
-<col style="width: 74%">
-<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1010,37 +990,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Trial-space finite element basis containing mesh connectivity, quadrature points, and basis function evaluations</td>
+<td>Trial-space FE basis containing mesh connectivity, quadrature points, and basis function evaluations.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>vbasis</td>
-<td>Basis</td>
-<td>Test-space finite element basis. If None, defaults to ubasis for standard Galerkin formulations</td>
+<td>Basis or None</td>
+<td>Test-space FE basis; defaults to <code>ubasis</code> for standard Galerkin formulations.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>elem_indices</td>
-<td>array_like of int</td>
-<td>Specific element indices to include in extraction. If None, processes all elements in the hyperreduced mesh</td>
+<td>array_like of int or None</td>
+<td>Specific element indices to process; defaults to all elements in the hyperreduced mesh.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Additional keyword arguments passed to the bilinear form evaluation, such as material parameters or other problem-specific data</td>
+<td>Additional keyword arguments forwarded to the bilinear form evaluation, such as material parameters or other problem-specific data.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<section id="returns-1" class="level5">
+<h5 class="anchored" data-anchor-id="returns-1">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 26%">
-<col style="width: 64%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1052,36 +1032,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>element_matrices</td>
-<td>ndarray of shape (n_elements, n_local_dofs, n_local_dofs)</td>
-<td>Array of local element stiffness matrices. Each element_matrices[e] contains the n_local_dofs × n_local_dofs stiffness matrix for element e</td>
+<td>ndarray, shape (n_elements, n_local_dofs, n_local_dofs)</td>
+<td>Stack of local element stiffness matrices; <code>element_matrices[e]</code> is the <code>n_local_dofs × n_local_dofs</code> stiffness matrix for element ( e ).</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="raises" class="level6 doc-section doc-section-raises">
-<h6 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h6>
+<section id="raises" class="level5">
+<h5 class="anchored" data-anchor-id="raises">Raises</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 9%">
-<col style="width: 84%">
+<col style="width: 35%">
+<col style="width: 64%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Name</th>
 <th>Type</th>
-<th>Description</th>
+<th>Condition</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
 <td>ValueError</td>
-<td>If trial and test bases have incompatible quadrature point counts, indicating a mismatch in integration rules</td>
+<td>Raised if trial and test bases have incompatible quadrature point counts, indicating a mismatch in integration rules.</td>
 </tr>
 </tbody>
 </table>
-</section>
+<hr>
 </section>
 </section>
 </section>
@@ -1098,23 +1075,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements">with_elements</a></td>
-<td>Return a similar basis on a subset of element indices.</td>
+<td>Return a restricted basis on a specified subset of element indices.</td>
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements">with_elements</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements(<span class="va">self</span>, elements<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Return a similar basis on a subset of element indices.</p>
-<p><strong>TL;DR</strong>: Creates a restricted FacetBasis containing only specified elements.</p>
-<section id="parameters-3" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-3">Parameters</h4>
+<p><strong>Summary:</strong> Returns a new <code>FacetBasis</code> instance restricted to the specified subset of element indices. Used internally to construct the hyperreduced basis objects <code>ubasis_rom</code> and <code>vbasis_rom</code> covering only the active (nonzero-weight) elements, and is also available for external use when restricting any compatible basis to an element subset.</p>
+<section id="parameters-3" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-3">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 18%">
-<col style="width: 57%">
-<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1127,20 +1104,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>elements</td>
-<td>Optional[Any]</td>
-<td>Subset of element indices to restrict the basis to</td>
+<td>array_like of int or None</td>
+<td>Subset of element indices to retain in the restricted basis; if <code>None</code>, the full basis is returned unchanged.</td>
 <td><code>None</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-2" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h4>
+<section id="returns-2" class="level4">
+<h4 class="anchored" data-anchor-id="returns-2">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 15%">
-<col style="width: 74%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1151,9 +1128,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
+<td>restricted_basis</td>
 <td>FacetBasis</td>
-<td>New FacetBasis instance restricted to specified elements</td>
+<td>New <code>FacetBasis</code> instance covering only the specified elements, with mesh connectivity and quadrature data adjusted accordingly.</td>
 </tr>
 </tbody>
 </table>

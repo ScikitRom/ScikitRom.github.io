@@ -606,8 +606,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
-  <li><a href="#nnlssolver" id="toc-nnlssolver" class="nav-link" data-scroll-target="#nnlssolver">NNLSSolver</a></li>
-  <li><a href="#nnls_termination" id="toc-nnls_termination" class="nav-link" data-scroll-target="#nnls_termination">NNLS_termination</a></li>
+  <li><a href="#skrom.rom.ecsw.custom_nnls.NNLSSolver" id="toc-skrom.rom.ecsw.custom_nnls.NNLSSolver" class="nav-link" data-scroll-target="#skrom.rom.ecsw.custom_nnls.NNLSSolver">NNLSSolver</a></li>
+  <li><a href="#skrom.rom.ecsw.custom_nnls.NNLS_termination" id="toc-skrom.rom.ecsw.custom_nnls.NNLS_termination" class="nav-link" data-scroll-target="#skrom.rom.ecsw.custom_nnls.NNLS_termination">NNLS_termination</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -621,18 +621,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.ecsw.custom_nnls" class="level1">
 <h1>rom.ecsw.custom_nnls</h1>
-<p><code>rom.ecsw.custom_nnls</code></p>
-<p><strong>Bounded Non-Negative Least Squares (NNLS) for ECSW Hyperreduction</strong></p>
-<p>This module lets you solve problems where you need to find <strong>non-negative weights</strong> (x ≥ 0), usually for building hyperreduced cubature rules. It uses a powerful “active set” algorithm, works with per-entry (element-by-element) bounds, and gives you detailed control over solver convergence and diagnostics.</p>
-<p><strong>Features:</strong></p>
-<ul>
-<li>A flexible, robust NNLS solver you can configure for accuracy, speed, and verbosity</li>
-<li>Two main ways to check if the solver has converged (<code>L2</code> or maximum violation)</li>
-<li>Prune/select important cubature points using sequential/active-set methods</li>
-<li>All tools needed to integrate within an ECSW (“Empirical Cubature Subset Weighting”) pipeline</li>
-</ul>
-<p><strong>Original C++ reference: libROM team at LLNL<br>
-Python adaptation: Suparno Bhattacharyya</strong></p>
+<p><strong>Purpose:</strong> Provides a flexible, robust bounded Non-Negative Least Squares (NNLS) solver for computing positive cubature weights in ECSW-based hyperreduction pipelines. Designed to find non-negative weight vectors that satisfy a linear system within per-entry bounds, with precise control over sparsity, convergence criteria, and solver diagnostics.</p>
+<p><strong>Summary:</strong> Implements an active-set NNLS algorithm supporting per-entry lower and upper bounds on the right-hand side, configurable sparsity constraints (minimum and maximum nonzeros), stall detection, and two convergence criteria (L2 norm or L∞ norm). The <code>NNLSSolver</code> class is the primary entry point for ECSW weight computation, and the <code>NNLS_termination</code> enum selects the stopping condition. This module is a Python adaptation of the libROM NNLS implementation from the LLNL team.</p>
+<p><strong>Original C++ Reference:</strong> libROM team, LLNL</p>
+<p><strong>Python Adaptation:</strong> Suparno Bhattacharyya</p>
 <hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
@@ -646,17 +638,17 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecsw.custom_nnls.NNLSSolver">NNLSSolver</a></td>
-<td>Main class: sequential NNLS solver with custom bounds and stopping rules</td>
+<td>Active-set NNLS solver with configurable bounds, sparsity constraints, and convergence criteria.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecsw.custom_nnls.NNLS_termination">NNLS_termination</a></td>
-<td>Enum for picking termination condition (L2 or L∞)</td>
+<td>Enumeration for selecting the solver termination criterion (L2 or L∞).</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="nnlssolver" class="level3">
-<h3 class="anchored" data-anchor-id="nnlssolver">NNLSSolver</h3>
+<section id="skrom.rom.ecsw.custom_nnls.NNLSSolver" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecsw.custom_nnls.NNLSSolver">NNLSSolver</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.custom_nnls.NNLSSolver(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-06</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    min_nnz<span class="op">=</span><span class="dv">1</span>,</span>
@@ -668,36 +660,29 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n_inner<span class="op">=</span><span class="dv">400</span>,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    criterion<span class="op">=</span>NNLS_termination.LINF,</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What is this?</strong></p>
+<p><strong>Summary:</strong> Solves the bounded non-negative least squares problem: find ( ) such that ( A ), where each entry of ( ) may be constrained to a range ([<em>{},, </em>{}]). The active-set algorithm iteratively adapts the set of active (nonzero) variables while enforcing non-negativity, per-entry bounds, sparsity constraints, and stall detection. Key algorithmic properties include:</p>
 <ul>
-<li>A solver for the problem: <em>find <code>x</code> such that</em> <strong>A x ≈ b</strong>, with constraints <strong>x ≥ 0</strong> (and possibly per-entry bounds on <code>b</code>)<br>
-</li>
-<li>Used for selecting positive weights that make a linear equation fit as closely as possible, with deep control over tolerances, iteration limits, and termination</li>
-</ul>
-<p><strong>Algorithm highlights:</strong></p>
-<ul>
-<li>Active-set approach: adapts which variables are “active” as it searches for a solution</li>
-<li>Supports per-entry lower/upper bounds on <code>b</code>, not just on <code>x</code></li>
-<li>Lets you specify when to stop: based on sum of squares (<code>L2</code>) <strong>or</strong> largest single violation (<code>L∞</code>)</li>
-<li>Detects “stalling” (when solution doesn’t improve anymore)</li>
-<li>Can limit number of nonzero weights or require a minimum (for sparse solutions)</li>
-<li>Easy to choose how much diagnostic output you want</li>
+<li><strong>Active-set method:</strong> Dynamically maintains the set of nonzero variables, updating it at each outer iteration to maximize constraint satisfaction.</li>
+<li><strong>Per-entry bound support:</strong> Each right-hand side entry can independently have a lower and upper bound, providing flexible constraint specification beyond simple non-negativity.</li>
+<li><strong>Dual termination criteria:</strong> Convergence can be assessed via the L2 norm (sum-of-squares residual) or the L∞ norm (maximum single constraint violation), selectable via <code>criterion</code>.</li>
+<li><strong>Stall detection:</strong> If the mean residual change over 50 consecutive steps falls below <code>res_change_termination_tol</code>, the solver exits early with a stall flag.</li>
+<li><strong>Sparsity control:</strong> <code>min_nnz</code> and <code>max_nnz</code> allow enforcement of sparse solutions, which is critical for ECSW cubature rules where a minimal element subset is desired.</li>
 </ul>
 <hr>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 15%">
-<col style="width: 24%">
-<col style="width: 50%">
-<col style="width: 9%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
 <th>Type</th>
-<th>What it means</th>
+<th>Description</th>
 <th>Default</th>
 </tr>
 </thead>
@@ -705,56 +690,56 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <tr class="odd">
 <td>const_tol</td>
 <td>float</td>
-<td>Tolerance for constraint violations (infinity norm criterion)</td>
+<td>Tolerance for constraint violations evaluated under the infinity norm criterion.</td>
 <td><code>1e-06</code></td>
 </tr>
 <tr class="even">
 <td>min_nnz</td>
 <td>int</td>
-<td>Stop only if at least this many non-zero entries in x</td>
+<td>Minimum number of nonzero entries required in the solution before the solver may terminate.</td>
 <td><code>1</code></td>
 </tr>
 <tr class="odd">
 <td>max_nnz</td>
 <td>int</td>
-<td>Don’t allow more than this many non-zero entries (0 means no limit)</td>
+<td>Maximum number of nonzero entries permitted in the solution; <code>0</code> imposes no upper limit.</td>
 <td><code>0</code></td>
 </tr>
 <tr class="even">
 <td>verbosity</td>
 <td>int</td>
-<td>Level of console output (0: silent, 1: summary, ≥2: detailed)</td>
+<td>Console output level: <code>0</code> for silent, <code>1</code> for summary only, <code>≥2</code> for detailed per-iteration diagnostics.</td>
 <td><code>1</code></td>
 </tr>
 <tr class="odd">
 <td>res_change_termination_tol</td>
 <td>float</td>
-<td>If the mean residual changes less than this across 50 steps, stop as “stalled”</td>
+<td>Stall detection threshold; if the mean residual change over 50 steps falls below this value, the solver exits with a stall exit code.</td>
 <td><code>1e-10</code></td>
 </tr>
 <tr class="even">
 <td>zero_tol</td>
 <td>float</td>
-<td>Values smaller than this are treated as zero (numerical noise filter)</td>
+<td>Numerical zero threshold; values with absolute magnitude below this are treated as zero to suppress numerical noise.</td>
 <td><code>1e-15</code></td>
 </tr>
 <tr class="odd">
 <td>n_outer</td>
 <td>int</td>
-<td>Maximum number of <strong>active-set</strong> iterations</td>
+<td>Maximum number of active-set (outer) iterations before termination.</td>
 <td><code>1000</code></td>
 </tr>
 <tr class="even">
 <td>n_inner</td>
 <td>int</td>
-<td>Maximum number of “inner” iterations for each set</td>
+<td>Maximum number of inner iterations per active-set update step.</td>
 <td><code>400</code></td>
 </tr>
 <tr class="odd">
 <td>criterion</td>
-<td>(NNLS_termination.L2, NNLS_termination.LINF)</td>
-<td>Stopping condition: L2 (least squares norm) or L∞ (max violation must fall below <code>const_tol</code>)</td>
-<td><code>LINF</code> by default</td>
+<td>NNLS_termination</td>
+<td>Stopping condition: <code>L2</code> (residual sum-of-squares below threshold) or <code>LINF</code> (maximum constraint violation below <code>const_tol</code>).</td>
+<td><code>LINF</code></td>
 </tr>
 </tbody>
 </table>
@@ -764,9 +749,9 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 31%">
-<col style="width: 19%">
-<col style="width: 49%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -779,54 +764,54 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <tr class="odd">
 <td>const_tol_</td>
 <td>float</td>
-<td>Copied from <code>const_tol</code> (above)</td>
+<td>Active constraint violation tolerance.</td>
 </tr>
 <tr class="even">
 <td>min_nnz_</td>
 <td>int</td>
-<td>Minimum # of nonzeros</td>
+<td>Minimum required number of nonzero solution entries.</td>
 </tr>
 <tr class="odd">
 <td>max_nnz_</td>
 <td>int</td>
-<td>Maximum # of nonzeros</td>
+<td>Maximum permitted number of nonzero solution entries.</td>
 </tr>
 <tr class="even">
 <td>verbosity_</td>
 <td>int</td>
-<td>Chosen level of output detail</td>
+<td>Current output verbosity level.</td>
 </tr>
 <tr class="odd">
 <td>res_change_termination_tol_</td>
 <td>float</td>
-<td>For stall check</td>
+<td>Stall detection threshold for residual change monitoring.</td>
 </tr>
 <tr class="even">
 <td>zero_tol_</td>
 <td>float</td>
-<td>Numerical zero threshold</td>
+<td>Numerical zero threshold for noise suppression.</td>
 </tr>
 <tr class="odd">
 <td>n_outer_</td>
 <td>int</td>
-<td>Max outer iterations</td>
+<td>Maximum outer (active-set) iteration count.</td>
 </tr>
 <tr class="even">
 <td>n_inner_</td>
 <td>int</td>
-<td>Max inner iterations</td>
+<td>Maximum inner iteration count per active-set step.</td>
 </tr>
 <tr class="odd">
 <td>d_criterion</td>
 <td>NNLS_termination</td>
-<td>Convergence rule</td>
+<td>Active convergence criterion.</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="example-usage" class="level4">
-<h4 class="anchored" data-anchor-id="example-usage">Example Usage</h4>
+<section id="example" class="level4">
+<h4 class="anchored" data-anchor-id="example">Example</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> nnls_solver <span class="im">import</span> NNLSSolver, NNLS_termination</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> A <span class="op">=</span> np.random.rand(<span class="dv">20</span>, <span class="dv">10</span>)</span>
@@ -836,9 +821,6 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> solver <span class="op">=</span> NNLSSolver(const_tol<span class="op">=</span>const_tol_, verbosity<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> x, flag <span class="op">=</span> solver.solve(A, lb, ub)</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Exit flag:"</span>, flag)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ul>
-<li>See how you can set verbosity, control bounds, and get out an exit flag for status</li>
-</ul>
 <hr>
 </section>
 <section id="methods" class="level4">
@@ -853,25 +835,28 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.ecsw.custom_nnls.NNLSSolver.set_verbosity">set_verbosity</a></td>
-<td>Change the amount of output printed during solve.</td>
+<td>Update the output verbosity level for subsequent solver runs.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.ecsw.custom_nnls.NNLSSolver.solve">solve</a></td>
-<td>Solve the non-negative least squares problem A x ≈ b, with bounds, using the active-set method.</td>
+<td>Solve the bounded non-negative least squares problem using the active-set method.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="set_verbosity" class="level5">
-<h5 class="anchored" data-anchor-id="set_verbosity">set_verbosity</h5>
+</section>
+<section id="skrom.rom.ecsw.custom_nnls.NNLSSolver.set_verbosity" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecsw.custom_nnls.NNLSSolver.set_verbosity">set_verbosity</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.custom_nnls.NNLSSolver.set_verbosity(verbosity_in)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Change how much is printed during solver runs.</strong></p>
+<p><strong>Summary:</strong> Updates the solver’s verbosity level, controlling the volume of diagnostic output printed during subsequent calls to <code>solve</code>. Setting <code>0</code> suppresses all output; higher values progressively enable more detailed per-iteration reporting.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 18%">
-<col style="width: 10%">
-<col style="width: 54%">
-<col style="width: 16%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -885,28 +870,26 @@ Python adaptation: Suparno Bhattacharyya</strong></p>
 <tr class="odd">
 <td>verbosity_in</td>
 <td>int</td>
-<td>New output level (0 = silent, higher = more detail)</td>
+<td>New output verbosity level; <code>0</code> for silent, <code>1</code> for summary, <code>≥2</code> for detailed diagnostics.</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="solve" class="level5">
-<h5 class="anchored" data-anchor-id="solve">solve</h5>
+</section>
+<section id="skrom.rom.ecsw.custom_nnls.NNLSSolver.solve" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.ecsw.custom_nnls.NNLSSolver.solve">solve</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.custom_nnls.NNLSSolver.solve(mat, rhs_lb, rhs_ub)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Solves:</strong><br>
-Find x ≥ 0 so that <strong>A x ≈ b</strong>, where b ∈ [rhs_lb, rhs_ub] (each entry can be a range).</p>
-<ul>
-<li>Uses active-set NNLS, fast and reliable for (often sparse) hyperreduction weights</li>
-</ul>
-<p><strong>Parameters:</strong></p>
+<p><strong>Summary:</strong> Solves the bounded non-negative least squares problem: find ( ) such that ( A ) with ( ) entry-wise. The active-set algorithm iterates over candidate nonzero sets, updating the active variables to progressively reduce constraint violations until the selected termination criterion (<code>L2</code> or <code>LINF</code>) is satisfied, sparsity limits are met, or a maximum iteration count or stall condition is reached.</p>
+<section id="parameters-2" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-2">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
 <col style="width: 26%">
-<col style="width: 53%">
-<col style="width: 11%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -919,30 +902,32 @@ Find x ≥ 0 so that <strong>A x ≈ b</strong>, where b ∈ [rhs_lb, rhs_ub] (e
 <tbody>
 <tr class="odd">
 <td>mat</td>
-<td>(array_like, shape(m, n))</td>
-<td>Matrix A of the system</td>
+<td>array_like, shape (m, n)</td>
+<td>System matrix ( A ) for the least squares problem.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>rhs_lb</td>
-<td>(array_like, shape(m))</td>
-<td>Lower bound for each right-hand side entry</td>
+<td>array_like, shape (m,)</td>
+<td>Per-entry lower bounds on the right-hand side ( ).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>rhs_ub</td>
-<td>(array_like, shape(m))</td>
-<td>Upper bound for each right-hand side entry</td>
+<td>array_like, shape (m,)</td>
+<td>Per-entry upper bounds on the right-hand side ( ).</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Returns:</strong></p>
+</section>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 16%">
-<col style="width: 74%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -954,13 +939,13 @@ Find x ≥ 0 so that <strong>A x ≈ b</strong>, where b ∈ [rhs_lb, rhs_ub] (e
 <tbody>
 <tr class="odd">
 <td>final_soln</td>
-<td>(ndarray, shape(n))</td>
-<td>Non-negative solution x</td>
+<td>ndarray, shape (n,)</td>
+<td>Non-negative solution vector ( ).</td>
 </tr>
 <tr class="even">
 <td>exit_flag</td>
 <td>int</td>
-<td>Status code: <br>0: succeeded <br>1: hit max iterations <br>2: stalled <br>3: failed (see notes)</td>
+<td>Solver status code: <code>0</code> = converged successfully; <code>1</code> = reached maximum iterations; <code>2</code> = stalled (residual change below <code>res_change_termination_tol</code>); <code>3</code> = failed.</td>
 </tr>
 </tbody>
 </table>
@@ -968,15 +953,15 @@ Find x ≥ 0 so that <strong>A x ≈ b</strong>, where b ∈ [rhs_lb, rhs_ub] (e
 </section>
 </section>
 </section>
-<section id="nnls_termination" class="level3">
-<h3 class="anchored" data-anchor-id="nnls_termination">NNLS_termination</h3>
+<section id="skrom.rom.ecsw.custom_nnls.NNLS_termination" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.ecsw.custom_nnls.NNLS_termination">NNLS_termination</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.custom_nnls.NNLS_termination()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Enum for how solver decides when to stop (convergence criteria):</strong></p>
+<p><strong>Summary:</strong> Enumeration for selecting the convergence criterion used by <code>NNLSSolver</code>. Determines how the solver assesses whether the current solution satisfies the constraint tolerance.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 83%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -989,23 +974,21 @@ Find x ≥ 0 so that <strong>A x ≈ b</strong>, where b ∈ [rhs_lb, rhs_ub] (e
 <tr class="odd">
 <td>L2</td>
 <td>int</td>
-<td>Stop when the L2 norm (sum of squares) of the residual is small enough</td>
+<td>Terminate when the L2 norm (sum of squared residuals) falls below the constraint tolerance. Corresponds to standard least-squares convergence.</td>
 </tr>
 <tr class="even">
 <td>LINF</td>
 <td>int</td>
-<td>Stop when the largest single violation (“infinity norm”) is under <code>const_tol</code></td>
+<td>Terminate when the L∞ norm (largest single constraint violation) falls below <code>const_tol</code>. Stricter than L2—ensures no individual constraint is significantly violated. Default criterion.</td>
 </tr>
 </tbody>
 </table>
-<hr>
-<p><strong>In practice:</strong></p>
-<ul>
-<li>Use <code>NNLSSolver</code> to compute guaranteed-positive cubature (ECSW) weights, with full control over nonzeros, bounds, and convergence diagnostics.</li>
-<li>Choose L2 or L∞ for termination—L∞ (default) is stricter (no big violations left), L2 is usual least-squares.</li>
-</ul>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p><code>LINF</code> (default) is the more conservative criterion and is recommended for ECSW weight computation where individual constraint violations can produce physically inconsistent cubature rules. <code>L2</code> may be preferred when a globally small residual is sufficient and isolated violations are acceptable.</p>
 
 
+</section>
 </section>
 </section>
 </section>

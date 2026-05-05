@@ -602,7 +602,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.ecsw.hyperreduce" id="toc-skrom.rom.ecsw.hyperreduce" class="nav-link active" data-scroll-target="#skrom.rom.ecsw.hyperreduce">rom.ecsw.hyperreduce</a>
+  <li><a href="#rom.ecsw.hyperreduce" id="toc-rom.ecsw.hyperreduce" class="nav-link active" data-scroll-target="#rom.ecsw.hyperreduce">rom.ecsw.hyperreduce</a>
   <ul class="collapse">
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
@@ -618,37 +618,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.ecsw.hyperreduce" class="level1">
+<section id="rom.ecsw.hyperreduce" class="level1">
 <h1>rom.ecsw.hyperreduce</h1>
-<p><code>rom.ecsw.hyperreduce</code></p>
-<p>Implements the end-to-end hyper-reduction pipeline combining randomized SVD and bounded NNLS.</p>
-<p>This module provides:</p>
+<p><strong>Purpose:</strong> Implements the end-to-end hyper-reduction pipeline for ECSW-based reduced-order modeling, combining optional randomized SVD preprocessing with a bounded Non-Negative Least Squares (NNLS) solve to compute positive cubature weights from a quantity-of-interest (QoI) matrix. Serves as the primary high-level entry point for deriving ECSW element weights from snapshot data.</p>
+<p><strong>Summary:</strong> Provides the <code>hyperreduce</code> function, which accepts a QoI matrix, optionally compresses it via randomized SVD, constructs per-entry bounded constraints around the projected right-hand side, solves the resulting bounded NNLS problem using <code>NNLSSolver</code>, and returns the hyperreduction weight vector alongside a solver convergence flag. Optional diagnostic plots of singular value decay and NNLS coefficient distributions are available for result inspection.</p>
+<p>The broader <code>ecsw.hyperreduce</code> package includes:</p>
 <ul>
-<li><p><code>hyperreduce</code>: function to perform hyper-reduction on a QoI matrix by:</p>
-<ol type="1">
-<li>Optionally applying randomized SVD for dimensionality reduction</li>
-<li>Constructing bounded constraints for NNLS from projected data</li>
-<li>Solving a bounded NNLS problem via <code>NNLSSolver</code></li>
-<li>Optionally visualizing singular value decay and NNLS coefficients</li>
-</ol></li>
+<li>Randomized SVD preprocessing routines for fast dimensionality reduction</li>
+<li>Bounded NNLS solve integration via <code>custom_nnls</code></li>
+<li>Plotting helpers for diagnostic visualization of reduction errors and singular value spectra</li>
 </ul>
-<p>The <code>hyperreduce</code> folder contains utilities to reduce full-order models, including:</p>
-<ul>
-<li>Randomized SVD preprocessing routines</li>
-<li>Bounded NNLS solve integrations (<code>custom_nnls</code>)</li>
-<li>Plotting helpers for diagnostic visualization of reduction errors</li>
-</ul>
-<p>Dependencies:</p>
-<ul>
-<li>NumPy for array operations</li>
-<li>scikit-learn’s <code>randomized_svd</code> for fast SVD</li>
-<li>Matplotlib for plotting diagnostics</li>
-<li>Custom <code>NNLSSolver</code> implementation in <code>custom_nnls</code></li>
-</ul>
-<p>Usage example:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hyperreduce.hyperreduce <span class="im">import</span> hyperreduce</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x, flag <span class="op">=</span> hyperreduce(qoi_data, n_components<span class="op">=</span><span class="dv">100</span>, svd<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>[Code: Suparno Bhattacharyya]</p>
+<p><strong>Author:</strong> Suparno Bhattacharyya</p>
+<hr>
 <section id="functions" class="level2">
 <h2 class="anchored" data-anchor-id="functions">Functions</h2>
 <table class="caption-top table">
@@ -665,33 +646,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.ecsw.hyperreduce.hyperreduce" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.ecsw.hyperreduce.hyperreduce">hyperreduce</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.hyperreduce.hyperreduce(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    qoi,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    n_components<span class="op">=</span><span class="dv">500</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    verbosity<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    plot<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-10</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    zero_tol<span class="op">=</span><span class="fl">1e-14</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    svd<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Perform hyper-reduction via randomized SVD followed by a bounded NNLS solve.</p>
-<p>The hyper-reduction pipeline includes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.ecsw.hyperreduce.hyperreduce(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    qoi,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    n_components<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    verbosity<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    plot<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    const_tol<span class="op">=</span><span class="fl">1e-10</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    zero_tol<span class="op">=</span><span class="fl">1e-14</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    svd<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Executes the complete hyper-reduction pipeline on a quantity-of-interest matrix. The pipeline proceeds through four stages:</p>
 <ol type="1">
-<li><p>(Optional) Randomized SVD of the quantity of interest (QoI) matrix to reduce its dimensionality.</p></li>
-<li><p>Construction of lower and upper bound constraints around the projected right-hand side vector.</p></li>
-<li><p>Bounded Non-Negative Least Squares (NNLS) solve using the <code>NNLSSolver</code>.</p></li>
-<li><p>(Optional) Visualization of singular value decay and NNLS solution coefficients.</p></li>
+<li><strong>(Optional) Randomized SVD:</strong> If <code>svd=True</code>, applies scikit-learn’s <code>randomized_svd</code> with oversampling and power iterations to compress <code>qoi</code> to <code>n_components</code> dimensions, reducing the problem size before the NNLS solve.</li>
+<li><strong>Constraint Construction:</strong> Builds per-entry lower and upper bounds around the projected right-hand side vector ( _q ):</li>
 </ol>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p>[ b_{} = <em>q - , b</em>{} = _q + ]</p>
+<p>where ( _q = V_q^{} ) is the projected right-hand side vector.</p>
+<ol start="3" type="1">
+<li><strong>Bounded NNLS Solve:</strong> Calls <code>NNLSSolver</code> to find the non-negative weight vector ( ) satisfying the bounded constraints within the specified tolerances.</li>
+<li><strong>(Optional) Diagnostics:</strong> If <code>plot=True</code>, displays plots of the singular value decay spectrum and the NNLS solution coefficient distribution for result inspection.</li>
+</ol>
+<p>The hyper-reduced approximation error is computed internally as:</p>
+<p>[ = ]</p>
+<p>and printed to console for diagnostic purposes.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 19%">
-<col style="width: 68%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -704,56 +692,56 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>qoi</td>
-<td>(array_like, shape(n_samples, n_features))</td>
-<td>Quantity of interest matrix on which hyper-reduction is performed.</td>
+<td>array_like, shape (n_samples, n_features)</td>
+<td>Quantity-of-interest matrix on which hyper-reduction is performed; rows correspond to samples and columns to features (e.g., element contributions).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>n_components</td>
 <td>int</td>
-<td>Number of singular value decomposition components to retain when <code>svd=True</code>. Must be less than or equal to (n_samples, n_features). Default is 500.</td>
+<td>Number of SVD components to retain when <code>svd=True</code>; must not exceed ((,, )).</td>
 <td><code>500</code></td>
 </tr>
 <tr class="odd">
 <td>verbosity</td>
 <td>int</td>
-<td>Verbosity level for the NNLS solver. Higher values yield more diagnostic output. Default is 2.</td>
+<td>Verbosity level forwarded to <code>NNLSSolver</code>; higher values yield more detailed per-iteration diagnostic output.</td>
 <td><code>2</code></td>
 </tr>
 <tr class="even">
 <td>plot</td>
 <td>bool</td>
-<td>Whether to display plots for singular value decay and the NNLS solution vector. Default is True.</td>
+<td>If <code>True</code>, displays plots of singular value decay and NNLS solution coefficients for diagnostic inspection.</td>
 <td><code>True</code></td>
 </tr>
 <tr class="odd">
 <td>const_tol</td>
 <td>float</td>
-<td>Tolerance used to define the half-gap around the average right-hand side vector for bounded constraints. Default is 1e-10.</td>
+<td>Half-gap tolerance defining the bounded constraints around the projected right-hand side vector; smaller values enforce tighter constraint satisfaction.</td>
 <td><code>1e-10</code></td>
 </tr>
 <tr class="even">
 <td>zero_tol</td>
 <td>float</td>
-<td>Threshold below which NNLS solution coefficients are considered zero. Default is 1e-14.</td>
+<td>Threshold below which NNLS solution coefficients are treated as zero and excluded from the active weight set.</td>
 <td><code>1e-14</code></td>
 </tr>
 <tr class="odd">
 <td>svd</td>
 <td>bool</td>
-<td>If True, apply randomized SVD preprocessing to <code>qoi</code>, otherwise solve NNLS directly on the original data. Default is False.</td>
+<td>If <code>True</code>, applies randomized SVD preprocessing to <code>qoi</code> before the NNLS solve; if <code>False</code>, solves directly on the original data.</td>
 <td><code>False</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level4 doc-section doc-section-returns">
-<h4 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h4>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 32%">
-<col style="width: 61%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -765,63 +753,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>x</td>
-<td>(ndarray, shape(n_features) or (n_components))</td>
-<td>Coefficients from the bounded NNLS solve representing the hyper-reduction weights.</td>
+<td>ndarray, shape (n_features,) or (n_components,)</td>
+<td>Non-negative hyperreduction weight coefficients from the bounded NNLS solve; shape depends on whether SVD preprocessing was applied.</td>
 </tr>
 <tr class="even">
 <td>flag</td>
 <td>int</td>
-<td>Exit status flag returned by the NNLS solver (e.g., 0 indicates successful convergence).</td>
+<td>Exit status from <code>NNLSSolver</code>: <code>0</code> = converged successfully; <code>1</code> = reached maximum iterations; <code>2</code> = stalled; <code>3</code> = failed.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="raises" class="level4 doc-section doc-section-raises">
-<h4 class="doc-section doc-section-raises anchored" data-anchor-id="raises">Raises</h4>
+<section id="raises" class="level4">
+<h4 class="anchored" data-anchor-id="raises">Raises</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 11%">
-<col style="width: 80%">
+<col style="width: 35%">
+<col style="width: 64%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Name</th>
 <th>Type</th>
-<th>Description</th>
+<th>Condition</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
 <td>ValueError</td>
-<td>If <code>n_components</code> is greater than the minimum dimension of <code>qoi</code> when <code>svd=True</code>.</td>
+<td>Raised if <code>n_components</code> exceeds ((,, )) when <code>svd=True</code>.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="notes" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
 <ul>
-<li><p>The <code>randomized_svd</code> step (when enabled) uses oversampling and power iterations for stability and accuracy.</p></li>
-<li><p>Bounds for the NNLS solve are constructed as:</p>
-<p>.. math:: b_{} = d_q - , b_{} = d_q + ,</p>
-<p>where</p>
-<p>.. math:: d_q = V_q^{} </p>
-<p>is the projected right-hand side vector.</p></li>
-<li><p>The final hyper-reduced error is computed internally as</p>
-<p>.. math:: </p>
-<p>and printed for diagnostic purposes.</p></li>
+<li>The randomized SVD step (when enabled) uses oversampling and power iterations for improved numerical stability and accuracy on large matrices.</li>
+<li>Bounds are constructed symmetrically around the projected right-hand side; <code>const_tol</code> directly controls the feasibility tolerance of the NNLS solution.</li>
+<li>The diagnostic error printed to console reflects how well the selected weights reproduce the full integration across all QoI samples.</li>
 </ul>
 </section>
-<section id="examples" class="level4 doc-section doc-section-examples">
-<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> hyperreduce_module <span class="im">import</span> hyperreduce</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> np.random.rand(<span class="dv">100</span>, <span class="dv">200</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> x, flag <span class="op">=</span> hyperreduce(data, n_components<span class="op">=</span><span class="dv">50</span>, svd<span class="op">=</span><span class="va">True</span>, plot<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Exit flag:"</span>, flag)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Active basis vectors:"</span>, np.<span class="bu">sum</span>(x <span class="op">&gt;</span> <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="example" class="level4">
+<h4 class="anchored" data-anchor-id="example">Example</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> hyperreduce_module <span class="im">import</span> hyperreduce</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> data <span class="op">=</span> np.random.rand(<span class="dv">100</span>, <span class="dv">200</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> x, flag <span class="op">=</span> hyperreduce(data, n_components<span class="op">=</span><span class="dv">50</span>, svd<span class="op">=</span><span class="va">True</span>, plot<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Exit flag:"</span>, flag)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="st">"Active basis vectors:"</span>, np.<span class="bu">sum</span>(x <span class="op">&gt;</span> <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

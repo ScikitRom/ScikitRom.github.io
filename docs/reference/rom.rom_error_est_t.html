@@ -607,9 +607,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#notes-on-data-shapes" id="toc-notes-on-data-shapes" class="nav-link" data-scroll-target="#notes-on-data-shapes">Notes on Data Shapes</a></li>
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#compute_rom_error_metrics_flat" id="toc-compute_rom_error_metrics_flat" class="nav-link" data-scroll-target="#compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></li>
-  <li><a href="#generate_rom_error_report" id="toc-generate_rom_error_report" class="nav-link" data-scroll-target="#generate_rom_error_report">generate_rom_error_report</a></li>
-  <li><a href="#plot_rom_param_diagnostics_t" id="toc-plot_rom_param_diagnostics_t" class="nav-link" data-scroll-target="#plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</a></li>
+  <li><a href="#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat" id="toc-skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></li>
+  <li><a href="#skrom.rom.rom_error_est_t.generate_rom_error_report" id="toc-skrom.rom.rom_error_est_t.generate_rom_error_report" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est_t.generate_rom_error_report">generate_rom_error_report</a></li>
+  <li><a href="#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t" id="toc-skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -623,25 +623,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.rom_error_est_t" class="level1">
 <h1>rom.rom_error_est_t</h1>
-<p><code>rom.rom_error_est_t</code></p>
-<p><strong>Purpose:</strong><br>
-Compute and plot ROM error metrics for comparing full-order and reduced-order (ROM) solutions, especially when your data is stored in straightforward “flat” (vectorized) NumPy arrays.</p>
-<p><strong>What’s included?</strong></p>
-<ul>
-<li>Automated calculation of many standard error metrics (L2, L∞, RMSE, MAE, R²/score, explained variance, quantiles, and optionally energy norm)</li>
-<li>Useful visualizations: scatter plots, snapshot overlays, and “raincloud” plots of error/speedup</li>
-<li>A function to print error summaries in a clean, human-readable report</li>
-</ul>
+<p><strong>Purpose:</strong> Provides automated computation and visualization of ROM error metrics for comparing full-order and reduced-order solutions stored as flat (vectorized) NumPy arrays. Supports both steady-state and time-dependent data, with configurable axis layout and a comprehensive set of standard accuracy measures.</p>
+<p><strong>Summary:</strong> Offers three functions covering the full error analysis workflow: <code>compute_rom_error_metrics_flat</code> for computing a broad set of scalar and time-resolved error metrics, <code>generate_rom_error_report</code> for printing a structured human-readable summary, and <code>plot_rom_param_diagnostics_t</code> for producing diagnostic visualizations including bar charts, boxplots, scatter plots, and raincloud distributions. Together these utilities support publication-quality error reporting, debugging, and iterative ROM improvement.</p>
 <hr>
 <section id="notes-on-data-shapes" class="level2">
 <h2 class="anchored" data-anchor-id="notes-on-data-shapes">Notes on Data Shapes</h2>
-<p>Supported shapes for your <code>u</code> (full solution) and <code>u_rom</code> (ROM solution):</p>
+<p>The functions in this module accept solution arrays <code>u</code> (full-order) and <code>u_rom</code> (ROM) in two supported layouts:</p>
 <ul>
-<li>(n_snapshots, n_space): E.g., each row is a spatial solution for a parametric sample</li>
-<li>(n_snapshots, n_time, n_space): E.g., for time-dependent simulations</li>
+<li><strong>(n_snapshots, n_space):</strong> Each row is a spatial solution for one parametric sample; for steady-state problems.</li>
+<li><strong>(n_snapshots, n_time, n_space):</strong> Each entry is a spatial solution at one timestep for one parametric sample; for time-dependent problems.</li>
 </ul>
-<p>If your data uses a different axis/ordering, use the keyword arguments:<br>
-<code>snapshot_axis</code>, <code>time_axis</code>, and <code>space_axis</code> to tell the functions which axes mean what.</p>
+<p>If your data uses a non-standard axis ordering, use the keyword arguments <code>snapshot_axis</code>, <code>time_axis</code>, and <code>space_axis</code> to specify which array axis corresponds to each dimension.</p>
 <hr>
 </section>
 <section id="functions" class="level2">
@@ -656,21 +648,21 @@ Compute and plot ROM error metrics for comparing full-order and reduced-order (R
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></td>
-<td>Calculate error metrics between full-order and ROM results.</td>
+<td>Compute a comprehensive set of error metrics between full-order and ROM solutions.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.rom_error_est_t.generate_rom_error_report">generate_rom_error_report</a></td>
-<td>Print a structured, readable summary of ROM errors.</td>
+<td>Print a structured, human-readable summary of ROM error metrics.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</a></td>
-<td>Plot error and diagnostic charts for (param, time, dof) data.</td>
+<td>Generate diagnostic plots for parameter- and time-resolved ROM error analysis.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="compute_rom_error_metrics_flat" class="level3">
-<h3 class="anchored" data-anchor-id="compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</h3>
+<section id="skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est_t.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est_t.compute_rom_error_metrics_flat(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    u_rom,</span>
@@ -681,15 +673,15 @@ Compute and plot ROM error metrics for comparing full-order and reduced-order (R
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    space_axis<span class="op">=-</span><span class="dv">1</span>,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    eps<span class="op">=</span><span class="fl">1e-30</span>,</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-Computes a range of error metrics between the full-order (<code>u</code>) and ROM (<code>u_rom</code>) data, across all snapshots/parameters—and, if present, across all timesteps.</p>
-<p><strong>Parameters:</strong></p>
+<p><strong>Summary:</strong> Computes a comprehensive set of error metrics between the full-order solution array <code>u</code> and the ROM solution array <code>u_rom</code>, evaluated across all snapshots and—for 3D arrays—across all timesteps. Supported metrics include L2 norm error, L∞ norm error, RMSE, MAE, R² score, explained variance, quantile statistics, and optionally the energy norm when a stiffness matrix <code>K</code> is provided. For time-dependent data of shape <code>(n_snapshots, n_time, n_space)</code>, time-resolved metrics are returned with shape <code>(n_snapshots, n_time)</code> in addition to global aggregates.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 8%">
-<col style="width: 73%">
-<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -701,49 +693,57 @@ Computes a range of error metrics between the full-order (<code>u</code>) and RO
 </thead>
 <tbody>
 <tr class="odd">
-<td>u, u_rom</td>
-<td></td>
-<td>Arrays of full-order and ROM results, shape <code>(n_snapshots, n_space)</code> or <code>(n_snapshots, n_time, n_space)</code></td>
+<td>u</td>
+<td>array_like</td>
+<td>Full-order solution array of shape <code>(n_snapshots, n_space)</code> or <code>(n_snapshots, n_time, n_space)</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
-<td>K</td>
+<td>u_rom</td>
 <td>array_like</td>
-<td>Optional stiffness matrix for energy-norm errors. Shape <code>(n_space, n_space)</code>.</td>
-<td><code>None</code></td>
+<td>ROM solution array with the same shape as <code>u</code>.</td>
+<td><em>required</em></td>
 </tr>
 <tr class="odd">
+<td>K</td>
+<td>array_like or None</td>
+<td>Optional stiffness matrix of shape <code>(n_space, n_space)</code> for computing energy-norm errors.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="even">
 <td>snapshot_axis</td>
 <td>int</td>
-<td>Which axis is “snapshot/parameter”? Needed if <code>u</code>/<code>u_rom</code> shape/order is not standard.</td>
+<td>Axis index corresponding to the snapshot/parameter dimension; adjust if data layout differs from the default.</td>
 <td><code>0</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>time_axis</td>
-<td>int</td>
-<td>Which axis is “time”? If not time-dependent (2D), leave as <code>None</code>.</td>
+<td>int or None</td>
+<td>Axis index corresponding to the time dimension; set to <code>None</code> for steady-state (2D) data.</td>
 <td><code>None</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>space_axis</td>
 <td>int</td>
-<td>Which axis is “space”? Needed if order is not default.</td>
+<td>Axis index corresponding to the spatial dimension; adjust if data layout differs from the default.</td>
 <td><code>-1</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>eps</td>
 <td>float</td>
-<td>Small value to prevent divide-by-zero in relative errors.</td>
+<td>Small regularization value added to denominators to prevent divide-by-zero in relative error computations.</td>
 <td><code>1e-30</code></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Returns:</strong></p>
+</section>
+<section id="returns" class="level4">
+<h4 class="anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 10%">
-<col style="width: 77%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -756,29 +756,27 @@ Computes a range of error metrics between the full-order (<code>u</code>) and RO
 <tr class="odd">
 <td>metrics</td>
 <td>dict</td>
-<td>Dictionary with global and (if 3D) time-dependent metrics</td>
+<td>Dictionary of global and (for 3D data) time-dependent error metrics. Time-resolved entries have shape <code>(n_snapshots, n_time)</code>.</td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>For 3D arrays (<code>n_snapshots, n_time, n_space</code>), time-dependent results are shaped <code>(n_snapshots, n_time)</code>.</li>
-</ul>
 <hr>
 </section>
-<section id="generate_rom_error_report" class="level3">
-<h3 class="anchored" data-anchor-id="generate_rom_error_report">generate_rom_error_report</h3>
+</section>
+<section id="skrom.rom.rom_error_est_t.generate_rom_error_report" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est_t.generate_rom_error_report">generate_rom_error_report</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est_t.generate_rom_error_report(</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    metrics,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    name<span class="op">=</span><span class="st">'ROM Accuracy Report'</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-Prints a clean, well-structured summary of all the ROM error metrics to your screen/console—perfect for log files or quick reviews.</p>
-<p><strong>Parameters:</strong></p>
+<p><strong>Summary:</strong> Prints a clean, well-structured report of all ROM error metrics from the dictionary returned by <code>compute_rom_error_metrics_flat</code>. The output is formatted for readability and is suitable for console logging, log files, or quick diagnostic review during iterative ROM development.</p>
+<section id="parameters-1" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 8%">
-<col style="width: 55%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
 <col style="width: 26%">
 </colgroup>
 <thead>
@@ -793,21 +791,22 @@ Prints a clean, well-structured summary of all the ROM error metrics to your scr
 <tr class="odd">
 <td>metrics</td>
 <td>dict</td>
-<td>Metrics dict from <code>compute_rom_error_metrics_flat</code>.</td>
+<td>Metrics dictionary returned by <code>compute_rom_error_metrics_flat</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>name</td>
 <td>str</td>
-<td>Title for the report.</td>
+<td>Title displayed at the top of the printed report.</td>
 <td><code>'ROM Accuracy Report'</code></td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
-<section id="plot_rom_param_diagnostics_t" class="level3">
-<h3 class="anchored" data-anchor-id="plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</h3>
+</section>
+<section id="skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est_t.plot_rom_param_diagnostics_t">plot_rom_param_diagnostics_t</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est_t.plot_rom_param_diagnostics_t(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    u_rom,</span>
@@ -819,43 +818,91 @@ Prints a clean, well-structured summary of all the ROM error metrics to your scr
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    log_error<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    use_raincloud<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Inputs:</strong><br>
-- <code>u</code>, <code>u_rom</code>: Arrays of shape <code>(p, t, dof)</code><br>
-(<code>p</code>: parameters/snapshots, <code>t</code>: timesteps, <code>dof</code>: spatial points)</p>
-<p><strong>What does it plot?</strong></p>
+<p><strong>Summary:</strong> Generates a suite of diagnostic visualizations for ROM solutions stored in arrays of shape <code>(p, t, dof)</code>, where <code>p</code> is the number of parameters/snapshots, <code>t</code> is the number of timesteps, and <code>dof</code> is the number of spatial degrees of freedom. The following plots are produced:</p>
 <ol type="1">
-<li>Per-parameter (snapshot) error summarized as a <strong>bar</strong> chart</li>
-<li>Per-parameter, <strong>per-timestep</strong> error as a boxplot (how error changes over time)</li>
-<li><strong>Scatter plot</strong> of error vs.&nbsp;speed-up—if you provide <code>speedup_per_param</code></li>
-<li>L2-norms as a <strong>bar plot</strong>—if you provide <code>l2_per_param</code></li>
-<li><strong>Raincloud plots</strong>—showing the distribution of:
+<li><strong>Per-parameter error bar chart:</strong> Summarizes the aggregate error for each snapshot/parameter.</li>
+<li><strong>Per-parameter, per-timestep boxplot:</strong> Shows how the error evolves across timesteps for each parameter.</li>
+<li><strong>Error vs.&nbsp;speedup scatter plot:</strong> Produced when <code>speedup_per_param</code> is provided; visualizes the accuracy–efficiency trade-off.</li>
+<li><strong>L2-norm bar plot:</strong> Produced when <code>l2_per_param</code> is provided; compares L2 norms across parameters.</li>
+<li><strong>Raincloud plots</strong> (when <code>use_raincloud=True</code>): Display the full distribution of:
 <ul>
 <li>Per-parameter relative error (<code>rel_err_p</code>)</li>
-<li>Relative error per parameter and timestep, grouped by parameter (<code>rel_err_pt</code>)</li>
-<li>Speed-up values (if provided)</li>
+<li>Per-parameter, per-timestep relative error grouped by parameter (<code>rel_err_pt</code>)</li>
+<li>Speedup values per parameter (when <code>speedup_per_param</code> is provided)</li>
 </ul></li>
 </ol>
-<p>These visualizations help you see:</p>
-<ul>
-<li>How errors stack up across parameters or over time</li>
-<li>Whether any cases are particularly good or poor</li>
-<li>The distribution and “spread” of errors and speed-ups</li>
-</ul>
-<p><strong>Options:</strong></p>
-<ul>
-<li><code>eps</code>: Small value to avoid divide-by-zero in plotting errors (default: <code>1e-16</code>)</li>
-<li><code>log_error</code>: Use log-scale for error axes (default: <code>True</code>)</li>
-<li><code>use_raincloud</code>: Turns on/off the “raincloud” plots for error/speedup distributions</li>
-</ul>
-<hr>
-<p><strong>Summary:</strong></p>
-<ul>
-<li>Use this module for fast, reliable error checking and visual reporting when comparing your full-order and ROM results.</li>
-<li>Handles both steady-state and time-dependent data shapes.</li>
-<li>Metric output and plots are suitable for publication, debug, or iterative ROM improvement.</li>
-</ul>
+<p>These visualizations collectively enable identification of poorly performing parameter cases, assessment of temporal error growth, and inspection of the error and speedup distributions across the test set.</p>
+<section id="parameters-2" class="level4">
+<h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>u</td>
+<td>array_like, shape (p, t, dof)</td>
+<td>Full-order solution array.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="even">
+<td>u_rom</td>
+<td>array_like, shape (p, t, dof)</td>
+<td>ROM solution array with the same shape as <code>u</code>.</td>
+<td><em>required</em></td>
+</tr>
+<tr class="odd">
+<td>l2_per_param</td>
+<td>array_like or None</td>
+<td>Precomputed L2 norms per parameter; if provided, generates an additional bar plot.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="even">
+<td>speedup_per_param</td>
+<td>array_like or None</td>
+<td>Precomputed speedup values per parameter; if provided, generates the error-vs-speedup scatter plot and raincloud.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="odd">
+<td>param_labels</td>
+<td>sequence of str or None</td>
+<td>Labels for each parameter/snapshot used in plot axis annotations.</td>
+<td><code>None</code></td>
+</tr>
+<tr class="even">
+<td>eps</td>
+<td>float</td>
+<td>Small value added to denominators to prevent divide-by-zero when computing plotted error quantities.</td>
+<td><code>1e-16</code></td>
+</tr>
+<tr class="odd">
+<td>log_error</td>
+<td>bool</td>
+<td>If <code>True</code>, uses logarithmic scaling on error axes.</td>
+<td><code>True</code></td>
+</tr>
+<tr class="even">
+<td>use_raincloud</td>
+<td>bool</td>
+<td>If <code>True</code>, generates raincloud distribution plots for errors and speedup in addition to bar and box plots.</td>
+<td><code>True</code></td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 </section>
 </section>

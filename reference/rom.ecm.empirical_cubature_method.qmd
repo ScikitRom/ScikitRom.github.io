@@ -1,18 +1,22 @@
 # rom.ecm.empirical_cubature_method
 
-`rom.ecm.empirical_cubature_method`
+**Purpose:**
+Automates the selection of a minimal, optimally weighted subset of integration points (or mesh elements) for constructing hyper-reduced order models. By replacing full-domain integration with a compact cubature rule composed of only the most informative points, ECM makes large-scale nonlinear model reduction both computationally tractable and memory-efficient. [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC6432970/)
 
----
+**Summary:**
+Provides the `EmpiricalCubatureMethod` class, which solves an optimization problem to identify the smallest possible set of elements and their associated positive weights such that the reduced integration accurately reproduces the snapshot data within a prescribed tolerance.  The class follows a structured three-step workflow—`SetUp` → `Initialize` → `Run` (or `Calculate`)—and supports optional L2 weighting, constrained weight sums, and warm-starting from an initial candidate set for greater flexibility in practice. [pmc.ncbi.nlm.nih](https://pmc.ncbi.nlm.nih.gov/articles/PMC6432970/)
+
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
-| [EmpiricalCubatureMethod](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod) | Class for selecting important elements and positive weights for hyper-reduced order modeling. |
+| [EmpiricalCubatureMethod](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod) | Selects a minimal set of integration points and positive weights for hyper-reduced order modeling. |
 
----
+***
 
-### EmpiricalCubatureMethod
+### EmpiricalCubatureMethod { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod }
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod(
@@ -23,71 +27,45 @@ rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod(
 )
 ```
 
-**What does this class do?**  
-It finds a small, optimal set of elements (e.g., mesh cells or quadrature points) and their positive weights so you can accurately and efficiently build a hyper-reduced order model (HROM). This makes large-scale model reduction practical by evaluating only these crucial points.
+**Summary:**
+Identifies a small, optimal subset of mesh elements (or quadrature points) together with their associated positive weights, enabling accurate and efficient hyper-reduced order model (HROM) construction.  Rather than evaluating the full mesh during online ROM queries, the HROM evaluates only the ECM-selected points—achieving dramatic reductions in assembly cost while maintaining approximation accuracy controlled by `ECM_tolerance`. [onlinelibrary.wiley](https://onlinelibrary.wiley.com/doi/10.1002/nme.70192)
 
-**Reference:**  
-_Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models._  
-arXiv preprint arXiv:2310.15769 (2023)
+The standard usage pattern is sequential: call `SetUp` to configure the problem, `Initialize` to prepare internal data structures, then `Run` (or `Calculate`) to execute the selection algorithm and obtain the output indices and weights.
 
-**Key Parameters:**
-- `ECM_tolerance`: Sets tolerance for how close the reduced approximation needs to be.
-- `Filter_tolerance`: Sets the threshold for filtering effects.
-- `Plotting`: If `True`, enables plotting for diagnostics or visualization.
-- `MaximumNumberUnsuccesfulIterations`: How many bad iterations before the algorithm stops.
+#### Parameters
 
----
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| ECM_tolerance | float | Convergence tolerance controlling how closely the reduced cubature rule must approximate the full integration; smaller values enforce higher accuracy at the cost of selecting more points. | `0` |
+| Filter_tolerance | float | Threshold for filtering out negligible contributions during the selection process. | `0` |
+| Plotting | bool | If `True`, enables diagnostic plotting during the selection algorithm for visualization and debugging. | `False` |
+| MaximumNumberUnsuccesfulIterations | int | Maximum number of consecutive unsuccessful iterations before the selection algorithm terminates early. | `100` |
+
+#### Key Attributes Set After `Run`
+
+| Name | Type | Description |
+|------|------|-------------|
+| z | ndarray of int | Indices of the selected (important) elements or quadrature points in the reduced cubature rule. |
+| w | ndarray of float | Positive weights associated with each selected point, defining the reduced integration rule. |
+
+#### Reference
+
+Hernández, J.A. et al., 2023. Local-ECM: An empirical cubature hyper-reduction method adapted to local reduced order models. arXiv preprint arXiv:2310.15769.
+
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [Calculate](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate) | Computes the final selected elements and their weights (run after `Initialize`). |
-| [Initialize](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize) | Prepares the calculation by setting up necessary data and variables. |
-| [Run](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run) | Runs the full ECM selection algorithm to find which elements and weights to use. |
-| [SetUp](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp) | Configures the selection problem using your snapshot data and options. |
+| [SetUp](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp) | Configure the element selection problem using snapshot data and assembly options. |
+| [Initialize](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize) | Prepare internal data structures before running the selection algorithm. |
+| [Run](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run) | Execute the core ECM selection loop to identify optimal elements and weights. |
+| [Calculate](#skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate) | Compute the final selected element indices and positive weights after `Initialize`. |
 
----
+***
 
-##### Calculate
-
-```python
-rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate()
-```
-
-**What it does:**  
-After calling `Initialize`, this method performs the computation to **identify** the final subset of elements and calculate their **positive weights** required for hyper-reduction.
-
----
-
-##### Initialize
-
-```python
-rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize()
-```
-
-**What it does:**  
-Sets up the internal structures and data needed before running the main selection algorithm.  
-*Call this before you use `Calculate` or `Run`.*
-
----
-
-##### Run
-
-```python
-rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run()
-```
-
-**What it does:**  
-Runs the **core ECM selection loop** to determine:
-- `self.z`: Indices of selected (important) elements
-- `self.w`: The corresponding positive weights
-
-This is the main entry point for actually producing your hyper-reduced model’s selection.
-
----
-
-##### SetUp
+#### SetUp { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp }
 
 ```python
 rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(
@@ -99,20 +77,70 @@ rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.SetUp(
 )
 ```
 
-**What it does:**  
-Configures the element selection problem by specifying the snapshots or basis you want to approximate, any starting weights/candidates, and several optional settings.
+**Summary:**
+Configures the ECM element selection problem by specifying the snapshot or basis data to be approximated, the element-level integration weights, and optional settings that control the selection behavior. This must be called before `Initialize` or `Run`. The matrix `G` typically contains projected residual snapshots or a reduced basis whose column space defines the space over which the cubature rule must be accurate.
 
-**Inputs:**
-- `G`: (Typically) a numpy array with **snapshot data** or a basis of projected residuals you want to approximate.
-- `Weights`: A numpy array of weights associated with the elements (for weighted norms or integration).
-- `constrain_sum_of_weights`: If `True`, forces the sum of selected weights to equal that of the original.
-- `InitialCandidatesSet`: (Optional) Start the selection with these element indices.
-- `use_L2_weighting`: Use L2-norm weighting in the selection process (can make selection more robust).
+##### Parameters
 
----
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| G | ndarray | Snapshot data matrix or projected residual basis to approximate; each column typically represents one snapshot or basis vector evaluated over the full integration domain. | _required_ |
+| Weights | ndarray | Integration weights associated with each element or quadrature point in the full-order mesh; used for weighted norm computations during selection. | _required_ |
+| constrain_sum_of_weights | bool | If `True`, enforces that the sum of the selected ECM weights equals the sum of the original full-domain weights, preserving integral consistency. | `False` |
+| InitialCandidatesSet | array_like of int or None | Optional initial set of element indices from which the selection algorithm begins; useful for warm-starting or restricting the candidate pool. | `None` |
+| use_L2_weighting | bool | If `True`, applies L2-norm weighting during the selection process, which can improve robustness for problems with non-uniform solution energy distributions. | `False` |
 
-**In simple terms:**  
-- **EmpiricalCubatureMethod** automates the selection of the smallest possible set of elements and positive weights you need to build an accurate hyper-reduced-order model.
-- Run `SetUp` → `Initialize` → `Run` (or `Calculate`) in sequence for a typical workflow.
-- This saves you time and memory—your reduced model will run much faster, just using the “important” pieces of the original problem!
+***
 
+#### Initialize { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Initialize()
+```
+
+**Summary:**
+Prepares the internal data structures, index sets, and intermediate variables required by the ECM selection algorithm. Must be called after `SetUp` and before invoking `Calculate` or `Run`. This step ensures all problem dimensions and internal state are correctly initialized prior to the iterative selection procedure.
+
+***
+
+#### Run { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Run()
+```
+
+**Summary:**
+Executes the complete ECM selection loop, combining `Initialize` and `Calculate` into a single top-level call. Iteratively identifies which elements or quadrature points to include and computes their associated positive weights. Upon completion, the results are stored as:
+
+- `self.z`: Indices of selected (important) elements or quadrature points.
+- `self.w`: Positive weights for each selected point forming the reduced cubature rule.
+
+This is the primary entry point for producing the hyperreduction point set and weights in a standard ECM workflow.
+
+***
+
+#### Calculate { #skrom.rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate }
+
+```python
+rom.ecm.empirical_cubature_method.EmpiricalCubatureMethod.Calculate()
+```
+
+**Summary:**
+Performs the core computational step of the ECM algorithm after `Initialize` has been called. Identifies the final subset of elements and computes their positive weights such that the reduced cubature rule approximates the full integration to within the specified `ECM_tolerance`. Use this method when you need direct control over the initialization and calculation phases separately, rather than through the combined `Run` entry point.
+
+***
+
+#### Notes
+
+The recommended workflow for a standard ECM setup is:
+
+```python
+ecm = EmpiricalCubatureMethod(ECM_tolerance=1e-3)
+ecm.SetUp(G, Weights)
+ecm.Run()
+# Access results
+selected_indices = ecm.z
+selected_weights = ecm.w
+```
+
+For finer control over the initialization and computation phases, `Initialize` followed by `Calculate` can be used in place of `Run`.

@@ -1,31 +1,22 @@
-# rom.ecsw.bilinear_form_hyperrom_ecsw { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw }
+# rom.ecsw.bilinear_form_hyperrom_ecsw
 
-`rom.ecsw.bilinear_form_hyperrom_ecsw`
+**Purpose:**
+Implements ECSW-based hyperreduction for finite element bilinear forms, enabling fast reduced-order stiffness matrix assembly by combining Energy-Conserving Sampling and Weighting (ECSW) with intelligent element clustering. Achieves substantial computational savings while preserving the energy conservation properties of the full-order operator—making it particularly suited for structural dynamics, wave propagation, and long-time integration scenarios.
 
-ECSW-based hyperreduction for finite element bilinear forms with element clustering.
+**Summary:**
+Provides the `BilinearFormHYPERROM_ecsw` class, which assembles the hyperreduced bilinear form by clustering active elements by their free DOF count for vectorized processing, extracting local stiffness submatrices using advanced NumPy indexing, applying ECSW weights to preserve physical structure, and accumulating contributions into the final \( r \times r \) reduced stiffness matrix via vectorized Einstein summation. This approach is especially effective when element distributions are relatively uniform, energy conservation is critical, and real-time ROM evaluation is required.
 
-This module provides hyperreduction of bilinear forms using Energy-Conserving 
-Sampling and Weighting (ECSW) combined with intelligent element clustering for 
-efficient reduced-order stiffness assembly. It achieves dramatic computational 
-speedups by clustering elements by number of free DOFs for vectorized operations,
-extracting and projecting element stiffness blocks onto reduced bases with weights,
-and assembling global reduced matrices via vectorized Einstein summation.
+**Author:** Suparno Bhattacharyya
 
-## TL;DR {.doc-section .doc-section-tldr}
-
-Enables substantial speedup in bilinear form assembly for ROMs while 
-preserving stability and energy conservation through intelligent element clustering
-and weighted assembly strategies.
-
-## Author {.doc-section .doc-section-author}
-
-Suparno Bhattacharyya
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
 | [BilinearFormHYPERROM_ecsw](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw) | ECSW-based hyperreduced bilinear form with element clustering for efficient assembly. |
+
+***
 
 ### BilinearFormHYPERROM_ecsw { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw }
 
@@ -44,129 +35,107 @@ rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw(
 )
 ```
 
-ECSW-based hyperreduced bilinear form with element clustering for efficient assembly.
+**Summary:**
+Implements a hyperreduction strategy that combines ECSW with element clustering to achieve computationally efficient and physically consistent reduced stiffness matrix assembly. The approach introduces several key innovations:
 
-**TL;DR**: Dramatically accelerates bilinear form assembly substantially through 
-energy-conserving element clustering and weighted sampling, providing both 
-computational efficiency and numerical stability for real-time ROM applications.
+- **Element clustering by free DOF count** for vectorized batch operations, eliminating expensive Python loops over individual elements.
+- **Energy-conserving weighted assembly** that preserves physical properties such as symmetry and stability throughout the reduction.
+- **Efficient submatrix extraction** using advanced NumPy indexing to pull free-DOF blocks from local element matrices.
+- **Vectorized Einstein summation** for parallel contraction of entire element clusters onto the reduced basis.
 
-This class implements a sophisticated hyperreduction strategy that combines 
-Energy-Conserving Sampling and Weighting (ECSW) with intelligent element 
-clustering to achieve massive computational savings while preserving crucial 
-physical properties. The approach works through several key innovations:
+This hyperreduction strategy is most effective for problems where energy conservation is critical, element DOF distributions are relatively uniform, computational stability is paramount for long-time integration, and real-time performance is required for control or optimization workflows.
 
-- Element clustering by free DOF count for vectorized operations
-- Energy-conserving weighted assembly preserving physical properties
-- Efficient submatrix extraction using advanced NumPy indexing
-- Vectorized Einstein summation for parallel element contributions
+***
 
-The hyperreduction is particularly effective for problems where:
+#### Parameters
 
-- Energy conservation is critical (structural dynamics, wave propagation)
-- Element distributions are relatively uniform (similar local DOF counts)
-- Computational stability is paramount for long-time integration
-- Real-time performance is required for control or optimization
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| form | callable | Full-order bilinear form function to be hyperreduced; should accept test and trial basis functions and return element-wise stiffness contributions. | _required_ |
+| elem_weight | scalar or array_like, shape (n_elements,) | ECSW weights determining each element's contribution to the reduced assembly; either a scalar applied uniformly or per-element weights from ECSW analysis. | _required_ |
+| ubasis | Basis | Trial-space FE basis containing full DOF count, element connectivity, and quadrature information for the original mesh. | _required_ |
+| lob | ndarray, shape (n_free, r) or (n_full, r) | Left (test) reduced basis matrix; shape depends on whether `free_dofs` is provided—if so, the basis is defined only on free DOFs. | _required_ |
+| rob | ndarray, shape (n_free, r) or (n_full, r) | Right (trial) reduced basis matrix with the same shape requirements as `lob`; projects full-order solutions to the \(r\)-dimensional reduced space. | _required_ |
+| vbasis | Basis or None | Test-space FE basis; defaults to `ubasis` for standard Galerkin formulations. | `None` |
+| free_dofs | ndarray of int or None | Indices of global DOFs that are free (non-Dirichlet); if provided, all reduced bases and operations are restricted to these DOFs. | `None` |
+| mean | ndarray or None | Mean snapshot vector for solution centering; required if snapshot data was mean-subtracted during reduced basis construction. | `None` |
+| nthreads | int | Number of threads for parallel element matrix extraction; `0` uses serial execution. | `0` |
+| dtype | numpy.dtype | Numeric precision for all computations and storage arrays. | `np.float64` |
 
-#### Parameters {.doc-section .doc-section-parameters}
+***
 
-| Name        | Type                                        | Description                                                                                                                                                                                           | Default      |
-|-------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| form        | callable                                    | The original bilinear form function to be hyperreduced. Should accept  test and trial basis functions and return element-wise stiffness contributions                                                 | _required_   |
-| elem_weight | scalar or array_like of shape (n_elements,) | Element-wise ECSW weights determining the contribution of each element  to the reduced assembly. Can be a single scalar applied to all elements  or individual weights per element from ECSW analysis | _required_   |
-| ubasis      | Basis                                       | Trial-space finite element basis containing full DOF count, element  connectivity, and quadrature information for the original mesh                                                                   | _required_   |
-| lob         | ndarray of shape (n_free, r) or (n_full, r) | Left (test) reduced basis matrix. Shape depends on whether free_dofs  is provided - if so, basis is defined only on free DOFs                                                                         | _required_   |
-| rob         | ndarray of shape (n_free, r) or (n_full, r) | Right (trial) reduced basis matrix with same shape requirements as lob. Projects full-order solutions to the r-dimensional reduced space                                                              | _required_   |
-| vbasis      | Basis                                       | Test-space finite element basis. If None, defaults to ubasis for  standard Galerkin formulations                                                                                                      | `None`       |
-| free_dofs   | ndarray of int                              | Indices of global DOFs that are free (non-Dirichlet). If provided, all reduced bases and operations are performed only on these DOFs                                                                  | `None`       |
-| mean        | ndarray                                     | Mean snapshot vector for solution centering. Required if snapshot data  was mean-subtracted during reduced basis construction                                                                         | `None`       |
-| nthreads    | int                                         | Number of threads for parallel element matrix extraction. Zero means  serial execution, positive values enable multi-threaded assembly                                                                | `0`          |
-| dtype       | numpy.dtype                                 | Numerical precision for all computations and storage arrays                                                                                                                                           | `np.float64` |
+#### Attributes
 
-#### Attributes {.doc-section .doc-section-attributes}
+| Name | Type | Description |
+|------|------|-------------|
+| lob | ndarray | Left reduced basis matrix, possibly restricted to free DOFs. |
+| rob | ndarray | Right reduced basis matrix, possibly restricted to free DOFs. |
+| free_dofs | ndarray or None | Indices of free DOFs when Dirichlet boundary conditions are present. |
+| mean | ndarray or None | Mean snapshot vector for solution centering and reconstruction. |
+| r | int | Reduced dimension (number of reduced basis vectors). |
+| mapping | ndarray of int | Mapping from full DOF indices to reduced free-DOF indices; Dirichlet-constrained DOFs are mapped to `-1`. |
+| cluster_idx | list of ndarray | Element indices grouped by number of free DOFs per element; each entry contains indices of elements sharing the same free DOF count. |
+| order_cluster | list of ndarray | Local DOF ordering within each cluster for efficient submatrix extraction; shape `(cluster_size, n_free_dofs_in_cluster)`. |
+| w_cluster | list of ndarray | ECSW weights corresponding to elements in each cluster. |
+| R_test_free | list of ndarray | Test basis matrices restricted to free DOFs for each cluster; shape `(cluster_size, n_free_dofs, r)`. |
+| R_trial_free | list of ndarray | Trial basis matrices restricted to free DOFs for each cluster; shape `(cluster_size, n_free_dofs, r)`. |
+| unique_freedom | ndarray of int | Unique counts of free DOFs per element, determining the number of distinct clusters. |
+| weight | ndarray | Full array of ECSW element weights. |
+| nonzero_elements | ndarray | Indices of elements with nonzero ECSW weights. |
+| ubasis_rom | Basis | Trial basis restricted to nonzero-weight elements. |
+| vbasis_rom | Basis | Test basis restricted to nonzero-weight elements. |
+| element_dofs | ndarray | Element-to-DOF connectivity for the restricted mesh. |
+| free_indices | ndarray | Free DOF indices for each element. |
+| mask | ndarray of bool | Boolean mask indicating which DOFs are free within each element's local DOF set. |
+| n_freedom | ndarray of int | Number of free DOFs per element. |
 
-| Name             | Type            | Description                                                                                                                       |
-|------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| lob              | ndarray         | Left reduced basis matrix, possibly restricted to free DOFs                                                                       |
-| rob              | ndarray         | Right reduced basis matrix, possibly restricted to free DOFs                                                                      |
-| free_dofs        | ndarray or None | Indices of free DOFs if Dirichlet boundary conditions are present                                                                 |
-| mean             | ndarray or None | Mean snapshot vector for solution centering and reconstruction                                                                    |
-| r                | int             | Reduced dimension (number of reduced basis vectors)                                                                               |
-| mapping          | ndarray of int  | Mapping from full DOF indices to reduced free-DOF indices, with  Dirichlet DOFs mapped to -1                                      |
-| cluster_idx      | list of ndarray | Element indices grouped by number of free DOFs per element. Each entry  contains indices of elements with the same free DOF count |
-| order_cluster    | list of ndarray | Local DOF ordering within each cluster for efficient submatrix extraction. Shape: (cluster_size, n_free_dofs_in_cluster)          |
-| w_cluster        | list of ndarray | ECSW weights corresponding to elements in each cluster                                                                            |
-| R_test_free      | list of ndarray | Test basis matrices restricted to free DOFs for each cluster. Shape: (cluster_size, n_free_dofs, r)                               |
-| R_trial_free     | list of ndarray | Trial basis matrices restricted to free DOFs for each cluster. Shape: (cluster_size, n_free_dofs, r)                              |
-| unique_freedom   | ndarray of int  | Unique counts of free DOFs per element, determining the number of clusters                                                        |
-| weight           | ndarray         | Array of ECSW weights                                                                                                             |
-| nonzero_elements | ndarray         | Indices of elements with non-zero weights                                                                                         |
-| ubasis_rom       | Basis           | Trial basis restricted to non-zero weight elements                                                                                |
-| vbasis_rom       | Basis           | Test basis restricted to non-zero weight elements                                                                                 |
-| element_dofs     | ndarray         | Element-to-DOF connectivity for restricted mesh                                                                                   |
-| free_indices     | ndarray         | Free DOF indices for each element                                                                                                 |
-| mask             | ndarray of bool | Boolean mask indicating which DOFs are free in each element                                                                       |
-| n_freedom        | ndarray of int  | Number of free DOFs per element                                                                                                   |
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [assemble_weighted_ecsw](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw) | Assemble the globally weighted reduced stiffness matrix using ECSW. |
-| [extract_element_matrices_rom](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom) | Extract element stiffness matrices for hyperreduced mesh assembly. |
+| [assemble_weighted_ecsw](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw) | Assemble the globally weighted reduced stiffness matrix using ECSW element clustering. |
+| [extract_element_matrices_rom](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom) | Extract local element stiffness matrices for the hyperreduced mesh. |
 
-##### assemble_weighted_ecsw { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw }
+***
+
+#### assemble_weighted_ecsw { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw }
 
 ```python
-rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw(
-    **kwargs,
-)
+rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.assemble_weighted_ecsw(**kwargs)
 ```
 
-Assemble the globally weighted reduced stiffness matrix using ECSW.
+**Summary:**
+Orchestrates the complete ECSW hyperreduction assembly to produce the final reduced stiffness matrix \( K_r \in \mathbb{R}^{r \times r} \). Executes the following five stages:
 
-**TL;DR**: Main assembly method that orchestrates element clustering, 
-vectorized stiffness extraction, ECSW weighting, and reduced basis 
-projection to produce the final r×r reduced-order stiffness matrix.
+1. **Element Matrix Extraction:** Calls element extraction routines to compute local stiffness matrices for all active elements, leveraging parallel processing when available.
+2. **Cluster-Based Processing:** Processes elements in clusters grouped by their free DOF count, enabling highly efficient vectorized operations over entire element groups.
+3. **Submatrix Extraction:** For each cluster, extracts free-DOF submatrices from local element matrices using advanced NumPy indexing.
+4. **ECSW Weighting:** Applies energy-conserving element weights to preserve physical properties during reduction.
+5. **Vectorized Contraction:** Uses Einstein summation to perform parallel contractions over entire clusters:
 
-This method performs the complete ECSW hyperreduction assembly process 
-through a sophisticated multi-stage algorithm:
+\[
+K_r \mathrel{+}= \sum_{e} R_{\text{test}}[e]^\top \cdot \bigl(w[e] \cdot K_{\text{local}}[e]\bigr) \cdot R_{\text{trial}}[e]
+\]
 
-1. **Element Matrix Extraction**: Calls element extraction routines to 
-   compute local stiffness matrices for all active elements, leveraging 
-   parallel processing when available.
+The final result preserves the mathematical structure of the full-order operator while achieving substantial computational savings through intelligent clustering and vectorization.
 
-2. **Cluster-Based Processing**: Processes elements in clusters based on 
-   their free DOF count, enabling highly efficient vectorized operations 
-   and eliminating expensive Python loops.
+##### Parameters
 
-3. **Submatrix Extraction**: For each cluster, extracts the free DOF 
-   submatrices from local element matrices using advanced NumPy indexing 
-   for maximum efficiency.
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| **kwargs | dict | Additional keyword arguments forwarded to element extraction routines, such as material parameters or quadrature settings. | `{}` |
 
-4. **ECSW Weighting**: Applies energy-conserving weights to preserve 
-   physical properties while enabling computational reduction.
+##### Returns
 
-5. **Vectorized Contraction**: Uses Einstein summation to perform 
-   parallel contractions over entire clusters: 
-   A_reduced += Σ_e R_test[e]^T @ (w[e] * K_local[e]) @ R_trial[e]
+| Name | Type | Description |
+|------|------|-------------|
+| K_reduced | ndarray, shape (r, r) | Assembled reduced-order stiffness matrix ready for use in ROM linear solves; preserves the energy conservation properties of the full-order operator. |
 
-The final result preserves the mathematical structure of the full-order 
-operator while achieving dramatic computational savings through intelligent 
-clustering and vectorization strategies.
+***
 
-###### Parameters {.doc-section .doc-section-parameters}
-
-| Name     | Type   | Description                                                                                                                                               | Default   |
-|----------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| **kwargs | dict   | Additional keyword arguments passed to element extraction routines for controlling assembly behavior, such as material parameters or  quadrature settings | `{}`      |
-
-###### Returns {.doc-section .doc-section-returns}
-
-| Name      | Type                    | Description                                                                                                                                                                                     |
-|-----------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| K_reduced | ndarray of shape (r, r) | Assembled reduced-order stiffness matrix ready for use in ROM systems. This matrix preserves the energy conservation properties of the  full-order operator while enabling real-time evaluation |
-
-##### extract_element_matrices_rom { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom }
+#### extract_element_matrices_rom { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom }
 
 ```python
 rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_matrices_rom(
@@ -177,55 +146,45 @@ rom.ecsw.bilinear_form_hyperrom_ecsw.BilinearFormHYPERROM_ecsw.extract_element_m
 )
 ```
 
-Extract element stiffness matrices for hyperreduced mesh assembly.
+**Summary:**
+Evaluates the bilinear form element by element over the hyperreduced mesh and returns local stiffness matrices for all active elements. Integration is restricted to the ECSW-selected element subset, dramatically reducing computational cost relative to full-mesh evaluation. Supports both serial and parallel execution modes. For each element \( e \), the local stiffness matrix entry is:
 
-**TL;DR**: Computes local element stiffness matrices for the reduced 
-element set using either serial or parallel execution, providing the 
-fundamental building blocks for ECSW-weighted global assembly.
+\[
+K_e[i,j] = \int_{\Omega_e} \varphi_i(\mathbf{x}) \cdot \mathcal{A}(\varphi_j(\mathbf{x})) \, d\Omega
+\]
 
-This method performs the core finite element integration to compute 
-element-level contributions to the global bilinear form. The integration 
-is performed only over elements selected by the hyperreduction strategy, 
-dramatically reducing computational cost while maintaining accuracy through 
-ECSW weighting.
+where \( \varphi_i, \varphi_j \) are local basis functions and integration uses the quadrature rules embedded in the finite element basis.
 
-The method supports both execution modes:
+##### Parameters
 
-- **Serial Mode** (nthreads=0): Sequential element-by-element computation
-- **Parallel Mode** (nthreads>0): Multi-threaded parallel element processing
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| ubasis | Basis | Trial-space FE basis containing mesh connectivity, quadrature points, and basis function evaluations. | _required_ |
+| vbasis | Basis or None | Test-space FE basis; defaults to `ubasis` for standard Galerkin formulations. | `None` |
+| elem_indices | array_like of int or None | Specific element indices to process; defaults to all elements in the hyperreduced mesh. | `None` |
+| **kwargs | dict | Additional keyword arguments forwarded to the bilinear form evaluation, such as material parameters or other problem-specific data. | `{}` |
 
-For each element, the method evaluates the bilinear form:
-K_e[i,j] = ∫_Ω_e φ_i(x) * form * φ_j(x) dx
+##### Returns
 
-where φ_i, φ_j are basis functions and integration uses the quadrature 
-rules embedded in the finite element basis.
+| Name | Type | Description |
+|------|------|-------------|
+| element_matrices | ndarray, shape (n_elements, n_local_dofs, n_local_dofs) | Stack of local element stiffness matrices; `element_matrices[e]` is the `n_local_dofs × n_local_dofs` stiffness matrix for element \( e \). |
 
-###### Parameters {.doc-section .doc-section-parameters}
+##### Raises
 
-| Name         | Type              | Description                                                                                                                     | Default    |
-|--------------|-------------------|---------------------------------------------------------------------------------------------------------------------------------|------------|
-| ubasis       | Basis             | Trial-space finite element basis containing mesh connectivity, quadrature points, and basis function evaluations                | _required_ |
-| vbasis       | Basis             | Test-space finite element basis. If None, defaults to ubasis  for standard Galerkin formulations                                | `None`     |
-| elem_indices | array_like of int | Specific element indices to include in extraction. If None, processes all elements in the hyperreduced mesh                     | `None`     |
-| **kwargs     | dict              | Additional keyword arguments passed to the bilinear form evaluation, such as material parameters or other problem-specific data | `{}`       |
+| Type | Condition |
+|------|-----------|
+| ValueError | Raised if trial and test bases have incompatible quadrature point counts, indicating a mismatch in integration rules. |
 
-###### Returns {.doc-section .doc-section-returns}
-
-| Name             | Type                                                      | Description                                                                                                                                  |
-|------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| element_matrices | ndarray of shape (n_elements, n_local_dofs, n_local_dofs) | Array of local element stiffness matrices. Each element_matrices[e]  contains the n_local_dofs × n_local_dofs stiffness matrix for element e |
-
-###### Raises {.doc-section .doc-section-raises}
-
-| Name   | Type       | Description                                                                                                   |
-|--------|------------|---------------------------------------------------------------------------------------------------------------|
-|        | ValueError | If trial and test bases have incompatible quadrature point counts, indicating a mismatch in integration rules |
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [with_elements](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements) | Return a similar basis on a subset of element indices. |
+| [with_elements](#skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements) | Return a restricted basis on a specified subset of element indices. |
+
+***
 
 ### with_elements { #skrom.rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements }
 
@@ -233,18 +192,17 @@ rules embedded in the finite element basis.
 rom.ecsw.bilinear_form_hyperrom_ecsw.with_elements(self, elements=None)
 ```
 
-Return a similar basis on a subset of element indices.
+**Summary:**
+Returns a new `FacetBasis` instance restricted to the specified subset of element indices. Used internally to construct the hyperreduced basis objects `ubasis_rom` and `vbasis_rom` covering only the active (nonzero-weight) elements, and is also available for external use when restricting any compatible basis to an element subset.
 
-**TL;DR**: Creates a restricted FacetBasis containing only specified elements.
+#### Parameters
 
-#### Parameters {.doc-section .doc-section-parameters}
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| elements | array_like of int or None | Subset of element indices to retain in the restricted basis; if `None`, the full basis is returned unchanged. | `None` |
 
-| Name     | Type            | Description                                        | Default   |
-|----------|-----------------|----------------------------------------------------|-----------|
-| elements | Optional\[Any\] | Subset of element indices to restrict the basis to | `None`    |
+#### Returns
 
-#### Returns {.doc-section .doc-section-returns}
-
-| Name   | Type       | Description                                              |
-|--------|------------|----------------------------------------------------------|
-|        | FacetBasis | New FacetBasis instance restricted to specified elements |
+| Name | Type | Description |
+|------|------|-------------|
+| restricted_basis | FacetBasis | New `FacetBasis` instance covering only the specified elements, with mesh connectivity and quadrature data adjusted accordingly. |

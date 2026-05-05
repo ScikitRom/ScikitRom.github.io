@@ -602,7 +602,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#skrom.rom.deim.deim" id="toc-skrom.rom.deim.deim" class="nav-link active" data-scroll-target="#skrom.rom.deim.deim">rom.deim.deim</a>
+  <li><a href="#rom.deim.deim" id="toc-rom.deim.deim" class="nav-link active" data-scroll-target="#rom.deim.deim">rom.deim.deim</a>
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
@@ -618,19 +618,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="skrom.rom.deim.deim" class="level1">
+<section id="rom.deim.deim" class="level1">
 <h1>rom.deim.deim</h1>
-<p><code>rom.deim.deim</code></p>
-<p>Discrete Empirical Interpolation Method (DEIM) for nonlinear ROM acceleration.</p>
-<p>This module implements DEIM for reducing the dimension of nonlinear force terms in reduced-order models within finite element frameworks. DEIM enables efficient evaluation of nonlinear terms by:</p>
-<ul>
-<li>Computing empirical modes from nonlinear force snapshots via SVD</li>
-<li>Selecting optimal interpolation points using greedy algorithms</li>
-<li>Constructing projection matrices for fast nonlinear term approximation</li>
-<li>Mapping selected DOFs to element indicators for efficient assembly</li>
-</ul>
-<p><strong>TL;DR</strong>: Dramatically reduces computational cost of nonlinear ROM evaluation by approximating nonlinear terms using interpolation at carefully selected points, achieving significant speedups while maintaining accuracy.</p>
-<p>Author: Suparno Bhattacharyya</p>
+<p><strong>Purpose:</strong> Implements the Discrete Empirical Interpolation Method (DEIM) for accelerating nonlinear term evaluation in reduced-order models within finite element frameworks. By restricting nonlinear force evaluations to a small set of strategically selected degrees of freedom and reconstructing the full term via interpolation, DEIM reduces the computational cost of nonlinear ROM evaluation by orders of magnitude while preserving accuracy.</p>
+<p><strong>Summary:</strong> Provides the <code>deim</code> class, which constructs an efficient approximation of nonlinear force terms by computing empirical modes from snapshot data, selecting optimal interpolation points via a greedy algorithm, and building the DEIM projection matrix for fast online reconstruction. Selected DOFs are mapped to finite element indicators to enable sparse assembly during online evaluation. The method transforms nonlinear term evaluation from ((n)) to ((m)) where (m n), making real-time and large-scale nonlinear ROM simulation tractable.</p>
+<p><strong>Author:</strong> Suparno Bhattacharyya</p>
+<hr>
 <section id="classes" class="level2">
 <h2 class="anchored" data-anchor-id="classes">Classes</h2>
 <table class="caption-top table">
@@ -647,27 +640,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<hr>
 <section id="skrom.rom.deim.deim.deim" class="level3">
 <h3 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim">deim</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.deim.deim(mesh, F_nl, V_sel, tol_f<span class="op">=</span><span class="fl">0.01</span>, extra_modes<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Discrete Empirical Interpolation Method for nonlinear ROM acceleration.</p>
-<p><strong>TL;DR</strong>: Reduces computational cost of nonlinear terms in ROMs by ~1000x through strategic sampling and interpolation, enabling real-time nonlinear PDE solutions.</p>
-<p>The Discrete Empirical Interpolation Method (DEIM) addresses the computational bottleneck in nonlinear reduced-order models where nonlinear terms must still be evaluated at all degrees of freedom. DEIM constructs an efficient approximation by:</p>
+<p><strong>Summary:</strong> Addresses the computational bottleneck in nonlinear reduced-order models where nonlinear terms must otherwise be evaluated at all degrees of freedom regardless of basis size. The DEIM procedure proceeds through four stages:</p>
 <ol type="1">
-<li><p><strong>Empirical Mode Analysis</strong>: Computes dominant modes of nonlinear force snapshots using SVD to capture the essential nonlinear behavior patterns.</p></li>
-<li><p><strong>Optimal Point Selection</strong>: Uses a greedy algorithm to select interpolation points that maximize information content while minimizing approximation error.</p></li>
-<li><p><strong>Projection Matrix Construction</strong>: Builds a projection matrix that enables fast reconstruction of full nonlinear terms from interpolated values.</p></li>
-<li><p><strong>Element Mapping</strong>: Maps selected degrees of freedom to finite element indicators for efficient sparse assembly operations.</p></li>
+<li><strong>Empirical Mode Analysis:</strong> Computes dominant modes of the nonlinear force snapshot matrix via SVD to capture the essential nonlinear behavior patterns in a compact basis.</li>
+<li><strong>Optimal Point Selection:</strong> Applies a greedy algorithm to select interpolation points that maximize information content and minimize approximation error in the empirical subspace.</li>
+<li><strong>Projection Matrix Construction:</strong> Builds the DEIM projection matrix enabling fast reconstruction of the full nonlinear term from values sampled at the selected points only.</li>
+<li><strong>Element Mapping:</strong> Maps selected DOFs to finite element indicators for efficient sparse matrix assembly during online ROM evaluation.</li>
 </ol>
-<p>The method transforms the nonlinear term evaluation from O(n) to O(m) where m &lt;&lt; n, achieving dramatic computational savings essential for real-time applications.</p>
-<section id="parameters" class="level4 doc-section doc-section-parameters">
-<h4 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters">Parameters</h4>
+<p>This approach is most effective for nonlinear PDEs with smooth or localized nonlinear behavior, real-time control applications, and systems where nonlinear term evaluation dominates the online computational cost.</p>
+<section id="parameters" class="level4">
+<h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 18%">
-<col style="width: 70%">
-<col style="width: 5%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -686,38 +678,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td>F_nl</td>
-<td>ndarray of shape (n_dofs, n_snapshots)</td>
-<td>Snapshot matrix of nonlinear force evaluations at various parameter values. Each column represents the nonlinear force vector for one parameter instance.</td>
+<td>ndarray, shape (n_dofs, n_snapshots)</td>
+<td>Snapshot matrix of nonlinear force evaluations; each column is the nonlinear force vector for one parameter instance.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>V_sel</td>
-<td>ndarray of shape (n_dofs, n_modes)</td>
+<td>ndarray, shape (n_dofs, n_modes)</td>
 <td>Reduced basis matrix from POD, used for solution space projection.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>tol_f</td>
 <td>float</td>
-<td>Tolerance for SVD mode selection based on singular value decay. Smaller values retain more modes for higher accuracy.</td>
+<td>Tolerance for SVD mode selection based on singular value decay; smaller values retain more modes for higher accuracy.</td>
 <td><code>1e-2</code></td>
 </tr>
 <tr class="odd">
 <td>extra_modes</td>
 <td>int</td>
-<td>Additional empirical modes to retain beyond those selected by tolerance criterion, useful for capturing marginal nonlinear effects.</td>
+<td>Additional empirical modes to retain beyond those selected by the tolerance criterion, useful for capturing marginal nonlinear effects.</td>
 <td><code>0</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="attributes" class="level4 doc-section doc-section-attributes">
-<h4 class="doc-section doc-section-attributes anchored" data-anchor-id="attributes">Attributes</h4>
+<section id="attributes" class="level4">
+<h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 10%">
-<col style="width: 82%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -730,17 +722,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>U_fs</td>
 <td>ndarray</td>
-<td>Truncated empirical basis matrix containing selected nonlinear modes.</td>
+<td>Truncated empirical basis matrix containing the selected nonlinear modes.</td>
 </tr>
 <tr class="even">
 <td>deim_mat</td>
 <td>ndarray</td>
-<td>DEIM projection matrix enabling fast nonlinear term reconstruction: F_nl_approx = V.T @ U_fs @ deim_mat @ F_nl_sampled</td>
+<td>DEIM projection matrix enabling fast nonlinear term reconstruction: ( <em>{} = V^U</em>{fs} D _{} ), where (D) is <code>deim_mat</code>.</td>
 </tr>
 <tr class="odd">
 <td>xi</td>
 <td>ndarray of int</td>
-<td>Binary element indicator vector marking which elements contain selected DOFs.</td>
+<td>Binary element indicator vector marking which elements contain at least one selected DOF.</td>
 </tr>
 <tr class="even">
 <td>n_f_sel</td>
@@ -750,30 +742,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="notes" class="level4 doc-section doc-section-notes">
-<h4 class="doc-section doc-section-notes anchored" data-anchor-id="notes">Notes</h4>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
 <p>DEIM is particularly effective for:</p>
 <ul>
 <li>Nonlinear PDEs with localized nonlinear effects</li>
-<li>Real-time control applications requiring fast ROM evaluation<br>
-</li>
+<li>Real-time control applications requiring fast online ROM evaluation</li>
 <li>Problems where nonlinear term evaluation dominates computational cost</li>
 <li>Systems with smooth nonlinear behavior amenable to low-rank approximation</li>
 </ul>
-<p>The method assumes the nonlinear terms can be well-approximated by a low-rank representation, which is typically valid for many physical systems.</p>
+<p>The method assumes nonlinear terms can be well-approximated by a low-rank representation, which holds for a broad class of physical systems.</p>
 </section>
-<section id="references" class="level4 doc-section doc-section-references">
-<h4 class="doc-section doc-section-references anchored" data-anchor-id="references">References</h4>
-<p>.. [1] Chaturantabut, S. and Sorensen, D.C., 2010. Nonlinear model reduction via discrete empirical interpolation method. SIAM journal on scientific computing, 32(5), pp.2737-2764.</p>
+<section id="references" class="level4">
+<h4 class="anchored" data-anchor-id="references">References</h4>
+<p>Chaturantabut, S. and Sorensen, D.C., 2010. Nonlinear model reduction via discrete empirical interpolation method. <em>SIAM Journal on Scientific Computing</em>, 32(5), pp.&nbsp;2737–2764.</p>
 </section>
-<section id="examples" class="level4 doc-section doc-section-examples">
-<h4 class="doc-section doc-section-examples anchored" data-anchor-id="examples">Examples</h4>
+<section id="examples" class="level4">
+<h4 class="anchored" data-anchor-id="examples">Examples</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Generate nonlinear force snapshots</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> F_snapshots <span class="op">=</span> compute_nonlinear_snapshots(problem, param_list)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Create DEIM approximation</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> deim_obj <span class="op">=</span> deim(mesh, F_snapshots, reduced_basis, tol_f<span class="op">=</span><span class="fl">1e-3</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> deim_matrix, sample_points <span class="op">=</span> deim_obj.select_elems()</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Use in ROM: F_approx = V.T @ U @ deim_matrix @ F_sampled</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
 <section id="methods" class="level4">
 <h4 class="anchored" data-anchor-id="methods">Methods</h4>
@@ -787,38 +779,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.deim.deim.deim.deim_red">deim_red</a></td>
-<td>Execute greedy DEIM algorithm for optimal interpolation point selection.</td>
+<td>Execute the greedy DEIM algorithm for optimal interpolation point selection.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.deim.deim.deim.select_elems">select_elems</a></td>
-<td>Select interpolation points and construct DEIM projection matrix.</td>
+<td>Select interpolation points and construct the DEIM projection matrix.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.deim.deim.deim.sopt_red">sopt_red</a></td>
-<td>S-OPT sampling: selects rows maximising the S-optimality measure</td>
+<td>S-OPT sampling: select rows maximizing the S-optimality measure.</td>
 </tr>
 </tbody>
 </table>
-<section id="skrom.rom.deim.deim.deim.deim_red" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim.deim_red">deim_red</h5>
+<hr>
+</section>
+<section id="skrom.rom.deim.deim.deim.deim_red" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim.deim_red">deim_red</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.deim.deim.deim_red(f_basis, num_f_basis_vectors_used)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Execute greedy DEIM algorithm for optimal interpolation point selection.</p>
-<p><strong>TL;DR</strong>: Implements the core greedy algorithm that iteratively selects interpolation points to minimize approximation error in the empirical subspace.</p>
-<p>The DEIM greedy algorithm works by:</p>
+<p><strong>Summary:</strong> Implements the core greedy DEIM algorithm that iteratively selects interpolation points to minimize approximation error in the empirical subspace. The procedure operates as follows:</p>
 <ol type="1">
-<li><p><strong>Initial Selection</strong>: Chooses the DOF with maximum absolute value in the first empirical mode as the starting interpolation point.</p></li>
-<li><p><strong>Iterative Refinement</strong>: For each subsequent mode, solves for optimal interpolation coefficients using previously selected points, then selects the DOF with maximum residual as the next point.</p></li>
-<li><p><strong>Residual Minimization</strong>: Each new point is chosen to minimize the approximation error when reconstructing the current empirical mode from previously selected points.</p></li>
+<li><strong>Initial Selection:</strong> Chooses the DOF with the largest absolute value in the first empirical mode as the starting interpolation point.</li>
+<li><strong>Iterative Refinement:</strong> For each subsequent mode, solves for optimal interpolation coefficients using the previously selected points, then selects the DOF with the maximum residual as the next point.</li>
+<li><strong>Residual Minimization:</strong> Each new point is chosen to minimize the reconstruction error for the current empirical mode given all previously selected points.</li>
 </ol>
-<p>This greedy strategy ensures that interpolation points capture maximum information content while maintaining numerical stability through well-conditioned interpolation matrices.</p>
-<section id="parameters-1" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-1">Parameters</h6>
+<p>This greedy strategy ensures that selected points capture maximum information content while maintaining numerical stability through well-conditioned interpolation matrices. The computational complexity is ((m^3)) where (m) is the number of modes, making it efficient even for moderately large empirical subspaces.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 13%">
-<col style="width: 18%">
-<col style="width: 61%">
-<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -831,26 +823,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f_basis</td>
-<td>ndarray of shape (n_dofs, n_modes)</td>
-<td>Empirical basis matrix from SVD of nonlinear force snapshots. Each column represents one empirical mode.</td>
+<td>ndarray, shape (n_dofs, n_modes)</td>
+<td>Empirical basis matrix from SVD of nonlinear force snapshots; each column represents one empirical mode.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>num_f_basis_vectors_used</td>
 <td>int</td>
-<td>Number of empirical modes to use for interpolation point selection. Cannot exceed the total number of available modes.</td>
+<td>Number of empirical modes to use for interpolation point selection; cannot exceed the total number of available modes.</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns">Returns</h6>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 20%">
-<col style="width: 71%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -862,51 +854,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f_basis_sampled</td>
-<td>ndarray of shape (num_modes, num_modes)</td>
-<td>Square matrix containing rows of the empirical basis corresponding to selected interpolation points. Used to construct the projection matrix.</td>
+<td>ndarray, shape (num_modes, num_modes)</td>
+<td>Square matrix containing the rows of the empirical basis corresponding to selected interpolation points; used to construct the DEIM projection matrix.</td>
 </tr>
 <tr class="even">
 <td>sampled_rows</td>
 <td>list of int</td>
-<td>Ordered list of DOF indices selected as interpolation points. The order reflects the greedy selection sequence.</td>
+<td>Ordered list of DOF indices selected as interpolation points; the ordering reflects the greedy selection sequence.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="notes-1" class="level6 doc-section doc-section-notes">
-<h6 class="doc-section doc-section-notes anchored" data-anchor-id="notes-1">Notes</h6>
-<p>The algorithm ensures that the interpolation matrix f_basis_sampled remains well-conditioned by construction, as each new point is chosen to maximize the residual norm.</p>
-<p>For problems with strong locality in nonlinear effects, DEIM typically selects points near regions of highest nonlinear activity, leading to physically intuitive sampling patterns.</p>
-<p>The computational complexity is O(m³) where m is the number of modes, making it efficient even for moderately large empirical subspaces.</p>
+<section id="notes-1" class="level5">
+<h5 class="anchored" data-anchor-id="notes-1">Notes</h5>
+<p>The interpolation matrix <code>f_basis_sampled</code> remains well-conditioned by construction, as each successive point is chosen to maximize the residual norm. For problems with strongly localized nonlinear effects, DEIM typically selects points near regions of highest nonlinear activity, producing physically intuitive sampling patterns.</p>
 </section>
-<section id="examples-1" class="level6 doc-section doc-section-examples">
-<h6 class="doc-section doc-section-examples anchored" data-anchor-id="examples-1">Examples</h6>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="co"># Empirical basis from SVD  </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> U, s, Vt <span class="op">=</span> np.linalg.svd(F_snapshots, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> sampled_basis, indices <span class="op">=</span> deim_obj.deim_red(U, n_modes<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="ss">f"Condition number: </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>cond(sampled_basis)<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="examples-1" class="level5">
+<h5 class="anchored" data-anchor-id="examples-1">Examples</h5>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> U, s, Vt <span class="op">=</span> np.linalg.svd(F_snapshots, full_matrices<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> sampled_basis, indices <span class="op">=</span> deim_obj.deim_red(U, n_modes<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="ss">f"Condition number: </span><span class="sc">{</span>np<span class="sc">.</span>linalg<span class="sc">.</span>cond(sampled_basis)<span class="sc">:.2e}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.deim.deim.deim.select_elems" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim.select_elems">select_elems</h5>
+<section id="skrom.rom.deim.deim.deim.select_elems" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim.select_elems">select_elems</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rom.deim.deim.deim.select_elems(sopt<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Select interpolation points and construct DEIM projection matrix.</p>
-<p><strong>TL;DR</strong>: Core DEIM algorithm that identifies optimal sampling points and builds the projection matrix for fast nonlinear term approximation.</p>
-<p>This method performs the complete DEIM setup:</p>
+<p><strong>Summary:</strong> Performs the complete DEIM setup pipeline, from snapshot decomposition through to projection matrix construction. Executes the following steps in sequence:</p>
 <ol type="1">
-<li><p><strong>SVD Analysis</strong>: Decomposes nonlinear snapshots to identify dominant empirical modes that capture essential nonlinear behavior patterns.</p></li>
-<li><p><strong>Mode Selection</strong>: Applies tolerance-based truncation with optional extra modes to balance accuracy and computational efficiency.</p></li>
-<li><p><strong>Point Selection</strong>: Uses greedy DEIM algorithm to select interpolation points that minimize approximation error in the empirical subspace.</p></li>
-<li><p><strong>Element Mapping</strong>: Maps selected DOFs to finite element indicators for efficient sparse matrix assembly during online evaluation.</p></li>
-<li><p><strong>Projection Construction</strong>: Builds the DEIM projection matrix that enables reconstruction: F_full ≈ U_fs @ pinv(U_fs[selected_rows, :]) @ F_sampled</p></li>
+<li><strong>SVD Analysis:</strong> Decomposes the nonlinear snapshot matrix to identify the dominant empirical modes capturing essential nonlinear behavior.</li>
+<li><strong>Mode Selection:</strong> Applies tolerance-based truncation, with optional additional modes (<code>extra_modes</code>) to balance accuracy against computational efficiency.</li>
+<li><strong>Point Selection:</strong> Invokes the greedy DEIM algorithm (or S-OPT if <code>sopt=True</code>) to select interpolation points that minimize approximation error in the empirical subspace.</li>
+<li><strong>Element Mapping:</strong> Maps selected DOFs to finite element indicators (<code>self.xi</code>) to enable efficient sparse assembly during online evaluation.</li>
+<li><strong>Projection Construction:</strong> Builds the DEIM projection matrix using the Moore-Penrose pseudoinverse for numerical stability:</li>
 </ol>
-<section id="returns-1" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-1">Returns</h6>
+<p>[ <em>{} U</em>{fs} (U_{fs}[, :])^{+} _{} ]</p>
+<section id="returns-1" class="level5">
+<h5 class="anchored" data-anchor-id="returns-1">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 23%">
-<col style="width: 69%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -918,44 +907,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>deim_mat</td>
-<td>ndarray of shape (n_modes, n_selected_points)</td>
-<td>DEIM projection matrix for reconstructing full nonlinear terms from sampled values. Used as: F_approx = V.T @ U_fs @ deim_mat @ F_sampled</td>
+<td>ndarray, shape (n_modes, n_selected_points)</td>
+<td>DEIM projection matrix for reconstructing full nonlinear terms from sampled values; used as ( <em>{} = V^U</em>{fs} D _{} ).</td>
 </tr>
 <tr class="even">
 <td>sampled_rows</td>
 <td>list of int</td>
-<td>Indices of degrees of freedom selected as DEIM interpolation points. These are the only DOFs where nonlinear terms need evaluation.</td>
+<td>DOF indices selected as DEIM interpolation points; these are the only locations where nonlinear terms require evaluation during online ROM solves.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="notes-2" class="level6 doc-section doc-section-notes">
-<h6 class="doc-section doc-section-notes anchored" data-anchor-id="notes-2">Notes</h6>
-<p>The projection matrix construction uses the Moore-Penrose pseudoinverse to ensure numerical stability even when the empirical basis is not perfectly conditioned.</p>
-<p>The element mapping (self.xi) enables efficient assembly by identifying which finite elements contribute to the selected DOFs, allowing sparse matrix operations during online evaluation.</p>
+<section id="notes-2" class="level5">
+<h5 class="anchored" data-anchor-id="notes-2">Notes</h5>
+<p>The pseudoinverse-based construction ensures numerical stability even when the empirical basis is not perfectly conditioned. The element mapping (<code>self.xi</code>) restricts assembly to only the finite elements containing selected DOFs, enabling sparse matrix operations throughout the online phase.</p>
 </section>
-<section id="examples-2" class="level6 doc-section doc-section-examples">
-<h6 class="doc-section doc-section-examples anchored" data-anchor-id="examples-2">Examples</h6>
+<section id="examples-2" class="level5">
+<h5 class="anchored" data-anchor-id="examples-2">Examples</h5>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> deim_obj <span class="op">=</span> deim(mesh, F_snapshots, basis_matrix)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> proj_matrix, points <span class="op">=</span> deim_obj.select_elems()</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="ss">f"Selected </span><span class="sc">{</span><span class="bu">len</span>(points)<span class="sc">}</span><span class="ss"> points from </span><span class="sc">{</span>F_snapshots<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> DOFs"</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">print</span>(<span class="ss">f"Reduction ratio: </span><span class="sc">{</span>F_snapshots<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="op">/</span><span class="bu">len</span>(points)<span class="sc">:.1f}</span><span class="ss">x"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
 </section>
-<section id="skrom.rom.deim.deim.deim.sopt_red" class="level5">
-<h5 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim.sopt_red">sopt_red</h5>
+<section id="skrom.rom.deim.deim.deim.sopt_red" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.deim.deim.sopt_red">sopt_red</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rom.deim.deim.deim.sopt_red(f_basis, num_f_basis_vectors_used)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>S-OPT sampling: selects rows maximising the S-optimality measure S(Z^T Q) which jointly maximises column orthogonality and determinant of the information matrix (Z^T Q)^T (Z^T Q).</p>
-<p>Uses efficient Sherman-Morrison rank-1 updates to avoid recomputing determinants at every candidate evaluation.</p>
-<p>Phase 1 (j &lt; n_f): row + column expansion — Slide 12/14 formula Phase 2 (j &gt;= n_f): row-only append (oversampling) — Slide 13/15 formula</p>
-<section id="parameters-2" class="level6 doc-section doc-section-parameters">
-<h6 class="doc-section doc-section-parameters anchored" data-anchor-id="parameters-2">Parameters</h6>
+<p><strong>Summary:</strong> Implements S-OPT sampling as an alternative to the greedy DEIM algorithm. Rather than minimizing pointwise residuals, S-OPT selects rows of the empirical basis by maximizing the S-optimality measure ( S(Z^Q) ), which jointly maximizes column orthogonality and the determinant of the information matrix ( (Z^Q)^(Z^Q) ). This produces sampling sets with better volumetric coverage of the empirical subspace compared to purely greedy selection.</p>
+<p>Efficient Sherman–Morrison rank-1 updates are used to avoid recomputing determinants at every candidate evaluation, keeping the procedure tractable for large subspaces. The algorithm operates in two phases:</p>
+<ul>
+<li><strong>Phase 1</strong> (( j &lt; n_f )): Row and column expansion following the Slide 12/14 formula.</li>
+<li><strong>Phase 2</strong> (( j n_f )): Row-only append for oversampling, following the Slide 13/15 formula.</li>
+</ul>
+<section id="parameters-2" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-2">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 21%">
-<col style="width: 22%">
-<col style="width: 45%">
-<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -968,26 +960,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>f_basis</td>
-<td>ndarray(N, n_modes_total)</td>
-<td>Full empirical basis from SVD of nonlinear snapshots.</td>
+<td>ndarray, shape (N, n_modes_total)</td>
+<td>Full empirical basis matrix from SVD of nonlinear snapshots.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>num_f_basis_vectors_used</td>
 <td>int</td>
-<td>Number of basis vectors (modes) to use.</td>
+<td>Number of empirical basis vectors (modes) to use for point selection.</td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-2" class="level6 doc-section doc-section-returns">
-<h6 class="doc-section doc-section-returns anchored" data-anchor-id="returns-2">Returns</h6>
+<section id="returns-2" class="level5">
+<h5 class="anchored" data-anchor-id="returns-2">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 20%">
-<col style="width: 22%">
-<col style="width: 56%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1000,7 +992,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>f_sampled_row</td>
 <td>ndarray</td>
-<td>Rows of f_basis at the selected indices.</td>
+<td>Rows of <code>f_basis</code> at the S-OPT selected indices.</td>
 </tr>
 <tr class="even">
 <td>Z_indices</td>
@@ -1010,17 +1002,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>Z_boolean</td>
 <td>ndarray of bool</td>
-<td>Boolean mask of selected rows.</td>
+<td>Boolean mask of selected rows, usable for direct array indexing.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="references-1" class="level6 doc-section doc-section-references">
-<h6 class="doc-section doc-section-references anchored" data-anchor-id="references-1">References</h6>
-<p>Shin &amp; Xiu, SIAM J. Sci. Comput. 38 (2016), pp.&nbsp;A385-A411. Lauzon et al., SIAM J. Sci. Comput. 46 (2024), arXiv:2203.16494.</p>
+<section id="references-1" class="level5">
+<h5 class="anchored" data-anchor-id="references-1">References</h5>
+<p>Shin, Y. and Xiu, D., 2016. On a near optimal sampling strategy for least squares polynomial regression. <em>SIAM Journal on Scientific Computing</em>, 38(3), pp.&nbsp;A385–A411.</p>
+<p>Lauzon, J. et al., 2024. S-OPT: A points selection strategy for hyper-reduction in reduced order models. <em>SIAM Journal on Scientific Computing</em>, 46. arXiv:2203.16494.</p>
 
 
-</section>
 </section>
 </section>
 </section>

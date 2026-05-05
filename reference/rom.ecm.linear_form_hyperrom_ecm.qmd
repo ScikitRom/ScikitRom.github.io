@@ -1,26 +1,26 @@
-# rom.ecm.linear_form_hyperrom_ecm { #skrom.rom.ecm.linear_form_hyperrom_ecm }
+# rom.ecm.linear_form_hyperrom_ecm
 
-`rom.ecm.linear_form_hyperrom_ecm`
+**Purpose:**
+Implements ECM-based hyperreduction for finite element linear forms, enabling fast reduced load vector assembly by restricting integration to ECM-selected Gauss points with their associated per-point weights. Follows the same element clustering strategy as the ECSW linear form implementation in this repository, with the key distinction that weights are stored and applied at the individual Gauss-point level rather than at the element level.
 
-ECM-based hyperreduction for finite element linear forms.
+**Summary:**
+Provides the `LinearFormHYPERROM_ecm` class, which assembles the hyperreduced linear form by evaluating local load vector contributions at each active Gauss point, scaling them by their corresponding ECM weights, projecting onto the left reduced basis, and accumulating into the final reduced-order load vector. Because per-Gauss-point contributions are not pre-summed across quadrature points, ECM weights can be applied precisely at each integration point before the summation step.
 
-This module follows the same clustering strategy used by the ECSW linear-form
-implementation already in the repository. The only change is that the weights
-are stored per element and per Gauss point, and the assembly is performed from
-per-Gauss local vectors.
+***
 
-## Assumption {.doc-section .doc-section-assumption}
+## Assumption
 
-The stored ECM weights are treated as multiplicative factors applied to
-scikit-fem's native per-Gauss contributions ``form(...) * dx``. If an external
-ECM code returns *absolute* cubature weights, convert them first using the
-helper in ``skrom.rom.ecm.helpers``.
+ECM weights stored in `gauss_weight` are treated as **multiplicative factors** applied to scikit-fem's native per-Gauss-point contributions `form(...) * dx`. If an external ECM solver returns **absolute cubature weights** rather than multipliers, convert them first using the helper utility in `skrom.rom.ecm.helpers` before passing them to this class.
+
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
 | [LinearFormHYPERROM_ecm](#skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm) | Hyperreduced linear form assembled from ECM-selected Gauss points. |
+
+***
 
 ### LinearFormHYPERROM_ecm { #skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm }
 
@@ -37,26 +37,65 @@ rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm(
 )
 ```
 
-Hyperreduced linear form assembled from ECM-selected Gauss points.
+**Summary:**
+Assembles the hyperreduced linear form for ROM use by integrating only over those Gauss points and elements with nonzero ECM weights. The class follows the same element clustering strategy as the ECSW linear form assembler, grouping active elements by their free local DOF count for memory-efficient processing. Per-Gauss-point local vectors are extracted without pre-summing across quadrature points, allowing ECM weights to be applied individually before accumulation into the final reduced-order load vector \( \mathbf{F}_r \in \mathbb{R}^r \).
+
+The assembly pipeline proceeds as:
+
+\[
+\mathbf{F}_r = \sum_{e \in \mathcal{E}_{\text{active}}} \sum_{q} w_{e,q}^{\text{ECM}} \cdot V_L^\top \cdot \mathbf{f}_{e,q}
+\]
+
+where \( w_{e,q}^{\text{ECM}} \) is the ECM weight for Gauss point \( q \) in element \( e \), \( \mathbf{f}_{e,q} \) is the raw per-point local load vector contribution (already including `basis.dx`), and \( V_L \) is the left reduced test basis `lob`.
+
+#### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| form | callable | Full-order linear form function to be hyperreduced; must accept a test basis and return element-wise load contributions. | _required_ |
+| gauss_weight | ndarray, shape (n_elements, n_gauss_points) | ECM weight array in multiplicative form; entries are nonzero only for ECM-selected Gauss points. | _required_ |
+| ubasis | Basis | Test basis for the full-order FE space, containing mesh connectivity and quadrature information. | _required_ |
+| lob | ndarray, shape (n_free, r) | Left (test) reduced basis matrix projecting full-order load vectors onto the \(r\)-dimensional reduced test space. | _required_ |
+| free_dofs | ndarray of int or None | Indices of unconstrained (non-Dirichlet) DOFs for boundary condition handling. | `None` |
+| mean | ndarray or None | Mean load vector for centering; required if load data was mean-subtracted during basis construction. | `None` |
+| nthreads | int | Number of threads for parallel element vector extraction; `0` uses serial execution. | `0` |
+| dtype | numpy.dtype | Numeric precision for all computations and storage. | `np.float64` |
+
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [assemble_weighted_ecm](#skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.assemble_weighted_ecm) | Assemble the reduced linear form using ECM Gauss-point weights. |
-| [extract_element_vectors_qp_rom](#skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.extract_element_vectors_qp_rom) | Extract per-Gauss local element vectors. |
+| [assemble_weighted_ecm](#skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.assemble_weighted_ecm) | Assemble the reduced load vector using ECM Gauss-point weights. |
+| [extract_element_vectors_qp_rom](#skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.extract_element_vectors_qp_rom) | Extract per-Gauss-point local element load vectors for ECM-weighted assembly. |
 
-##### assemble_weighted_ecm { #skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.assemble_weighted_ecm }
+***
+
+#### assemble_weighted_ecm { #skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.assemble_weighted_ecm }
 
 ```python
-rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.assemble_weighted_ecm(
-    **kwargs,
-)
+rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.assemble_weighted_ecm(**kwargs)
 ```
 
-Assemble the reduced linear form using ECM Gauss-point weights.
+**Summary:**
+Constructs the ROM's reduced load vector by applying ECM weights at the individual Gauss-point level. Per-Gauss-point local load vector contributions are obtained via `extract_element_vectors_qp_rom`, scaled by their corresponding ECM weights from `gauss_weight`, projected onto the left reduced test basis `lob`, and accumulated into the final reduced-order load vector. Because contributions are not pre-summed across quadrature points, ECM weights are applied directly to the raw per-point integrands—preserving the correctness of the hyperreduced quadrature rule.
 
-##### extract_element_vectors_qp_rom { #skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.extract_element_vectors_qp_rom }
+##### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| **kwargs | dict | Additional keyword arguments forwarded to element-level assembly, such as time-dependent load parameters or material coefficients. | `{}` |
+
+##### Returns
+
+| Name | Type | Description |
+|------|------|-------------|
+| F_reduced | ndarray, shape (r,) | Reduced-order load vector assembled via ECM-weighted Gauss-point integration, ready for use in ROM linear solves. |
+
+***
+
+#### extract_element_vectors_qp_rom { #skrom.rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.extract_element_vectors_qp_rom }
 
 ```python
 rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.extract_element_vectors_qp_rom(
@@ -66,10 +105,27 @@ rom.ecm.linear_form_hyperrom_ecm.LinearFormHYPERROM_ecm.extract_element_vectors_
 )
 ```
 
-Extract per-Gauss local element vectors.
+**Summary:**
+Evaluates the linear form over the active elements and returns local load vector contributions **resolved per Gauss point**, without summing across quadrature points. This Gauss-point-level granularity is the key requirement for ECM-weighted assembly: by retaining the per-point structure, ECM weights can be applied individually to each `(element, Gauss-point)` contribution before accumulation.
 
-###### Returns {.doc-section .doc-section-returns}
+Each returned entry `element_vectors_q[e, :, q]` represents the contribution of the \(q\)-th Gauss point in element \(e\) to the local load vector, already multiplied by `basis.dx` but **not yet summed over** \(q\). ECM weights should be applied along the `n_q` axis before summing to produce ECM-weighted element load vectors.
 
-| Name              | Type                                 | Description                                                                                                                  |
-|-------------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| element_vectors_q | (ndarray, shape(n_elem, n_loc, n_q)) | Per-element local vectors resolved at Gauss points, already multiplied by ``basis.dx`` but not yet summed over Gauss points. |
+##### Parameters
+
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| basis | Basis | FE test basis containing mesh connectivity, quadrature points, and basis function evaluations for the active hyperreduced mesh. | _required_ |
+| elem_indices | array_like of int or None | Specific element indices to process; defaults to all active elements in the hyperreduced mesh. | `None` |
+| **kwargs | dict | Additional keyword arguments forwarded to the linear form evaluation. | `{}` |
+
+##### Returns
+
+| Name | Type | Description |
+|------|------|-------------|
+| element_vectors_q | ndarray, shape (n_elem, n_loc, n_q) | Per-Gauss-point local element load vectors. The axis ordering is (element, local DOF, quadrature point). Multiply ECM weights along the `n_q` axis before summing to obtain ECM-weighted element load vectors. |
+
+***
+
+#### Notes
+
+`LinearFormHYPERROM_ecm` is the linear-form counterpart to `BilinearFormHYPERROM_ecm` and should be used alongside it in ECM-accelerated ROM workflows where both stiffness matrices and load vectors require Gauss-point-level hyperreduction. Always verify that your ECM weights conform to the multiplicative convention described in the Assumption section; absolute cubature weights must be converted using `skrom.rom.ecm.helpers.flat_to_element_gauss_weights` before use.

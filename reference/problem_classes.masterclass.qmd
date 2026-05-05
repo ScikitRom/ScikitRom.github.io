@@ -1,193 +1,184 @@
 # problem_classes.masterclass
 
-Framework for static reduced-order modeling (ROM).
+Framework for static reduced-order modeling (ROM) in finite element workflows.
 
-## TL;DR
+**Summary:**
+Provides a complete, structured pipeline for both the offline (full-order snapshot generation) and online (ROM evaluation) stages of projection-based reduced-order modeling. Includes a base problem interface, a problem registry with factory access, and built-in support for hyper-reduction methods including DEIM, ECSW, and ECM.
 
-This module helps you:
+**Purpose:**
+To standardize how FEM/ROM problems are defined, registered, and executed—enabling consistent offline data collection, fast online ROM evaluation, and seamless integration of hyper-reduction techniques. The registry pattern makes it straightforward to switch between problem types programmatically, which is especially useful in parameter studies and automated workflows.
 
-- Run offline full-model (FEM) solves to get data (“snapshots”)
-- Run online reduced-order (ROM) solves for fast prediction
-- Optionally use hyper-reduction (DEIM, ECSW, ECM) for quicker online solves, with error tracking
+**Authors:** Suparno Bhattacharyya, Ali Hamza Syed Abidi
 
-Main features:
-
-- A standard problem interface (base class) for consistency
-- A registry and factory to create various problem classes
-- Offline workflow for generating training data (snapshots) with the big/full model
-- Online workflow for using ROMs, with error and speed tracking
-- Ready-to-use hooks for hyper-reduction methods
-
----
-
-**Authors:** Suparno Bhattacharyya, Ali Hamza Abidi Syed
-
----
+***
 
 ## Classes
 
 | Name | Description |
 | --- | --- |
-| [Problem](#skrom.problem_classes.masterclass.Problem) | The “blueprint” for any FEM/ROM problem you want to define. |
-| [fom_simulation](#skrom.problem_classes.masterclass.fom_simulation) | Automates running and saving full-order solves (offline stage). |
-| [rom_simulation](#skrom.problem_classes.masterclass.rom_simulation) | Automates ROM runs, error, and performance tests (online stage). |
+| [Problem](#skrom.problem_classes.masterclass.Problem) | Abstract base class defining the interface for any FEM/ROM problem. |
+| [fom_simulation](#skrom.problem_classes.masterclass.fom_simulation) | Offline workflow for full-order snapshot generation and storage. |
+| [rom_simulation](#skrom.problem_classes.masterclass.rom_simulation) | Online workflow for ROM evaluation, error tracking, and speedup analysis. |
 
----
+***
 
-### Problem
+### Problem { #skrom.problem_classes.masterclass.Problem }
 
 ```python
 problem_classes.masterclass.Problem()
 ```
 
-**Summary:** 
+**Summary:**
+Defines the required interface that every parameterized FEM/ROM problem must implement. Users subclass `Problem` and provide concrete implementations of each method to describe their specific physical problem. This ensures all problem types remain interchangeable within the master class workflows.
 
-Defines what every parameterized FEM/ROM problem must have.  
-You make your own class from this, and supply the required methods, such as:
+Your subclass should provide the following:
 
-- Mesh and basis setup
-- Bilinear and linear forms in affine terms (for easy ROM)
-- How parameters control coefficients in your problem
-- How to sample from your parameter space
-- How to solve full and reduced systems
-- Optional support for hyper-reduced solves (DEIM, ECSW, ECM)
+- Mesh construction and finite element basis setup
+- Bilinear and linear forms expressed in affine decomposition (required for ROM assembly)
+- A parameter-to-coefficient mapping describing how parameters modulate the problem
+- A method to sample from the parameter space
+- Full-order and reduced-order solvers
+- Optional hyper-reduced solvers for DEIM, ECSW, and ECM methods
 
-**Key methods you should provide** (all listed below in the same format):
+***
 
----
-
-##### bilinear_forms
+#### bilinear_forms { #skrom.problem_classes.masterclass.Problem.bilinear_forms }
 
 ```python
 problem_classes.masterclass.Problem.bilinear_forms()
 ```
-Returns all parts (“components”) of the bilinear form (stiffness, etc.) in affine form (for ROM).
 
----
+Returns all component matrices of the bilinear form (e.g., stiffness contributions) expressed in affine decomposition format, as required for efficient ROM assembly.
 
-##### domain
+***
+
+#### domain { #skrom.problem_classes.masterclass.Problem.domain }
 
 ```python
 problem_classes.masterclass.Problem.domain()
 ```
-Returns your mesh and FE bases.
 
----
+Returns the mesh and finite element bases associated with the problem. This method serves as the primary source of geometric and discretization data.
 
-##### fom_solver
+***
+
+#### fom_solver { #skrom.problem_classes.masterclass.Problem.fom_solver }
 
 ```python
 problem_classes.masterclass.Problem.fom_solver()
 ```
-Solves your big/full-order FEM system for given parameters.
 
----
+Solves the full-order FEM system for a given parameter instance. This is the high-fidelity solver used during the offline stage to generate training snapshots.
 
-##### hyper_rom_solver_deim
+***
+
+#### hyper_rom_solver_deim { #skrom.problem_classes.masterclass.Problem.hyper_rom_solver_deim }
 
 ```python
 problem_classes.masterclass.Problem.hyper_rom_solver_deim()
 ```
-Solves your reduced system using DEIM-based hyper-reduction.
 
----
+Solves the reduced-order system using DEIM (Discrete Empirical Interpolation Method) hyper-reduction, enabling fast nonlinear term approximation during the online stage.
 
-##### hyper_rom_solver_ecm
+***
+
+#### hyper_rom_solver_ecm { #skrom.problem_classes.masterclass.Problem.hyper_rom_solver_ecm }
 
 ```python
 problem_classes.masterclass.Problem.hyper_rom_solver_ecm()
 ```
-Solves with ECM-based hyper-reduction.
 
----
+Solves the reduced-order system using ECM (Empirical Cubature Method) hyper-reduction, accelerating numerical integration over the reduced mesh.
 
-##### hyper_rom_solver_ecsw
+***
+
+#### hyper_rom_solver_ecsw { #skrom.problem_classes.masterclass.Problem.hyper_rom_solver_ecsw }
 
 ```python
 problem_classes.masterclass.Problem.hyper_rom_solver_ecsw()
 ```
-Solves with ECSW-based hyper-reduction.
 
----
+Solves the reduced-order system using ECSW (Energy-Conserving Sampling and Weighting) hyper-reduction, preserving physical structure while reducing online cost.
 
-##### linear_forms
+***
+
+#### linear_forms { #skrom.problem_classes.masterclass.Problem.linear_forms }
 
 ```python
 problem_classes.masterclass.Problem.linear_forms()
 ```
-Returns all parts (“components”) of affine linear forms (force/load vectors etc.).
 
----
+Returns all component vectors of the linear form (e.g., load and forcing vectors) in affine decomposition format for use in ROM assembly.
 
-##### parameters
+***
+
+#### parameters { #skrom.problem_classes.masterclass.Problem.parameters }
 
 ```python
 problem_classes.masterclass.Problem.parameters()
 ```
-Produces a collection of parameter samples (for training/testing).
 
----
+Generates a collection of parameter samples from the problem's parameter space. Used to drive both offline snapshot generation and online ROM testing.
 
-##### properties
+***
+
+#### properties { #skrom.problem_classes.masterclass.Problem.properties }
 
 ```python
 problem_classes.masterclass.Problem.properties()
 ```
-Returns a function that calculates coefficients depending on your current parameters.
 
----
+Returns a function that computes the affine coefficients corresponding to a given parameter instance. These coefficients weight the component matrices and vectors during assembly.
 
-##### rom_solver
+***
+
+#### rom_solver { #skrom.problem_classes.masterclass.Problem.rom_solver }
 
 ```python
 problem_classes.masterclass.Problem.rom_solver()
 ```
-Solves the reduced-order model.
 
----
+Solves the reduced-order model for a given parameter, operating in the low-dimensional subspace defined by the projection basis.
 
-### fom_simulation
+***
+
+### fom_simulation { #skrom.problem_classes.masterclass.fom_simulation }
 
 ```python
 problem_classes.masterclass.fom_simulation(num_snapshots=32)
 ```
 
-**Offline workflow** for collecting snapshot data:
-
-- Takes parameter samples
-- Solves the full (FEM) model for each sample
-- Saves the solutions and timings
-- Computes a mean/reference solution for centering
-- Stores all data for later ROM use
+**Summary:**
+Implements the offline stage of the ROM pipeline. Iterates over parameter samples, solves the full-order FEM model for each, and persistently stores the resulting solutions along with timing data. Designed to be fault-tolerant and resumable, making it suitable for long-running snapshot campaigns.
 
 #### Attributes
 
-| Name          | Type            | Description                                     |
-|---------------|-----------------|-------------------------------------------------|
-| num_snapshots | int             | How many samples to use                         |
-| param_list    | array_like      | The sampled parameters                          |
-| fos_solutions | list of ndarray | List of full-order FEM solutions                |
-| fos_time      | list of float   | Solve times for each snapshot                   |
-| train_ref     | ndarray         | The average (“reference”) field computed        |
+| Name | Type | Description |
+|------|------|-------------|
+| num_snapshots | int | Number of parameter samples (and corresponding FOM solves) to generate. |
+| param_list | array_like | The sampled parameter set used for snapshot generation. |
+| fos_solutions | list of ndarray | Full-order solutions corresponding to each parameter sample. |
+| fos_time | list of float | Wall-clock solve times recorded for each snapshot. |
+| train_ref | ndarray | Mean field computed across all snapshots, used as the centering reference for ROM. |
 
----
+***
 
-##### run_simulation
+#### run_simulation { #skrom.problem_classes.masterclass.fom_simulation.run_simulation }
 
 ```python
 problem_classes.masterclass.fom_simulation.run_simulation()
 ```
 
-Runs all full-order solves and saves each result:
+Executes all full-order solves and writes each result to disk as a checkpoint. Key behaviors:
 
-- Each snapshot checkpoint is written to `.npz` (safe/atomic)
-- If a checkpoint already exists, it skips and loads instead (resume on crash)
-- Uses hash for long filenames (handles Windows path limits)
-- If a checkpoint is corrupt, it recomputes and overwrites
+- Checkpoint files are written atomically in `.npz` format after each solve.
+- If a valid checkpoint already exists for a given parameter, the solve is skipped and the result is loaded from disk—enabling seamless resumption after interruption or crash.
+- Long parameter-derived filenames are hashed to remain compatible with Windows path length limits.
+- Corrupt or unreadable checkpoints are detected, recomputed, and overwritten automatically.
 
----
+***
 
-### rom_simulation
+### rom_simulation { #skrom.problem_classes.masterclass.rom_simulation }
 
 ```python
 problem_classes.masterclass.rom_simulation(
@@ -202,38 +193,33 @@ problem_classes.masterclass.rom_simulation(
 )
 ```
 
-**Online evaluation workflow** for ROMs:
-
-- Loads data from disk
-- Picks test samples and (optional) reference full solutions
-- Runs your ROM and reconstructs the “full” fields if needed
-- Calculates error and speedup factors
-- Supports DEIM, ECSW, ECM solvers for hyper-reduced runs
+**Summary:**
+Implements the online evaluation stage of the ROM pipeline. Loads precomputed data, selects test parameters, runs the ROM (standard or hyper-reduced), reconstructs full-field solutions where required, and computes error and speedup metrics for performance assessment.
 
 #### Attributes
 
-| Name            | Type          | Description                                     |
-|-----------------|---------------|-------------------------------------------------|
-| V_sel           | ndarray       | Matrix (basis) used to reconstruct ROM solution |
-| n_sel           | int           | Number of ROM modes used                        |
-| param_list_test | array_like    | List of test parameters                         |
-| rom_error       | list of float | % errors for each test case                     |
-| speed_up        | list of float | (FOM time)/(ROM time) for performance tracking  |
+| Name | Type | Description |
+|------|------|-------------|
+| V_sel | ndarray | Projection basis matrix used to reconstruct full-field solutions from ROM coordinates. |
+| n_sel | int | Number of ROM modes retained in the projection basis. |
+| param_list_test | array_like | Parameter samples used for online ROM evaluation. |
+| rom_error | list of float | Relative errors (%) between ROM and FOM solutions for each test case. |
+| speed_up | list of float | Ratio of FOM to ROM solve time for each test case, measuring online acceleration. |
 
----
+***
 
 #### Methods
 
 | Name | Description |
 | --- | --- |
-| [run_hyper_rom_simulation_deim](#skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_deim) | Run ROM using DEIM hyper-reduction. |
-| [run_hyper_rom_simulation_ecm](#skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecm) | Run ROM using ECM hyper-reduction. |
-| [run_hyper_rom_simulation_ecsw](#skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecsw) | Run ROM using ECSW hyper-reduction. |
-| [run_rom_simulation](#skrom.problem_classes.masterclass.rom_simulation.run_rom_simulation) | Run regular ROM (no hyper-reduction). |
+| [run_hyper_rom_simulation_deim](#skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_deim) | Evaluate the ROM using DEIM hyper-reduction across all test parameters. |
+| [run_hyper_rom_simulation_ecm](#skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecm) | Evaluate the ROM using ECM hyper-reduction across all test parameters. |
+| [run_hyper_rom_simulation_ecsw](#skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecsw) | Evaluate the ROM using ECSW hyper-reduction across all test parameters. |
+| [run_rom_simulation](#skrom.problem_classes.masterclass.rom_simulation.run_rom_simulation) | Evaluate the standard ROM (no hyper-reduction) across all test parameters. |
 
----
+***
 
-##### run_hyper_rom_simulation_deim
+#### run_hyper_rom_simulation_deim { #skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_deim }
 
 ```python
 problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_deim(
@@ -245,33 +231,29 @@ problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_deim(
 )
 ```
 
-Runs the DEIM version of your ROM for all parameters:
+Evaluates the DEIM hyper-reduced ROM across all test parameters. For each parameter, the hyper-reduced solver is invoked and—if `full_order=True`—the reduced coordinates are mapped back to the full solution space for error comparison. When `new_params` is provided, evaluation is restricted to those parameters and error/speedup metrics are not computed.
 
-- For each parameter, runs the hyper-reduced solver
-- If needed, reconstructs the full solution for error comparison or just returns the reduced coordinates
-- Calculates relative error (%) and speed-up unless custom parameters (`new_params`) are provided
+##### Parameters
 
-###### Parameters
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| z | array_like | Weight vector from the DEIM offline workflow. | _required_ |
+| deim_mat | ndarray | DEIM interpolation matrix. | _required_ |
+| sampled_rows | array_like of int | DOF row indices selected by the DEIM procedure. | _required_ |
+| full_order | bool | If `True`, reconstruct full-field solutions; if `False`, return reduced coordinates only. | `True` |
+| new_params | sequence or None | If provided, evaluates only for these parameters and skips error and speedup computation. | `None` |
 
-| Name         | Type              | Description                                                                 | Default    |
-|--------------|-------------------|-----------------------------------------------------------------------------|------------|
-| z            | array_like        | Weight vector from DEIM workflow                                            | _required_ |
-| deim_mat     | ndarray           | Interpolation matrix for DEIM                                               | _required_ |
-| sampled_rows | array_like of int | DOF row indices sampled by DEIM                                             | _required_ |
-| full_order   | bool              | If True, reconstruct full fields; if False, only reduced coords             | `True`     |
-| new_params   | sequence          | If provided, evaluates only for these params and skips error/speed metrics  | `None`     |
+##### Returns
 
-###### Returns
+| Name | Type | Description |
+|------|------|-------------|
+| hyper_rom_error | list of float | Relative errors (%) for each test parameter; returned when `new_params` is not given. |
+| hyper_speed_up | list of float | FOM-to-ROM speedup ratios; returned when `new_params` is not given. |
+| hyper_rom_solutions | list of ndarray | Reconstructed full-field or reduced solutions; returned when `new_params` is given. |
 
-| Name                | Type            | Description                                                                                                   |
-|---------------------|-----------------|---------------------------------------------------------------------------------------------------------------|
-| hyper_rom_error     | list of float   | Errors (%) if `new_params` is not given                                                                       |
-| hyper_speed_up      | list of float   | Speed-up ratios if `new_params` is not given                                                                  |
-| hyper_rom_solutions | list of ndarray | List of reconstructed (or reduced) solutions (given when `new_params` is provided)                            |
+***
 
----
-
-##### run_hyper_rom_simulation_ecm
+#### run_hyper_rom_simulation_ecm { #skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecm }
 
 ```python
 problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecm(
@@ -281,31 +263,27 @@ problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecm(
 )
 ```
 
-Runs ECM-type hyper-ROM for parameters:
+Evaluates the ECM hyper-reduced ROM across test parameters. The ECM weight vector `z` (of size n_elements × n_q) defines the reduced quadrature rule. Behavior for `full_order` and `new_params` follows the same convention as `run_hyper_rom_simulation_deim`.
 
-- For each parameter, runs the hyper-reduced solver
-- Optionally reconstructs solution (“full_order”)
-- Calculates errors and speed-up if `new_params` is not given
+##### Parameters
 
-###### Parameters
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| z | array_like | ECM element weights of shape (n_elements × n_q). | _required_ |
+| full_order | bool | If `True`, reconstruct full-field solutions; if `False`, return reduced coordinates only. | `True` |
+| new_params | sequence or None | If provided, evaluates only for these parameters and skips error and speedup computation. | `None` |
 
-| Name       | Type       | Description                                                               | Default    |
-|------------|------------|---------------------------------------------------------------------------|------------|
-| z          | array_like | ECM weights (size: n_elements × n_q)                                     | _required_ |
-| full_order | bool       | If True, reconstruct full field; if False, just reduced coords            | `True`     |
-| new_params | sequence   | If provided, only computes solutions for these, skips error/speed-up      | `None`     |
+##### Returns
 
-###### Returns
+| Name | Type | Description |
+|------|------|-------------|
+| hyper_rom_error | list of float | Relative errors (%) for each test parameter; returned when `new_params` is not given. |
+| hyper_speed_up | list of float | FOM-to-ROM speedup ratios; returned when `new_params` is not given. |
+| hyper_rom_solutions | list of ndarray | Reconstructed full-field or reduced solutions; returned when `new_params` is given. |
 
-| Name                | Type            | Description                                                         |
-|---------------------|-----------------|---------------------------------------------------------------------|
-| hyper_rom_error     | list of float   | % error (if `new_params` not given)                                 |
-| hyper_speed_up      | list of float   | Speedup (if `new_params` not given)                                 |
-| hyper_rom_solutions | list of ndarray | Reconstructed or reduced solutions (if `new_params` given)          |
+***
 
----
-
-##### run_hyper_rom_simulation_ecsw
+#### run_hyper_rom_simulation_ecsw { #skrom.problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecsw }
 
 ```python
 problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecsw(
@@ -315,31 +293,27 @@ problem_classes.masterclass.rom_simulation.run_hyper_rom_simulation_ecsw(
 )
 ```
 
-Runs the ECSW hyper-ROM:
+Evaluates the ECSW hyper-reduced ROM across test parameters. ECSW element weights are used to construct an energy-conserving reduced integration rule. Behavior for `full_order` and `new_params` follows the same convention as the other hyper-ROM methods.
 
-- Each parameter, runs ECSW solver
-- Reconstructs full field if needed
-- Gives errors, speed-up, and/or solutions as above
+##### Parameters
 
-###### Parameters
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| z | array_like | ECSW element weights. | _required_ |
+| full_order | bool | If `True`, reconstruct full-field solutions; if `False`, return reduced coordinates only. | `True` |
+| new_params | sequence or None | If provided, evaluates only for these parameters and skips error and speedup computation. | `None` |
 
-| Name       | Type       | Description                                                      | Default    |
-|------------|------------|------------------------------------------------------------------|------------|
-| z          | array_like | ECSW element weights                                             | _required_ |
-| full_order | bool       | If True, reconstruct full field                                  | `True`     |
-| new_params | sequence   | If present, only evaluate for these and skip error/speed-up      | `None`     |
+##### Returns
 
-###### Returns
+| Name | Type | Description |
+|------|------|-------------|
+| hyper_rom_error | list of float | Relative errors (%) for each test parameter; returned when `new_params` is not given. |
+| hyper_speed_up | list of float | FOM-to-ROM speedup ratios; returned when `new_params` is not given. |
+| hyper_rom_solutions | list of ndarray | Reconstructed full-field or reduced solutions; returned when `new_params` is given. |
 
-| Name                | Type            | Description                                       |
-|---------------------|-----------------|---------------------------------------------------|
-| hyper_rom_error     | list of float   | % Error (if `new_params` not supplied)            |
-| hyper_speed_up      | list of float   | Speed-up metric                                   |
-| hyper_rom_solutions | list of ndarray | Solutions (reconstructed or reduced)              |
+***
 
----
-
-##### run_rom_simulation
+#### run_rom_simulation { #skrom.problem_classes.masterclass.rom_simulation.run_rom_simulation }
 
 ```python
 problem_classes.masterclass.rom_simulation.run_rom_simulation(
@@ -348,109 +322,106 @@ problem_classes.masterclass.rom_simulation.run_rom_simulation(
 )
 ```
 
-Runs the basic reduced-order model (no hyper-reduction):
+Evaluates the standard (non-hyper-reduced) ROM across test parameters. For each parameter, the ROM solver is invoked in the projection subspace and the solution is optionally lifted back to the full-order space. Error and speedup are computed when no custom parameter set is provided.
 
-- Each parameter, solves the ROM, reconstructs full field if needed
-- Calculates error (%) and speed-up (if `new_params` not provided)
+##### Parameters
 
-###### Parameters
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| full_order | bool | If `True`, reconstruct full-field solutions; if `False`, return reduced coordinates only. | `True` |
+| new_params | sequence or None | If provided, evaluates only for these parameters and skips error and speedup computation. | `None` |
 
-| Name       | Type     | Description                                                      | Default   |
-|------------|----------|------------------------------------------------------------------|-----------|
-| full_order | bool     | If True, reconstruct full field; else reduce only                | `True`    |
-| new_params | sequence | If present, only produces solutions for these, skips errors      | `None`    |
+##### Returns
 
-###### Returns
+| Name | Type | Description |
+|------|------|-------------|
+| rom_error | list of float | Relative errors (%) for each test parameter; returned when `new_params` is not given. |
+| speed_up | list of float | FOM-to-ROM speedup ratios; returned when `new_params` is not given. |
+| rom_solutions | list of ndarray | Reconstructed full-field or reduced solutions; returned when `new_params` is given. |
 
-| Name          | Type            | Description                                    |
-|---------------|-----------------|------------------------------------------------|
-| rom_error     | list of float   | % Error (if `new_params` not supplied)         |
-| speed_up      | list of float   | Speed-up metric                                |
-| rom_solutions | list of ndarray | Full or reduced solutions (if `new_params`)    |
-
----
+***
 
 ## Functions
 
 | Name | Description |
 | --- | --- |
-| [assign_properties](#skrom.problem_classes.masterclass.assign_properties) | Get all the function handles for key problem methods, as a tuple. |
-| [get_problem](#skrom.problem_classes.masterclass.get_problem) | Create a registered problem class by name. |
-| [register_problem](#skrom.problem_classes.masterclass.register_problem) | Decorator: add a class to the problem registry under a chosen name. |
+| [assign_properties](#skrom.problem_classes.masterclass.assign_properties) | Retrieve all key callable methods from a problem instance as an ordered tuple. |
+| [get_problem](#skrom.problem_classes.masterclass.get_problem) | Instantiate a registered problem class by its registry key. |
+| [register_problem](#skrom.problem_classes.masterclass.register_problem) | Decorator to register a problem class under a chosen string key. |
 
----
+***
 
-### assign_properties
+### assign_properties { #skrom.problem_classes.masterclass.assign_properties }
 
 ```python
 problem_classes.masterclass.assign_properties(prob)
 ```
 
-Gets a tuple of all the main callable methods from your problem instance (`prob`), for easy access.
+Extracts and returns an ordered tuple of all primary callable methods from a `Problem` instance. This is a convenience utility for workflows that need to pass method handles as a single unit.
 
 #### Parameters
 
-| Name   | Type    | Description       | Default    |
-|--------|---------|-------------------|------------|
-| prob   | Problem | Problem instance. | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| prob | Problem | An instantiated problem object. | _required_ |
 
 #### Returns
 
-| Name       | Type   | Description                                                                                                |
-|------------|--------|------------------------------------------------------------------------------------------------------------|
-| properties | tuple  | (parameters, bilinear_forms, linear_forms, domain, properties, fom_solver, rom_solver, hyper_deim_solver, hyper_ecsw_solver, hyper_ecm_solver) |
+| Name | Type | Description |
+|------|------|-------------|
+| properties | tuple | Ordered tuple of: `(parameters, bilinear_forms, linear_forms, domain, properties, fom_solver, rom_solver, hyper_deim_solver, hyper_ecsw_solver, hyper_ecm_solver)` |
 
----
+***
 
-### get_problem
+### get_problem { #skrom.problem_classes.masterclass.get_problem }
 
 ```python
 problem_classes.masterclass.get_problem(name)
 ```
 
-Given the name (a string), returns a *new instance* of the registered problem class.
+Looks up the given string key in `PROBLEM_REGISTRY` and returns a new instance of the corresponding problem class.
 
 #### Parameters
 
-| Name   | Type   | Description                                | Default    |
-|--------|--------|--------------------------------------------|------------|
-| name   | str    | Registry key used in ``PROBLEM_REGISTRY``. | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| name | str | Registry key identifying the desired problem class. | _required_ |
 
 #### Returns
 
-| Name             | Type    | Description                       |
-|------------------|---------|-----------------------------------|
-| problem_instance | Problem | Instance of the registered class. |
+| Name | Type | Description |
+|------|------|-------------|
+| problem_instance | Problem | A freshly instantiated object of the registered class. |
 
 #### Raises
 
-| Name   | Type       | Description                                 |
-|--------|------------|---------------------------------------------|
-|        | ValueError | If ``name`` is not present in the registry. |
+| Type | Condition |
+|------|-----------|
+| ValueError | Raised if `name` is not found in `PROBLEM_REGISTRY`. |
 
----
+***
 
-### register_problem
+### register_problem { #skrom.problem_classes.masterclass.register_problem }
 
 ```python
 problem_classes.masterclass.register_problem(name)
 ```
 
-Decorator to register a problem class under a string key (helps with automatic selection).
+A decorator that registers a problem class in `PROBLEM_REGISTRY` under the specified string key. Once registered, the class can be retrieved by name via `get_problem`, enabling dynamic problem selection—for example, based on the current working directory name in automated pipelines.
 
 #### Parameters
 
-| Name   | Type   | Description                         | Default    |
-|--------|--------|-------------------------------------|------------|
-| name   | str    | Registry key for the problem class. | _required_ |
+| Name | Type | Description | Default |
+|------|------|-------------|---------|
+| name | str | String key under which the class will be stored in the registry. | _required_ |
 
 #### Returns
 
-| Name   | Type     | Description                                                          |
-|--------|----------|----------------------------------------------------------------------|
-| deco   | callable | A decorator. It stores your class in the registry, then returns it.  |
+| Name | Type | Description |
+|------|------|-------------|
+| deco | callable | A decorator that stores the decorated class in the registry and returns it unchanged. |
 
 #### Notes
 
-The registry makes it easy to select which problem to use, even automatically, just by working directory name.
+Register all problem classes before invoking `get_problem` or launching any parallel simulation workflows. The registry supports automatic problem selection by working directory name, making it particularly useful in batch and sweep studies.
 

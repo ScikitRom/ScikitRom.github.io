@@ -606,9 +606,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a>
   <ul class="collapse">
-  <li><a href="#compute_rom_error_metrics_flat" id="toc-compute_rom_error_metrics_flat" class="nav-link" data-scroll-target="#compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></li>
-  <li><a href="#generate_rom_error_report" id="toc-generate_rom_error_report" class="nav-link" data-scroll-target="#generate_rom_error_report">generate_rom_error_report</a></li>
-  <li><a href="#plot_rom_error_diagnostics_flat" id="toc-plot_rom_error_diagnostics_flat" class="nav-link" data-scroll-target="#plot_rom_error_diagnostics_flat">plot_rom_error_diagnostics_flat</a></li>
+  <li><a href="#skrom.rom.rom_error_est.compute_rom_error_metrics_flat" id="toc-skrom.rom.rom_error_est.compute_rom_error_metrics_flat" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></li>
+  <li><a href="#skrom.rom.rom_error_est.generate_rom_error_report" id="toc-skrom.rom.rom_error_est.generate_rom_error_report" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est.generate_rom_error_report">generate_rom_error_report</a></li>
+  <li><a href="#skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat" id="toc-skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat" class="nav-link" data-scroll-target="#skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat">plot_rom_error_diagnostics_flat</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -622,15 +622,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.rom_error_est" class="level1">
 <h1>rom.rom_error_est</h1>
-<p><code>rom.rom_error_est</code></p>
-<p><strong>Compute and visualize error metrics for Reduced-Order Model (ROM) reconstructions (for flat, non-time-dependent data).</strong></p>
-<p><strong>What does this module provide?</strong></p>
-<ul>
-<li>Automated calculation of a wide range of error metrics to compare full-order and ROM results (including L2, L∞, RMSE, MAE, R², explained variance, and more).</li>
-<li>Quick, publication-ready diagnostic plots: true-vs-ROM scatter, spatial plots, and error/speedup “raincloud” visualizations.</li>
-<li>Easy summary reports you can print for a fast ROM error overview.</li>
-</ul>
-<p><strong>Note:</strong> This module focuses on flat (non-time-dependent) data, e.g., <code>(n_snapshots, n_space_reference_points)</code>.</p>
+<p><strong>Purpose:</strong> Provides automated computation and visualization of error metrics for comparing full-order and reduced-order model (ROM) solutions stored as flat, non-time-dependent NumPy arrays. Designed for validation, tuning, and publication-quality reporting of ROM accuracy across a set of parametric snapshots.</p>
+<p><strong>Summary:</strong> Offers three functions covering the complete error analysis workflow for steady-state ROM data: <code>compute_rom_error_metrics_flat</code> for computing a comprehensive set of per-snapshot and global accuracy metrics, <code>generate_rom_error_report</code> for printing a structured human-readable summary, and <code>plot_rom_error_diagnostics_flat</code> for producing diagnostic visualizations including true-vs-ROM scatter plots, spatial field comparisons, and raincloud distributions of errors and speedups. Supports optional energy-norm error assessment when a stiffness matrix is available.</p>
+<p><strong>Note:</strong> This module targets flat, non-time-dependent data of shape <code>(n_snapshots, n_space)</code>. For time-dependent data of shape <code>(n_snapshots, n_time, n_space)</code>, use <code>rom.rom_error_est_t</code>.</p>
 <p><strong>Author:</strong> Suparno Bhattacharyya</p>
 <hr>
 <section id="functions" class="level2">
@@ -645,33 +639,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.rom_error_est.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</a></td>
-<td>Computes standard error metrics between FOM and ROM arrays.</td>
+<td>Compute standard error metrics between full-order and ROM solution arrays.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.rom_error_est.generate_rom_error_report">generate_rom_error_report</a></td>
-<td>Prints a nice summary of computed errors and accuracy scores.</td>
+<td>Print a structured, human-readable summary of ROM error metrics.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat">plot_rom_error_diagnostics_flat</a></td>
-<td>Plots scatter, spatial maps, and error/speedup distributions for your ROM results.</td>
+<td>Generate diagnostic scatter, spatial, and distribution plots for ROM results.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="compute_rom_error_metrics_flat" class="level3">
-<h3 class="anchored" data-anchor-id="compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</h3>
+<section id="skrom.rom.rom_error_est.compute_rom_error_metrics_flat" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est.compute_rom_error_metrics_flat">compute_rom_error_metrics_flat</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est.compute_rom_error_metrics_flat(u, u_rom, K<span class="op">=</span><span class="va">None</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Purpose:</strong><br>
-Calculate a variety of error metrics between your <em>full-order solutions</em> (<code>u</code>) and your <em>ROM reconstructions</em> (<code>u_rom</code>).<br>
-Especially useful for validation, tuning, and reporting.</p>
+<p><strong>Purpose:</strong> Computes a comprehensive set of error metrics between the full-order solution array <code>u</code> and the ROM reconstruction <code>u_rom</code>, covering per-snapshot diagnostics and global aggregate accuracy measures. When a stiffness matrix <code>K</code> is provided, an additional energy-norm error is computed to assess physically weighted accuracy. Particularly useful for validation, hyperparameter tuning, and formal accuracy reporting.</p>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 5%">
-<col style="width: 31%">
-<col style="width: 53%">
-<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -684,20 +676,20 @@ Especially useful for validation, tuning, and reporting.</p>
 <tbody>
 <tr class="odd">
 <td>u</td>
-<td>(array_like, shape(n_snapshots, n_space))</td>
-<td>Full-model field; each row is a parameter/realization (“snapshot”).</td>
+<td>array_like, shape (n_snapshots, n_space)</td>
+<td>Full-order solution array; each row is one parametric snapshot.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>u_rom</td>
-<td>(array_like, shape(n_snapshots, n_space))</td>
-<td>ROM field of the same shape as <code>u</code>.</td>
+<td>array_like, shape (n_snapshots, n_space)</td>
+<td>ROM reconstruction array with the same shape as <code>u</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>K</td>
-<td>(array_like, shape(n_space, n_space))</td>
-<td>(Optional) Stiffness matrix for calculating energy-norm error.</td>
+<td>array_like, shape (n_space, n_space) or None</td>
+<td>Optional stiffness matrix for computing the energy-norm error ( | e |_K = ).</td>
 <td><code>None</code></td>
 </tr>
 </tbody>
@@ -707,9 +699,9 @@ Especially useful for validation, tuning, and reporting.</p>
 <h4 class="anchored" data-anchor-id="returns">Returns</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 2%">
-<col style="width: 2%">
-<col style="width: 95%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -722,25 +714,106 @@ Especially useful for validation, tuning, and reporting.</p>
 <tr class="odd">
 <td>metrics</td>
 <td>dict</td>
-<td>Dictionary with all computed errors:<br><br><strong>Per-snapshot (arrays of length n_snapshots):</strong><br> L2_error_time: absolute error (L2 norm) per snapshot<br> relative_L2_error_time: relative L2 error per snapshot<br> RMSE_time: root mean square error per snapshot<br> MAE_time: mean absolute error per snapshot<br><br><strong>Global (scalars):</strong><br> L2_error: global L2 norm<br> relative_L2_error: overall relative L2 error<br> Linf_error: max absolute error<br> relative_Linf_error: max relative error<br> RMSE: overall RMSE<br> MAE: overall MAE<br> R2: R² coefficient of determination<br> explained_variance: fraction of variance your ROM captures<br> quantiles: dict with <code>median_error</code> and <code>p95_error</code><br> (Optional) energy_norm_error: energy norm (if <code>K</code> provided)</td>
+<td>Dictionary of computed error metrics, organized as follows.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Per-snapshot metrics</strong> (arrays of length <code>n_snapshots</code>):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L2_error_time</code></td>
+<td>Absolute L2 norm error per snapshot.</td>
+</tr>
+<tr class="even">
+<td><code>relative_L2_error_time</code></td>
+<td>Relative L2 error per snapshot.</td>
+</tr>
+<tr class="odd">
+<td><code>RMSE_time</code></td>
+<td>Root mean square error per snapshot.</td>
+</tr>
+<tr class="even">
+<td><code>MAE_time</code></td>
+<td>Mean absolute error per snapshot.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Global metrics</strong> (scalars):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>L2_error</code></td>
+<td>Global L2 norm error across all snapshots.</td>
+</tr>
+<tr class="even">
+<td><code>relative_L2_error</code></td>
+<td>Overall relative L2 error.</td>
+</tr>
+<tr class="odd">
+<td><code>Linf_error</code></td>
+<td>Maximum absolute error (L∞ norm).</td>
+</tr>
+<tr class="even">
+<td><code>relative_Linf_error</code></td>
+<td>Maximum relative error.</td>
+</tr>
+<tr class="odd">
+<td><code>RMSE</code></td>
+<td>Overall root mean square error.</td>
+</tr>
+<tr class="even">
+<td><code>MAE</code></td>
+<td>Overall mean absolute error.</td>
+</tr>
+<tr class="odd">
+<td><code>R2</code></td>
+<td>R² coefficient of determination.</td>
+</tr>
+<tr class="even">
+<td><code>explained_variance</code></td>
+<td>Fraction of total variance captured by the ROM.</td>
+</tr>
+<tr class="odd">
+<td><code>quantiles</code></td>
+<td>Dictionary with <code>median_error</code> and <code>p95_error</code> (95th percentile error).</td>
+</tr>
+<tr class="even">
+<td><code>energy_norm_error</code></td>
+<td>Energy norm error (only present when <code>K</code> is provided).</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
 </section>
-<section id="generate_rom_error_report" class="level3">
-<h3 class="anchored" data-anchor-id="generate_rom_error_report">generate_rom_error_report</h3>
+<section id="skrom.rom.rom_error_est.generate_rom_error_report" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est.generate_rom_error_report">generate_rom_error_report</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est.generate_rom_error_report(metrics, name<span class="op">=</span><span class="st">'ROM Accuracy Report'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Purpose:</strong><br>
-Prints a structured, readable summary of your ROM error metrics—for fast reporting on model accuracy.</p>
+<p><strong>Purpose:</strong> Prints a clean, well-structured report of all ROM error metrics from the dictionary returned by <code>compute_rom_error_metrics_flat</code>. The output is formatted for readability and is suitable for console logging, log files, or quick diagnostic review during iterative ROM development.</p>
 <section id="parameters-1" class="level4">
 <h4 class="anchored" data-anchor-id="parameters-1">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 8%">
-<col style="width: 55%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
 <col style="width: 26%">
 </colgroup>
 <thead>
@@ -755,13 +828,13 @@ Prints a structured, readable summary of your ROM error metrics—for fast repor
 <tr class="odd">
 <td>metrics</td>
 <td>dict</td>
-<td>Metrics dict from <code>compute_rom_error_metrics_flat</code></td>
+<td>Metrics dictionary returned by <code>compute_rom_error_metrics_flat</code>.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>name</td>
 <td>str</td>
-<td>Report title</td>
+<td>Title displayed at the top of the printed report.</td>
 <td><code>'ROM Accuracy Report'</code></td>
 </tr>
 </tbody>
@@ -772,24 +845,22 @@ Prints a structured, readable summary of your ROM error metrics—for fast repor
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Name</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
 <td>None</td>
-<td></td>
+<td>Prints the report to standard output; returns no value.</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
 </section>
-<section id="plot_rom_error_diagnostics_flat" class="level3">
-<h3 class="anchored" data-anchor-id="plot_rom_error_diagnostics_flat">plot_rom_error_diagnostics_flat</h3>
+<section id="skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.rom_error_est.plot_rom_error_diagnostics_flat">plot_rom_error_diagnostics_flat</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.rom_error_est.plot_rom_error_diagnostics_flat(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    u,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    u_rom,</span>
@@ -799,21 +870,20 @@ Prints a structured, readable summary of your ROM error metrics—for fast repor
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    metrics,</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    spatial_shape<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Purpose:</strong></p>
-<p>Quickly creates summary plots:</p>
-<ul>
-<li><strong>Scatter plot</strong>: “True” vs.&nbsp;ROM predictions.</li>
-<li><strong>Spatial snapshots</strong>: Compare fields (original and ROM), optionally reshaped for 2D coloring.</li>
-<li><strong>Raincloud/box/scatter plots</strong>: Show the distribution and variation of errors and speed-ups across all snapshots.</li>
-</ul>
+<p><strong>Purpose:</strong> Generates a suite of diagnostic visualizations for comparing full-order and ROM solutions across all parametric snapshots. Produces the following plots:</p>
+<ol type="1">
+<li><strong>True vs.&nbsp;ROM scatter plot:</strong> Point-by-point comparison of full-order and ROM values, annotated with axis labels from <code>sim_axis</code>.</li>
+<li><strong>Spatial snapshot comparison:</strong> Side-by-side field plots of the full-order and ROM solutions; when <code>spatial_shape</code> is provided, fields are reshaped into 2D grids for color map visualization.</li>
+<li><strong>Raincloud / box / scatter plots:</strong> Show the full distribution and spread of per-snapshot relative errors and speedup factors across the test set, combining individual data points, box statistics, and kernel density estimates.</li>
+</ol>
 <section id="parameters-2" class="level4">
 <h4 class="anchored" data-anchor-id="parameters-2">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 14%">
-<col style="width: 32%">
-<col style="width: 44%">
-<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -826,44 +896,44 @@ Prints a structured, readable summary of your ROM error metrics—for fast repor
 <tbody>
 <tr class="odd">
 <td>u</td>
-<td>(array_like, shape(n_snapshots, n_space))</td>
-<td>Full-order solutions (used as ground truth).</td>
+<td>array_like, shape (n_snapshots, n_space)</td>
+<td>Full-order solution array used as ground truth.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>u_rom</td>
-<td>(array_like, shape(n_snapshots, n_space))</td>
-<td>Your ROM outputs, matching <code>u</code> in shape.</td>
+<td>array_like, shape (n_snapshots, n_space)</td>
+<td>ROM output array matching <code>u</code> in shape.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>rom_relative_error</td>
-<td>(array_like, shape(n_snapshots))</td>
-<td>Relative error, one per snapshot.</td>
+<td>array_like, shape (n_snapshots,)</td>
+<td>Precomputed relative error, one value per snapshot.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>rom_speed_up</td>
-<td>(array_like, shape(n_snapshots))</td>
-<td>Speed-up factor, one per snapshot (ROM time/FOM time).</td>
+<td>array_like, shape (n_snapshots,)</td>
+<td>Precomputed speedup factor per snapshot (ROM time / FOM time).</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>sim_axis</td>
 <td>tuple of str</td>
-<td>(“True label”, “ROM label”) for scatter plot axes.</td>
+<td>Two-element tuple <code>("True label", "ROM label")</code> used to annotate the scatter plot axes.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>metrics</td>
 <td>dict</td>
-<td>All metrics from <code>compute_rom_error_metrics_flat</code>.</td>
+<td>Metrics dictionary from <code>compute_rom_error_metrics_flat</code>, used to annotate plots with scalar accuracy summaries.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>spatial_shape</td>
-<td>tuple of int</td>
-<td>(Optional) Shape to reshape your data for 2D spatial pics (e.g.&nbsp;<code>(nx, ny)</code> for 2D color plots).</td>
+<td>tuple of int or None</td>
+<td>Optional shape <code>(nx, ny)</code> for reshaping spatial fields into 2D grids for color map visualization.</td>
 <td><code>None</code></td>
 </tr>
 </tbody>
@@ -872,28 +942,23 @@ Prints a structured, readable summary of your ROM error metrics—for fast repor
 <section id="returns-2" class="level4">
 <h4 class="anchored" data-anchor-id="returns-2">Returns</h4>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Name</th>
 <th>Type</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
 <td>None</td>
-<td></td>
+<td>Renders plots inline or to the active Matplotlib backend; returns no value.</td>
 </tr>
 </tbody>
 </table>
-<hr>
-<p><strong>In summary:</strong></p>
-<ul>
-<li>Use these functions to <strong>quantify and visualize</strong> how well your ROM matches the full model, at a single-glance and in statistical detail.</li>
-<li>Handles all standard metrics and produces visualizations publication-ready and diagnostic-friendly.</li>
-<li>Supports additional “energy-norm” assessment if the stiffness matrix is available.</li>
-</ul>
 
 
 </section>

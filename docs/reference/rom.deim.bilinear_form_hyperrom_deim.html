@@ -606,7 +606,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#classes" id="toc-classes" class="nav-link" data-scroll-target="#classes">Classes</a>
   <ul class="collapse">
-  <li><a href="#bilinearformhyperrom_deim" id="toc-bilinearformhyperrom_deim" class="nav-link" data-scroll-target="#bilinearformhyperrom_deim">BilinearFormHYPERROM_deim</a></li>
+  <li><a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim" id="toc-skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim" class="nav-link" data-scroll-target="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim">BilinearFormHYPERROM_deim</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -620,13 +620,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="rom.deim.bilinear_form_hyperrom_deim" class="level1">
 <h1>rom.deim.bilinear_form_hyperrom_deim</h1>
-<p><code>rom.deim.bilinear_form_hyperrom_deim</code></p>
-<p><strong>What does this do?</strong><br>
-Implements DEIM-based hyperreduction for finite element bilinear forms (like stiffness matrices)—so you can assemble reduced-order models (ROMs) <strong>100–1000× faster</strong> than classic methods.</p>
-<ul>
-<li>Works by assembling only the “important” elements (using DEIM), and uses intelligent interpolation to estimate the full matrix.</li>
-<li>This means huge savings in both time and memory, allowing for real-time or large-scale nonlinear ROM simulation.</li>
-</ul>
+<p><strong>Purpose:</strong> Implements DEIM-based hyperreduction for finite element bilinear forms—enabling reduced-order matrix assembly that is <strong>100–1000× faster</strong> than classical projection approaches. By assembling only a small, carefully selected subset of elements and using DEIM interpolation to reconstruct the full reduced operator, this module enables real-time and large-scale nonlinear parametric ROM simulations with dramatic savings in both computation time and memory.</p>
+<p><strong>Summary:</strong> Provides the <code>BilinearFormHYPERROM_deim</code> class, which combines element selection (driven by DEIM sampling points) with sparse assembly and reduced-basis projection. Assembly cost scales with the number of selected elements rather than the total mesh size—making this approach particularly effective when the operator is approximately low-rank with respect to parameters, or when most of the mesh contributes negligibly to the parametric variation.</p>
 <p><strong>Author:</strong> Suparno Bhattacharyya</p>
 <hr>
 <section id="classes" class="level2">
@@ -641,13 +636,13 @@ Implements DEIM-based hyperreduction for finite element bilinear forms (like sti
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim">BilinearFormHYPERROM_deim</a></td>
-<td>Class for fast, DEIM-based hyperreduced bilinear form assembly in ROMs.</td>
+<td>DEIM-based hyperreduced bilinear form assembly for fast ROM operator construction.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="bilinearformhyperrom_deim" class="level3">
-<h3 class="anchored" data-anchor-id="bilinearformhyperrom_deim">BilinearFormHYPERROM_deim</h3>
+<section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim" class="level3">
+<h3 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim">BilinearFormHYPERROM_deim</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    form,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    elem_weight,</span>
@@ -662,38 +657,24 @@ Implements DEIM-based hyperreduction for finite element bilinear forms (like sti
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    nthreads<span class="op">=</span><span class="dv">0</span>,</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    dtype<span class="op">=</span>np.float64,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>In short:</strong></p>
-<ul>
-<li>This class gives you a super-fast way to assemble stiffness (or other bilinear) matrices in a reduced basis.</li>
-<li>It combines DEIM (Discrete Empirical Interpolation Method) with element selection: assemble <em>just a small, critical subset of elements</em> and then reconstruct the full reduced matrix from those.</li>
-</ul>
-<section id="how-does-it-work" class="level4">
-<h4 class="anchored" data-anchor-id="how-does-it-work">How does it work?</h4>
-<p><strong>1. Element Selection:</strong><br>
-Only elements linked to the most “important” degrees of freedom (found by DEIM) are assembled. This can reduce the number of elements in the matrix assembly from thousands to just a few dozen!</p>
-<p><strong>2. Sparse, Efficient Assembly:</strong><br>
-It uses sparse matrix tricks to assemble only these selected elements—saving lots of memory and computation.</p>
-<p><strong>3. DEIM Operator Reconstruction:</strong><br>
-Uses a special interpolation (DEIM) matrix to <em>reconstruct</em> the full reduced system from the small set of samples.</p>
-<p><strong>4. Basis Projection:</strong><br>
-The system is projected onto the reduced basis (the same way as normal reduction) to produce the final, small matrix.</p>
-<p><strong>When to use:</strong></p>
-<ul>
-<li>When most of your computation is wasted on “boring”/unchanging regions</li>
-<li>Real-time ROM or large-scale nonlinear ROM needed</li>
-<li>Operators (matrices) look nearly low-rank with respect to parameters</li>
-</ul>
-<p>Assembly cost drops by orders of magnitude—from “all elements” to just “a few”! (For n_selected ≪ n_elements.)</p>
+<p><strong>Summary:</strong> Constructs a hyperreduced bilinear form operator by restricting element assembly to only the elements connected to DEIM-selected degrees of freedom. The reduced operator is reconstructed from these sparse samples using the DEIM interpolation matrix and projected onto the reduced basis—producing the final ( r r ) system matrix at a fraction of the cost of full assembly.</p>
+<p>The assembly process follows four key stages:</p>
+<ol type="1">
+<li><strong>Element Selection:</strong> Only elements linked to DEIM-identified critical DOFs are assembled, reducing the active set from potentially thousands of elements to just a few dozen.</li>
+<li><strong>Sparse Assembly:</strong> Local element matrices for the active subset are assembled into a sparse global matrix using COO-to-CSR conversion, minimizing memory usage.</li>
+<li><strong>DEIM Reconstruction:</strong> The DEIM interpolation matrix is applied to the sampled rows of the sparse global matrix to reconstruct the full reduced operator.</li>
+<li><strong>Basis Projection:</strong> The reconstructed operator is projected onto the right reduced basis to yield the final ROM system matrix.</li>
+</ol>
+<p>This approach is most advantageous when operators are approximately low-rank in the parameter space, or when real-time ROM evaluation is required for large-scale nonlinear problems.</p>
 <hr>
-</section>
 <section id="parameters" class="level4">
 <h4 class="anchored" data-anchor-id="parameters">Parameters</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 20%">
-<col style="width: 63%">
-<col style="width: 7%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -707,73 +688,73 @@ The system is projected onto the reduced basis (the same way as normal reduction
 <tr class="odd">
 <td>form</td>
 <td>callable</td>
-<td>The original bilinear form function. Must accept basis objects and return elementwise matrices.</td>
+<td>Full-order bilinear form function; must accept basis objects and return element-wise matrices.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>elem_weight</td>
-<td>array_like of shape (n_elements,)</td>
-<td>Array showing which elements are selected (1=selected, 0=skipped), usually from DEIM selection.</td>
+<td>array_like, shape (n_elements,)</td>
+<td>Element selection vector from DEIM; entries are <code>1</code> for selected elements and <code>0</code> for skipped ones.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>ubasis</td>
 <td>Basis</td>
-<td>The (full) basis for trial/test functions—contains mesh &amp; quadrature info.</td>
+<td>Full FE basis for trial functions, containing mesh, quadrature, and connectivity information.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>lob</td>
-<td>ndarray (n_free, r)</td>
-<td>Left/test reduced basis (included for compatibility, not used here).</td>
+<td>ndarray, shape (n_free, r)</td>
+<td>Left (test) reduced basis; included for interface compatibility.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>rob</td>
-<td>ndarray (n_free, r)</td>
-<td>Right/trial reduced basis (maps full to reduced).</td>
+<td>ndarray, shape (n_free, r)</td>
+<td>Right (trial) reduced basis used for projecting the reconstructed operator.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>sampled_rows</td>
-<td>array_like of int (n_samp,)</td>
-<td>The global DOFs picked by DEIM as most important (“sampling points”).</td>
+<td>array_like of int, shape (n_samp,)</td>
+<td>Global DOF indices selected by DEIM as the most informative interpolation points.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="odd">
 <td>deim_mat</td>
-<td>ndarray (r, n_samp)</td>
-<td>DEIM interpolation matrix to reconstruct the full operator from the sample values.</td>
+<td>ndarray, shape (r, n_samp)</td>
+<td>DEIM interpolation matrix used to reconstruct the full reduced operator from sampled values.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>vbasis</td>
-<td>Basis</td>
-<td>Optionally, basis for test functions (default: use <code>ubasis</code>).</td>
+<td>Basis or None</td>
+<td>FE basis for test functions; defaults to <code>ubasis</code> if not provided.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>free_dofs</td>
-<td>ndarray of int</td>
-<td>Indices of non-Dirichlet (free) DOFs, for boundary handling.</td>
+<td>ndarray of int or None</td>
+<td>Indices of non-Dirichlet (free) DOFs for boundary condition handling.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>mean</td>
-<td>ndarray</td>
-<td>Mean snapshot (if you subtracted mean during POD/SVD).</td>
+<td>ndarray or None</td>
+<td>Mean snapshot field subtracted prior to POD/SVD basis construction.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>nthreads</td>
 <td>int</td>
-<td>Number of threads for element assembly—0 for single-core, &gt;0 for parallel.</td>
+<td>Number of threads for parallel element assembly; <code>0</code> uses single-core execution.</td>
 <td><code>0</code></td>
 </tr>
 <tr class="even">
 <td>dtype</td>
 <td>numpy.dtype</td>
-<td>Precision type (<code>np.float64</code> by default).</td>
+<td>Numeric precision for assembly operations.</td>
 <td><code>np.float64</code></td>
 </tr>
 </tbody>
@@ -784,8 +765,8 @@ The system is projected onto the reduced basis (the same way as normal reduction
 <h4 class="anchored" data-anchor-id="attributes">Attributes</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 13%">
-<col style="width: 34%">
+<col style="width: 24%">
+<col style="width: 24%">
 <col style="width: 52%">
 </colgroup>
 <thead>
@@ -798,43 +779,43 @@ The system is projected onto the reduced basis (the same way as normal reduction
 <tbody>
 <tr class="odd">
 <td>weight</td>
-<td>ndarray (n_elements,)</td>
-<td>Copy of element weight vector (which elements are active).</td>
+<td>ndarray, shape (n_elements,)</td>
+<td>Copy of the element selection weight vector identifying active elements.</td>
 </tr>
 <tr class="even">
 <td>nonzero_elements</td>
 <td>ndarray of int</td>
-<td>Indices of elements actually sampled and assembled (the “active” subset).</td>
+<td>Indices of elements that are active (selected for assembly by DEIM).</td>
 </tr>
 <tr class="odd">
 <td>ubasis_rom</td>
 <td>Basis</td>
-<td>FE basis, shrunk down to only the “active” elements of the hyperreduced mesh.</td>
+<td>FE basis restricted to only the active elements of the hyperreduced mesh.</td>
 </tr>
 <tr class="even">
 <td>sampled_rows</td>
-<td>ndarray of int (n_samp,)</td>
-<td>Global DOFs where DEIM interpolation is performed (the “essential points”).</td>
+<td>ndarray of int, shape (n_samp,)</td>
+<td>Global DOF indices at which DEIM interpolation is performed.</td>
 </tr>
 <tr class="odd">
 <td>n_samp</td>
 <td>int</td>
-<td>Number of sampled points (length of sampled_rows).</td>
+<td>Number of DEIM sampling points (length of <code>sampled_rows</code>).</td>
 </tr>
 <tr class="even">
 <td>deim_mat</td>
-<td>ndarray (r, n_samp)</td>
-<td>DEIM matrix for reconstructing the reduced operator.</td>
+<td>ndarray, shape (r, n_samp)</td>
+<td>DEIM interpolation matrix for operator reconstruction.</td>
 </tr>
 <tr class="odd">
 <td>edofs</td>
-<td>ndarray (n_active_elements, n_local_dofs)</td>
-<td>Local-to-global DOF connectivity (for each sampled element, which global DOFs).</td>
+<td>ndarray, shape (n_active_elements, n_local_dofs)</td>
+<td>Local-to-global DOF connectivity table for the active element subset.</td>
 </tr>
 <tr class="even">
 <td>n_elems</td>
 <td>int</td>
-<td>Number of elements in the hyperreduced mesh (just the “active” elements).</td>
+<td>Number of active elements in the hyperreduced mesh.</td>
 </tr>
 <tr class="odd">
 <td>n_loc</td>
@@ -844,17 +825,17 @@ The system is projected onto the reduced basis (the same way as normal reduction
 <tr class="even">
 <td>n_dofs</td>
 <td>int</td>
-<td>Global DOFs in the restricted mesh.</td>
+<td>Total number of global DOFs in the restricted mesh.</td>
 </tr>
 <tr class="odd">
 <td>rows, cols</td>
 <td>ndarray</td>
-<td>Row/column indices for assembling the full local-&gt;global sparse matrix.</td>
+<td>Row and column index arrays for local-to-global sparse matrix assembly.</td>
 </tr>
 <tr class="even">
 <td>row_flat, col_flat</td>
 <td>ndarray</td>
-<td>Flattened/single-array versions (for building sparse COO matrix fast).</td>
+<td>Flattened index arrays for fast COO sparse matrix construction.</td>
 </tr>
 </tbody>
 </table>
@@ -872,42 +853,41 @@ The system is projected onto the reduced basis (the same way as normal reduction
 <tbody>
 <tr class="odd">
 <td><a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim">assemble_deim</a></td>
-<td>Builds the DEIM/hyperreduced bilinear form, ready for ROM use.</td>
+<td>Construct the DEIM hyperreduced bilinear form matrix ready for ROM solve.</td>
 </tr>
 <tr class="even">
 <td><a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly">deim_elem_assembly</a></td>
-<td>Assemble a sparse global matrix over just the selected elements.</td>
+<td>Assemble a sparse global matrix restricted to the DEIM-selected elements.</td>
 </tr>
 <tr class="odd">
 <td><a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom">extract_element_matrices_rom</a></td>
-<td>Get local stiffness matrices only for the selected (active) elements.</td>
+<td>Compute local stiffness matrices for the active (DEIM-selected) elements only.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<section id="assemble_deim" class="level5">
-<h5 class="anchored" data-anchor-id="assemble_deim">assemble_deim</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-Builds the hyperreduced bilinear form in four key steps:</p>
+</section>
+<section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim">assemble_deim</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.assemble_deim(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Orchestrates the full DEIM hyperreduction pipeline to produce the final reduced-order operator matrix. Executes the following four steps in sequence:</p>
 <ol type="1">
-<li>Uses <a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly"><code>deim_elem_assembly</code></a> to assemble a sparse matrix over only the important (“active”) elements</li>
-<li>Grabs only the rows for the key DOFs picked by DEIM (<code>sampled_rows</code>)</li>
-<li>Uses the DEIM interpolation matrix (<code>deim_mat</code>) to reconstruct the full reduced matrix</li>
-<li>Projects onto the reduced basis so your operator is ready for ROM solve</li>
+<li>Calls <code>deim_elem_assembly</code> to build a sparse global matrix from only the active elements.</li>
+<li>Extracts the rows corresponding to DEIM sampling points (<code>sampled_rows</code>) from the sparse matrix.</li>
+<li>Applies the DEIM interpolation matrix to reconstruct the full reduced operator from the sampled values.</li>
+<li>Projects the result onto the right reduced basis <code>rob</code> to obtain the ROM-ready matrix.</li>
 </ol>
-<p><strong>Formula summary:</strong> &gt; A_reduced = deim_mat @ A_sampled[sampled_rows, :] @ rob</p>
-<p>where <code>A_sampled</code> comes from only the selected elements, not the full FE mesh.</p>
-<section id="parameters-1" class="level6">
-<h6 class="anchored" data-anchor-id="parameters-1">Parameters</h6>
+<p>The assembled operator follows:</p>
+<p>[ A_{} = D A_{}[,, :] V ]</p>
+<p>where ( D ) is the DEIM matrix, ( A_{} ) is the sparse global matrix from selected elements, and ( V ) is the right reduced basis <code>rob</code>.</p>
+<section id="parameters-1" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-1">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 7%">
-<col style="width: 73%">
-<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -921,19 +901,19 @@ Builds the hyperreduced bilinear form in four key steps:</p>
 <tr class="odd">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Extra options you want to pass to element assembly.</td>
+<td>Additional keyword arguments forwarded to element assembly.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns" class="level6">
-<h6 class="anchored" data-anchor-id="returns">Returns</h6>
+<section id="returns" class="level5">
+<h5 class="anchored" data-anchor-id="returns">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 21%">
-<col style="width: 69%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -945,37 +925,26 @@ Builds the hyperreduced bilinear form in four key steps:</p>
 <tbody>
 <tr class="odd">
 <td>A_reduced</td>
-<td>ndarray of shape (r, r)</td>
-<td>The reduced-order operator matrix for your ROM—built efficiently via DEIM.</td>
+<td>ndarray, shape (r, r)</td>
+<td>Hyperreduced bilinear form matrix assembled via DEIM, ready for ROM linear solve.</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
 </section>
-<section id="deim_elem_assembly" class="level5">
-<h5 class="anchored" data-anchor-id="deim_elem_assembly">deim_elem_assembly</h5>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-Assembles a global sparse matrix, but only over the “active” element set (those needed by DEIM).</p>
-<ul>
-<li>Calls <a href="#skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom"><code>extract_element_matrices_rom</code></a> to get all local element matrices</li>
-<li>Each local is inserted into a global sparse matrix (COO format → CSR)</li>
-<li>Optional: skips zero entries for efficiency</li>
-</ul>
-<p><strong>Result:</strong><br>
-You get a global matrix equivalent to the “full” FE matrix <em>if you had only assembled the selected elements</em>.<br>
-Huge reduction in time and space!</p>
-<section id="parameters-2" class="level6">
-<h6 class="anchored" data-anchor-id="parameters-2">Parameters</h6>
+<section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly">deim_elem_assembly</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.deim_elem_assembly(<span class="op">**</span>kwargs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Summary:</strong> Assembles a sparse global stiffness matrix by accumulating contributions from only the DEIM-selected elements. Local element matrices are obtained via <code>extract_element_matrices_rom</code> and inserted into a global COO sparse matrix, which is then converted to CSR format for efficient downstream row extraction. Zero entries are optionally skipped to further reduce memory usage. The resulting matrix is equivalent to what would be obtained from a full assembly if only the active elements were present in the mesh.</p>
+<section id="parameters-2" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-2">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 13%">
-<col style="width: 10%">
-<col style="width: 60%">
-<col style="width: 14%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -989,19 +958,19 @@ Huge reduction in time and space!</p>
 <tr class="odd">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Extra options for element matrix extraction</td>
+<td>Additional keyword arguments forwarded to element matrix extraction.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-1" class="level6">
-<h6 class="anchored" data-anchor-id="returns-1">Returns</h6>
+<section id="returns-1" class="level5">
+<h5 class="anchored" data-anchor-id="returns-1">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 41%">
-<col style="width: 51%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1013,41 +982,33 @@ Huge reduction in time and space!</p>
 <tbody>
 <tr class="odd">
 <td>K</td>
-<td>scipy.sparse.csr_matrix (n_dofs, n_dofs)</td>
-<td>Global sparse matrix over just the relevant elements</td>
+<td>scipy.sparse.csr_matrix, shape (n_dofs, n_dofs)</td>
+<td>Sparse global stiffness matrix assembled over the DEIM-selected element subset.</td>
 </tr>
 </tbody>
 </table>
 <hr>
 </section>
 </section>
-<section id="extract_element_matrices_rom" class="level5">
-<h5 class="anchored" data-anchor-id="extract_element_matrices_rom">extract_element_matrices_rom</h5>
+<section id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom" class="level4">
+<h4 class="anchored" data-anchor-id="skrom.rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom">extract_element_matrices_rom</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rom.deim.bilinear_form_hyperrom_deim.BilinearFormHYPERROM_deim.extract_element_matrices_rom(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    ubasis,</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    vbasis<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    elem_indices<span class="op">=</span><span class="va">None</span>,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>kwargs,</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>What does it do?</strong><br>
-Computes all local element matrices, but <em>only</em> for the elements actually needed (based on DEIM sampling).</p>
-<ul>
-<li>Can run in serial or parallel (if <code>nthreads &gt; 0</code>)</li>
-<li>Only integrates over selected elements</li>
-<li>Uses quadrature rules/basis from <code>ubasis</code> and (optionally) <code>vbasis</code></li>
-<li>Returns all local matrices needed for assembling the sparse global</li>
-</ul>
-<p><strong>Formula:</strong><br>
-For each selected element: &gt; K_e[i,j] = ∫ (phi_i * form * phi_j) dx</p>
-<p>where phi’s are basis functions and “form” is your bilinear form.</p>
-<section id="parameters-3" class="level6">
-<h6 class="anchored" data-anchor-id="parameters-3">Parameters</h6>
+<p><strong>Summary:</strong> Evaluates the bilinear form element by element and returns the local stiffness matrices for the active (DEIM-selected) elements only. Supports both serial and parallel execution. For each selected element ( e ), the local matrix entry is:</p>
+<p>[ K_e[i,j] = _{_e} _i (_j) , d ]</p>
+<p>where ( _i ) and ( _j ) are local basis functions and ( ) denotes the bilinear operator. Only the elements identified by <code>elem_indices</code> (defaulting to all active elements) are integrated, significantly reducing quadrature cost relative to full-mesh evaluation.</p>
+<section id="parameters-3" class="level5">
+<h5 class="anchored" data-anchor-id="parameters-3">Parameters</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 12%">
 <col style="width: 17%">
-<col style="width: 59%">
-<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 38%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1061,37 +1022,37 @@ For each selected element: &gt; K_e[i,j] = ∫ (phi_i * form * phi_j) dx</p>
 <tr class="odd">
 <td>ubasis</td>
 <td>Basis</td>
-<td>Trial FE basis using correct mesh, quadrature, and connectivity</td>
+<td>Trial FE basis with correct mesh, quadrature rule, and element connectivity.</td>
 <td><em>required</em></td>
 </tr>
 <tr class="even">
 <td>vbasis</td>
-<td>Basis</td>
-<td>Test FE basis (default: <code>ubasis</code>)</td>
+<td>Basis or None</td>
+<td>Test FE basis; defaults to <code>ubasis</code> if not provided.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="odd">
 <td>elem_indices</td>
-<td>array of int</td>
-<td>List of element indices to compute (default: all active)</td>
+<td>array of int or None</td>
+<td>Indices of elements to integrate; defaults to all active (DEIM-selected) elements.</td>
 <td><code>None</code></td>
 </tr>
 <tr class="even">
 <td>**kwargs</td>
 <td>dict</td>
-<td>Extra parameters for form evaluation</td>
+<td>Additional keyword arguments forwarded to the form evaluation.</td>
 <td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="returns-2" class="level6">
-<h6 class="anchored" data-anchor-id="returns-2">Returns</h6>
+<section id="returns-2" class="level5">
+<h5 class="anchored" data-anchor-id="returns-2">Returns</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 13%">
-<col style="width: 44%">
-<col style="width: 42%">
+<col style="width: 24%">
+<col style="width: 24%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1103,46 +1064,40 @@ For each selected element: &gt; K_e[i,j] = ∫ (phi_i * form * phi_j) dx</p>
 <tbody>
 <tr class="odd">
 <td>element_matrices</td>
-<td>ndarray (n_elements, n_local_dofs, n_local_dofs)</td>
-<td>All local stiffness matrices for the selected elements</td>
+<td>ndarray, shape (n_elements, n_local_dofs, n_local_dofs)</td>
+<td>Stack of local stiffness matrices for each selected element.</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="raises" class="level6">
-<h6 class="anchored" data-anchor-id="raises">Raises</h6>
+<section id="raises" class="level5">
+<h5 class="anchored" data-anchor-id="raises">Raises</h5>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 9%">
-<col style="width: 13%">
-<col style="width: 76%">
+<col style="width: 35%">
+<col style="width: 64%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Name</th>
 <th>Type</th>
-<th>Description</th>
+<th>Condition</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td></td>
 <td>ValueError</td>
-<td>If trial and test bases are not compatible (quadrature mismatch)</td>
+<td>Raised if trial and test bases are incompatible due to a quadrature rule mismatch.</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<p><strong>In summary:</strong></p>
-<ul>
-<li>Use this to speed up reduced matrix assembly massively in your ROMs.</li>
-<li>Only evaluates a small, crucial set of elements, and reconstructs the rest using DEIM math.</li>
-<li>Great for real-time and large, nonlinear parametric ROMs.</li>
-</ul>
-
-
 </section>
 </section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<p><code>BilinearFormHYPERROM_deim</code> is the recommended class for DEIM-accelerated ROM operator assembly when the bilinear form varies with parameters. It reduces assembly cost from ((N_{})) to ((N_{})), where ( N_{} N_{} ) in typical applications. It is most effective for parametric nonlinear problems where the operator cannot be precomputed offline in its entirety.</p>
+
+
 </section>
 </section>
 </section>
